@@ -8,6 +8,7 @@
   <li> yarn add react-icons </li>
   <li> yarn add react-router-dom </li>
   <li> yarn add add axios </li>
+  <li> yarn add styled-component </li>
 </ul>  
  
 <h1>Rules</h1>
