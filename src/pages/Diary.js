@@ -2,18 +2,18 @@ import React from "react";
 import HeaderBar from "../components/HeaderBarNavi";
 import { styled } from 'styled-components';
 
-const HomeDiv = styled.div`
+const DiaryDiv = styled.div`
     width: 97vw;
     height: auto;
 `;
 
-const Home = () =>{
+const Diary = () =>{
     return(
-        <HomeDiv>        
+        <DiaryDiv>
             <HeaderBar/>
-            <h1>This is Home</h1>
-        </HomeDiv>
+            <h1>This is Diary</h1>
+        </DiaryDiv>
     );
 };
 
-export default Home;
+export default Diary;
