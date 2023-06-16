@@ -1,9 +1,10 @@
 import React from "react";
-import HeaderBar from "../components/HeaderBarNavi";
 import { styled } from 'styled-components';
+import HeaderBar from "../components/HeaderBarNavi";
+import KakaoMap from "../components/KakaoMap";
 
 const HomeDiv = styled.div`
-    width: 97vw;
+    width: auto;
     height: auto;
 `;
 
@@ -11,7 +12,7 @@ const Home = () =>{
     return(
         <HomeDiv>        
             <HeaderBar/>
-            <h1>This is Home</h1>
+            <KakaoMap/>
         </HomeDiv>
     );
 };

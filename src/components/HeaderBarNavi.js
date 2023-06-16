@@ -3,17 +3,19 @@ import { styled } from 'styled-components';
 import Logo from '../images/logo.png';
 
 const HeaderBarDiv = styled.div`
-    width: 100%;
+    width: 100vw;
     height: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid var(--grey);
-    padding-left: 60px;
     p {
         font-family: var(--efont);
         font-size: 20px;
         padding-right: 70px;
+    }
+    img{
+        padding-left: 70px;
     }
 `;
 
