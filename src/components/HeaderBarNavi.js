@@ -4,7 +4,7 @@ import Logo from '../images/logo.png';
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
-  height: 7vh;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,8 +18,8 @@ const HeaderBarDiv = styled.div`
 
   img {
     padding-left: 3%;
-    width: 15vh;
-    height: 5vh;
+    width:20vh;
+    height: 100%;
   }
 `;
 
