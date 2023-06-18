@@ -1,67 +1,130 @@
 import React from "react";
-import { styled } from 'styled-components';
+import {styled} from 'styled-components';
 import HeaderBar from "../components/HeaderBarNavi";
 import KakaoMap from "../components/KakaoMap";
 import { SlMenu } from "react-icons/sl";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import close from "../images/close.png"
+
 const HomeDiv = styled.div`
-    width: 100vw;
-    height: 100vh;
-    
+  width: auto;
+  height: auto;
+  position: relative;
 
-    .SidebarButton {
-        width: 35px;
-        height: 35px;
-        margin-top: 200px;
-        margin-left: 200px;
-        border: transparent;
-        background-color: transparent;
-        z-index: 999;
-    }
-    .SidebarButton:hover {
-        cursor: pointer;
-    }
+  * {
+    box-sizing: border-box;
+  }
+
+  .to-timeline {
+    width: 5vw;
+    height: 2vw;
+    top: 300px;
+    left: 300px;
+    position: absolute;
+    background-color: #00b4d8;
+    color: white;
+    z-index: 2;
+    text-align: center;
+    padding: 10px 0;
+  }
 `;
 
-const MapWrapper = styled.div`
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    
+const SidebarButton = styled.button`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 2;
+  top: 80px;
+  left: 100px;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
+
 `;
 
 
-const SidebarIcon = styled(SlMenu)`
+
+const MenuImg = styled(SlMenu)`
   width: 30px;
   height: 30px;
   margin-left: -5px;
 `;
 
-const SideBar = styled.div`
-    width: 20vw;
-    height: 100%;
-    background-color: black;
+
+// 여기서부터 사이드바 안쪽 
+
+const Sidebar = styled.div`
+ 
+  display: block;
+  width: 30vw;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
+  top: 52px;
+  left: 0;
+  background-color: white;
+  border-right: 1px solid #d9d9d9;
+  transition: transform 0.3s ease;
+  transform: translateX(${({ translateX }) => translateX});
+`;
+
+const CloseButton = styled.button`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 3;
+  top: 80px;
+  left: 100px;
+  border: none;
+  background-color: transparent;
+  background-image: url(${close});
+  left: 26vw;
+  top: 20px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const MyInfo = styled.div`
+
 `;
 
 
+const Home = () => {
 
-const Home = () =>{
+  // 사이드바 가로이동
+  const [translateX, setTranslateX] = useState("-30vw");
 
-    const sidebarOpen = () => {
-        
-    }
+  const moveLeft = () => {
+    setTranslateX("0");
+  };
+  
+  const moveRight = () => {
+    setTranslateX("-30vw");
+  };
 
 
-    return(
-        <HomeDiv>        
-            <HeaderBar/>
-                <button className="SidebarButton" onClick={sidebarOpen}><SidebarIcon/></button>
-            <MapWrapper>
-                <KakaoMap/>
-            </MapWrapper>
-            
-        </HomeDiv>
-    );
+  return (
+    <HomeDiv>
+      <HeaderBar/>
+      <KakaoMap/>
+      
+      <SidebarButton onClick={moveLeft}>
+          <MenuImg/>
+        </SidebarButton>
+      <div className="hot-place to-timeline">강남구</div>
+
+
+      <Sidebar translateX={translateX}>
+        <CloseButton onClick={moveRight}>
+          
+        </CloseButton>
+      </Sidebar>
+    </HomeDiv>
+  );
 };
 
 export default Home;
