@@ -5,6 +5,8 @@ import KakaoMap from "../components/KakaoMap";
 import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import close from "../images/close.png"
+import defProfile from "../images/default_avatar.png"
+import setting from "../images/setting.png"
 
 const HomeDiv = styled.div`
   width: auto;
@@ -89,7 +91,39 @@ const CloseButton = styled.button`
 `;
 
 const MyInfo = styled.div`
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+  .profileImg {
+    position: absolute;
+    top: 3vw;
+    background-image: url(${defProfile});
+    width: 8vw;
+    height: 8vw;
+    background-size: cover;
+  }
+
+  
+`;
+
+const EditButton = styled.button`
+   position: absolute;
+    top: 3vw;
+    left: 50px;
+    width: 30px;
+    height: 30px;
+    background-image: url(${setting});
+    background-size: cover;
+    background-color: transparent;
+    border: none;
+    transition: transform 0.5s ease;
+    transform: ${({ isClicked }) => (isClicked ? 'rotate(120deg)' : 'rotate(0)')};
+    &:hover {
+      cursor: pointer;
+    }
+    
 `;
 
 
@@ -101,9 +135,17 @@ const Home = () => {
   const moveLeft = () => {
     setTranslateX("0");
   };
-  
+
   const moveRight = () => {
     setTranslateX("-30vw");
+  };
+  
+
+  // 정보 수정 버튼을 눌렀을 때 톱니바퀴가 회전
+  const [isClicked, setIsClicked] = useState(false);
+  
+  const handleClick = () => {
+    setIsClicked(!isClicked);
   };
 
 
@@ -119,9 +161,13 @@ const Home = () => {
 
 
       <Sidebar translateX={translateX}>
-        <CloseButton onClick={moveRight}>
-          
-        </CloseButton>
+        <CloseButton onClick={moveRight}></CloseButton>
+
+        <MyInfo>
+          <EditButton onClick={handleClick} isClicked={isClicked}></EditButton>
+          <div className="profileImg"></div>
+        </MyInfo>
+        
       </Sidebar>
     </HomeDiv>
   );
