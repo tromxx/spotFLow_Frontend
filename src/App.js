@@ -13,7 +13,6 @@ function App() {
         <Route path="/" element={<>
             <HeaderBar />
             <Home />
-            
           </>} />
         <Route path="/diary" element={<Diary/>} />
         <Route path="/myflow" element={<MyFlow/>}/>   

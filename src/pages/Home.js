@@ -7,6 +7,9 @@ import { useState } from "react";
 import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
+import MyFlowImg from "../images/myFlow.png"
+import DiaryImg from "../images/DiaryMenu.png"
+import DarkmodeImg from "../images/Darkmode.png"
 
 const HomeDiv = styled.div`
   width: auto;
@@ -36,8 +39,8 @@ const SidebarButton = styled.button`
   height: 30px;
   position: absolute;
   z-index: 2;
-  top: 80px;
-  left: 100px;
+  top: 20px;
+  left: 50px;
   border: none;
   background-color: transparent;
 
@@ -112,19 +115,57 @@ const EditButton = styled.button`
    position: absolute;
     top: 3vw;
     left: 50px;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background-image: url(${setting});
     background-size: cover;
     background-color: transparent;
     border: none;
     transition: transform 0.5s ease;
-    transform: ${({ isClicked }) => (isClicked ? 'rotate(120deg)' : 'rotate(0)')};
+    transform: ${({ isClicked }) => (isClicked ? 'rotate(120deg)' : 'rotate(5deg)')};
     &:hover {
       cursor: pointer;
     }
     
 `;
+
+const Input = styled.input`
+
+`;
+
+const ButtonMenu = styled.button`
+  font-family: var(--efont);
+  font-size: 30px;
+  font-weight: 900;
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  background-size: auto;
+  background-repeat: no-repeat;
+  width: 250px;
+  height: 40px;
+  
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  &.MyFlow {
+    top: 350px;
+    left: 100px;
+  }
+
+  &.Diary {
+    top: 450px;
+    left: 100px;
+  }
+
+  &.Theme {
+    top: 550px;
+    left: 100px;
+  }
+`;
+
 
 
 const Home = () => {
@@ -148,6 +189,18 @@ const Home = () => {
     setIsClicked(!isClicked);
   };
 
+  // 다크모드 / 라이트모드 변경
+
+  const [mode, setModeText] = useState("Dark Mode");
+
+  const Mode = () => {
+    if (mode === "Dark Mode") {
+      setModeText("Light Mode");
+    } else {
+      setModeText("Dark Mode");
+    }
+  };
+
 
   return (
     <HomeDiv>
@@ -165,8 +218,9 @@ const Home = () => {
         <MyInfo>
           <EditButton onClick={handleClick} isClicked={isClicked}></EditButton>
           <div className="profileImg"></div>
-
-          
+          <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
+          <ButtonMenu className="Diary">Diary</ButtonMenu>
+          <ButtonMenu className="Theme" onClick={Mode}>{mode}</ButtonMenu>
         </MyInfo>
         
 
