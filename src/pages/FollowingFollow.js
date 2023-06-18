@@ -23,7 +23,9 @@ const FollowingFollow = () =>{
         <FollowFollowingDiv>
             <HeaderBar/>
             <KakaoMap/>
-                <div className="Testing" ref={nodeRef}></div>
+                <div className="Testing">
+                    
+                </div>
         </FollowFollowingDiv>
     );
 }
