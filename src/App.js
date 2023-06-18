@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Diary from './pages/Diary';
 import MyFlow from './pages/MyFlow';
+import TimeLine from './pages/TimeLine';
 
 function App() {
   return (
@@ -11,6 +12,8 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/diary" element={<Diary/>} />
         <Route path="/myflow" element={<MyFlow/>}/>   
+        <Route path="/diary" element={<Diary/>} /> 
+        <Route path="/timeline" element={<TimeLine/>} />      
       </Routes>
     </BrowserRouter>
   );
