@@ -64,8 +64,8 @@ const Sidebar = styled.div`
   width: 30vw;
   height: 100%;
   position: absolute;
-  z-index: 999;
-  top: 52px;
+  z-index: 50;
+  top: 0px;
   left: 0;
   background-color: white;
   border-right: 1px solid #d9d9d9;
@@ -151,7 +151,6 @@ const Home = () => {
 
   return (
     <HomeDiv>
-      <HeaderBar/>
       <KakaoMap/>
       
       <SidebarButton onClick={moveLeft}>
@@ -166,8 +165,12 @@ const Home = () => {
         <MyInfo>
           <EditButton onClick={handleClick} isClicked={isClicked}></EditButton>
           <div className="profileImg"></div>
+
+          
         </MyInfo>
         
+
+
       </Sidebar>
     </HomeDiv>
   );

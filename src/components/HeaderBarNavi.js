@@ -9,7 +9,7 @@ const HeaderBarDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid var(--grey);
-
+  
   p {
     font-family: var(--efont);
     font-size: 2vh;
