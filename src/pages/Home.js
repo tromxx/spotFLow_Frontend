@@ -1,7 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import {styled} from 'styled-components';
 import HeaderBar from "../components/HeaderBarNavi";
 import KakaoMap from "../components/KakaoMap";
+import ToSpot from "./eventHandler";
+import {SlMenu} from "react-icons/sl";
+import {FaMapMarkerAlt} from "react-icons/fa";
+import close from "../images/close.png"
+import defProfile from "../images/default_avatar.png"
+import setting from "../images/setting.png"
 
 const HomeDiv = styled.div`
   width: auto;
@@ -181,10 +187,12 @@ const ButtonMenu = styled.button`
 const Home = () => {
   // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
   const place = ToSpot.getPlace();
-  let value = 3;
-  let count = 0;
-  const left = (input) => {
-    value += count * 10;
+  let value = 2; //toSpot 버튼의 간격을 조절해주는 초기 값
+  let count = 0; //toSpot 버튼의 개수를 카운팅
+
+  const toSpot_position = (input) => { //toSpot 간격을 조절하는 함수
+    count+=1;
+    value += count + 10;
     return input;
   };
 
@@ -225,7 +233,7 @@ const Home = () => {
     <HomeDiv>
       <KakaoMap/>
       {place.map(p => (
-        <div className="hot-place to-timeline" style={{top:'10vh', left:left(value) + 'vw'}}>
+        <div className="hot-place to-timeline" style={{top:'20px', right:toSpot_position(value) + 'vw'}}>
           <div className="to-spot"><FaMapMarkerAlt size={20} color="#000000"/></div>
           {p.location}
         </div>
