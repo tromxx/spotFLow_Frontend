@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import {styled} from 'styled-components';
 import KakaoMap from "../components/KakaoMap";
-import { SlMenu } from "react-icons/sl";
-import { useState } from "react";
+import ToSpot from "./eventHandler";
+import {SlMenu} from "react-icons/sl";
+import {FaMapMarkerAlt} from "react-icons/fa";
 import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
@@ -17,16 +18,34 @@ const HomeDiv = styled.div`
   }
 
   .to-timeline {
-    width: 5vw;
-    height: 2vw;
-    top: 300px;
-    left: 300px;
+    width: 120px;
+    height: 40px;
     position: absolute;
-    background-color: #00b4d8;
+    display: flex;
+    background-color: #61dafb;
     color: white;
     z-index: 2;
     text-align: center;
-    padding: 10px 0;
+    line-height: 1.8;
+    padding: 5px;
+    border-radius: 40px;
+  }
+
+  .to-spot {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    background-color: white;
+    margin-right: 10px;
+    padding: 5px;
+  }
+
+  .to-spot:hover {
+    background-color: #ccc;
+  }
+
+  .to-timeline:hover {
+    background-color: #00b4d8;
   }
 `;
 
@@ -165,6 +184,17 @@ const ButtonMenu = styled.button`
 
 
 const Home = () => {
+  // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
+  const place = ToSpot.getPlace();
+  let value = 2; //toSpot 버튼의 간격을 조절해주는 초기 값
+  let count = 0; //toSpot 버튼의 개수를 카운팅
+
+  const toSpot_position = (input) => { //toSpot 간격을 조절하는 함수
+    count+=1;
+    value += count + 10;
+    return input;
+  };
+
 
   // 사이드바 가로이동
   const [translateX, setTranslateX] = useState("-30vw");
@@ -201,7 +231,13 @@ const Home = () => {
   return (
     <HomeDiv>
       <KakaoMap/>
-      
+      {place.map(p => (
+        <div className="hot-place to-timeline" style={{top:'20px', right:toSpot_position(value) + 'vw'}}>
+          <div className="to-spot"><FaMapMarkerAlt size={20} color="#000000"/></div>
+          {p.location}
+        </div>
+      ))}
+
       <SidebarButton onClick={moveLeft}>
           <MenuImg/>
         </SidebarButton>
@@ -218,7 +254,7 @@ const Home = () => {
           <ButtonMenu className="Diary">Diary</ButtonMenu>
           <ButtonMenu className="Theme" onClick={Mode}>{mode}</ButtonMenu>
         </MyInfo>
-        
+
 
 
       </Sidebar>
