@@ -81,13 +81,15 @@ const Sidebar = styled.div`
   display: block;
   width: 30vw;
   height: 100%;
+  min-width: 450px;
+  min-height: max-content;
   position: absolute;
   z-index: 50;
   top: 0px;
   left: 0;
   background-color: white;
   border-right: 1px solid #d9d9d9;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
   transform: translateX(${({ translateX }) => translateX});
 `;
 
@@ -96,13 +98,12 @@ const CloseButton = styled.button`
   height: 30px;
   position: absolute;
   z-index: 3;
-  top: 80px;
-  left: 100px;
+  top: 20px;
+  right: 20px;
   border: none;
   background-color: transparent;
   background-image: url(${close});
-  left: 26vw;
-  top: 20px;
+  
   &:hover {
     cursor: pointer;
   }
@@ -113,13 +114,17 @@ const MyInfo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  
 
   .profileImg {
     position: absolute;
     top: 3vw;
+    justify-content: space-evenly;
     background-image: url(${defProfile});
     width: 8vw;
     height: 8vw;
+    min-width: 120px;
+    min-height: 120px;
     background-size: cover;
   }
 
@@ -197,14 +202,14 @@ const Home = () => {
 
 
   // 사이드바 가로이동
-  const [translateX, setTranslateX] = useState("-30vw");
+  const [translateX, setTranslateX] = useState("-50vw");
 
   const moveLeft = () => {
     setTranslateX("0");
   };
 
   const moveRight = () => {
-    setTranslateX("-30vw");
+    setTranslateX("-150vw");
   };
   
 
@@ -250,11 +255,11 @@ const Home = () => {
         <MyInfo>
           <EditButton onClick={handleClick} isClicked={isClicked}></EditButton>
           <div className="profileImg"></div>
+          
+        </MyInfo>
           <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
           <ButtonMenu className="Diary">Diary</ButtonMenu>
           <ButtonMenu className="Theme" onClick={Mode}>{mode}</ButtonMenu>
-        </MyInfo>
-
 
 
       </Sidebar>
