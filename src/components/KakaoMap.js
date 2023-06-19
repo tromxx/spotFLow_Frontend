@@ -20,6 +20,8 @@ const KakaoMap=({latitude, longitude})=>{
 
 
   useEffect(()=>{
+    console.log(latitude);
+    console.log(longitude);
     if (latitude > 0) lat = latitude;
     if (longitude > 0) lng = longitude;
     let container = document.getElementById('map');

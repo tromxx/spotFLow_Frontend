@@ -23,6 +23,7 @@ const ToSpotBtn = styled.div`
   transition: transform 0.5s ease;
   transform: translateY(${({translateY}) => translateY + "px"});
   position: absolute;
+  font-family: 'Prompt', sans-serif;
   top: 20px;
   right: 150px;
   z-index: 2;
@@ -275,8 +276,8 @@ const Home = () => {
       ))}
       <ToSpotBtn>
         <div className="to-timeline more" onClick={btnToSpotMoreView}>
-          <div className="to-spot" ><FaMapMarkerAlt size={20} color="#000000"/></div>
-          위치보기
+          <div className="to-spot" style={{marginRight:"3px"}}><FaMapMarkerAlt size={20} color="#000000"/></div>
+          TimeLine
         </div>
       </ToSpotBtn>
 
