@@ -7,11 +7,16 @@ import {FaMapMarkerAlt} from "react-icons/fa";
 import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
+import { useTheme } from "../context/themeProvider";
 
 const HomeDiv = styled.div`
   width: auto;
   height: auto;
   position: relative;
+  background-color: ${props => props.theme.bgColor};
+  color: ${props => props.theme.textColor};
+  border: ${props => props.theme.borderColor};
+  
 
   * {
     box-sizing: border-box;
@@ -87,9 +92,10 @@ const Sidebar = styled.div`
   z-index: 50;
   top: 0px;
   left: 0;
-  background-color: white;
-  border-right: 1px solid #d9d9d9;
-  transition: transform 0.5s ease;
+  background-color: ${props => props.theme.bgColor};
+  color: ${props => props.theme.textColor};
+  border-right: ${props => props.theme.borderColor};
+  transition: background-color 0.5s ease, transform 0.5s ease;
   transform: translateX(${({ translateX }) => translateX});
 `;
 
@@ -160,6 +166,7 @@ const ButtonMenu = styled.button`
   position: absolute;
   border: none;
   background-color: transparent;
+  color: ${props => props.theme.textColor};
   background-size: auto;
   background-repeat: no-repeat;
   width: 250px;
@@ -188,7 +195,7 @@ const ButtonMenu = styled.button`
 
 
 
-const Home = () => {
+const Home = ({ children }) => {
   // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
   const place = ToSpot.getPlace();
   let value = 2; //toSpot 버튼의 간격을 조절해주는 초기 값
@@ -222,15 +229,7 @@ const Home = () => {
 
   // 다크모드 / 라이트모드 변경
 
-  const [mode, setModeText] = useState("Dark Mode");
-
-  const Mode = () => {
-    if (mode === "Dark Mode") {
-      setModeText("Light Mode");
-    } else {
-      setModeText("Dark Mode");
-    }
-  };
+  const [ThemeMode, setTheme] = useTheme();
 
 
   return (
@@ -259,7 +258,7 @@ const Home = () => {
         </MyInfo>
           <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
           <ButtonMenu className="Diary">Diary</ButtonMenu>
-          <ButtonMenu className="Theme" onClick={Mode}>{mode}</ButtonMenu>
+          <ButtonMenu className="Theme" onClick={setTheme} mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
 
 
       </Sidebar>
