@@ -24,7 +24,7 @@ const ToSpotBtn = styled.div`
   transform: translateY(${({translateY}) => translateY + "px"});
   position: absolute;
   top: 20px;
-  right: 15px;
+  right: 150px;
   z-index: 2;
 
   .to-timeline {
