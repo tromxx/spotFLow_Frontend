@@ -80,16 +80,21 @@ const Item = styled.div`
         &:first-child {
             margin-top : 20px;
         }
-        &:nth-child(2) {
-            margin-top : 20px;
-        }
+       
     ${(props) => props.isSort ? `
       ${centerAlign}
       flex-direction:column;
+      &:nth-child(odd){
+            margin-right:0px;
+        }
+         &:nth-child(2) {
+            margin-top : 20px;
+        } 
     ` : `
    
     flex-direction:row;
         display:flex;
+       
 
     `}   
 
@@ -97,8 +102,9 @@ const Item = styled.div`
 const ItemImg = styled.div`
      background-image: url(${(props) => props.url});
      background-repeat : no-repeat;
-        background-size: cover;
+    background-size: cover;
        border-radius: 10px;
+
     ${(props) => props.isSort ? `
     
         height : 80%;
