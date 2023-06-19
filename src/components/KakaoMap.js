@@ -7,13 +7,13 @@ const Container = styled.div`
     box-sizing: border-box;
   }
   #map {
-    width: 100vw;
+    width: 100%;
     height: 93vh;
     position: relative;
     z-index: 1;
   }
 `;
-const KakaoMap=({latditude, longditude})=>{
+const KakaoMap=({latitude, longitude})=>{
   const {location, setLocation} = useState("");
 
 
