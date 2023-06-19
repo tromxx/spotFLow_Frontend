@@ -1,15 +1,11 @@
 import React from "react";
 import {styled} from 'styled-components';
-import HeaderBar from "../components/HeaderBarNavi";
 import KakaoMap from "../components/KakaoMap";
 import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
-import MyFlowImg from "../images/myFlow.png"
-import DiaryImg from "../images/DiaryMenu.png"
-import DarkmodeImg from "../images/Darkmode.png"
 
 const HomeDiv = styled.div`
   width: auto;
