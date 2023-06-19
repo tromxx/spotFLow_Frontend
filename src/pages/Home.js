@@ -262,10 +262,6 @@ const Home = () => {
    setLatitude(lat);
  }
 
- useEffect(() => {
- })
-
-
   return (
     <HomeDiv>
       <KakaoMap latitude={latitude} longitude={longitude}/>
@@ -300,8 +296,6 @@ const Home = () => {
           <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
           <ButtonMenu className="Diary">Diary</ButtonMenu>
           <ButtonMenu className="Theme" onClick={Mode}>{mode}</ButtonMenu>
-
-
       </Sidebar>
     </HomeDiv>
   );
