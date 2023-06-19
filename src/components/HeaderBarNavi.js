@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
-  height: 100%;
+  height: 7vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
