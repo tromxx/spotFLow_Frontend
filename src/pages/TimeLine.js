@@ -72,10 +72,10 @@ const Item = styled.div`
         }
     ${(props) => props.isSort ? `
        display:flex;
-       flex-direction: row;
+        flex-direction: column;
     ` : `
         display:flex;
-       flex-direction: row;
+
     `}   
 
 `
@@ -88,7 +88,7 @@ const ItemImg = styled.div`
         width: 100%;
     ` : `
             height : 80%;
-            width: 35%;
+            width: 50%;
     `}   
 
 
@@ -100,7 +100,44 @@ const ItemTitle = styled.div`
 `
 
 const ItemContent =styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 50%;
+    flex-direction:column;
+     ${(props) => props.isSort ? `
+      
+    ` : `
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 100%;
+    flex-direction:column;
+    `} 
 
+
+    
+
+    .title{
+        margin:10px;
+        border-radius: 15px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background-color : silver ;
+        width: 85%;
+        flex:2;
+    }
+    .content{
+        margin:10px;
+        border-radius: 15px;
+        background-color: silver;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex: 10;
+        width: 85%;
+    }
 `
 
 
@@ -199,7 +236,11 @@ const TimeLine = () => {
                 dummy.map((e)=> 
                     <Item isSort={isSort} key={e.id}>
                         <ItemImg isSort={isSort} url={e.image}></ItemImg>
-                        <ItemContent>{e.content}</ItemContent>
+                        <ItemContent>
+                            <div className="title">{e.title}</div>
+                            {isSort ?  <></> :  <div className="content">{e.content}</div>}
+                           
+                        </ItemContent>
                     </Item>
                 )
                 }
