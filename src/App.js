@@ -6,7 +6,7 @@ import MyFlow from './pages/MyFlow';
 import TimeLine from './pages/TimeLine';
 import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
-import Singup from './pages/Singup';
+import Signup from './pages/Signup';
 import FollowingFollow from './pages/FollowingFollow';
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
         </>} />
         <Route path="/singup" element={<>
           <HeaderBarNavi />
-          <Singup />
+          <Signup />
         </>} />
         <Route path="/followingfollow" element={<>
           <HeaderBarNavi />

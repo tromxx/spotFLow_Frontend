@@ -54,7 +54,7 @@ const HeaderBar = () => {
       <ul>
         <li onClick={goToLogin}>Login</li>
         <li>/</li>
-        <li onClick={goToSignUp}>Signup</li>
+        <li onClick={goToSignUp}>Sign up</li>
       </ul>
     </HeaderBarDiv>
   );
