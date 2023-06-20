@@ -29,6 +29,7 @@ const HeaderBarDiv = styled.div`
     list-style: none;
   }
   li:hover {
+    transition: 0.25s;
     color: var(--blue);
   }
   img {
