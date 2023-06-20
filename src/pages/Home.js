@@ -9,6 +9,8 @@ import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
 import { useTheme } from "../context/themeProvider";
 import DarkSetting from "../images/DarkSetting.png"
+import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HomeDiv = styled.div`
   width: auto;
@@ -124,7 +126,7 @@ const Sidebar = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   border-right: ${props => props.theme.borderColor};
-  transition: background-color 0.5s ease, transform 0.5s ease;
+  transition: background-color 0.5s ease, transform 0.6s ease;
   transform: translateX(${({ translateX }) => translateX});
 `;
 
@@ -162,8 +164,69 @@ const MyInfo = styled.div`
     background-size: cover;
   }
 
+  .nicknameInput {
+    color: ${props => props.theme.textColor};
+    position: absolute;
+    top: 12vw;
+    width: fit-content;
+    height: 25px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: bold;
+  }
 
+  
+  input:focus {
+  outline: none;
+  }
 `;
+
+const StatusMsgWrapper = styled.div`
+    color: ${props => props.theme.textColor};
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 10px;
+    position: absolute;
+    top: 18vw;
+    width: 250px;
+    height: 50px;
+    border: ${props => props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'};
+    border-radius: 8px;
+    background-color: transparent;
+    box-sizing: border-box;
+
+    p {
+      margin: 2px;
+      padding: 2px;
+    }
+`;
+
+const FollowWrapper = styled.div`
+  position: absolute;
+  top: 15vw;
+
+
+  input {
+    color: ${props => props.theme.textColor};
+    width: 50px;
+    height: 30px;
+    border: none;
+    background-color: transparent;
+    margin-left: 5px;
+    font-size: 1rem;
+  }
+  input:hover {
+    cursor: pointer;
+  }
+  input:focus {
+  outline: none;
+  }
+`;
+
+
 
 const EditButton = styled.button`
   position: absolute;
@@ -191,13 +254,9 @@ const EditImg = styled.img`
   height: 35px;
 `;
 
-const Input = styled.input`
-
-`;
-
 const ButtonMenu = styled.button`
   font-family: var(--efont);
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 900;
   position: absolute;
   border: none;
@@ -219,18 +278,21 @@ const ButtonMenu = styled.button`
   }
 
   &.Diary {
-    top: 450px;
+    top: 420px;
     left: 100px;
   }
 
   &.Theme {
-    top: 550px;
+    top: 490px;
     left: 100px;
   }
 `;
 
 
 const Home = ({ children }) => {
+
+  const navigate = useNavigate();
+
   // 사이드바 가로이동
   const [translateX, setTranslateX] = useState("-50vw");
 
@@ -239,7 +301,7 @@ const Home = ({ children }) => {
   };
 
   const moveRight = () => {
-    setTranslateX("-150vw");
+    setTranslateX("-100vw");
   };
   
 
@@ -250,7 +312,7 @@ const Home = ({ children }) => {
     setIsClicked(!isClicked);
   };
 
-  // 다크모드 / 라이트모드 변경
+  
 
   const [ThemeMode, setTheme] = useTheme();
   // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
@@ -264,10 +326,14 @@ const Home = ({ children }) => {
 
   const [latitude, setLatitude] = useState(37.4923615);
   const [longitude, setLongitude] = useState(127.0292881);
- const toSpotFocus = (lat, lng) => {
+  const toSpotFocus = (lat, lng) => {
    setLongitude(lng);
    setLatitude(lat);
- }
+  }
+
+  const goFollowing = () => {
+    navigate("/followingfollow")
+  }
 
   return (
     <HomeDiv>
@@ -300,7 +366,18 @@ const Home = ({ children }) => {
             <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
           </EditButton>
           <div className="profileImg"></div>
+            <input type="text" className="nicknameInput" value={"nickname"} readOnly />
+          <FollowWrapper>
+            <label htmlFor="following">following</label>
+            <input type="text" id="following" value={"225"} readOnly onClick={goFollowing}/>
+            <label htmlFor="follower">follower</label>
+            <input type="text" id="follower" value={"850"} readOnly onClick={goFollowing}/>
+          </FollowWrapper>
+          <StatusMsgWrapper>
+            <p>상태 메시지가 출력되는 칸입니다 상태 메시지가 출력되는 칸입니다 상태 메시지가 출력되는 칸입니다 상태 메시지가 출력되는 칸입니다</p>
+          </StatusMsgWrapper>
           
+
         </MyInfo>
           <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
           <ButtonMenu className="Diary">Diary</ButtonMenu>
