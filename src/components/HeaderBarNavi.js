@@ -59,7 +59,7 @@ const HeaderBar = ({ children }) => {
   };
 
   const goToSignUp = () => {
-    navigate("/Singup");
+    navigate("/Signup");
   };
 
   const [ThemeMode, setTheme] = useTheme();

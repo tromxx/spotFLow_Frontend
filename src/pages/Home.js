@@ -7,8 +7,9 @@ import {FaMapMarkerAlt} from "react-icons/fa";
 import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
-import { useTheme } from "../context/themeProvider";
+import {useTheme} from "../context/themeProvider";
 import DarkSetting from "../images/DarkSetting.png"
+import {useNavigate} from "react-router";
 
 const HomeDiv = styled.div`
   width: auto;
@@ -17,12 +18,13 @@ const HomeDiv = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   border: ${props => props.theme.borderColor};
-  
+
   z-index: 1;
+
   * {
     box-sizing: border-box;
   }
-  
+
 `;
 const ToSpotBtn = styled.div`
   transition: transform 0.5s ease;
@@ -125,7 +127,7 @@ const Sidebar = styled.div`
   color: ${props => props.theme.textColor};
   border-right: ${props => props.theme.borderColor};
   transition: background-color 0.5s ease, transform 0.5s ease;
-  transform: translateX(${({ translateX }) => translateX});
+  transform: translateX(${({translateX}) => translateX});
 `;
 
 const CloseButton = styled.button`
@@ -138,7 +140,7 @@ const CloseButton = styled.button`
   border: none;
   background-color: transparent;
   background-image: url(${close});
-  
+
   &:hover {
     cursor: pointer;
   }
@@ -207,12 +209,12 @@ const ButtonMenu = styled.button`
   background-repeat: no-repeat;
   width: 250px;
   height: 40px;
-  
-  
+
+
   &:hover {
     cursor: pointer;
   }
-  
+
   &.MyFlow {
     top: 350px;
     left: 100px;
@@ -230,7 +232,8 @@ const ButtonMenu = styled.button`
 `;
 
 
-const Home = ({ children }) => {
+const Home = ({children}) => {
+  const navigate = useNavigate();
   // 사이드바 가로이동
   const [translateX, setTranslateX] = useState("-50vw");
 
@@ -241,18 +244,19 @@ const Home = ({ children }) => {
   const moveRight = () => {
     setTranslateX("-150vw");
   };
-  
+
 
   // 정보 수정 버튼을 눌렀을 때 톱니바퀴가 회전
   const [isClicked, setIsClicked] = useState(false);
-  
+
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
 
   // 다크모드 / 라이트모드 변경
-
   const [ThemeMode, setTheme] = useTheme();
+
+
   // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
   const place = ToSpot.getPlace();
   // toSpot 버튼 아이템 표시 여부 ex) 0 = false, 1 = true
@@ -262,14 +266,21 @@ const Home = ({ children }) => {
     else setIsToSpotBtnState(0);
   }
   const ToTimeLine = () => {
-
+    navigate("/timeline", {
+      state: {
+        loc: location
+      }
+    });
   }
   const [latitude, setLatitude] = useState(37.4923615);
-  const [longitude, setLongitude] = useState(127.0292881);
- const toSpotFocus = (lat, lng) => {
-   setLongitude(lng);
-   setLatitude(lat);
- }
+  const [longitude, setLongitude]= useState(127.0292881);
+  const [location, setLocation] = useState("");
+  const toSpotFocus = (lat, lng, location) => {
+    console.log(lat + "/" + lng + "/" + location);
+    setLongitude(lng);
+    setLatitude(lat);
+    setLocation(location);
+  }
 
   return (
     <HomeDiv>
@@ -277,36 +288,40 @@ const Home = ({ children }) => {
       {place.map(p => (
         <ToSpotBtn translateY={(p.num * 50 * isToSpotBtnState)}>
           <div className={"hot-spot to-timeline"}>
-            <div className="to-spot" onClick={()=>toSpotFocus(p.lat, p.lng)}><FaMapMarkerAlt size={20} color="#000000"/></div>
-            {p.location}
+            <div className="to-spot" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
+              <FaMapMarkerAlt size={20} color="#000000"/>
+            </div>
+            <span onClick={()=>ToTimeLine()}>{p.location}</span>
           </div>
         </ToSpotBtn>
       ))}
       <ToSpotBtn>
-        <div className="to-timeline more" onClick={ToTimeLine}>
-          <div className="to-spot" onClick={()=>btnToSpotMoreView} style={{marginRight:"3px"}}><FaMapMarkerAlt size={20} color="#000000"/></div>
-          TimeLine
+        <div className="to-timeline more">
+          <div className="to-spot" onClick={() => btnToSpotMoreView()} style={{marginRight: "3px"}}><FaMapMarkerAlt
+            size={20} color="#000000"/></div>
+          <span onClick={()=>ToTimeLine()}>TimeLine</span>
         </div>
       </ToSpotBtn>
 
-      <SidebarButton onClick={()=>moveLeft}>
+      <SidebarButton onClick={() => moveLeft()}>
         <MenuImg/>
       </SidebarButton>
 
 
       <Sidebar translateX={translateX}>
-        <CloseButton onClick={moveRight}></CloseButton>
+        <CloseButton onClick={() => moveRight()}></CloseButton>
 
         <MyInfo>
-          <EditButton onClick={handleClick} isClicked={isClicked}>
+          <EditButton onClick={() => handleClick()} isClicked={isClicked}>
             <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
           </EditButton>
           <div className="profileImg"></div>
-          
+
         </MyInfo>
-          <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
-          <ButtonMenu className="Diary">Diary</ButtonMenu>
-          <ButtonMenu className="Theme" onClick={setTheme} mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
+        <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
+        <ButtonMenu className="Diary">Diary</ButtonMenu>
+        <ButtonMenu className="Theme" onClick={setTheme}
+                    mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
       </Sidebar>
     </HomeDiv>
   );
