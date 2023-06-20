@@ -9,9 +9,7 @@ import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
 import {useTheme} from "../context/themeProvider";
 import DarkSetting from "../images/DarkSetting.png"
-import { Link, Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import {useNavigate} from "react-router";
+import { Link, Navigate, useNavigate  } from "react-router-dom";
 
 const HomeDiv = styled.div`
   width: auto;
@@ -153,10 +151,10 @@ const MyInfo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
+  
   .profileImg {
     position: absolute;
-    top: 3vw;
+    top: 50px;
     justify-content: space-evenly;
     background-image: url(${defProfile});
     width: 8vw;
@@ -169,7 +167,7 @@ const MyInfo = styled.div`
   .nicknameInput {
     color: ${props => props.theme.textColor};
     position: absolute;
-    top: 12vw;
+    top: 190px;
     width: fit-content;
     height: 25px;
     background-color: transparent;
@@ -192,7 +190,7 @@ const StatusMsgWrapper = styled.div`
     justify-content: flex-start;
     font-size: 10px;
     position: absolute;
-    top: 18vw;
+    top: 270px;
     width: 250px;
     height: 50px;
     border: ${props => props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'};
@@ -200,16 +198,31 @@ const StatusMsgWrapper = styled.div`
     background-color: transparent;
     box-sizing: border-box;
 
-    p {
-      margin: 2px;
-      padding: 2px;
+    textarea {
+      font-family: var(--kfont);
+      width: 250px;
+      height: 50px;
+      margin: 0px;
+      padding: 0px;
+      background-color: transparent;
+      border: none;
+      resize: none;
+      outline: none;
+      padding: 1px;
+      
+    }
+    textarea:focus {
+    outline: none;
     }
 `;
 
 const FollowWrapper = styled.div`
   position: absolute;
-  top: 15vw;
-
+  top: 230px;
+  
+  label {
+    margin-left: 20px;
+  }
 
   input {
     color: ${props => props.theme.textColor};
@@ -217,7 +230,7 @@ const FollowWrapper = styled.div`
     height: 30px;
     border: none;
     background-color: transparent;
-    margin-left: 5px;
+    margin-left: 10px;
     font-size: 1rem;
   }
   input:hover {
@@ -307,18 +320,38 @@ const Home = ({children}) => {
   };
 
 
-  // 정보 수정 버튼을 눌렀을 때 톱니바퀴가 회전
-  const [isClicked, setIsClicked] = useState(false);
+  // 정보 수정 관련 요소들
 
+  // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전
+  // 정보 수정 톱니바퀴를 눌렀을 떄 readOnly 속성을 바꿈
+  // 상태메시지 관련 
+  const [statusMsgValue, setStatusMsgValue] = useState("");
+  const [isClicked, setIsClicked] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [nicknameValue, setNicknameValue] = useState("");
+  const [isBorderVisible, setIsBorderVisible] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
+    setIsReadOnly(!isReadOnly);
+  };
+
+  const handleStatusMsgChange = (e) => {
+    setStatusMsgValue(e.target.value);
+  };
+
+  const handleNicknameChange = (e) => {
+    setNicknameValue(e.target.value);
+  }
+
+  const handleBorderVisible = () => {
+    setIsBorderVisible(!isBorderVisible);
   };
 
   // 다크모드 / 라이트모드 변경
-
   const [ThemeMode, setTheme] = useTheme();
 
-
+  
+  
   // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
   const place = ToSpot.getPlace();
   // toSpot 버튼 아이템 표시 여부 ex) 0 = false, 1 = true
@@ -382,7 +415,7 @@ const Home = ({children}) => {
             <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
           </EditButton>
           <div className="profileImg"></div>
-            <input type="text" className="nicknameInput" value={"nickname"} readOnly />
+            <input type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} />
           <FollowWrapper>
             <label htmlFor="following">following</label>
             <input type="text" id="following" value={"225"} readOnly onClick={goFollowing}/>
@@ -390,7 +423,7 @@ const Home = ({children}) => {
             <input type="text" id="follower" value={"850"} readOnly onClick={goFollowing}/>
           </FollowWrapper>
           <StatusMsgWrapper>
-            <p>상태 메시지가 출력되는 칸입니다 상태 메시지가 출력되는 칸입니다 상태 메시지가 출력되는 칸입니다 상태 메시지가 출력되는 칸입니다</p>
+            <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" readOnly={isReadOnly} value={statusMsgValue} onChange={handleStatusMsgChange}></textarea>
           </StatusMsgWrapper>
           
 
