@@ -1,24 +1,32 @@
-import styled from "styled-components";
+import styled , {css} from "styled-components";
 import { TfiArrowLeft } from "react-icons/tfi";
 import { useState } from "react";
 import HeaderBar from "../components/HeaderBarNavi";
 import { FiColumns } from "react-icons/fi";
 import { RiLayoutRowLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
+import SearchBar from "../components/SearchBar";
+
+const centerAlign = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 
 const Container = styled.div`
     font-style: var(--kfont);
     display:flex;
     justify-content:center;
-    flex-direction: column;
     align-items:center;
+    flex-direction: column;
+   
     width: 100vw;
     height: 100vh;
 `
 const Header = styled.div`
     background-color: white;
-    height: 20%;
+    height: 10%;
     width: 100%;
 `
 const HeaderList = styled.div`
@@ -36,13 +44,14 @@ const HeaderItemRight =styled.div`
     width: 50%;
 `
 const CreateBtn = styled.div`
-    display: flex;
+    /* display: flex;
     justify-content:center;
-    align-items:center;
+    align-items:center; */
+    ${centerAlign}
     border-radius: 5px;
     width: 35px;
     height: 35px;
-    background-color: silver;
+    background-color: #d8d8d8;
     margin : 5px;
 `
 
@@ -50,8 +59,8 @@ const Main = styled.div`
     overflow : scroll;
     display: grid;
     grid-template-rows: 1fr 1fr;
-    background-color: silver;
-    height: 80%;
+    background-color: #d8d8d8;
+    height: 90%;
     width: 100%;
     ${(props) => props.isSort ? `
         grid-template-columns: 1fr 1fr;
@@ -64,17 +73,28 @@ const Item = styled.div`
     background-color: white ;
     //width: 50%;
     height: 300px;
+    border-radius:15px;
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom:20px;
         &:first-child {
             margin-top : 20px;
         }
+       
     ${(props) => props.isSort ? `
-       display:flex;
-        flex-direction: column;
+      ${centerAlign}
+      flex-direction:column;
+      &:nth-child(odd){
+            margin-right:0px;
+        }
+         &:nth-child(2) {
+            margin-top : 20px;
+        } 
     ` : `
+   
+    flex-direction:row;
         display:flex;
+       
 
     `}   
 
@@ -82,11 +102,17 @@ const Item = styled.div`
 const ItemImg = styled.div`
      background-image: url(${(props) => props.url});
      background-repeat : no-repeat;
-        background-size: cover;
+    background-size: cover;
+       border-radius: 10px;
+
     ${(props) => props.isSort ? `
+    
         height : 80%;
-        width: 100%;
+        width: 90%;
     ` : `
+          margin-left: 30px;
+          margin-bottom: 30px;
+            margin-top: 30px;
             height : 80%;
             width: 50%;
     `}   
@@ -100,17 +126,13 @@ const ItemTitle = styled.div`
 `
 
 const ItemContent =styled.div`
-    display:flex;
-    justify-content:center;
-    align-items:center;
+   ${centerAlign}
     width: 50%;
     flex-direction:column;
      ${(props) => props.isSort ? `
       
     ` : `
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    ${centerAlign}
     width: 100%;
     flex-direction:column;
     `} 
@@ -121,22 +143,19 @@ const ItemContent =styled.div`
     .title{
         margin:10px;
         border-radius: 15px;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background-color : silver ;
+       ${centerAlign}
+        background-color : #d8d8d8 ;
         width: 85%;
-        flex:2;
+        flex: 1;
+
     }
     .content{
         margin:10px;
         border-radius: 15px;
-        background-color: silver;
-        display:flex;
-        justify-content:center;
-        align-items:center;
+        background-color: #d8d8d8;
+        ${centerAlign}
         flex: 10;
-        width: 85%;
+        width : 85%;
     }
 `
 
@@ -164,7 +183,7 @@ const TimeLine = () => {
         {
             id : 2,
             title: "강남역",
-            content: "명불허전",
+            content: "내가자주가",
             name : "이은지",
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo4Kelx6UY4EAmAxBKpECisZtK0MAxfCfo_w&usqp=CAU"
         },
@@ -227,9 +246,11 @@ const TimeLine = () => {
                         <CreateBtn>
                          <AiOutlinePlus></AiOutlinePlus>
                         </CreateBtn>
+
                     </HeaderItemRight>
                    
                 </HeaderList>
+
             </Header>
             <Main isSort={isSort}>
                 {
