@@ -38,7 +38,7 @@ const ToSpotBtn = styled.div`
     height: 40px;
     position: absolute;
     display: flex;
-    background-color: #61dafb;
+    background-color: #3AACFF;
     color: white;
     z-index: 2;
     text-align: center;
@@ -65,11 +65,11 @@ const ToSpotBtn = styled.div`
   }
 
   .hot-spot:hover {
-    background-color: #10cfff;
+    background-color: #0097e6;
   }
 
   .hot-spot:active {
-    background-color: #00b4d8;
+    background-color: #0077B6;
   }
 
   .more {
@@ -261,7 +261,9 @@ const Home = ({ children }) => {
     if (isToSpotBtnState === 0) setIsToSpotBtnState(1);
     else setIsToSpotBtnState(0);
   }
+  const ToTimeLine = () => {
 
+  }
   const [latitude, setLatitude] = useState(37.4923615);
   const [longitude, setLongitude] = useState(127.0292881);
  const toSpotFocus = (lat, lng) => {
@@ -275,19 +277,19 @@ const Home = ({ children }) => {
       {place.map(p => (
         <ToSpotBtn translateY={(p.num * 50 * isToSpotBtnState)}>
           <div className={"hot-spot to-timeline"}>
-            <div className="to-spot" onClick={() => toSpotFocus(p.lat, p.lng)}><FaMapMarkerAlt size={20} color="#000000"/></div>
+            <div className="to-spot" onClick={()=>toSpotFocus(p.lat, p.lng)}><FaMapMarkerAlt size={20} color="#000000"/></div>
             {p.location}
           </div>
         </ToSpotBtn>
       ))}
       <ToSpotBtn>
-        <div className="to-timeline more" onClick={btnToSpotMoreView}>
-          <div className="to-spot" style={{marginRight:"3px"}}><FaMapMarkerAlt size={20} color="#000000"/></div>
+        <div className="to-timeline more" onClick={ToTimeLine}>
+          <div className="to-spot" onClick={()=>btnToSpotMoreView} style={{marginRight:"3px"}}><FaMapMarkerAlt size={20} color="#000000"/></div>
           TimeLine
         </div>
       </ToSpotBtn>
 
-      <SidebarButton onClick={moveLeft}>
+      <SidebarButton onClick={()=>moveLeft}>
         <MenuImg/>
       </SidebarButton>
 
