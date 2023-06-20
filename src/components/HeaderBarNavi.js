@@ -63,6 +63,7 @@ const HeaderBar = ({ children }) => {
   };
 
   const [ThemeMode, setTheme] = useTheme();
+  
   console.log(ThemeMode)
   return (
       <HeaderBarDiv>

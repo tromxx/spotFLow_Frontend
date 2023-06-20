@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {styled} from 'styled-components';
-import HeaderBar from "../components/HeaderBarNavi";
 import KakaoMap from "../components/KakaoMap";
 import ToSpot from "../dataSet/ToSpotData";
 import {SlMenu} from "react-icons/sl";
@@ -9,6 +8,7 @@ import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
 import { useTheme } from "../context/themeProvider";
+import DarkSetting from "../images/DarkSetting.png"
 
 const HomeDiv = styled.div`
   width: auto;
@@ -167,21 +167,28 @@ const MyInfo = styled.div`
 
 const EditButton = styled.button`
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 3vw;
   left: 50px;
   width: 35px;
   height: 35px;
-  background-image: url(${setting});
   background-size: cover;
   background-color: transparent;
   border: none;
-  transition: transform 0.5s ease;
+  transition: transform 0.7s ease;
   transform: ${({isClicked}) => (isClicked ? 'rotate(120deg)' : 'rotate(5deg)')};
 
   &:hover {
     cursor: pointer;
   }
 
+`;
+
+const EditImg = styled.img`
+  width: 35px;
+  height: 35px;
 `;
 
 const Input = styled.input`
@@ -289,7 +296,9 @@ const Home = ({ children }) => {
         <CloseButton onClick={moveRight}></CloseButton>
 
         <MyInfo>
-          <EditButton onClick={handleClick} isClicked={isClicked}></EditButton>
+          <EditButton onClick={handleClick} isClicked={isClicked}>
+            <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
+          </EditButton>
           <div className="profileImg"></div>
           
         </MyInfo>
