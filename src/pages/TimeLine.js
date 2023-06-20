@@ -1,11 +1,13 @@
 import styled , {css} from "styled-components";
 import { TfiArrowLeft } from "react-icons/tfi";
-import { useState } from "react";
+import { useState , useRef ,useEffect } from "react";
 import HeaderBar from "../components/HeaderBarNavi";
 import { FiColumns } from "react-icons/fi";
 import { RiLayoutRowLine } from "react-icons/ri";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "react-icons/ai";
 import SearchBar from "../components/SearchBar";
+import {MdOutlineEditOff} from "react-icons/md";
+import { useTheme } from "../context/themeProvider";
 
 const centerAlign = css`
     display: flex;
@@ -13,9 +15,82 @@ const centerAlign = css`
     align-items: center;
 `;
 
+const CreatePost = styled.div`
+    background-color: #E7F1F5;
+    ${centerAlign}
+    flex-direction: column;
+    width : 35%;
+    height: 85%; 
+
+
+    position: absolute;
+    border-radius: 15px;
+    z-index: 100;
+   
+
+    @media (max-width: 1000px) {
+	& {
+		width: 300px;
+        height:450px;
+	}
+   textarea {
+     width: 82%;
+   }
+}
+
+   
+    .create-btns {
+        
+        ${centerAlign}
+        flex-direction:column ;
+        flex:2;
+        width: 100%;
+    }
+    button {
+        margin:10px;
+        width: 48%;
+        background-color: white;
+        border:none;
+        border-radius:15px;
+        height: 45px;
+    }
+    textarea {
+        width: 85%;
+        margin-left:20px;
+        margin-right:20px;
+        padding: 10px;
+        flex:6;
+        border:none;
+        background-color: white;
+        border-radius:15px;
+    }
+    input { 
+        padding: 10px;
+        margin:20px;
+        flex:1;
+        border:none;
+        border-radius:15px;
+        background-color:white;
+        width: 83%;
+
+        
+    }
+    .button-box {
+
+        position: relative;
+        width: 100%;
+        flex:3;
+        background-color: none;
+    }
+    .button-box-btn {
+        border-radius: 25px;
+    }
+
+`;
+
 
 const Container = styled.div`
-    font-style: var(--kfont);
+    font-family: var(--kfont);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -53,13 +128,17 @@ const CreateBtn = styled.div`
     height: 35px;
     background-color: #d8d8d8;
     margin : 5px;
+    &:hover{
+        background-color: white;
+        border: 1px solid silver;
+    }
 `
 
 const Main = styled.div`
     overflow : scroll;
     display: grid;
     grid-template-rows: 1fr 1fr;
-    background-color: #d8d8d8;
+    background-color:  ${(props) => props.theme.timeLineBgColor};
     height: 90%;
     width: 100%;
     ${(props) => props.isSort ? `
@@ -70,6 +149,7 @@ const Main = styled.div`
     `}    
 `;
 const Item = styled.div`
+    position: relative;
     background-color: white ;
     //width: 50%;
     height: 300px;
@@ -97,13 +177,27 @@ const Item = styled.div`
        
 
     `}   
+    .editBtn {
+        position: absolute;
+        background-color:white;
+        opacity: 80%;
+        border: 1px solid silver;
+        border-radius: 30px;
+        top:0;
+        left:0;
+        &:hover {
+            opacity: 100%;
+            background-color:silver;
+        }
+    }
 
 `
 const ItemImg = styled.div`
      background-image: url(${(props) => props.url});
      background-repeat : no-repeat;
-    background-size: cover;
-       border-radius: 10px;
+     background-size: cover;
+     border-radius: 10px;
+     background-position: center;
 
     ${(props) => props.isSort ? `
     
@@ -111,8 +205,10 @@ const ItemImg = styled.div`
         width: 90%;
     ` : `
           margin-left: 30px;
-          margin-bottom: 30px;
-            margin-top: 30px;
+           margin-bottom: 30px;
+             margin-top: 30px;
+
+        
             height : 80%;
             width: 50%;
     `}   
@@ -126,13 +222,17 @@ const ItemTitle = styled.div`
 `
 
 const ItemContent =styled.div`
+    
    ${centerAlign}
-    width: 50%;
+    width: 100%;
     flex-direction:column;
      ${(props) => props.isSort ? `
-      
+
     ` : `
     ${centerAlign}
+    margin:20px;
+    margin-left : 0;
+    margin-right : 0;
     width: 100%;
     flex-direction:column;
     `} 
@@ -144,7 +244,8 @@ const ItemContent =styled.div`
         margin:10px;
         border-radius: 15px;
        ${centerAlign}
-        background-color : #d8d8d8 ;
+       background-color:  ${(props) => props.theme.bgColor};
+       color : ${(props) => props.theme.textColor};
         width: 85%;
         flex: 1;
 
@@ -152,7 +253,8 @@ const ItemContent =styled.div`
     .content{
         margin:10px;
         border-radius: 15px;
-        background-color: #d8d8d8;
+        background-color:  ${(props) => props.theme.bgColor};
+        color : ${(props) => props.theme.textColor};
         ${centerAlign}
         flex: 10;
         width : 85%;
@@ -163,8 +265,77 @@ const ItemContent =styled.div`
 
 
 const TimeLine = () => {
+    // const input = useRef();
+    // const content = useRef();
+    const [title,setTitle] = useState("");
+    const [content,setContent] = useState("");
+
+
+    const theme = useTheme();
+
+    const [dummy,setDummy] = useState(
+        [
+            {
+                id : 1,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/6d/23/89/6d2389ac0bbd5afe74a2633b872d14fc.jpg",
+            },
+            {
+                id : 2,
+                title: "강남역",
+                content: "내가자주가",
+                name : "이은지",
+                image: "https://i.pinimg.com/474x/b3/91/3e/b3913eb2cfef207381eb28d8033229ba.jpg"
+            },
+            {   
+                id : 3 ,
+                title: "선릉역",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "마마무",
+                image : "https://i.pinimg.com/474x/39/03/d4/3903d4a7dfd82def0c1a825416a69853.jpg",
+            },
+            {   
+                id : 4, 
+                title: "ㅇㄹㅇ",
+                name : "",
+                image: "https://i.pinimg.com/474x/2b/f9/df/2bf9df9d3095b4b6c84a3e4cfb84ba11.jpg",
+            },
+            {
+                id : 5,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/2b/dd/1f/2bdd1fcb3dc2b7f303f143f6395b69d7.jpg",
+            },
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+    ]
+    );
+    const deleteTimeLine = () => {
+        setDummy(dummy.filter(i => !data.includes(i.id)));
+       // setDummy(dummy.filter(e => e.id !== data.id ))
+    }
+    const data = [];
+
+    
+    
+
+
+   const [isCreate,setIsCreate] = useState(false);
+
     // 타임라인 리스트 정렬하기위한 변수
-    const [isSort,setIsSort] = useState(false); 
+    const [isSort,setIsSort] = useState(false);
+    
+    // 편집모드를 위한 변수 
+    const [isEdit,setIsEdit] = useState(false);
 
     // 정렬하기위한 메서드  
     const toggleSwitch = () =>{
@@ -172,56 +343,28 @@ const TimeLine = () => {
     } 
 
     // dummy 임시로 테스트하려고 만든 객체배열 
-    const dummy = [
-        {
-            id : 1,
-            title: "역삼동 맛집",
-            content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-            name : "안유진",
-            image : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlFjaZeCyw7uQ35A-m0mj--3p6--bnk1WOsA&usqp=CAU",
-        },
-        {
-            id : 2,
-            title: "강남역",
-            content: "내가자주가",
-            name : "이은지",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo4Kelx6UY4EAmAxBKpECisZtK0MAxfCfo_w&usqp=CAU"
-        },
-        {   
-            id : 3 ,
-            title: "선릉역",
-            content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-            name : "마마무",
-            image : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOnMXfxlsIJPgeaFtQ_273EZrHFIDa2RizYg&usqp=CAU",
-        },
-        {   
-            id : 4, 
-            title: "ㅇㄹㅇ",
-            name : "",
-            image: "",
-        },
-        {
-            id : 5,
-            title: "역삼동 맛집",
-            content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-            name : "안유진",
-            image : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlFjaZeCyw7uQ35A-m0mj--3p6--bnk1WOsA&usqp=CAU",
-        },
-        {
-            id : 6,
-            title: "역삼동 맛집",
-            content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-            name : "안유진",
-            image : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlFjaZeCyw7uQ35A-m0mj--3p6--bnk1WOsA&usqp=CAU",
-        },
-
-];
+    
     
     return(
         <>
 <HeaderBar/>
-        <Container>
-            
+        <Container theme={theme}>
+            {isCreate &&
+                <CreatePost>
+                    <input onChange={e=>{ setTitle(e.target.value)}} type="text" />
+                    <textarea onChange={e=>{setContent(e.target.value)}} name="" id="" cols="50" rows="30"></textarea>
+                    <div className="create-btns">
+                       {/* <CreateBtn className="create-btn">확인</CreateBtn>
+                        <CreateBtn className="create-btn">취소</CreateBtn> */}
+                       <div className="button-box">
+                            <CreateBtn className="button-box-btn"/>
+                        </div> 
+                        <button onClick={()=>{setDummy([...dummy, {title: title, content: content}]); setContent("");setTitle("")}}>확인</button>
+                        <button onClick={()=>setIsCreate(!isCreate)}>취소</button>
+                    </div>
+                   
+                </CreatePost>
+            }
             <Header>
                 <HeaderList>
                     <HeaderItemLeft>
@@ -243,9 +386,28 @@ const TimeLine = () => {
                         </CreateBtn>
                         
                         }
-                        <CreateBtn>
+                        <CreateBtn onClick={()=> {setIsCreate(!isCreate)}}>
                          <AiOutlinePlus></AiOutlinePlus>
                         </CreateBtn>
+                        
+
+                        <CreateBtn onClick={deleteTimeLine}>
+                         <AiFillDelete></ AiFillDelete>
+                        </CreateBtn>
+                       
+                        
+                        {!isCreate &&
+                        
+                        <CreateBtn onClick={()=>{setIsEdit(!isEdit)}}>
+                        {isEdit ? <MdOutlineEditOff />
+                         : <AiOutlineEdit onClick={()=>{setIsEdit(!isEdit)}}></AiOutlineEdit>}
+                        
+                    </CreateBtn>
+                        
+                        
+                        }
+                       
+                    
 
                     </HeaderItemRight>
                    
@@ -256,8 +418,11 @@ const TimeLine = () => {
                 {
                 dummy.map((e)=> 
                     <Item isSort={isSort} key={e.id}>
+                        {isEdit ?  
+                        <CreateBtn onClick={()=>{data.push(e.id)}} className="editBtn"></CreateBtn>
+                        : <></>}
                         <ItemImg isSort={isSort} url={e.image}></ItemImg>
-                        <ItemContent>
+                        <ItemContent isSort={isSort}>
                             <div className="title">{e.title}</div>
                             {isSort ?  <></> :  <div className="content">{e.content}</div>}
                            
