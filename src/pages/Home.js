@@ -128,17 +128,6 @@ const NicknameInput = styled.input`
     outline: none;
   }
 `
-const NicknameWrapper = styled.div`
-  width: 200px;
-  height: 200px;
-  display: flex;
-  position: absolute;
-  top: 100px;
-  border: ${props =>
-  props.isBorderVisible
-    ? `${props => props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'}`
-    : `transparent`};   
-`;
 
 
 
@@ -241,7 +230,7 @@ const ButtonMenu = styled.button`
   background-repeat: no-repeat;
   width: 250px;
   height: 40px;
-
+  transform: translateX(${({transMenuX}) => transMenuX});
 
   &:hover {
     cursor: pointer;
@@ -250,26 +239,89 @@ const ButtonMenu = styled.button`
   &.MyFlow {
     top: 350px;
     left: 100px;
+    transition: transform 0.3s ease;
   }
 
   &.Diary {
     top: 420px;
     left: 100px;
+    transition: transform 0.7s ease;
   }
 
   &.Theme {
     top: 490px;
     left: 100px;
+    transition: transform 1.0s ease;
   }
 `;
 
+const ButtonMenuWrapper = styled.div`
+  
+`;
+
+const InfoInput = styled.input`
+  color: ${props => props.theme.textColor};
+  font-family: var(--kfont);
+  position: absolute;
+  width: 250px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: transparent;
+  display: flex;
+  border: ${props =>
+  props.isBorderVisible
+    ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
+    : 'transparent'};
+  transform: translateX(${({transInfoEditX}) => transInfoEditX});  
+  &.password {
+    top: 350px;
+    left: 105px;
+    transition: transform 0.3s ease;
+  }
+  &.newPassword {
+    top: 420px;
+    left: 105px;
+    transition: transform 0.7s ease;
+  }
+  &.newPasswordConfirm {
+    top: 490px;
+    left: 105px;
+    transition: transform 1.0s ease;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const SaveButton = styled.button`
+  transform: translateX(${({transInfoEditX}) => transInfoEditX});  
+  background-color: #00B4D8;
+  font-family: var(--kfont);
+  color: white;
+  position: absolute;
+  width: 250px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1.3s ease;
+  top: 560px;
+  left: 105px;
+  border: none;
+  &:hover {
+    background-color: #0096C7;
+    transition: background-color 0.5s ease
+  }
+`;
 
 const Home = ({children}) => {
 
   const navigate = useNavigate();
 
   // 사이드바 가로이동
-  const [translateX, setTranslateX] = useState("-50vw");
+  const [translateX, setTranslateX] = useState("-100vw");
 
   const moveLeft = () => {
     setTranslateX("0");
@@ -287,11 +339,14 @@ const Home = ({children}) => {
   const [isReadOnly, setIsReadOnly] = useState(true);  // 정보 수정 톱니바퀴를 눌렀을 때 readOnly 속성을 바꿈
   const [nicknameValue, setNicknameValue] = useState(""); // 닉네임 값
   const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
-  const [transY, setTransY] = useState("0");
+  const [transMenuX, setTransMenuX] = useState("0"); // 정보 수정 톱니바퀴를 눌렀을 때 원래 존재하는 메뉴들의 이동
+  const [transInfoEditX, setTransInfoEditX] = useState("-50vw"); // 정보 수정 톱니바퀴를 눌렀을 때 비밀번호 수정 창의 이동
   const handleClick = () => {
-    setIsClicked(!isClicked);
-    setIsReadOnly(!isReadOnly);
-    setIsBorderVisible(!isBorderVisible);
+    setIsClicked(true);
+    setIsReadOnly(false);
+    setIsBorderVisible(true);
+    setTransMenuX("-50vw");
+    setTransInfoEditX("0");
   };
 
   const handleStatusMsgChange = (e) => {
@@ -300,6 +355,14 @@ const Home = ({children}) => {
 
   const handleNicknameChange = (e) => {
     setNicknameValue(e.target.value);
+  }
+
+  const handleSave = () => {
+    setIsClicked(false);
+    setTransMenuX("0");
+    setIsReadOnly(true);
+    setIsBorderVisible(false);
+    setTransInfoEditX("-50vw");
   }
 
   // 다크모드 / 라이트모드 변경
@@ -330,7 +393,6 @@ const Home = ({children}) => {
             <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
           </EditButton>
           <div className="profileImg"></div>
-          <NicknameWrapper isBorderVisible={isBorderVisible}></NicknameWrapper>
             <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
           <FollowWrapper>
             <label htmlFor="following">following</label>
@@ -344,11 +406,17 @@ const Home = ({children}) => {
           
 
         </MyInfo>
-        
-        <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
-        <ButtonMenu className="Diary">Diary</ButtonMenu>
-        <ButtonMenu className="Theme" onClick={setTheme}
-                    mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
+        <ButtonMenuWrapper >
+          <ButtonMenu transMenuX = {transMenuX} className="MyFlow">myFlow</ButtonMenu>
+          <ButtonMenu transMenuX = {transMenuX} className="Diary">Diary</ButtonMenu>
+          <ButtonMenu transMenuX = {transMenuX} className="Theme" onClick={setTheme}
+                      mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
+        </ButtonMenuWrapper>
+
+        <InfoInput transInfoEditX = {transInfoEditX} className="password" placeholder="비밀번호" isBorderVisible={isBorderVisible}/>
+        <InfoInput transInfoEditX = {transInfoEditX} className="newPassword" placeholder="새 비밀번호" isBorderVisible={isBorderVisible}/>
+        <InfoInput transInfoEditX = {transInfoEditX} className="newPasswordConfirm" placeholder="새 비밀번호 확인" isBorderVisible={isBorderVisible}/>
+        <SaveButton transInfoEditX = {transInfoEditX} onClick={handleSave}>저장하기</SaveButton>
       </Sidebar>
     </HomeDiv>
   );
