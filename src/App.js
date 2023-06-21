@@ -12,6 +12,8 @@ import Following from './pages/Following';
 import { ThemeProvider } from './context/themeProvider';
 import KakaoMap from './components/KakaoMap';
 import styled from 'styled-components'
+import SideBar from './components/SideBar';
+import SideBarMain from './components/SidebarMain';
 
 const Sidebar = styled.div`
   display: flex;
@@ -37,6 +39,10 @@ function App() {
           <Routes>
             <Route path="/" element={<>
                 <HeaderBarNavi />
+                
+                <SideBar>
+                  <SideBarMain />
+                </SideBar>
                 <Home />
               </>} />
             <Route path="/login" element={<>
@@ -57,7 +63,10 @@ function App() {
               <HeaderBarNavi />
               <Following/>
             </>} />
-            <Route path="/diary" element={<Diary />} />
+            <Route path="/diary" element={<>
+              <HeaderBarNavi />
+              <Diary />
+            </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
           </Routes>

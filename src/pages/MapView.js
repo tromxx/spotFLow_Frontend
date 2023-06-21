@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import KakaoMap from "../components/KakaoMap";
 import {FaMapMarkerAlt} from "react-icons/fa";
 import {styled} from "styled-components";
@@ -133,7 +133,7 @@ const MapView = () => {
   return (
     <>
       {/*카카오맵을 렌더링하는 컴포넌트*/}
-      <KakaoMap MapData={mapData}/>
+      <KakaoMap MapData={mapData} ViewSet={viewSet}/>
 
       {/*place 에 저장된 배열만큼 map 함수로 바로가기 버튼 생성*/}
       {place.map(p => (
@@ -142,11 +142,11 @@ const MapView = () => {
             <div className="to-spot item" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
               <FaMapMarkerAlt className="marker" size={20}/>
             </div>
-            <span className="btn-sub" onClick={()=>ToTimeLine(p.location)}>{p.location}</span>
+            <span className="btn-sub" onClick={()=>ToTimeLine(p.location)}>{p.name}</span>
           </div>
         </ToSpotBtn>
       ))}
-      {/*바로가기 버튼을 보여주는 상위 버튼, timeline 문구를 클릭하면 검색값을 비운채로 타임라인으로 이동*/}
+      {/*바로가기 버튼을 보여주는 상위 버튼, timeline 문구를 클릭하면 검색값을 비운 채로 타임라인으로 이동*/}
       <ToSpotBtn>
         <div className="to-timeline more">
           <div className="to-spot main" onClick={() => btnToSpotMoreView()} style={{marginRight: "3px"}}>

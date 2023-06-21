@@ -2,81 +2,56 @@ import React from "react";
 import { styled } from "styled-components";
 
 const DiaryLayoutdiv = styled.div`
-    margin-top: 0px;
-    width: 80vw;
-    height: 20vw;
-    color: black;
-    justify-content: center;
+  /* border: solid 1px red; */
+  width: 100%;
+  height: 33.3%;
+
+  .bar1{
+    /* border: solid 1px violet; */
+    width: 100%;
+    height: 20%;
+    border-top: solid 15px #00b4d8;
+    border-bottom: solid 5px #caf0f8;
     display: flex;
-    flex-direction: column;
-    border-top: 12px solid var(--blue);
-    position: relative;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    *{
-        box-sizing: border-box;
-        border: solid 1px royalblue;
-    }
-    .designbar{
-        border: solid 1px black;
-        width: 100%;
-        height: auto;
-        border-bottom: 3px solid var(--blue);
-        position: absolute;
-        margin-bottom: 140px;
-        
-    }
+  h6{
+    display: flex;
+    margin-right: 50px;
+  }
 
-    .h4{
-        display: flex;
-        justify-content: flex-start;
-        text-align: center;
-        align-items: center;
-        width: 10%;
-        height: 35px;
-        border: solid 1px gray;
-    }
-
-    .h6{
-        border: solid 1px blue;
-        width: 10%;
-        height: 38px;
-        display: flex;
-        position: absolute;
-        text-align: center;
-        align-items: flex-end;
-        left: 90%;
-        top:3%;
-    }
-
-    .firstcontents{
-        border: solid 1px red;
-        width: 100%;
-        height: 100px;
-        display: flex;
-        /* flex-direction: column; */
-        justify-content: flex-end;
-    }
+  .flex-Container{
+    border: solid 1px green;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    width: 100%;
+    height: 70%;
+  }
+  .flex-item{
+    border: solid 1px red;
+    width: 15%;
+    height: 60%;
+    margin: 15px;
+  }
+`; 
 
 
-    
-`;
-
-
-const DiaryLayout = () => {
+const DiaryLayout = (props) => {
     return(
         <DiaryLayoutdiv>
-            <div className="designbar">
-                <div className="h4">
-                    <h4>Popular</h4>
-                </div>
-                <div className="h6">
-                    <h6>See All</h6>
-                </div>
+            <div className="bar1">
+                <h4>{props.name}</h4>
+                <h6>See All</h6>
             </div>
-            <div className="firstcontents">
-                    <div>내용</div>
-                    <div>내용</div>
-                    <div>내용</div>
+            <div className="flex-Container">
+                <div className="flex-item">item 1</div>
+                <div className="flex-item">item 2</div>
+                <div className="flex-item">item 3</div>
+                <div className="flex-item">item 4</div>
+                <div className="flex-item">item 5</div>
             </div>
         </DiaryLayoutdiv>
     );
