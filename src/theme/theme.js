@@ -1,6 +1,7 @@
 
 
 export const lightTheme = {
+    timeLineBgColor: '#F5F5F4',
     bgColor: 'white',
     textColor: 'black',
     borderColor: '1px solid #d9d9d9',
