@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import KakaoMap from "../components/KakaoMap";
 import {FaMapMarkerAlt} from "react-icons/fa";
 import {styled} from "styled-components";
@@ -142,7 +142,7 @@ const MapView = () => {
             <div className="to-spot item" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
               <FaMapMarkerAlt className="marker" size={20}/>
             </div>
-            <span className="btn-sub" onClick={()=>ToTimeLine(p.location)}>{p.location}</span>
+            <span className="btn-sub" onClick={()=>ToTimeLine(p.location)}>{p.name}</span>
           </div>
         </ToSpotBtn>
       ))}
