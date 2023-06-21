@@ -90,6 +90,13 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+    @media (min-width: 1300px) {
+	& {
+        
+    }
+}
+
+
     font-family: var(--kfont);
     display:flex;
     justify-content:center;
@@ -100,9 +107,27 @@ const Container = styled.div`
     height: 100vh;
 `
 const Header = styled.div`
+    ${centerAlign}
+    justify-content: start;
+    flex-wrap: wrap;
     background-color: white;
     height: 10%;
     width: 100%;
+
+    .Search-bar {
+        width: 60%;
+        height: 20px;
+        margin-left: 20px;
+        border:none;
+        background-color: silver;
+        border-radius:15px;
+    }
+    @media (min-width: 1300px) {
+	& {
+        height: 20%;
+        width: 72%;
+    }
+}
 `
 const HeaderList = styled.div`
     display:flex;
@@ -132,9 +157,19 @@ const CreateBtn = styled.div`
         background-color: white;
         border: 1px solid silver;
     }
+    ${(props) => props.isClicked && 
+        `background-color: black; `
+    }
 `
 
 const Main = styled.div`
+     @media (min-width: 1300px) {
+	& {
+        height: 80%;
+        width: 70%;
+        border: 1px solid silver;
+    }
+}
     overflow : scroll;
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -198,7 +233,7 @@ const ItemImg = styled.div`
      background-size: cover;
      border-radius: 10px;
      background-position: center;
-
+     background-color: silver;   
     ${(props) => props.isSort ? `
     
         height : 80%;
@@ -319,15 +354,20 @@ const TimeLine = () => {
     
     ]
     );
+
+
     const deleteTimeLine = () => {
-        setDummy(dummy.filter(i => !data.includes(i.id)));
+        if((dummy.filter(i => !isClicked.includes(i.id)))){
+            setDummy(dummy.filter(i => !isClicked.includes(i.id)));
+        }
+
        // setDummy(dummy.filter(e => e.id !== data.id ))
     }
     const data = [];
 
     
     
-
+    const [isClicked,setIsClicked] = useState([]);
 
    const [isCreate,setIsCreate] = useState(false);
 
@@ -410,16 +450,17 @@ const TimeLine = () => {
                     
 
                     </HeaderItemRight>
-                   
-                </HeaderList>
 
+                </HeaderList>
+                <input type="text" className="Search-bar" />
             </Header>
             <Main isSort={isSort}>
                 {
                 dummy.map((e)=> 
                     <Item isSort={isSort} key={e.id}>
                         {isEdit ?  
-                        <CreateBtn onClick={()=>{data.push(e.id)}} className="editBtn"></CreateBtn>
+
+                        <CreateBtn isClicked={isClicked.includes(e.id)}  onClick={()=>{setIsClicked(...isClicked, e.id) }} className="editBtn"></CreateBtn>
                         : <></>}
                         <ItemImg isSort={isSort} url={e.image}></ItemImg>
                         <ItemContent isSort={isSort}>
