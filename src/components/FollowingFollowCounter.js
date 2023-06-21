@@ -10,7 +10,7 @@ import styled from 'styled-components'
 const FollowingFollowCounterDiv = styled.div`
     display: flex;
     gap: 50px;
-    margin-top: 100px;
+    
     cursor: pointer;
     p{
         font-family: var(--efont);

@@ -8,7 +8,7 @@ const Container = styled.div`
   }
   #map {
     width: 100%;
-    height: 93vh;
+    height: 100vh;
     position: relative;
     z-index: 1;
   }
