@@ -58,14 +58,10 @@ const ToSpotBtn = styled.div`
     border: .3px solid rgb(0, 0, 0, 30);
     color: #000;
   }
-
-  //800px 이하면 압축후 버튼으로 보이기 처리
-  @media (max-width: 860px) {
-  }
 `;
 const MapView = () => {
   const navigate = useNavigate();
-// 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
+  // 핫 플레이스 이름, 경도, 위도 데이터를 저장한 배열
   const place = ToSpot.getPlace();
   // toSpot 버튼 아이템 표시 여부 ex) 0 = false, 1 = true
   const [isToSpotBtnState, setIsToSpotBtnState] = useState(0);
@@ -73,7 +69,8 @@ const MapView = () => {
     if (isToSpotBtnState === 0) setIsToSpotBtnState(1);
     else setIsToSpotBtnState(0);
   }
-  const ToTimeLine = () => {
+  const ToTimeLine = (location) => {
+    console.log(location)
     navigate("/timeline", {
       state: {
         loc: location
@@ -91,22 +88,26 @@ const MapView = () => {
   }
   return (
     <>
+      {/*카카오맵을 렌더링하는 컴포넌트*/}
       <KakaoMap latitude={latitude} longitude={longitude}/>
+
+      {/*place 에 저장된 배열만큼 map 함수로 바로가기 버튼 생성*/}
       {place.map(p => (
         <ToSpotBtn translateY={(p.num * 50 * isToSpotBtnState)}>
           <div className={"hot-spot to-timeline"}>
             <div className="to-spot" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
               <FaMapMarkerAlt size={20} color="#000000"/>
             </div>
-            <span onClick={()=>ToTimeLine()}>{p.location}</span>
+            <span onClick={()=>ToTimeLine(p.location)}>{p.location}</span>
           </div>
         </ToSpotBtn>
       ))}
+      {/*바로가기 버튼을 보여주는 상위 버튼, timeline 문구를 클릭하면 검색값을 비운채로 타임라인으로 이동*/}
       <ToSpotBtn>
         <div className="to-timeline more">
-          <div className="to-spot" onClick={() => btnToSpotMoreView()} style={{marginRight: "3px"}}><FaMapMarkerAlt
-            size={20} color="#000000"/></div>
-          <span onClick={()=>ToTimeLine()}>TimeLine</span>
+          <div className="to-spot" onClick={() => btnToSpotMoreView()} style={{marginRight: "3px"}}>
+            <FaMapMarkerAlt size={20} color="#000000"/></div>
+          <span onClick={()=>ToTimeLine('')}>TimeLine</span>
         </div>
       </ToSpotBtn>
     </>
