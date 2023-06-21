@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react'
 import {styled} from "styled-components";
 import CityDataApi from "../api/CityDataApi";
+import ToSpotData from "../dataSet/ToSpotData";
 
 const Container = styled.div`
   * {
@@ -21,26 +22,62 @@ const KakaoMap=(props)=>{
   let lng = 127.0292881;
 
   /*
-  * 도시데이터 api 접목 테스트 코드
+  * 도시데이터 api 접목
   * 로직 :
-  * 1. 전체 데이터셋을 배열에 넣고 한번에 지도에 미리 그려넣기
-  * 2. 버튼으로 좌표만 전달 받아 지도 이동, 혹은 지역 이름만 받아 타임라인으로 이동
-  * 3.
+  * 1. API 를 통해 저장된 장소 배열을 반복해서 인수를 돌려
+  *    원하는 데이터만 json 배열로 저장(clear)
+  *
+  * 2. 저장된 모든 핫플레이스 정보를 맵에 렌더링 될 때 모두 표시
+  *
+  * 단점 :
+  * 1. 단점으로는 한가지만 해도 방대한 양의 데이터를 가져오는데
+  *    배열로 반복문을 돌리다보니 상당히 많은 시간이 소요 됨
+  *
+  * 해결 방안 :
+  * 1. 해결 방법으로는 기능 구현은 해당 컴포넌트에서 하되
+  *    프로그램을 시작함과 동시에 api에 접근한다면
+  *    필요한 데이터를 간추려서 전달하기 때문에
+  *    많은 시간 절약이 생길 것으로 생각됨
   */
-  async function apiTest(place)  {
-    let test = await CityDataApi.getCityData(place);
+  async function apiTest()  {
+    let places = ToSpotData.getPlace();
+    const test = await ToSpotData.getCityDataList(places);
     console.log(test);
   }
+  /*
+   * 혼잡도, 유저 이벤트 컨버트
+   * 로직 :
+   * 1. 정보공유 허용한 유저만 데이터를 받아와서 웹소켓 세션에 저장
+   *    클라이언트는 위치정보를 서버에 보내고 서버는 위치 정보를 받아서 저장한다
+   *    당연히 이 모든 통신은 웹소켓으로 이루어진다.
+   *
+   * 2. 뷰셋이 유저 이벤트로 설정되어 있으면 3-4번을 실행한다.
+   *
+   * 3. 세션에 저장되어 있는 유저 정보를 웹소켓을 통해 받아옴
+   *    (이 기능만 컴포넌트로 분리)
+   *
+   * 4. 받아온 유저(위치)데이터를 통해 서버에 유저(프로필)데이터를 받아온다.
+   *
+   * 5. 해당 위치 데이터에 의거해서 마커를 찍고
+   *    프로필 데이터를 토대로 오버레이를 생성해준다.
+   *
+   * 6. 뷰셋이 혼잡도로 설정 되어 있으면 api 접목 로직을 사용한다.
+   *
+   * 7. 우측 상단버튼은 좌표만 전달 받아 지도 이동,
+   *    혹은 지역 이름만 받아 타임라인으로 이동한다.
+   */
 
   useEffect( ()=>{
     console.log(mapData.latitude);
     console.log(mapData.longitude);
+
     if (mapData.latitude > 0) lat = mapData.latitude;
     if (mapData.longitude > 0) lng = mapData.longitude;
-    if (mapData.location !== "" && mapData.location !== undefined) {
+    if (mapData.location !== "" && mapData.location !== undefined)
       setLoc(mapData.location);
-      apiTest(mapData.location).then(r => console.log("거부 됨"));
-    }
+
+    if (props.ViewSet === 1) apiTest();
+
     let container = document.getElementById('map');
     let options = {
       center: new kakao.maps.LatLng(lat, lng),
