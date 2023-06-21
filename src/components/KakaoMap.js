@@ -13,24 +13,26 @@ const Container = styled.div`
     z-index: 1;
   }
 `;
-const KakaoMap=({latitude, longitude})=>{
-  const {location, setLocation} = useState("");
+const KakaoMap=(props)=>{
+  const [loc, setLoc] = useState("");
+  const mapData = props.MapData;
   let lat = 37.4923615;
   let lng = 127.0292881;
 
 
   useEffect(()=>{
-    console.log(latitude);
-    console.log(longitude);
-    if (latitude > 0) lat = latitude;
-    if (longitude > 0) lng = longitude;
+    console.log(mapData.latitude);
+    console.log(mapData.longitude);
+    if (mapData.latitude > 0) lat = mapData.latitude;
+    if (mapData.longitude > 0) lng = mapData.longitude;
+    if (mapData.location === "" && mapData.location !== undefined) setLoc(mapData.location);
     let container = document.getElementById('map');
     let options = {
       center: new kakao.maps.LatLng(lat, lng),
       level: 3
     };
     let map = new kakao.maps.Map(container, options);
-    }, [latitude, longitude])
+    }, [props])
 
     return (
       <Container>

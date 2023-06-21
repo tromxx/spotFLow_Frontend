@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
 
+
 const centerAlign = css`
     display: flex;
     justify-content: center;
@@ -116,7 +117,8 @@ const Header = styled.div`
 
     .Search-bar {
         width: 60%;
-        height: 20px;
+        padding: 15px;
+        height: 0px;
         margin-left: 20px;
         border:none;
         background-color: silver;
@@ -177,10 +179,10 @@ const Main = styled.div`
     height: 90%;
     width: 100%;
     ${(props) => props.isSort ? `
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     ` : `
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr ;
+        grid-template-rows: 1fr 1fr ;
     `}    
 `;
 const Item = styled.div`
@@ -195,14 +197,26 @@ const Item = styled.div`
         &:first-child {
             margin-top : 20px;
         }
-       
+       // 밑에 코드는 정렬 
     ${(props) => props.isSort ? `
       ${centerAlign}
       flex-direction:column;
+      &:nth-child(2n){
+            margin-right:0px;
+        }
+        &:nth-child(4n){
+            margin-right:20px;
+        }
       &:nth-child(odd){
             margin-right:0px;
         }
          &:nth-child(2) {
+            margin-top : 20px;
+        } 
+        &:nth-child(3) {
+            margin-top : 20px;
+        } 
+        &:nth-child(4) {
             margin-top : 20px;
         } 
     ` : `
@@ -244,8 +258,8 @@ const ItemImg = styled.div`
              margin-top: 30px;
 
         
-            height : 80%;
-            width: 50%;
+            height : 250px;
+            width: 40%;
     `}   
 
 
@@ -279,7 +293,7 @@ const ItemContent =styled.div`
         margin:10px;
         border-radius: 15px;
        ${centerAlign}
-       background-color:  ${(props) => props.theme.bgColor};
+       background-color:  ${(props) => props.theme.timeLineBgColor};
        color : ${(props) => props.theme.textColor};
         width: 85%;
         flex: 1;
@@ -288,7 +302,7 @@ const ItemContent =styled.div`
     .content{
         margin:10px;
         border-radius: 15px;
-        background-color:  ${(props) => props.theme.bgColor};
+        background-color:  ${(props) => props.theme.timeLineBgColor};
         color : ${(props) => props.theme.textColor};
         ${centerAlign}
         flex: 10;
@@ -453,6 +467,7 @@ const TimeLine = () => {
 
                 </HeaderList>
                 <input type="text" className="Search-bar" />
+
             </Header>
             <Main isSort={isSort}>
                 {
