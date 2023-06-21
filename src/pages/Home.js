@@ -104,25 +104,43 @@ const MyInfo = styled.div`
     min-height: 120px;
     background-size: cover;
   }
-
-  .nicknameInput {
-    color: ${props => props.theme.textColor};
-    position: absolute;
-    top: 190px;
-    width: fit-content;
-    height: 25px;
-    background-color: transparent;
-    border: none;
-    font-size: 1.2rem;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  
-  input:focus {
-  outline: none;
-  }
 `;
+
+const NicknameInput = styled.input`
+  position: absolute;
+  color: ${props => props.theme.textColor};
+  border: ${props =>
+  props.isBorderVisible
+    ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
+    : 'transparent'};
+  transition: 0.6s ease;
+  top: 190px;
+  width: 150px;
+  height: 35px;
+  border-radius: 8px;
+  background-color: transparent;
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: bold;
+  outline: none;
+  box-shadow: none;
+  &:focus {
+    outline: none;
+  }
+`
+const NicknameWrapper = styled.div`
+  width: 200px;
+  height: 200px;
+  display: flex;
+  position: absolute;
+  top: 100px;
+  border: ${props =>
+  props.isBorderVisible
+    ? `${props => props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'}`
+    : `transparent`};   
+`;
+
+
 
 const StatusMsgWrapper = styled.div`
     color: ${props => props.theme.textColor};
@@ -140,6 +158,7 @@ const StatusMsgWrapper = styled.div`
     box-sizing: border-box;
 
     textarea {
+      color: ${props => props.theme.textColor};
       font-family: var(--kfont);
       width: 250px;
       height: 50px;
@@ -149,7 +168,7 @@ const StatusMsgWrapper = styled.div`
       border: none;
       resize: none;
       outline: none;
-      padding: 1px;
+      padding: 2px;
       
     }
     textarea:focus {
@@ -263,17 +282,16 @@ const Home = ({children}) => {
 
   // 정보 수정 관련 요소들
 
-  // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전
-  // 정보 수정 톱니바퀴를 눌렀을 떄 readOnly 속성을 바꿈
-  // 상태메시지 관련 
-  const [statusMsgValue, setStatusMsgValue] = useState("");
-  const [isClicked, setIsClicked] = useState(false);
-  const [isReadOnly, setIsReadOnly] = useState(true);
-  const [nicknameValue, setNicknameValue] = useState("");
-  const [isBorderVisible, setIsBorderVisible] = useState(false);
+  const [statusMsgValue, setStatusMsgValue] = useState("");  // 상태메시지 관련
+  const [isClicked, setIsClicked] = useState(false);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전
+  const [isReadOnly, setIsReadOnly] = useState(true);  // 정보 수정 톱니바퀴를 눌렀을 때 readOnly 속성을 바꿈
+  const [nicknameValue, setNicknameValue] = useState(""); // 닉네임 값
+  const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
+  const [transY, setTransY] = useState("0");
   const handleClick = () => {
     setIsClicked(!isClicked);
     setIsReadOnly(!isReadOnly);
+    setIsBorderVisible(!isBorderVisible);
   };
 
   const handleStatusMsgChange = (e) => {
@@ -283,10 +301,6 @@ const Home = ({children}) => {
   const handleNicknameChange = (e) => {
     setNicknameValue(e.target.value);
   }
-
-  const handleBorderVisible = () => {
-    setIsBorderVisible(!isBorderVisible);
-  };
 
   // 다크모드 / 라이트모드 변경
   const [ThemeMode, setTheme] = useTheme();
@@ -316,7 +330,8 @@ const Home = ({children}) => {
             <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
           </EditButton>
           <div className="profileImg"></div>
-            <input type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} />
+          <NicknameWrapper isBorderVisible={isBorderVisible}></NicknameWrapper>
+            <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
           <FollowWrapper>
             <label htmlFor="following">following</label>
             <input type="text" id="following" value={"225"} readOnly onClick={goFollowing}/>
@@ -329,6 +344,7 @@ const Home = ({children}) => {
           
 
         </MyInfo>
+        
         <ButtonMenu className="MyFlow">myFlow</ButtonMenu>
         <ButtonMenu className="Diary">Diary</ButtonMenu>
         <ButtonMenu className="Theme" onClick={setTheme}
