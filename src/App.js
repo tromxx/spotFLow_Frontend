@@ -6,38 +6,42 @@ import MyFlow from './pages/MyFlow';
 import TimeLine from './pages/TimeLine';
 import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
-import Singup from './pages/Singup';
+import Signup from './pages/Signup';
 import FollowingFollow from './pages/FollowingFollow';
+import { ThemeProvider } from './context/themeProvider';
+
+
+
 
 function App() {
+  
+  
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<>
-            <HeaderBarNavi />
-            <Home />
-          </>} />
-        <Route path="/login" element={<>
-          <HeaderBarNavi />
-          <Login />
-        </>} />
-        <Route path="/singup" element={<>
-          <HeaderBarNavi />
-          <Singup />
-        </>} />
-        <Route path="/followingfollow" element={<>
-          <HeaderBarNavi />
-          <FollowingFollow />
-        </>} />
-        <Route path="/diary" element={<>
-          <HeaderBarNavi />
-          <Diary />
-        </>} />
-        <Route path="/myflow" element={<MyFlow/>}/>   
-        <Route path="/diary" element={<Diary/>} /> 
-        <Route path="/timeline" element={<TimeLine/>} />      
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <ThemeProvider>
+          <Routes>
+            <Route path="/" element={<>
+                <HeaderBarNavi />
+                <Home />
+              </>} />
+            <Route path="/login" element={<>
+              <HeaderBarNavi />
+              <Login />
+            </>} />
+            <Route path="/signup" element={<>
+              <HeaderBarNavi />
+              <Signup />
+            </>} />
+            <Route path="/followingfollow" element={<>
+              <HeaderBarNavi />
+              <FollowingFollow />
+            </>} />
+            <Route path="/diary" element={<Diary />} />
+            <Route path="/myflow" element={<MyFlow />} />
+            <Route path="/timeline" element={<TimeLine />} />
+          </Routes>
+        </ThemeProvider>
+      </BrowserRouter>
   );
 }
 
