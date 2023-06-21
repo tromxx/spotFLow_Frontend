@@ -27,7 +27,16 @@ const ToSpot = {
       lng: 127.09800673535563
     }];
     return place;
-  }
+  },
+  setMapData: (lat, lng, loc) => {
+    const data = {
+      latitude : lat,
+      longitude : lng,
+      location : loc
+    }
+    console.log(data);
+    return data;
+  },
 }
 
 export default ToSpot;
