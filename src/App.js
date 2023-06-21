@@ -10,18 +10,18 @@ import Signup from './pages/Signup';
 import Follower from './pages/Follower';
 import Following from './pages/Following';
 import { ThemeProvider } from './context/themeProvider';
-import KakaoMap from './components/KakaoMap';
 import styled from 'styled-components'
+import { AiOutlineMenu } from 'react-icons/ai';
+import { useState } from 'react';
+import MapView from './pages/MapView';
 
 const Sidebar = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
+  margin-top: 53px;
   width: 30vw;
   height: 100%;
   min-width: 450px;
   position: absolute;
+  z-index: 50;
   top: 0px;
   left: 0;
   background-color: white;
@@ -30,7 +30,29 @@ const Sidebar = styled.div`
   transform: translateX(${({ translateX }) => translateX});
 `;
 
+const SidebarButton = styled(AiOutlineMenu)`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 2;
+  top: 70px;
+  left: 50px;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+`;
+
 function App() {
+  const [translateX, setTranslateX] = useState("-50vw")
+
+  const moveLeft = () => {
+    setTranslateX("0");
+  };
+
   return (
       <BrowserRouter>
         <ThemeProvider>
@@ -49,13 +71,21 @@ function App() {
             </>} />
             <Route path="/follower" element={<>
               <HeaderBarNavi />
-              <Sidebar>
-              <Follower/>
+              <SidebarButton onClick={moveLeft}>
+              </SidebarButton>
+              <Sidebar translateX={translateX}>
+                <Follower/>
               </Sidebar>
+              <MapView/>
             </>} />
             <Route path="/following" element={<>
               <HeaderBarNavi />
+              <SidebarButton onClick={moveLeft}>
+              </SidebarButton>
+              <Sidebar translateX={translateX}>
               <Following/>
+              </Sidebar>
+              <MapView/>
             </>} />
             <Route path="/diary" element={<Diary />} />
             <Route path="/myflow" element={<MyFlow />} />
