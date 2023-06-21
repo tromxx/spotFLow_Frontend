@@ -104,7 +104,6 @@ const Home = ({children}) => {
   };
 
 
-
   return (
     <HomeDiv>
       <MapView/>
