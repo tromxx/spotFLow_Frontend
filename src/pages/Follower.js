@@ -1,3 +1,9 @@
+/*
+Follower page 
+- 어떻한 사용자가 사용자의 follower 하고 있는지 확인 가능 
+- Follower 하는 사용자의 삭제 도 가능 
+*/
+
 import React, {useState} from "react";
 import {styled} from 'styled-components';
 import KakaoMap from "../components/KakaoMap";
@@ -6,9 +12,11 @@ import SearchBar from "../components/SearchBar";
 import FollowingFollowCounter from "../components/FollowingFollowCounter";
 import UserContainer from "../components/UserContainer";
 const FollowingFollowDiv = styled.div`
-  width: auto;
-  height: auto;
+  margin-top: 40px;
+  width: 30vw;
+  height: 100vw;
   position: relative;
+  border: 1px solid black;
 `;
 
 const SidebarButton = styled(AiOutlineMenu)`
@@ -30,54 +38,42 @@ const SidebarButton = styled(AiOutlineMenu)`
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 30px;
   width: 30vw;
   height: 100%;
   min-width: 450px;
-  min-height: max-content;
   position: absolute;
-  z-index: 50;
   top: 0px;
   left: 0;
   background-color: white;
-  border-right: 1px solid val(--grey);
+  border-right: 10px solid val(--grey);
   transition: transform 0.5s ease;
   transform: translateX(${({ translateX }) => translateX});
 `;
 
-const FollowingFollow = () => {
+const Follower = () => {
   const [translateX, setTranslateX] = useState("-50vw");
-
+  const [search, setSearch] = useState("");
   const moveLeft = () => {
     setTranslateX("0");
   };
 
-  const moveRight = () => {
-    setTranslateX("-150vw");
+  const handleUserInput = (input) => {
+    setSearch(input);
+    console.log("User input:", input);
   };
-  
 
   return (
     <FollowingFollowDiv>
-      <KakaoMap/>
-      <SidebarButton onClick={moveLeft}>
-        <AiOutlineMenu/>
-      </SidebarButton>
-      <Sidebar translateX={translateX}>
-        <FollowingFollowCounter follow={10} following={20} />
-        <SearchBar/>
-        <UserContainer/>
-        <UserContainer/>
-        <UserContainer/>
-        <UserContainer/>
-        <UserContainer/>
-        <UserContainer/>
-        <UserContainer/>
-      </Sidebar>
+      <div>
+        <FollowingFollowCounter follower={10} following={20} />
+        <SearchBar onInputChange={handleUserInput}/>
+        <p>This if Follower page</p>
+        <p>{search}</p>
+      </div>
     </FollowingFollowDiv>
   );
 };
 
-export default FollowingFollow;
+export default Follower;

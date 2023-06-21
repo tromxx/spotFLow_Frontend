@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
 
+
 const centerAlign = css`
     display: flex;
     justify-content: center;
@@ -90,6 +91,13 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+    @media (min-width: 1300px) {
+	& {
+        
+    }
+}
+
+
     font-family: var(--kfont);
     display:flex;
     justify-content:center;
@@ -100,9 +108,28 @@ const Container = styled.div`
     height: 100vh;
 `
 const Header = styled.div`
+    ${centerAlign}
+    justify-content: start;
+    flex-wrap: wrap;
     background-color: white;
     height: 10%;
     width: 100%;
+
+    .Search-bar {
+        width: 60%;
+        padding: 15px;
+        height: 0px;
+        margin-left: 20px;
+        border:none;
+        background-color: silver;
+        border-radius:15px;
+    }
+    @media (min-width: 1300px) {
+	& {
+        height: 20%;
+        width: 72%;
+    }
+}
 `
 const HeaderList = styled.div`
     display:flex;
@@ -132,9 +159,19 @@ const CreateBtn = styled.div`
         background-color: white;
         border: 1px solid silver;
     }
+    ${(props) => props.isClicked && 
+        `background-color: black; `
+    }
 `
 
 const Main = styled.div`
+     @media (min-width: 1300px) {
+	& {
+        height: 80%;
+        width: 70%;
+        border: 1px solid silver;
+    }
+}
     overflow : scroll;
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -142,10 +179,10 @@ const Main = styled.div`
     height: 90%;
     width: 100%;
     ${(props) => props.isSort ? `
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     ` : `
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr ;
+        grid-template-rows: 1fr 1fr ;
     `}    
 `;
 const Item = styled.div`
@@ -160,14 +197,26 @@ const Item = styled.div`
         &:first-child {
             margin-top : 20px;
         }
-       
+       // 밑에 코드는 정렬 
     ${(props) => props.isSort ? `
       ${centerAlign}
       flex-direction:column;
+      &:nth-child(2n){
+            margin-right:0px;
+        }
+        &:nth-child(4n){
+            margin-right:20px;
+        }
       &:nth-child(odd){
             margin-right:0px;
         }
          &:nth-child(2) {
+            margin-top : 20px;
+        } 
+        &:nth-child(3) {
+            margin-top : 20px;
+        } 
+        &:nth-child(4) {
             margin-top : 20px;
         } 
     ` : `
@@ -198,7 +247,7 @@ const ItemImg = styled.div`
      background-size: cover;
      border-radius: 10px;
      background-position: center;
-
+     background-color: silver;   
     ${(props) => props.isSort ? `
     
         height : 80%;
@@ -209,8 +258,8 @@ const ItemImg = styled.div`
              margin-top: 30px;
 
         
-            height : 80%;
-            width: 50%;
+            height : 250px;
+            width: 40%;
     `}   
 
 
@@ -244,7 +293,7 @@ const ItemContent =styled.div`
         margin:10px;
         border-radius: 15px;
        ${centerAlign}
-       background-color:  ${(props) => props.theme.bgColor};
+       background-color:  ${(props) => props.theme.timeLineBgColor};
        color : ${(props) => props.theme.textColor};
         width: 85%;
         flex: 1;
@@ -253,7 +302,7 @@ const ItemContent =styled.div`
     .content{
         margin:10px;
         border-radius: 15px;
-        background-color:  ${(props) => props.theme.bgColor};
+        background-color:  ${(props) => props.theme.timeLineBgColor};
         color : ${(props) => props.theme.textColor};
         ${centerAlign}
         flex: 10;
@@ -319,15 +368,20 @@ const TimeLine = () => {
     
     ]
     );
+
+
     const deleteTimeLine = () => {
-        setDummy(dummy.filter(i => !data.includes(i.id)));
+        if((dummy.filter(i => !isClicked.includes(i.id)))){
+            setDummy(dummy.filter(i => !isClicked.includes(i.id)));
+        }
+
        // setDummy(dummy.filter(e => e.id !== data.id ))
     }
     const data = [];
 
     
     
-
+    const [isClicked,setIsClicked] = useState([]);
 
    const [isCreate,setIsCreate] = useState(false);
 
@@ -410,8 +464,9 @@ const TimeLine = () => {
                     
 
                     </HeaderItemRight>
-                   
+
                 </HeaderList>
+                <input type="text" className="Search-bar" />
 
             </Header>
             <Main isSort={isSort}>
@@ -419,7 +474,8 @@ const TimeLine = () => {
                 dummy.map((e)=> 
                     <Item isSort={isSort} key={e.id}>
                         {isEdit ?  
-                        <CreateBtn onClick={()=>{data.push(e.id)}} className="editBtn"></CreateBtn>
+
+                        <CreateBtn isClicked={isClicked.includes(e.id)}  onClick={()=>{setIsClicked(...isClicked, e.id) }} className="editBtn"></CreateBtn>
                         : <></>}
                         <ItemImg isSort={isSort} url={e.image}></ItemImg>
                         <ItemContent isSort={isSort}>
