@@ -8,6 +8,7 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
+    timeLineBgColor : 'silver',
     bgColor: '#424242',
     textColor: 'white',
     borderColor: '1px solid #424242'
