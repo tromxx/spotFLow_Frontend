@@ -310,7 +310,7 @@ const Home = ({children}) => {
 
 
   const goFollowing = () => {
-    navigate("/followingfollow")
+    navigate("/follower");
   }
 
   return (
