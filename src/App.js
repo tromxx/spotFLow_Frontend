@@ -11,9 +11,6 @@ import Follower from './pages/Follower';
 import Following from './pages/Following';
 import { ThemeProvider } from './context/themeProvider';
 import styled from 'styled-components'
-import { AiOutlineMenu } from 'react-icons/ai';
-import { useState } from 'react';
-import MapView from './pages/MapView';
 
 const Sidebar = styled.div`
   margin-top: 53px;
@@ -59,6 +56,10 @@ function App() {
           <Routes>
             <Route path="/" element={<>
                 <HeaderBarNavi />
+                
+                <SideBar>
+                  <SideBarMain />
+                </SideBar>
                 <Home />
               </>} />
             <Route path="/login" element={<>
@@ -87,7 +88,10 @@ function App() {
               </Sidebar>
               <MapView/>
             </>} />
-            <Route path="/diary" element={<Diary />} />
+            <Route path="/diary" element={<>
+              <HeaderBarNavi />
+              <Diary />
+            </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
           </Routes>

@@ -9,6 +9,8 @@ import { useTheme } from "../context/themeProvider";
 const HeaderBarDiv = styled.div`
   width: 100vw;
   height: 7vh;
+  min-height: 50px;
+  position: absolute;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,6 +18,7 @@ const HeaderBarDiv = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   transition: background-color 0.5s ease;
+  z-index: 80;
   ul{
     display: flex;
     flex-direction: row;
@@ -42,6 +45,7 @@ const HeaderBarDiv = styled.div`
 
 const LogoImg = styled.img`
   width: 20vh;
+  min-width: 150px;
   height: 100%;
   cursor: pointer;
 `;

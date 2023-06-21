@@ -7,50 +7,18 @@ import setting from "../images/setting.png"
 import {useTheme} from "../context/themeProvider";
 import DarkSetting from "../images/DarkSetting.png"
 import {useNavigate  } from "react-router-dom";
-
-const Sidebar = styled.div`
-
-  display: block;
-  width: 30vw;
-  height: 100%;
-  min-width: 450px;
-  min-height: max-content;
-  position: absolute;
-  z-index: 50;
-  top: 0px;
-  left: 0;
-  background-color: ${props => props.theme.bgColor};
-  color: ${props => props.theme.textColor};
-  border-right: ${props => props.theme.borderColor};
-  transition: background-color 0.5s ease, transform 0.6s ease;
-  transform: translateX(${({translateX}) => translateX});
-`;
-
-const CloseButton = styled.button`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  z-index: 3;
-  top: 20px;
-  right: 20px;
-  border: none;
-  background-color: transparent;
-  background-image: url(${close});
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
+import FollowingFollowCounter from "./FollowingFollowCounter";
 
 const MyInfo = styled.div`
 
   display: flex;
   justify-content: center;
   align-items: center;
+	top: 7vh;
   
   .profileImg {
     position: absolute;
-    top: 50px;
+    top: 100px;
     justify-content: space-evenly;
     background-image: url(${defProfile});
     width: 8vw;
@@ -69,7 +37,7 @@ const NicknameInput = styled.input`
     ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
     : 'transparent'};
   transition: 0.6s ease;
-  top: 190px;
+  top: 250px;
   width: 150px;
   height: 35px;
   border-radius: 8px;
@@ -93,7 +61,7 @@ const StatusMsgWrapper = styled.div`
     justify-content: flex-start;
     font-size: 10px;
     position: absolute;
-    top: 270px;
+    top: 340px;
     width: 250px;
     height: 50px;
     border: ${props =>
@@ -126,7 +94,7 @@ const StatusMsgWrapper = styled.div`
 
 const FollowWrapper = styled.div`
   position: absolute;
-  top: 230px;
+  top: 280px;
   
   label {
     margin-left: 20px;
@@ -156,7 +124,7 @@ const EditButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 3vw;
+  top: 80px;
   left: 50px;
   width: 35px;
   height: 35px;
@@ -196,19 +164,19 @@ const ButtonMenu = styled.button`
   }
 
   &.MyFlow {
-    top: 350px;
+    top: 420px;
     left: 100px;
     transition: transform 0.3s ease;
   }
 
   &.Diary {
-    top: 420px;
+    top: 490px;
     left: 100px;
     transition: transform 0.7s ease;
   }
 
   &.Theme {
-    top: 490px;
+    top: 560px;
     left: 100px;
     transition: transform 1.0s ease;
   }
@@ -233,17 +201,17 @@ const InfoInput = styled.input`
     : 'transparent'};
   transform: translateX(${({transInfoEditX}) => transInfoEditX});  
   &.password {
-    top: 350px;
+    top: 420px;
     left: 105px;
     transition: transform 0.3s ease;
   }
   &.newPassword {
-    top: 420px;
+    top: 490px;
     left: 105px;
     transition: transform 0.7s ease;
   }
   &.newPasswordConfirm {
-    top: 490px;
+    top: 560px;
     left: 105px;
     transition: transform 1.0s ease;
   }
@@ -258,7 +226,7 @@ const SaveButton = styled.button`
   font-family: var(--kfont);
   color: white;
   position: absolute;
-  width: 250px;
+  width: 255px;
   height: 40px;
   border-radius: 8px;
   display: flex;
@@ -266,7 +234,7 @@ const SaveButton = styled.button`
   align-items: center;
   justify-content: center;
   transition: transform 1.3s ease;
-  top: 560px;
+  top: 630px;
   left: 105px;
   border: none;
   &:hover {
@@ -330,9 +298,6 @@ const SideBarMain = ({ children }) => {
   
 
 
-  const goFollowing = () => {
-    navigate("/followingfollow")
-  }
 
   return (
 
@@ -343,10 +308,7 @@ const SideBarMain = ({ children }) => {
           <div className="profileImg"></div>
             <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
           <FollowWrapper>
-            <label htmlFor="following">following</label>
-            <input type="text" id="following" value={"225"} readOnly onClick={goFollowing}/>
-            <label htmlFor="follower">follower</label>
-            <input type="text" id="follower" value={"850"} readOnly onClick={goFollowing}/>
+            <FollowingFollowCounter  following={20} follower={65}/>
           </FollowWrapper>
           <StatusMsgWrapper isBorderVisible={isBorderVisible}>
             <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" readOnly={isReadOnly} value={statusMsgValue} onChange={handleStatusMsgChange}></textarea>
