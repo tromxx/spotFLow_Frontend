@@ -36,7 +36,10 @@ function App() {
               <HeaderBarNavi />
               <FollowingFollow />
             </>} />
-            <Route path="/diary" element={<Diary />} />
+            <Route path="/diary" element={<>
+              <HeaderBarNavi />
+              <Diary />
+            </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
           </Routes>
