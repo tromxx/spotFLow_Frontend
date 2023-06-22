@@ -8,7 +8,7 @@ import { AiOutlineSearch,AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "reac
 import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
-import MainSlider from "../components/Slider";
+import MainSlider from "../components/SliderSample";
 
 
 const centerAlign = css`
@@ -97,6 +97,9 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+    position: relative;
+    top:40px;
+
     @media (min-width: 1300px) {
 	& {
         
@@ -124,6 +127,7 @@ const Header = styled.div`
     .Search-bar {
         width: 60%;
         padding: 15px;
+        padding-left: 30px;
         height: 0px;
         margin-left: 20px;
         border:none;
@@ -205,7 +209,7 @@ const Item = styled.div`
     //width: 50%;
     height: 300px;
 
-    border-radius:15px;
+    border-radius:5px;
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom:20px;
@@ -215,6 +219,7 @@ const Item = styled.div`
        // 밑에 코드는 정렬 
     ${(props) => props.isSort ? `
       ${centerAlign}
+
       flex-direction:column;
       &:nth-child(2n){
             margin-right:0px;
@@ -235,6 +240,7 @@ const Item = styled.div`
             margin-top : 20px;
         } 
     ` : `
+    height: 160px;
     flex-direction:row;
         display:flex;      
         
@@ -258,7 +264,7 @@ const ItemImg = styled.div`
      background-image: url(${(props) => props.url});
      background-repeat : no-repeat;
      background-size: cover;
-     border-radius: 10px;
+     border-radius: 0px;
      background-position: center;
      background-color: silver;   
     ${(props) => props.isSort ? `
@@ -268,11 +274,9 @@ const ItemImg = styled.div`
     ` : `
           margin-left: 30px;
            margin-bottom: 30px;
-             margin-top: 30px;
-
-        
-            height : 250px;
-            width: 40%;
+             margin-top: 10px;
+            height : 140px;
+            width: 30%;
 
             
     `}   
@@ -308,8 +312,8 @@ const ItemContent =styled.div`
         margin:10px;
         border-radius: 15px;
        ${centerAlign}
-       background-color:  ${(props) => props.theme.timeLineBgColor};
-       color : ${(props) => props.theme.textColor};
+      // background-color:  ${(props) => props.theme.timeLineBgColor};
+     //  color : ${(props) => props.theme.textColor};
         width: 85%;
         flex: 1;
 
@@ -317,8 +321,8 @@ const ItemContent =styled.div`
     .content{
         margin:10px;
         border-radius: 15px;
-        background-color:  ${(props) => props.theme.timeLineBgColor};
-        color : ${(props) => props.theme.textColor};
+    //    background-color:  ${(props) => props.theme.timeLineBgColor};
+    //    color : ${(props) => props.theme.textColor};
         ${centerAlign}
         flex: 10;
         width : 85%;
@@ -482,8 +486,11 @@ const TimeLine = () => {
                     </HeaderItemRight>
 
                 </HeaderList>
+                <div  style={{width:"70%",position:"relative"}} >
                 <input type="text" className="Search-bar" 
-                /> <AiOutlineSearch/>
+                /> <AiOutlineSearch style={{position: "absolute",left: "30px" , bottom:"7px"}}/>
+                </div>
+               
 
             </Header>
             <Main isSort={isSort}>
