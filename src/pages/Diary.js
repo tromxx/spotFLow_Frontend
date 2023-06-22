@@ -5,6 +5,7 @@ import DiaryLayout from "../components/DiaryLayout";
 import SearchBar from "../components/SearchBar";
 import avatar from "../images/default_avatar.png"
 import { BsPeople } from "react-icons/bs";
+import SliderSample from "../components/SliderSample"
 
 
 
@@ -14,6 +15,8 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     background-color: gray;
+    position: relative;
+    top:40px;
 
     .namebar{
         display: flex;
@@ -23,12 +26,22 @@ const Container = styled.div`
         justify-content: center;
         align-items: center;
         justify-content: space-between;
+
+        .namebarleft{
+            display: flex;
+            justify-content: flex-start;
+            align-items: end;
+        }
+        .namebarright{
+            display: flex;
+            justify-content: flex-end;
+        }
         
-    .menu{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 50px;
+        .menu{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 50px; 
         }
 
         .id{
@@ -45,8 +58,10 @@ const Container = styled.div`
         
     }
     .searchBar{
+        display: flex;
         width: 100px;
         height: 100px;
+        
     }
     .people{
         width: 30px;
@@ -54,7 +69,7 @@ const Container = styled.div`
         display: flex;
         justify-content: flex-end;
         margin-right: 30px;
-    }
+    } 
 
 `; 
 
@@ -74,18 +89,22 @@ const Diary = () =>{
         <Container>
             <header>
                 <div className="namebar">
+                    <div className="namebarleft">
                     <div className="id">
-                <img src={avatar} alt="" />
-                <h6>whddus426</h6>
-                </div>
+                        <img src={avatar} alt="" />
+                        <h6>whddus426</h6>
+                     </div>
                 <div className="searchBar1">
                     <SearchBar  />
-                    </div>
-                            <div className="menu">
-                        <BsPeople className="people"/>
-                        <div className="MY">
-                        <h3>MY</h3>
-                        </div>
+                 </div>
+                 </div>
+                 <div className="namebarright">
+                         <div className="menu">
+                            <BsPeople className="people"/>
+                            <div className="MY">
+                                <h3>MY</h3>
+                                 </div>
+                            </div>
                         </div>
                 </div>
             </header>
@@ -93,7 +112,7 @@ const Diary = () =>{
             <DiaryDiv>
                 <DiaryLayout name={"Popular"}/>
                 <DiaryLayout name={"Friend"}/>
-                <DiaryLayout name={"Local live"}/>
+                <DiaryLayout name={"Local live"}/> 
             </DiaryDiv>
             </body>
         </Container>
