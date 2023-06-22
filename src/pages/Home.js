@@ -22,8 +22,6 @@ const HomeDiv = styled.div`
 
 const Home = ({children}) => {
 
-  const navigate = useNavigate();
-
 
   return (
     <HomeDiv>
