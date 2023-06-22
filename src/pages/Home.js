@@ -1,5 +1,7 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
+import SideBarMain from "../components/SidebarMain";
+import SideBar from "../components/SideBar";
 
 const HomeDiv = styled.div`
   width: auto;
@@ -20,9 +22,12 @@ const HomeDiv = styled.div`
 
 const Home = ({children}) => {
 
+  const navigate = useNavigate();
+
+
   return (
     <HomeDiv>
-      <MapView/>
+      <SideBar/>
     </HomeDiv>
   );
 };

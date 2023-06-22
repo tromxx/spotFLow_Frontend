@@ -15,7 +15,7 @@ import MapView from './pages/MapView';
 import { useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlineClose } from 'react-icons/ai';
-
+import Sidebars from './components/SideBar';
 
 const Sidebar = styled.div`
   margin-top: 53px;
@@ -65,6 +65,9 @@ const ExitButton = styled(AiOutlineClose)`
 `;
 
 function App() {
+    const shouldRenderSidebar = (path) => {
+    return path === "/" ;
+    };
   const [translateX, setTranslateX] = useState("-50vw")
 
   const moveLeft = () => {
@@ -83,7 +86,11 @@ function App() {
             <Route path="/" element={<>
                 <HeaderBarNavi />
               
-                <Home />
+                <>
+                {shouldRenderSidebar(window.location.pathname) && <Sidebars/>}
+                </>
+                <MapView/>
+
               </>} />
             <Route path="/login" element={<>
               <HeaderBarNavi />
@@ -101,7 +108,6 @@ function App() {
                 <ExitButton onClick={moveRight}></ExitButton>
                 <Follower/>
               </Sidebar>
-              <MapView/>
             </>} />
             <Route path="/following" element={<>
               <HeaderBarNavi />
@@ -110,7 +116,7 @@ function App() {
               <ExitButton onClick={moveRight}></ExitButton>
               <Following/>
               </Sidebar>
-              <MapView/>
+              <MapView/> 
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
@@ -120,6 +126,7 @@ function App() {
             <Route path="/timeline" element={<TimeLine />} />
             
           </Routes>
+          <MapView/>
         </ThemeProvider>
       </BrowserRouter>
   );
