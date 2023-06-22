@@ -72,6 +72,7 @@ const CreatePost = styled.div`
         border-radius:15px;
     }
     input { 
+       
         padding: 10px;
         margin:20px;
         flex:1;
@@ -134,6 +135,11 @@ const Header = styled.div`
     width: 100%;
 
     .Search-bar {
+        @media (max-width: 850px) {
+	& {
+		width: 105%;
+      
+	}}
         width: 60%;
         padding: 15px;
         padding-left: 30px;
@@ -203,22 +209,28 @@ const Main = styled.div`
     background-color:  ${(props) => props.theme.timeLineBgColor};
     height: 90%;
     width: 100%;
-    ${(props) => props.isSort ? `
-        grid-template-columns: 1fr 1fr 1fr 1fr;
 
-        @media (max-width: 850px) {
-	& {
-		grid-template-columns: 1fr 1fr ;
-	}}
-      
-       
-}   
+    @media (max-width: 850px) {
+        ${(props) => props.isSort ? `
+        grid-template-columns: 1fr 1fr;
+    ` : `      
+    `}   
+        }
+    // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
+        ${(props) => props.isSort ? `
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+    }   
 
-    ` : `
-        grid-template-columns: 1fr ;
-        grid-template-rows: 1fr 1fr ;
-    `}    
-`;
+        ` : `
+            grid-template-columns: 1fr ;
+            grid-template-rows: 1fr 1fr ;
+        `}    
+    `; 
+
+   
+
+
+
 const Item = styled.div`
 
     position: relative;
