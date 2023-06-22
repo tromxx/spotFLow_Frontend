@@ -9,7 +9,7 @@ import ToSpotData from "../dataSet/ToSpotData";
 
 const ToSpotBtn = styled.div`
   transition: transform 0.5s ease;
-  transform: translateY(${({translateY}) => translateY + "px"});
+  transform: translateY(${({translateY}) => translateY + "vh"});
   position: absolute;
   font-family: 'Prompt', sans-serif;
   top: 80px;
@@ -17,8 +17,8 @@ const ToSpotBtn = styled.div`
   z-index: 2;
 
   .to-timeline {
-    width: 120px;
-    height: 40px;
+    width: 13.5vh;
+    height: 4.5vh;
     position: absolute;
     display: flex;
     background-color: #3AACFF;
@@ -26,8 +26,8 @@ const ToSpotBtn = styled.div`
     z-index: 2;
     text-align: center;
     line-height: 1.8;
-    padding: 5px;
-    border-radius: 40px;
+    padding: .5vh .6vh;
+    border-radius: 4.5vh;
   }
 
   .to-spot {
@@ -55,7 +55,6 @@ const ToSpotBtn = styled.div`
 
   .more {
     background-color: #d9d9d9;
-    border: .3px solid rgb(0, 0, 0, 30);
     color: #000;
   }
   .marker {
@@ -137,7 +136,7 @@ const MapView = () => {
 
       {/*place 에 저장된 배열만큼 map 함수로 바로가기 버튼 생성*/}
       {place.map(p => (
-        <ToSpotBtn translateY={(p.num * 50 * isToSpotBtnState)}>
+        <ToSpotBtn translateY={(p.num * 6 * isToSpotBtnState)}>
           <div className={"hot-spot to-timeline"}>
             <div className="to-spot item" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
               <FaMapMarkerAlt className="marker" size={20}/>
