@@ -97,6 +97,7 @@ const Home = ({children}) => {
   return (
     <HomeDiv>
       <SideBar/>
+      <MapView/>
     </HomeDiv>
   );
 };

@@ -85,10 +85,7 @@ function App() {
           <Routes>
             <Route path="/" element={<>
                 <HeaderBarNavi />
-                <>
-                {shouldRenderSidebar(window.location.pathname) && <Sidebars/>}
-                </>
-                <MapView/>
+                <Home/>
               </>} />
             <Route path="/login" element={<>
               <HeaderBarNavi />
@@ -97,24 +94,6 @@ function App() {
             <Route path="/signup" element={<>
               <HeaderBarNavi />
               <Signup />
-            </>} />
-            <Route path="/follower" element={<>
-              <HeaderBarNavi />
-              <SidebarButton onClick={moveLeft}>
-              </SidebarButton>
-              <Sidebar translateX={translateX}>
-                <ExitButton onClick={moveRight}></ExitButton>
-                <Follower/>
-              </Sidebar>
-            </>} />
-            <Route path="/following" element={<>
-              <HeaderBarNavi />
-              <SidebarButton onClick={moveLeft}></SidebarButton>
-              <Sidebar translateX={translateX}>
-              <ExitButton onClick={moveRight}></ExitButton>
-              <Following/>
-              </Sidebar>
-              <MapView/> 
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
