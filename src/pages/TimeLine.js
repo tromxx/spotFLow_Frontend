@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
 import MainSlider from "../components/SliderSample";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 const centerAlign = css`
@@ -78,7 +79,7 @@ const CreatePost = styled.div`
         border-radius:15px;
         background-color:white;
         width: 83%;
-
+        z-index: 50;
         
     }
     .button-box {
@@ -230,7 +231,11 @@ const Item = styled.div`
        // 밑에 코드는 정렬 
     ${(props) => props.isSort ? `
       ${centerAlign}
-
+      @media (max-width: 850px) {
+	& {
+		width: 120px;
+        height:150px;
+	}}
       flex-direction:column;
       &:nth-child(2n){
             margin-right:0px;
@@ -340,6 +345,7 @@ const ItemContent =styled.div`
 
 
 const TimeLine = () => {
+    const Navi = useNavigate();
     // const input = useRef();
     // const content = useRef();
     const [title,setTitle] = useState("");
@@ -529,7 +535,7 @@ const TimeLine = () => {
             <Header>
                 <HeaderList>
                     <HeaderItemLeft>
-                        <CreateBtn style={{borderRadius:"15px"}}>
+                        <CreateBtn onClick={()=> {Navi(-1)}} style={{borderRadius:"15px"}}>
                         <TfiArrowLeft style={{fontSize:"20px"}}></TfiArrowLeft>
                         </CreateBtn>
                          
