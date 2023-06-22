@@ -240,7 +240,7 @@ const SaveButton = styled.button`
   }
 `;
 
-const SideBarMain = ({ children }) => {
+const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
 
   // 정보 수정 관련 요소들
 
@@ -278,8 +278,7 @@ const SideBarMain = ({ children }) => {
   // 다크모드 / 라이트모드 변경
   const [ThemeMode, setTheme] = useTheme();
 
-  
-  
+
 
 
 
@@ -292,13 +291,13 @@ const SideBarMain = ({ children }) => {
           <div className="profileImg"></div>
             <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
           <FollowWrapper>
-            <FollowingFollowCounter  following={20} follower={65}/>
+            <FollowingFollowCounter handleFollow = {handleFollow} following={20} follower={65}/>
           </FollowWrapper>
-          <StatusMsgWrapper isBorderVisible={isBorderVisible}>
+          <StatusMsgWrapper  isBorderVisible={isBorderVisible}>
             <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" readOnly={isReadOnly} value={statusMsgValue} onChange={handleStatusMsgChange}></textarea>
           </StatusMsgWrapper>
           <ButtonMenuWrapper >
-            <ButtonMenu transMenuX = {transMenuX} className="MyFlow">myFlow</ButtonMenu>
+            <ButtonMenu transMenuX = {transMenuX} className="MyFlow" onClick={handleMyFlow}>myFlow</ButtonMenu>
             <ButtonMenu transMenuX = {transMenuX} className="Diary">Diary</ButtonMenu>
             <ButtonMenu transMenuX = {transMenuX} className="Theme" onClick={setTheme}
                         mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>

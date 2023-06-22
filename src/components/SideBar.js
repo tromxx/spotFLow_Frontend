@@ -1,9 +1,15 @@
 import React, {useState} from "react";
-import {styled} from 'styled-components';
+import styled from 'styled-components';
 import {SlMenu} from "react-icons/sl";
 import close from "../images/close.png"
 import { useNavigate  } from "react-router-dom";
 import SideBarMain from "./SidebarMain";
+import Following from "../pages/Following"
+import Follower from "../pages/Follower"
+import MyFlow from "../pages/MyFlow"
+import { CSSTransition } from 'react-transition-group';
+import FollowingFollowCounter from "./FollowingFollowCounter";
+
 
 const SidebarButton = styled.button`
   width: 30px;
@@ -50,6 +56,13 @@ const Sidebar = styled.div`
   border-right: ${props => props.theme.borderColor};
   transition: background-color 0.5s ease, transform 0.6s ease;
   transform: translateX(${({translateX}) => translateX});
+
+  .button {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+
+  }
 `;
 
 const CloseButton = styled.button`
@@ -68,13 +81,14 @@ const CloseButton = styled.button`
   }
 `;
 
+
+
 const SideBar = ({ children }) => {
 
 const navigate = useNavigate();
 
   // 사이드바 가로이동
   const [translateX, setTranslateX] = useState("-100vw");
-
   const moveLeft = () => {
     setTranslateX("0");
   };
@@ -83,6 +97,40 @@ const navigate = useNavigate();
     setTranslateX("-100vw");
   };
 
+
+  const [renderMain, setRenderMain] = useState(true);
+  const [renderFollowing, setRenderFollowing] = useState(false);
+  const [renderFollower, setRenderFollower] = useState(false);
+  const [renderMyFlow, setRenderMyFlow] = useState(false);
+
+  const handleMyFlow = () => {
+    setRenderMain(false);
+    setRenderFollower(false);
+    setRenderFollowing(false);
+    setRenderMyFlow(true);
+  }
+
+  const handleFollowing = () => {
+    setRenderMain(false);
+    setRenderFollower(false);
+    setRenderMyFlow(false);
+    setRenderFollowing(true);
+  }
+
+  const handleFollower = () => {
+    setRenderMain(false);
+    setRenderFollowing(false);
+    setRenderMyFlow(false);
+    setRenderFollower(true);
+  }
+
+  const handleMain = () => {
+    setRenderMain(true);
+    setRenderFollowing(false);
+    setRenderMyFlow(false);
+    setRenderFollower(false);
+  }
+
   return(
     <SideBarWrapper>
         <SidebarButton onClick={() => moveLeft()}>
@@ -90,7 +138,13 @@ const navigate = useNavigate();
         </SidebarButton>
         <Sidebar translateX={translateX}>
             <CloseButton onClick={() => moveRight()}></CloseButton>
-            <SideBarMain />
+            
+              {renderMain && <SideBarMain handleFollower = {handleFollower} handleFollowing = {handleFollowing} handleMyFlow = {handleMyFlow} handleMain = {handleMain} />}
+              {renderFollower && <Follower />}
+              {renderFollowing && <Following />}
+              {renderMyFlow && <MyFlow />}
+              <button className="button" onClick={handleMain}></button>
+            
         </Sidebar>
       </SideBarWrapper>
   )
