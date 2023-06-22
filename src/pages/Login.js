@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Logo from "../images/logo.png"
 import GoogleLogo from "../images/GoogleLogin.png"
 import KakaoLogo from "../images/KakaoLogin.png"
+import { useNavigate } from "react-router";
 
 const LogInDiv = styled.div`
   justify-content: center;
@@ -11,6 +12,7 @@ const LogInDiv = styled.div`
   position: relative;
   top: 100px;
   ul{
+    width: 400px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -53,17 +55,34 @@ const LogInDiv = styled.div`
     li:nth-last-child(1) {
         background-color: yellow;
     }
+    .container{
+        display: flex;
+        gap: 30px;
+        font-family: var(--kfont);
+        cursor: pointer;
+        p:hover{
+            color: var(--blue);
+        }
+    }
 `;
 
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    const goToSingup = () =>{
+        navigate("/signup");
+    }
     return(
         <LogInDiv>
             <ul>
                 <li><img src={Logo} alt="" /></li>
                 <li><input type="text" placeholder="email@gmail.com"/></li>
-                <li><input type="text" placeholder="password"/></li>
-                <li><p>회원가입 아이디/비밀번호 찾기</p></li>
+                <li><input type="password" placeholder="password"/></li>
+                <div className="container">
+                    <p onClick={goToSingup}>회원가입</p>
+                    <p>아이디/비번찾기</p>
+                </div>
                 <li><img src={GoogleLogo} alt="" /></li>
                 <li><img src={KakaoLogo} alt="" /></li>
             </ul>

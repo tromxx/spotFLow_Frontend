@@ -8,16 +8,10 @@ import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
-<<<<<<< HEAD
 
-function App() {
-=======
 
 
 function App() {
-
-
->>>>>>> 4f2cf2804176faeb7e574dbacbe43d3bb0ed0bec
 
   return (
       <BrowserRouter>
