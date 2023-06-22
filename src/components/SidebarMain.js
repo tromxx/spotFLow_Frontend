@@ -1,12 +1,9 @@
 import React, {useState} from "react";
 import {styled} from 'styled-components';
-import {SlMenu} from "react-icons/sl";
-import close from "../images/close.png"
 import defProfile from "../images/default_avatar.png"
 import setting from "../images/setting.png"
 import {useTheme} from "../context/themeProvider";
 import DarkSetting from "../images/DarkSetting.png"
-import {useNavigate  } from "react-router-dom";
 import FollowingFollowCounter from "./FollowingFollowCounter";
 
 const MyInfo = styled.div`
@@ -244,19 +241,6 @@ const SaveButton = styled.button`
 `;
 
 const SideBarMain = ({ children }) => {
-    const navigate = useNavigate();
-
-  // 사이드바 가로이동
-  const [translateX, setTranslateX] = useState("-100vw");
-
-  const moveLeft = () => {
-    setTranslateX("0");
-  };
-
-  const moveRight = () => {
-    setTranslateX("-100vw");
-  };
-
 
   // 정보 수정 관련 요소들
 
