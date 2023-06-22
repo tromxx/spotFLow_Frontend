@@ -90,7 +90,6 @@ function App() {
                 {shouldRenderSidebar(window.location.pathname) && <Sidebars/>}
                 </>
                 <MapView/>
-
               </>} />
             <Route path="/login" element={<>
               <HeaderBarNavi />
@@ -126,7 +125,6 @@ function App() {
             <Route path="/timeline" element={<TimeLine />} />
             
           </Routes>
-          <MapView/>
         </ThemeProvider>
       </BrowserRouter>
   );
