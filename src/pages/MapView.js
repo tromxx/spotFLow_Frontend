@@ -12,33 +12,39 @@ const ToSpotBtn = styled.div`
   transform: translateY(${({translateY}) => translateY + "vh"});
   position: absolute;
   font-family: 'Prompt', sans-serif;
-  top: 80px;
-  right: 150px;
+  top: 8vh;
+  right: 3vh;
   z-index: 2;
   * {
     box-sizing: border-box;
   }
+  .hot-spot {
+    width: 20vh;
+    display: flex;
+    align-items: center;
+  }
   .to-timeline {
     width: 13.5vh;
     height: 4.5vh;
-    position: absolute;
     display: flex;
     background-color: #3AACFF;
     color: #caf0f8;
     z-index: 2;
     text-align: center;
     line-height: 1.8;
-    padding: .5vh .6vh;
+    padding: .3vh 2vh;
     border-radius: 4.5vh;
+    margin: 0 auto;
+    border: 2px solid #fff;
   }
 
   .to-spot {
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
+    width: 4.5vh;
+    height: 4.5vh;
+    border-radius: 4.5vh;
     background-color: white;
-    margin-right: 10px;
-    padding: 5px;
+    padding: .7vh .8vh;
+    margin: 0 auto;
   }
   .btn-main:hover {
     color: #ffffff;
@@ -139,20 +145,21 @@ const MapView = () => {
       {/*place 에 저장된 배열만큼 map 함수로 바로가기 버튼 생성*/}
       {place.map(p => (
         <ToSpotBtn translateY={(p.num * 6 * isToSpotBtnState)}>
-          <div className={"hot-spot to-timeline"}>
+          <div className={"hot-spot"}>
             <div className="to-spot item" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
-              <FaMapMarkerAlt className="marker" size={20}/>
+              <FaMapMarkerAlt className="marker" size={25}/>
             </div>
-            <span className="btn-sub" onClick={()=>ToTimeLine(p.location)}>{p.name}</span>
+            <div className="btn-sub to-timeline" onClick={()=>ToTimeLine(p.location)}>{p.name}</div>
           </div>
         </ToSpotBtn>
       ))}
       {/*바로가기 버튼을 보여주는 상위 버튼, timeline 문구를 클릭하면 검색값을 비운 채로 타임라인으로 이동*/}
       <ToSpotBtn>
-        <div className="to-timeline more">
+        <div className="hot-spot">
           <div className="to-spot main" onClick={() => btnToSpotMoreView()} style={{marginRight: "3px"}}>
-            <FaMapMarkerAlt className="marker" size={20}/></div>
-          <span className="btn-main" onClick={()=>ToTimeLine('')}>TimeLine</span>
+            <FaMapMarkerAlt className="marker" size={25}/>
+          </div>
+          <div className="btn-main to-timeline more" onClick={()=>ToTimeLine('')}>TimeLine</div>
         </div>
       </ToSpotBtn>
 

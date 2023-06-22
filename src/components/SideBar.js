@@ -24,7 +24,6 @@ const SidebarButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-
 `;
 
 

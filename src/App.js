@@ -8,11 +8,17 @@ import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
+import DiaryCategory from './pages/DiaryCategory';
+<<<<<<< HEAD
+
+function App() {
+=======
 
 
 function App() {
 
 
+>>>>>>> 4f2cf2804176faeb7e574dbacbe43d3bb0ed0bec
 
   return (
       <BrowserRouter>
@@ -33,7 +39,12 @@ function App() {
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
-              <Diary />
+              <Diary/>
+            </>} />
+
+            <Route path="/diary/Category" element={<>
+              <HeaderBarNavi />
+              <DiaryCategory/>
             </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
