@@ -12,6 +12,7 @@ import { ThemeProvider } from './context/themeProvider';
 
 
 function App() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   return (
       <BrowserRouter>
@@ -19,7 +20,6 @@ function App() {
           <Routes>
             <Route path="/" element={<>
                 <HeaderBarNavi />
-              
                 <Home/>
               </>} />
             <Route path="/login" element={<>

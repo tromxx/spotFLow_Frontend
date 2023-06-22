@@ -4,6 +4,7 @@ Follow 수랑 Following 할수 있는 컴포넌트
 */
 
 import React from "react";
+import { AiTwotonePropertySafety } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 
@@ -21,21 +22,12 @@ const FollowingFollowCounterDiv = styled.div`
     }
 `;
 
-const FollowingFollowCounter = ({follower, following}) =>{
-    const navigate = useNavigate()
+const FollowingFollowCounter = ({ follower, following, handleMain, handleFollower, handleFollowing }) =>{
     
-    const goToFollower = () =>{
-        navigate("/follower")
-    }
-
-    const goToFollowing = () =>{
-        navigate("/following")
-    }
-
     return(
         <FollowingFollowCounterDiv>
-            <p onClick={goToFollower}>Follower : {follower}</p>
-            <p onClick={goToFollowing}>Following : {following}</p>
+            <p onClick={handleFollower}>Follower : {follower}</p>
+            <p onClick={handleFollowing}>Following : {following}</p>
         </FollowingFollowCounterDiv>
     );
 };
