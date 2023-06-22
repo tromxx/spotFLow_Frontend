@@ -11,11 +11,16 @@ import Follower from './pages/Follower';
 import Following from './pages/Following';
 import { ThemeProvider } from './context/themeProvider';
 import styled from 'styled-components'
+import MapView from './pages/MapView';
+import { useState } from 'react';
+import { AiOutlineMenu } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
+
 
 const Sidebar = styled.div`
   margin-top: 53px;
   width: 30vw;
-  height: 100%;
+  height: 93vh;
   min-width: 450px;
   position: absolute;
   z-index: 50;
@@ -43,6 +48,22 @@ const SidebarButton = styled(AiOutlineMenu)`
 
 `;
 
+const ExitButton = styled(AiOutlineClose)`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 2;
+  top: 1vh;
+  left: 25vw;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+`;
+
 function App() {
   const [translateX, setTranslateX] = useState("-50vw")
 
@@ -50,16 +71,17 @@ function App() {
     setTranslateX("0");
   };
 
+  const moveRight = () => {
+    setTranslateX("-100vw");
+  };
+
+
   return (
       <BrowserRouter>
         <ThemeProvider>
           <Routes>
             <Route path="/" element={<>
                 <HeaderBarNavi />
-                
-                <SideBar>
-                  <SideBarMain />
-                </SideBar>
                 <Home />
               </>} />
             <Route path="/login" element={<>
@@ -75,15 +97,16 @@ function App() {
               <SidebarButton onClick={moveLeft}>
               </SidebarButton>
               <Sidebar translateX={translateX}>
+                <ExitButton onClick={moveRight}></ExitButton>
                 <Follower/>
               </Sidebar>
               <MapView/>
             </>} />
             <Route path="/following" element={<>
               <HeaderBarNavi />
-              <SidebarButton onClick={moveLeft}>
-              </SidebarButton>
+              <SidebarButton onClick={moveLeft}></SidebarButton>
               <Sidebar translateX={translateX}>
+              <ExitButton onClick={moveRight}></ExitButton>
               <Following/>
               </Sidebar>
               <MapView/>

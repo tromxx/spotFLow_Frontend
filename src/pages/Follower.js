@@ -6,37 +6,21 @@ Follower page
 
 import React, {useState} from "react";
 import {styled} from 'styled-components';
-import KakaoMap from "../components/KakaoMap";
-import { AiOutlineMenu } from 'react-icons/ai';
 import SearchBar from "../components/SearchBar";
 import FollowingFollowCounter from "../components/FollowingFollowCounter";
-import UserContainer from "../components/UserContainer";
+import FollowerContainer from "../components/FollowerContainer"
 
 const FollowerDiv = styled.div`
-  width: 30vw;
-  height: 100vw;
+  height: 85vh;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  padding-top: 60px;
+  overflow: scroll;
 `;
 
-const SidebarButton = styled(AiOutlineMenu)`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  z-index: 2;
-  top: 20px;
-  left: 50px;
-  border: none;
-  background-color: transparent;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-`;
 
 
 const Follower = () => {
@@ -51,8 +35,44 @@ const Follower = () => {
     <FollowerDiv>
         <FollowingFollowCounter follower={10} following={20} />
         <SearchBar onInputChange={handleUserInput}/>
-        <p>This if Follower page</p>
-        <p>{search}</p>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
+        <FollowerContainer/>
     </FollowerDiv>
   );
 };

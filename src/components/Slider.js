@@ -1,5 +1,4 @@
 import React, { useCallback, useRef } from 'react';
-import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 
 //import { LeftOutlined, RightOutlined } from '@ant-design/icons';
@@ -14,7 +13,7 @@ const Wrap = styled.div`
         display: inline-block;
     }
 	
-    // 2. 제가 추가한 커스텀 클래스입니다.
+    // 2. 제가 추가한 커스텀 클래스입니다.s
     // pagination 부분입니다.
     .slick-dots.slick-thumb {
         position: absolute;

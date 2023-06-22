@@ -10,7 +10,7 @@ import KakaoMap from "../components/KakaoMap";
 import { AiOutlineMenu } from 'react-icons/ai';
 import SearchBar from "../components/SearchBar";
 import FollowingFollowCounter from "../components/FollowingFollowCounter";
-import UserContainer from "../components/UserContainer";
+import UserContainer from "../components/FollowerContainer";
 const FollowingDiv = styled.div`
     width: 30vw;
     height: 100vw;
@@ -19,24 +19,8 @@ const FollowingDiv = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 30px;
+    padding-top: 60px;
 `;
-
-const SidebarButton = styled(AiOutlineMenu)`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  z-index: 2;
-  top: 20px;
-  left: 50px;
-  border: none;
-  background-color: transparent;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-`;
-
 
 const Following = () => {
   const [search, setSearch] = useState("");
