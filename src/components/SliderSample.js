@@ -8,8 +8,10 @@ const Wrap = styled.div`
     position: relative;
     padding-bottom: 70px;
     overflow: hidden;
-    width: 100%;
-    height: 300px;
+
+    width: 80%;
+    height: 33.3%;
+
 	
     // 1. Global style 추가했던 것을 슬라이드 상단에 Wrap을 만들어 여기서 선언했습니다.
     .slick-slide {
@@ -185,7 +187,9 @@ const MainSlider = () => {
         // 5. custom arrows를 만들기 위해 기본 arrows옵션을 false로 합니다.
         arrows: false,
         infinite: true,
-        slidesToShow: 5,
+
+        slidesToShow: 2,
+
         slidesToScroll: 2,
         
         // 2. custom pagination을 만듭니다.
@@ -206,8 +210,6 @@ const MainSlider = () => {
 
     return (
         <Wrap>
-			
-			
 			<Slick ref={slickRef} {...settings}>
             	
               
@@ -225,8 +227,6 @@ const MainSlider = () => {
                     )
                 })}
             </Slick>
-			
-
             <>
                 <PrevButton onClick={previous}>
                     

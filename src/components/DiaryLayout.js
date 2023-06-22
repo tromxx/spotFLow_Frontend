@@ -36,6 +36,10 @@ const DiaryLayoutdiv = styled.div`
     height: 60%;
     margin: 15px;
   }
+  /* .itembox{
+    justify-content: center;
+    align-items: center;
+  } */
 `; 
 
 
@@ -47,12 +51,12 @@ const DiaryLayout = (props) => {
                 <h6>See All</h6>
             </div>
             <div className="flex-Container">
-                <div className="flex-item">item 1</div>
-                <div className="flex-item">item 2</div>
-                <div className="flex-item">item 3</div>
-                <div className="flex-item">item 4</div>
-                <div className="flex-item">item 5</div>
-            </div>
+                    <div className="flex-item">item 1</div>      
+                    <div className="flex-item">item 2</div>
+                    <div className="flex-item">item 3</div>
+                    <div className="flex-item">item 4</div>
+                    <div className="flex-item">item 5</div>
+                </div>
         </DiaryLayoutdiv>
     );
 };

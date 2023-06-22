@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
 import MainSlider from "../components/SliderSample";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 const centerAlign = css`
@@ -78,7 +79,7 @@ const CreatePost = styled.div`
         border-radius:15px;
         background-color:white;
         width: 83%;
-
+        z-index: 50;
         
     }
     .button-box {
@@ -129,7 +130,7 @@ const Header = styled.div`
     justify-content: start;
     flex-wrap: wrap;
     background-color: white;
-    height: 10%;
+    height: 20%;
     width: 100%;
 
     .Search-bar {
@@ -205,6 +206,11 @@ const Main = styled.div`
     ${(props) => props.isSort ? `
         grid-template-columns: 1fr 1fr 1fr 1fr;
 
+        @media (max-width: 850px) {
+	& {
+		grid-template-columns: 1fr 1fr ;
+	}}
+      
        
 }   
 
@@ -228,9 +234,8 @@ const Item = styled.div`
             margin-top : 20px;
         }
        // 밑에 코드는 정렬 
-    ${(props) => props.isSort ? `
+    ${(props) => props.isSort ?`
       ${centerAlign}
-
       flex-direction:column;
       &:nth-child(2n){
             margin-right:0px;
@@ -250,12 +255,17 @@ const Item = styled.div`
         &:nth-child(4) {
             margin-top : 20px;
         } 
+        @media (max-width: 850px) {
+            & {
+		        width: 100%;
+                height:200px;
+	        }
+        }
     ` : `
     height: 160px;
     flex-direction:row;
-        display:flex;      
-        
-    `}   
+    display:flex;      
+    `}  
     .editBtn {
         position: absolute;
         background-color:white;
@@ -340,6 +350,7 @@ const ItemContent =styled.div`
 
 
 const TimeLine = () => {
+    const Navi = useNavigate();
     // const input = useRef();
     // const content = useRef();
     const [title,setTitle] = useState("");
@@ -392,7 +403,7 @@ const TimeLine = () => {
                 image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
             },
             {
-                id : 6,
+                id : 7,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -400,22 +411,14 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 8,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
                 image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
             },
             {
-                id : 6,
-                title: "역삼동 맛집",
-                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-                name : "안유진",
-                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-            },
-    
-            {
-                id : 6,
+                id : 9,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -423,7 +426,7 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 10,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -431,7 +434,7 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 11,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -439,7 +442,7 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 12,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -447,7 +450,7 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 13,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -455,7 +458,7 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 14,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -463,7 +466,15 @@ const TimeLine = () => {
             },
     
             {
-                id : 6,
+                id : 15,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 16,
                 title: "역삼동 맛집",
                 content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
                 name : "안유진",
@@ -529,7 +540,7 @@ const TimeLine = () => {
             <Header>
                 <HeaderList>
                     <HeaderItemLeft>
-                        <CreateBtn style={{borderRadius:"15px"}}>
+                        <CreateBtn onClick={()=> {Navi(-1)}} style={{borderRadius:"15px"}}>
                         <TfiArrowLeft style={{fontSize:"20px"}}></TfiArrowLeft>
                         </CreateBtn>
                          
