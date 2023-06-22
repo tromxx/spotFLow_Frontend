@@ -88,13 +88,10 @@ const navigate = useNavigate();
         <SidebarButton onClick={() => moveLeft()}>
             <MenuImg/>
         </SidebarButton>
-
-
         <Sidebar translateX={translateX}>
             <CloseButton onClick={() => moveRight()}></CloseButton>
             <SideBarMain />
         </Sidebar>
-
       </SideBarWrapper>
   )
 
