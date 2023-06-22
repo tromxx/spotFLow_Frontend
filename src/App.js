@@ -8,6 +8,7 @@ import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
+import { useState } from 'react';
 
 
 
@@ -36,7 +37,6 @@ function App() {
             </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
-            
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
