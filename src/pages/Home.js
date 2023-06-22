@@ -9,6 +9,7 @@ import DarkSetting from "../images/DarkSetting.png"
 import { useNavigate  } from "react-router-dom";
 import MapView from "./MapView";
 import SideBarMain from "../components/SidebarMain";
+import SideBar from "../components/SideBar";
 
 const HomeDiv = styled.div`
   width: auto;
@@ -92,21 +93,10 @@ const Home = ({children}) => {
 
   const navigate = useNavigate();
 
-  // 사이드바 가로이동
-  const [translateX, setTranslateX] = useState("-100vw");
-
-  const moveLeft = () => {
-    setTranslateX("0");
-  };
-
-  const moveRight = () => {
-    setTranslateX("-100vw");
-  };
-
 
   return (
     <HomeDiv>
-      <MapView/>
+      <SideBar/>
     </HomeDiv>
   );
 };
