@@ -30,6 +30,7 @@ const Container = styled.div`
         justify-content: center;
         margin-right: 50px;
         }
+
         .id{
             display: flex;
             justify-content: center;
@@ -54,11 +55,6 @@ const Container = styled.div`
         justify-content: flex-end;
         margin-right: 30px;
     }
-    h3{
-        font-style: 
-    }
-
-    
 
 `; 
 
