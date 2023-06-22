@@ -8,8 +8,13 @@ const Wrap = styled.div`
     position: relative;
     padding-bottom: 70px;
     overflow: hidden;
+<<<<<<< HEAD
     width: 80%;
     height: 33.3%;
+=======
+    width: 100%;
+    height: 300px;
+>>>>>>> af77ad4b6035e1258272ba3aeca0df392026ef65
 	
     // 1. Global style 추가했던 것을 슬라이드 상단에 Wrap을 만들어 여기서 선언했습니다.
     .slick-slide {
@@ -41,6 +46,7 @@ const Wrap = styled.div`
 `;
 
 const SlickItems = styled.div`
+    position: relative; // 추가
     width: 100%;    
     height: 400px;
     text-align: center;
@@ -51,6 +57,16 @@ const SlickItems = styled.div`
         vertical-align: top;
     }
 `;
+//     width: 100%;    
+//     height: 200px;
+//     text-align: center;
+
+//     img {
+//         max-width: 100%;
+//         height: 70%;
+//         vertical-align: top;
+//     }
+// `;
 
 const defaultButtonStyle = css`
     position: absolute;
@@ -103,6 +119,11 @@ const PagingAnchor = styled.a`
         width: 100%;
         height: 100%;
     }
+    h2 {
+        width: 100%;
+        height: 30px;
+        font-size:300px;
+    }
 `;
 
 // 3. custom pagination을 만듭니다.
@@ -122,19 +143,35 @@ const Paging = styled.span`
 const images = [
     {
         src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212614_fawslbwd.jpg",
-        title: "1"
+        title: "1sdfdsf"
     },
     {
         src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212649_esiekzxf.jpg",
-        title: "2"
+        title: "2dsfsdf"
     },
     {
         src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212707_zcrkccgp.jpg",
-        title: "3"
+        title: "3sdfdsf"
     },
     {
         src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212724_pacwfbiz.jpg",
-        title: "4"
+        title: "4dfdsfdsfsd"
+    },
+    {
+        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212614_fawslbwd.jpg",
+        title: "5"
+    },
+    {
+        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212649_esiekzxf.jpg",
+        title: "6"
+    },
+    {
+        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212707_zcrkccgp.jpg",
+        title: "7"
+    },
+    {
+        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212724_pacwfbiz.jpg",
+        title: "8"
     },
 ];
 
@@ -145,7 +182,7 @@ const MainSlider = () => {
 
 	// 6. slick에 추가할 세팅입니다.
     const settings = {
-        dots: true,
+        dots: false,
         
         // 2. 제가 추가한 커스텀 클래스입니다. (pagination)
         dotsClass: "slick-dots slick-thumb",
@@ -153,7 +190,11 @@ const MainSlider = () => {
         // 5. custom arrows를 만들기 위해 기본 arrows옵션을 false로 합니다.
         arrows: false,
         infinite: true,
+<<<<<<< HEAD
         slidesToShow: 2,
+=======
+        slidesToShow: 5,
+>>>>>>> af77ad4b6035e1258272ba3aeca0df392026ef65
         slidesToScroll: 2,
         
         // 2. custom pagination을 만듭니다.
@@ -180,8 +221,14 @@ const MainSlider = () => {
                 {images.map((v, i) => {
                     return (
                         <SlickItems key={`${v.title}_${i}`}>
-                            <img src={v.src} />
+                            
+                            <img src={v.src}  />
+                            <h2 style={{fontSize:"40px", color:"red", zIndex:"300", position:"absolute"}}>1</h2> 
+                            
+                          
+                            
                         </SlickItems>
+
                     )
                 })}
             </Slick>

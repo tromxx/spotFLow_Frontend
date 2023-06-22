@@ -1,6 +1,16 @@
 import React from "react";
-import HeaderBar from "../components/HeaderBarNavi";
 import { styled } from 'styled-components';
+
+
+const Myflow = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+	top: 7vh;   
+	width: 80%;
+	height: 100%;
+`;
+
 
 
 

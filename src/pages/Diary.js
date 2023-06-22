@@ -21,7 +21,7 @@ const Container = styled.div`
     .namebar{
         display: flex;
         width: 80vw;
-        height: 18vh;
+        height: 15vh;
         border: solid 5px red;
         justify-content: center;
         align-items: center;

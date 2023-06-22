@@ -47,7 +47,6 @@ const CreatePost = styled.div`
 
    
     .create-btns {
-        
         ${centerAlign}
         flex-direction:column ;
         flex:2;
@@ -97,6 +96,15 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+
+textarea {
+    appearance: none; /* 기본 브라우저 스타일 제거 */
+    outline: none; /* 아웃라인 제거 */
+    border: none; /* 테두리 제거 */
+    resize: none; /* 크기 조절 제거 */
+    /* 이외 원하는 스타일을 적용 */
+}
+
     position: relative;
     top:40px;
 
@@ -131,8 +139,9 @@ const Header = styled.div`
         height: 0px;
         margin-left: 20px;
         border:none;
-        background-color: silver;
+        background-color: lightblue;
         border-radius:15px;
+    
     }
     @media (min-width: 1300px) {
 	& {
@@ -156,6 +165,7 @@ const HeaderItemRight =styled.div`
     width: 50%;
 `
 const CreateBtn = styled.div`
+    
     /* display: flex;
     justify-content:center;
     align-items:center; */
@@ -163,7 +173,8 @@ const CreateBtn = styled.div`
     border-radius: 5px;
     width: 35px;
     height: 35px;
-    background-color: #d8d8d8;
+    color:white;
+    background-color: lightblue;
     margin : 5px;
     &:hover{
         background-color: white;
@@ -280,10 +291,6 @@ const ItemImg = styled.div`
 
             
     `}   
-
-
-
-
 `
 const ItemTitle = styled.div`
 
@@ -384,6 +391,86 @@ const TimeLine = () => {
                 name : "안유진",
                 image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
             },
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+            {
+                id : 6,
+                title: "역삼동 맛집",
+                content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
+                name : "안유진",
+                image : "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
+            },
+    
+    
     
     ]
     );
@@ -425,7 +512,7 @@ const TimeLine = () => {
         <Container theme={theme}>
             {isCreate &&
                 <CreatePost>
-                    <input onChange={e=>{ setTitle(e.target.value)}} type="text" />
+                    <input style={{textAlign: "center" , borderBottom: "1px solid silver" , borderRadius:"0px", backgroundColor:"none"}} placeholder="Typing the Title" onChange={e=>{ setTitle(e.target.value)}} type="text" />
                     <textarea onChange={e=>{setContent(e.target.value)}} name="" id="" cols="50" rows="30"></textarea>
                     <div className="create-btns">
                        {/* <CreateBtn className="create-btn">확인</CreateBtn>
@@ -490,7 +577,7 @@ const TimeLine = () => {
                 <input type="text" className="Search-bar" 
                 /> <AiOutlineSearch style={{position: "absolute",left: "30px" , bottom:"7px"}}/>
                 </div>
-               
+                        
 
             </Header>
             <Main isSort={isSort}>
@@ -511,7 +598,7 @@ const TimeLine = () => {
                 )
                 }
             </Main>
-           
+          
         </Container>
         </>
 
