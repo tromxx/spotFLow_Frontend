@@ -82,6 +82,7 @@ function App() {
           <Routes>
             <Route path="/" element={<>
                 <HeaderBarNavi />
+              
                 <Home />
               </>} />
             <Route path="/login" element={<>
@@ -117,6 +118,7 @@ function App() {
             </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
+            
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
