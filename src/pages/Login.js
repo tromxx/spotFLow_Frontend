@@ -8,15 +8,12 @@ const LogInDiv = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  margin-top: 15vh;
-`;
-
-const LogInContainer = styled.ul`
-    width: 629px;
-    height: auto;
+  position: relative;
+  top: 100px;
+  ul{
     display: flex;
     flex-direction: column;
-    gap: 70px;
+    gap: 15px;
     justify-content: baseline;
     align-items: center;
     border: 2px solid var(--grey);
@@ -24,9 +21,10 @@ const LogInContainer = styled.ul`
     padding: 100px;
     list-style: none;
     font-family: var(--kfont);
-    input {
-        width: 500px;
-        height: 70px;
+  }
+  input {
+        width: 400px;
+        height: 50px;
         font-size: 15px;
         border: 0;
         border-radius: 20px;
@@ -40,8 +38,8 @@ const LogInContainer = styled.ul`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 500px;
-        height: 70px;
+        width: 400px;
+        height: 50px;
         font-size: 20px;
         border: 0;
         border-radius: 20px;
@@ -57,17 +55,18 @@ const LogInContainer = styled.ul`
     }
 `;
 
+
 const Login = () => {
     return(
         <LogInDiv>
-            <LogInContainer>
+            <ul>
                 <li><img src={Logo} alt="" /></li>
                 <li><input type="text" placeholder="email@gmail.com"/></li>
                 <li><input type="text" placeholder="password"/></li>
                 <li><p>회원가입 아이디/비밀번호 찾기</p></li>
                 <li><img src={GoogleLogo} alt="" /></li>
                 <li><img src={KakaoLogo} alt="" /></li>
-            </LogInContainer>
+            </ul>
         </LogInDiv>
     );
 
