@@ -4,16 +4,21 @@ import { useState , useRef ,useEffect } from "react";
 import HeaderBar from "../components/HeaderBarNavi";
 import { FiColumns } from "react-icons/fi";
 import { RiLayoutRowLine } from "react-icons/ri";
-import { AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "react-icons/ai";
+import { AiOutlineSearch,AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "react-icons/ai";
 import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
+import MainSlider from "../components/SliderSample";
 
 
 const centerAlign = css`
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+const Search = `
+    
 `;
 
 const CreatePost = styled.div`
@@ -38,6 +43,7 @@ const CreatePost = styled.div`
      width: 82%;
    }
 }
+
 
    
     .create-btns {
@@ -91,6 +97,9 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+    position: relative;
+    top:40px;
+
     @media (min-width: 1300px) {
 	& {
         
@@ -118,6 +127,7 @@ const Header = styled.div`
     .Search-bar {
         width: 60%;
         padding: 15px;
+        padding-left: 30px;
         height: 0px;
         margin-left: 20px;
         border:none;
@@ -167,11 +177,14 @@ const CreateBtn = styled.div`
 const Main = styled.div`
      @media (min-width: 1300px) {
 	& {
+
         height: 80%;
         width: 70%;
         border: 1px solid silver;
+
+   
     }
-}
+} 
     overflow : scroll;
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -180,17 +193,23 @@ const Main = styled.div`
     width: 100%;
     ${(props) => props.isSort ? `
         grid-template-columns: 1fr 1fr 1fr 1fr;
+
+       
+}   
+
     ` : `
         grid-template-columns: 1fr ;
         grid-template-rows: 1fr 1fr ;
     `}    
 `;
 const Item = styled.div`
+
     position: relative;
     background-color: white ;
     //width: 50%;
     height: 300px;
-    border-radius:15px;
+
+    border-radius:5px;
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom:20px;
@@ -200,6 +219,7 @@ const Item = styled.div`
        // 밑에 코드는 정렬 
     ${(props) => props.isSort ? `
       ${centerAlign}
+
       flex-direction:column;
       &:nth-child(2n){
             margin-right:0px;
@@ -220,11 +240,10 @@ const Item = styled.div`
             margin-top : 20px;
         } 
     ` : `
-   
+    height: 160px;
     flex-direction:row;
-        display:flex;
-       
-
+        display:flex;      
+        
     `}   
     .editBtn {
         position: absolute;
@@ -245,21 +264,21 @@ const ItemImg = styled.div`
      background-image: url(${(props) => props.url});
      background-repeat : no-repeat;
      background-size: cover;
-     border-radius: 10px;
+     border-radius: 0px;
      background-position: center;
      background-color: silver;   
     ${(props) => props.isSort ? `
-    
+        
         height : 80%;
         width: 90%;
     ` : `
           margin-left: 30px;
            margin-bottom: 30px;
-             margin-top: 30px;
+             margin-top: 10px;
+            height : 140px;
+            width: 30%;
 
-        
-            height : 250px;
-            width: 40%;
+            
     `}   
 
 
@@ -293,8 +312,8 @@ const ItemContent =styled.div`
         margin:10px;
         border-radius: 15px;
        ${centerAlign}
-       background-color:  ${(props) => props.theme.timeLineBgColor};
-       color : ${(props) => props.theme.textColor};
+      // background-color:  ${(props) => props.theme.timeLineBgColor};
+     //  color : ${(props) => props.theme.textColor};
         width: 85%;
         flex: 1;
 
@@ -302,8 +321,8 @@ const ItemContent =styled.div`
     .content{
         margin:10px;
         border-radius: 15px;
-        background-color:  ${(props) => props.theme.timeLineBgColor};
-        color : ${(props) => props.theme.textColor};
+    //    background-color:  ${(props) => props.theme.timeLineBgColor};
+    //    color : ${(props) => props.theme.textColor};
         ${centerAlign}
         flex: 10;
         width : 85%;
@@ -402,6 +421,7 @@ const TimeLine = () => {
     return(
         <>
 <HeaderBar/>
+
         <Container theme={theme}>
             {isCreate &&
                 <CreatePost>
@@ -466,7 +486,11 @@ const TimeLine = () => {
                     </HeaderItemRight>
 
                 </HeaderList>
-                <input type="text" className="Search-bar" />
+                <div  style={{width:"70%",position:"relative"}} >
+                <input type="text" className="Search-bar" 
+                /> <AiOutlineSearch style={{position: "absolute",left: "30px" , bottom:"7px"}}/>
+                </div>
+               
 
             </Header>
             <Main isSort={isSort}>
@@ -487,8 +511,11 @@ const TimeLine = () => {
                 )
                 }
             </Main>
+           
         </Container>
         </>
+
+   
     );
 }
 
