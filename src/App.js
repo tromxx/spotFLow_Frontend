@@ -12,7 +12,6 @@ import Following from './pages/Following';
 import { ThemeProvider } from './context/themeProvider';
 import KakaoMap from './components/KakaoMap';
 import styled from 'styled-components'
-import SideBar from './components/SideBar';
 import SideBarMain from './components/SidebarMain';
 
 const Sidebar = styled.div`
@@ -32,6 +31,8 @@ const Sidebar = styled.div`
   transform: translateX(${({ translateX }) => translateX});
 `;
 
+
+
 function App() {
   return (
       <BrowserRouter>
@@ -40,9 +41,9 @@ function App() {
             <Route path="/" element={<>
                 <HeaderBarNavi />
                 
-                <SideBar>
+                <Sidebar>
                   <SideBarMain />
-                </SideBar>
+                </Sidebar>
                 <Home />
               </>} />
             <Route path="/login" element={<>
