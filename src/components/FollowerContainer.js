@@ -2,15 +2,14 @@ import React from "react";
 import {styled} from 'styled-components'
 import DefaultAvatar from "../images/default_avatar.png"
 
-const UserContainerDiv = styled.div`
-    width: 570px;
-    height: 70px;
+const FollowerContainerDiv = styled.div`
+    width: 380px;
+    height: 60px;
     border: 1px solid var(--grey);
     border-radius: 20px;
     outline: none;
     font-family: var(--efont);
     font-size: 20px;
-    font-weight: bold;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -31,11 +30,11 @@ const UserContainerDiv = styled.div`
 
 const UserContainer = () =>{
     return(
-        <UserContainerDiv>
+        <FollowerContainerDiv>
             <img src={DefaultAvatar} alt="" />
             <p>nickname</p>
             <button>unfollow</button>
-        </UserContainerDiv>
+        </FollowerContainerDiv>
     );
 };
 

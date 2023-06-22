@@ -9,6 +9,7 @@
   <li> yarn add react-router-dom </li>
   <li> yarn add add axios </li>
   <li> yarn add styled-components </li>
+  <li> yarn add react-slick </li>
 </ul>  
  
 <h1>Rules</h1>

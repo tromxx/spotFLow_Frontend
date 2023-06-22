@@ -12,7 +12,7 @@ const ToSpotBtn = styled.div`
   transform: translateY(${({translateY}) => translateY + "px"});
   position: absolute;
   font-family: 'Prompt', sans-serif;
-  top: 20px;
+  top: 80px;
   right: 150px;
   z-index: 2;
 
