@@ -8,6 +8,7 @@ import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
+import DiaryCategory from './pages/DiaryCategory';
 
 
 function App() {
@@ -33,7 +34,12 @@ function App() {
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
-              <Diary />
+              <Diary/>
+            </>} />
+
+            <Route path="/diary/Category" element={<>
+              <HeaderBarNavi />
+              <DiaryCategory/>
             </>} />
             <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
