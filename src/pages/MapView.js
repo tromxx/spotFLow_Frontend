@@ -15,7 +15,9 @@ const ToSpotBtn = styled.div`
   top: 80px;
   right: 150px;
   z-index: 2;
-
+  * {
+    box-sizing: border-box;
+  }
   .to-timeline {
     width: 13.5vh;
     height: 4.5vh;
