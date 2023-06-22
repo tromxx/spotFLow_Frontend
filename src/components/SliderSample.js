@@ -187,11 +187,9 @@ const MainSlider = () => {
         // 5. custom arrows를 만들기 위해 기본 arrows옵션을 false로 합니다.
         arrows: false,
         infinite: true,
-<<<<<<< HEAD
+
         slidesToShow: 2,
-=======
-        slidesToShow: 5,
->>>>>>> af77ad4b6035e1258272ba3aeca0df392026ef65
+
         slidesToScroll: 2,
         
         // 2. custom pagination을 만듭니다.
