@@ -83,7 +83,6 @@ const StatusMsgWrapper = styled.div`
       resize: none;
       outline: none;
       padding: 2px;
-      
     }
     textarea:focus {
     outline: none;
@@ -93,29 +92,12 @@ const StatusMsgWrapper = styled.div`
 const FollowWrapper = styled.div`
   position: absolute;
   top: 280px;
-  
-  label {
-    margin-left: 20px;
-  }
-
-  input {
-    color: ${props => props.theme.textColor};
-    width: 50px;
-    height: 30px;
-    border: none;
-    background-color: transparent;
-    margin-left: 10px;
-    font-size: 1rem;
-  }
-  input:hover {
-    cursor: pointer;
-  }
-  input:focus {
-  outline: none;
+  display: flex;
+  gap: 30px;
+  label{
+    transform: translateX(${({transMenuX}) => transMenuX});
   }
 `;
-
-
 
 const EditButton = styled.button`
   position: absolute;
@@ -241,7 +223,7 @@ const SaveButton = styled.button`
   }
 `;
 
-const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
+const SideBarMain = ({ handleMyFlow }) => {
   // 정보 수정 관련 요소들
   const [statusMsgValue, setStatusMsgValue] = useState("");  // 상태메시지 관련
   const [isClicked, setIsClicked] = useState(false);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전
@@ -282,8 +264,11 @@ const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
     navigate("/diary");
   }
 
-  return (
+  //팔로잉 테스트 중
+  const [following , setFollowing] = useState(100)
+  const [follower , setFollower] = useState(200)
 
+  return (
         <MyInfo>
           <EditButton onClick={() => handleClick()} isClicked={isClicked}>
             <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
@@ -291,7 +276,8 @@ const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
           <div className="profileImg"></div>
             <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
           <FollowWrapper>
-            <button transMenuX = {transMenuX}  onClick={handleFollow}>Follower : 20</button>
+            <label transMenuX = {transMenuX}>following : {following}</label>
+            <label transMenuX = {transMenuX}>follower : {follower}</label>
           </FollowWrapper>
           <StatusMsgWrapper  isBorderVisible={isBorderVisible}>
             <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" readOnly={isReadOnly} value={statusMsgValue} onChange={handleStatusMsgChange}></textarea>
@@ -300,15 +286,13 @@ const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
             <ButtonMenu transMenuX = {transMenuX} className="MyFlow" onClick={handleMyFlow}>myFlow</ButtonMenu>
             <ButtonMenu transMenuX = {transMenuX} className="Diary" onClick={goToDiary}>Diary</ButtonMenu>
             <ButtonMenu transMenuX = {transMenuX} className="Theme" onClick={setTheme}
-                        mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
+              mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}
+            </ButtonMenu>
         	</ButtonMenuWrapper>
-
 					<InfoInput transInfoEditX = {transInfoEditX} className="password" placeholder="비밀번호" isBorderVisible={isBorderVisible}/>
 					<InfoInput transInfoEditX = {transInfoEditX} className="newPassword" placeholder="새 비밀번호" isBorderVisible={isBorderVisible}/>
 					<InfoInput transInfoEditX = {transInfoEditX} className="newPasswordConfirm" placeholder="새 비밀번호 확인" isBorderVisible={isBorderVisible}/>
 					<SaveButton transInfoEditX = {transInfoEditX} onClick={handleSave}>저장하기</SaveButton>
-  
-
         </MyInfo>
   );
 };
