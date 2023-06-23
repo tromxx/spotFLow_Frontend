@@ -72,6 +72,8 @@ const Wrap = styled.div`
 // 슬라이딩 개별 아이템 스타일링
 const SlickItems = styled.div`
     margin-top:20px;
+
+ 
     position: relative; // 추가
     width: 200%;    
     height: 150%;

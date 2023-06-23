@@ -72,9 +72,9 @@ const CloseButton = styled.button`
   border: none;
   background-color: transparent;
   background-image: url(${close});
-
   &:hover {
     cursor: pointer;
+    color: var(--blue);
   }
 `;
 
@@ -106,15 +106,15 @@ const SideBar = ({ children }) => {
 
   const handleFollower = () => {
     setRenderMain(false);
-    setRenderFollower(false);
+    setRenderFollower(true);
     setRenderFollowing(false);
-    setRenderMyFlow(true);
+    setRenderMyFlow(false);
   }
 
   const handleFollowing = () => {
     setRenderMain(false);
     setRenderFollower(false);
-    setRenderFollowing(false);
+    setRenderFollowing(true);
     setRenderMyFlow(true);
   }
 
@@ -140,8 +140,8 @@ const SideBar = ({ children }) => {
               }
               {renderFollower && <Follower />}
               {renderFollowing && <Following />}
-              {renderMyFlow && <MyFlow />}
-              <button className="button" onClick={handleMain}></button>
+              {renderMyFlow && <MyFlow handleMain={handleMain}/>}
+              {/* <button className="button" onClick={handleMain}></button> */}
         </Sidebar>
       </SideBarWrapper>
   );
