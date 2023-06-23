@@ -4,13 +4,15 @@ import styled, { css } from 'styled-components';
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
 //import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
+
 const Sliderheader = styled.div`
     display:flex;
     align-items:center;
     justify-content:start;
     width: 100%;
-    height: 40px;
-    border: 1px solid;
+    height: 30px;
+    /* border: 1px solid; */
+    border-top: 10px solid #00b4d8;
 
 
      .left {
@@ -27,7 +29,7 @@ const Sliderheader = styled.div`
 `;
 
 const Wrap = styled.div`
-    border-top:10px solid lightblue;
+    border-top:5px solid lightblue;
     position: relative;
     padding-bottom: 30px;
     overflow: hidden;
@@ -71,13 +73,14 @@ const Wrap = styled.div`
 const SlickItems = styled.div`
     margin-top:20px;
     position: relative; // 추가
-    width: 100px;    
-    height: 200px;
+    width: 200%;    
+    height: 150%;
     text-align: center;
 
     img {
-        max-width: 80%;
-        height: 100%;
+        /* max-width: 250px */
+        width: 180px;
+        height: 120px;
         vertical-align: top;
     }
 `;
@@ -142,14 +145,16 @@ const PagingAnchor = styled.a`
     height: 50px;
 
     img {
-
         width: 100%;
         height: 100%;
+        
+        
     }
     h2 {
         width: 100%;
         height: 30px;
         font-size:300px;
+        
     }
 `;
 
@@ -238,41 +243,41 @@ const MainSlider = (props) => {
 
     return (
         <>
-        <Sliderheader>
-            <div className='left'>
-                <div> {props.name}</div>           
-            </div>
-            <div className='right'>
-                <div>See All</div>
-            </div>
-        </Sliderheader>
-        <Wrap>
-			<Slick ref={slickRef} {...settings}>
-            	
-              
-                {images.map((v, i) => {
-                    return (
+            <Sliderheader>
+                <div className='left'>
+                    <div> {props.name}</div>           
+                </div>
+                <div className='right'>
+                    <div>See All</div>
+                </div>
+            </Sliderheader>
+            <Wrap>
+                <Slick ref={slickRef} {...settings}>
+                    
+                
+                    {images.map((v, i) => {
+                        return (
 
-                        <SlickItems key={`${v.title}_${i}`}>     
-                            <img src={v.src}  />
-                            <h2 style={{fontSize:"20px", color:"black", zIndex:"300"}}>{v.title}</h2>      
-                        </SlickItems>
+                            <SlickItems key={`${v.title}_${i}`}>     
+                                <img src={v.src}  />
+                                <h2 style={{fontSize:"15px", color:"black", zIndex:"2"}}>{v.title}</h2>      
+                            </SlickItems>
 
-                    )
-                })}
-            </Slick>
-            <>
-                <PrevButton onClick={previous}>
-                    <GrFormPreviousLink style={{fontSize:"30px" }}/>
+                        )
+                    })}
+                </Slick>
+                <>
+                    <PrevButton onClick={previous}>
+                        <GrFormPreviousLink style={{fontSize:"30px" }}/>
+                            <span className="hidden"></span>
+                    </PrevButton>
+
+                    <NextButton onClick={next}>
+                        <GrFormNextLink  style={{fontSize:"30px"}}/>
                         <span className="hidden"></span>
-                </PrevButton>
-
-                <NextButton onClick={next}>
-                    <GrFormNextLink  style={{fontSize:"30px"}}/>
-                    <span className="hidden"></span>
-                </NextButton>
-            </>
-        </Wrap>
+                    </NextButton>
+                </>
+            </Wrap>
         </>
     );
 };

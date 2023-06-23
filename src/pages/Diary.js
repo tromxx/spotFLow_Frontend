@@ -1,11 +1,10 @@
 import React from "react";
-import HeaderBar from "../components/HeaderBarNavi";
 import { styled } from 'styled-components';
-import DiaryLayout from "../components/DiaryLayout";
 import SearchBar from "../components/SearchBar";
 import avatar from "../images/default_avatar.png"
 import { BsPeople } from "react-icons/bs";
-import SliderSample from "../components/Slider"
+import Slider from "../components/Slider";
+
 
 
 
@@ -14,7 +13,7 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: gray;
+    /* background-color: gray; */
     position: relative;
     top:40px;
 
@@ -22,7 +21,7 @@ const Container = styled.div`
         display: flex;
         width: 80vw;
         height: 15vh;
-        border: solid 5px red;
+        /* border: solid 5px red; */
         justify-content: center;
         align-items: center;
         justify-content: space-between;
@@ -51,12 +50,12 @@ const Container = styled.div`
         }
 
     }
-    img{
+    .img{
         width: 70px;
         height: 70px;
-        margin-right: 20px;
-        
+   //     margin-right: 20px;
     }
+
     .searchBar{
         display: flex;
         width: 100px;
@@ -70,17 +69,18 @@ const Container = styled.div`
         justify-content: flex-end;
         margin-right: 30px;
     } 
+    
 
 `; 
 
 const DiaryDiv = styled.div`
     width: 80vw;
-    height: 75vh;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: beige;
+    /* background-color: beige; */
 `;
 
 
@@ -91,7 +91,7 @@ const Diary = () =>{
                 <div className="namebar">
                     <div className="namebarleft">
                     <div className="id">
-                        <img src={avatar} alt="" />
+                        <img className="img" src={avatar} alt="" />
                         <h6>whddus426</h6>
                      </div>
                 <div className="searchBar1">
@@ -110,9 +110,12 @@ const Diary = () =>{
             </header>
             <body>
             <DiaryDiv>
-                <DiaryLayout name={"Popular"}/>
+                {/* <DiaryLayout name={"Popular"}/>
                 <DiaryLayout name={"Friend"}/>
-                <DiaryLayout name={"Local live"}/> 
+                <DiaryLayout name={"Local live"}/>  */}
+                <Slider name={"Popular"}/>
+                <Slider name={"Friend"}/>
+                <Slider name={"Local live"}/>
             </DiaryDiv>
             </body>
         </Container>
