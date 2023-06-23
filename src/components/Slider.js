@@ -2,7 +2,9 @@ import React, { useCallback, useRef } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
+import { Navigate, useNavigate } from 'react-router-dom';
 //import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+
 
 
 const Sliderheader = styled.div`
@@ -25,6 +27,10 @@ const Sliderheader = styled.div`
         display:flex;
         justify-content:end;
         margin: 30px;
+        &:hover{
+            color: gray;
+            font-weight: bold;
+        }
      }
 `;
 
@@ -209,7 +215,11 @@ const images = [
     },
 ];
 
+
+
 const MainSlider = (props) => {
+
+    const navi = useNavigate();
 	
     // 5. custom arrows를 만들어 ref를 통해 제어합니다.
     const slickRef = useRef(null);
@@ -250,7 +260,7 @@ const MainSlider = (props) => {
                     <div> {props.name}</div>           
                 </div>
                 <div className='right'>
-                    <div>See All</div>
+                    <div onClick={()=>{navi("/diaryCategory")}}>See All</div>
                 </div>
             </Sliderheader>
             <Wrap>
