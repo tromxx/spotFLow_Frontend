@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Diary from './pages/Diary';
-import MyFlow from './pages/MyFlow';
 import TimeLine from './pages/TimeLine';
 import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
@@ -35,7 +34,6 @@ function App() {
               <HeaderBarNavi />
               <Diary />
             </>} />
-            <Route path="/myflow" element={<MyFlow />} />
             <Route path="/timeline" element={<TimeLine />} />
           </Routes>
         </ThemeProvider>

@@ -1,3 +1,4 @@
+/* 홈에 들어갈 페이지 중 하나로 카카오맵 컴포넌트 위에 다양한 버튼을 올려서 이벤트를 관리하는 페이지*/
 import React, {useState} from 'react';
 import KakaoMap from "../components/KakaoMap";
 import {FaMapMarkerAlt} from "react-icons/fa";

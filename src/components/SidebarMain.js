@@ -5,6 +5,7 @@ import setting from "../images/setting.png"
 import {useTheme} from "../context/themeProvider";
 import DarkSetting from "../images/DarkSetting.png"
 import FollowingFollowCounter from "./FollowingFollowCounter";
+import { useNavigate } from "react-router-dom";
 
 const MyInfo = styled.div`
 
@@ -241,9 +242,7 @@ const SaveButton = styled.button`
 `;
 
 const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
-
   // 정보 수정 관련 요소들
-
   const [statusMsgValue, setStatusMsgValue] = useState("");  // 상태메시지 관련
   const [isClicked, setIsClicked] = useState(false);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전
   const [isReadOnly, setIsReadOnly] = useState(true);  // 정보 수정 톱니바퀴를 눌렀을 때 readOnly 속성을 바꿈
@@ -251,6 +250,9 @@ const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
   const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
   const [transMenuX, setTransMenuX] = useState("0"); // 정보 수정 톱니바퀴를 눌렀을 때 원래 존재하는 메뉴들의 이동
   const [transInfoEditX, setTransInfoEditX] = useState("-50vw"); // 정보 수정 톱니바퀴를 눌렀을 때 비밀번호 수정 창의 이동
+  const [ThemeMode, setTheme] = useTheme(); // 다크모드 / 라이트모드 변경
+  const navigate = useNavigate(); //Diary navigate 추가
+
   const handleClick = () => {
     setIsClicked(true);
     setIsReadOnly(false);
@@ -274,13 +276,11 @@ const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
     setIsBorderVisible(false);
     setTransInfoEditX("-50vw");
   }
-
-  // 다크모드 / 라이트모드 변경
-  const [ThemeMode, setTheme] = useTheme();
-
-
-
-
+  
+  // Diary navigate 추가
+  const goToDiary = () =>{
+    navigate("/diary");
+  }
 
   return (
 
@@ -291,14 +291,14 @@ const SideBarMain = ({ children, handleMyFlow , handleFollow }) => {
           <div className="profileImg"></div>
             <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
           <FollowWrapper>
-            <FollowingFollowCounter handleFollow = {handleFollow} following={20} follower={65}/>
+            <button transMenuX = {transMenuX}  onClick={handleFollow}>Follower : 20</button>
           </FollowWrapper>
           <StatusMsgWrapper  isBorderVisible={isBorderVisible}>
             <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" readOnly={isReadOnly} value={statusMsgValue} onChange={handleStatusMsgChange}></textarea>
           </StatusMsgWrapper>
           <ButtonMenuWrapper >
             <ButtonMenu transMenuX = {transMenuX} className="MyFlow" onClick={handleMyFlow}>myFlow</ButtonMenu>
-            <ButtonMenu transMenuX = {transMenuX} className="Diary">Diary</ButtonMenu>
+            <ButtonMenu transMenuX = {transMenuX} className="Diary" onClick={goToDiary}>Diary</ButtonMenu>
             <ButtonMenu transMenuX = {transMenuX} className="Theme" onClick={setTheme}
                         mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}</ButtonMenu>
         	</ButtonMenuWrapper>
