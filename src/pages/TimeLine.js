@@ -8,7 +8,7 @@ import { AiOutlineSearch,AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "reac
 import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
-import MainSlider from "../components/SliderSample";
+import MainSlider from "../components/Slider";
 import { Navigate, useNavigate } from "react-router-dom";
 
 
@@ -623,7 +623,9 @@ const TimeLine = () => {
             </Main>
           
         </Container>
+        <MainSlider name="Popular"/>
         </>
+
 
    
     );

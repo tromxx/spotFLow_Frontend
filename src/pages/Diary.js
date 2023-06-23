@@ -5,7 +5,7 @@ import DiaryLayout from "../components/DiaryLayout";
 import SearchBar from "../components/SearchBar";
 import avatar from "../images/default_avatar.png"
 import { BsPeople } from "react-icons/bs";
-import SliderSample from "../components/SliderSample"
+import SliderSample from "../components/Slider"
 
 
 
