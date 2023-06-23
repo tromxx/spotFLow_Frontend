@@ -70,12 +70,13 @@ const Wrap = styled.div`
 // 슬라이딩 개별 아이템 스타일링
 const SlickItems = styled.div`
     margin-top:20px;
-    position: relative; // 추가
+    position:relative;
     width: 100px;    
     height: 200px;
     text-align: center;
 
     img {
+        width: 80%;
         max-width: 80%;
         height: 100%;
         vertical-align: top;

@@ -23,11 +23,13 @@ const Search = `
 `;
 
 const CreatePost = styled.div`
-    background-color: #E7F1F5;
+    background-color: white;
     ${centerAlign}
     flex-direction: column;
     width : 35%;
-    height: 85%; 
+    height: 85%;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+ 
 
 
     position: absolute;
@@ -72,10 +74,10 @@ const CreatePost = styled.div`
         border-radius:15px;
     }
     input { 
-       
+
         padding: 10px;
         margin:20px;
-        flex:1;
+        flex:0.3;
         border:none;
         border-radius:15px;
         background-color:white;
@@ -115,9 +117,11 @@ textarea {
         
     }
 }
-
-
-    font-family: var(--kfont);
+    *{
+        font-family: 'Prompt', sans-serif;
+         font-style: var(--kfont);
+    }
+   
     display:flex;
     justify-content:center;
     align-items:center;
@@ -193,6 +197,18 @@ const CreateBtn = styled.div`
 `
 
 const Main = styled.div`
+     overflow-y: auto;
+  &::-webkit-scrollbar {
+    background-color: white;
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    background: #939393;
+     outline: none;
+  }
+
+
      @media (min-width: 1300px) {
 	& {
 
@@ -623,7 +639,7 @@ const TimeLine = () => {
             </Main>
           
         </Container>
-        <MainSlider name="Popular"/>
+        {/* <MainSlider name="Popular"/> */}
         </>
 
 
