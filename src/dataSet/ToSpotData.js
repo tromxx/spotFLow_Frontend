@@ -1,3 +1,4 @@
+// mapView 에서 다루는 이벤트에서 사용 될 복잡한 데이터를 저장하거나 불러오는 페이지
 import CityDataApi from "../api/CityDataApi";
 
 /*
@@ -101,7 +102,8 @@ const ToSpot = {
       arr.push(data)
     }
     return arr;
-  },
+  }
+  ,
   getClusterSample: () => {
     return {
       "positions": [
