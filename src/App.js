@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
 import { useState } from 'react';
+import DiaryCategory from './pages/DiaryCategory';
 
 
 
@@ -33,6 +34,10 @@ function App() {
             <Route path="/diary" element={<>
               <HeaderBarNavi />
               <Diary />
+            </>} />
+            <Route path="/diaryCategory" element={<>
+              <HeaderBarNavi />
+              <DiaryCategory />
             </>} />
             <Route path="/timeline" element={<TimeLine />} />
           </Routes>
