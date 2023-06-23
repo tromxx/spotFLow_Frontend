@@ -2,13 +2,11 @@ import React, {useState} from "react";
 import styled from 'styled-components';
 import {SlMenu} from "react-icons/sl";
 import close from "../images/close.png"
-import { useNavigate  } from "react-router-dom";
 import SideBarMain from "./SidebarMain";
-import Following from "../pages/Following"
-import Follower from "../pages/Follower"
-import MyFlow from "../pages/MyFlow"
+import Following from "./Following"
+import Follower from "./Follower"
+import MyFlow from "./MyFlow"
 import { CSSTransition } from 'react-transition-group';
-import FollowingFollowCounter from "./FollowingFollowCounter";
 
 
 const SidebarButton = styled.button`
@@ -83,9 +81,6 @@ const CloseButton = styled.button`
 
 
 const SideBar = ({ children }) => {
-
-const navigate = useNavigate();
-
   // 사이드바 가로이동
   const [translateX, setTranslateX] = useState("-100vw");
   const moveLeft = () => {
@@ -109,18 +104,18 @@ const navigate = useNavigate();
     setRenderMyFlow(true);
   }
 
+  const handleFollower = () => {
+    setRenderMain(false);
+    setRenderFollower(false);
+    setRenderFollowing(false);
+    setRenderMyFlow(true);
+  }
+
   const handleFollowing = () => {
     setRenderMain(false);
     setRenderFollower(false);
-    setRenderMyFlow(false);
-    setRenderFollowing(true);
-  }
-
-  const handleFollower = () => {
-    setRenderMain(false);
     setRenderFollowing(false);
-    setRenderMyFlow(false);
-    setRenderFollower(true);
+    setRenderMyFlow(true);
   }
 
   const handleMain = () => {
@@ -137,17 +132,19 @@ const navigate = useNavigate();
         </SidebarButton>
         <Sidebar translateX={translateX}>
             <CloseButton onClick={() => moveRight()}></CloseButton>
-            
-              {renderMain && <SideBarMain handleFollower = {handleFollower} handleFollowing = {handleFollowing} handleMyFlow = {handleMyFlow} handleMain = {handleMain} />}
+              {renderMain && <SideBarMain 
+                handleFollower = {handleFollower} 
+                handleFollowing = {handleFollowing} 
+                handleMyFlow = {handleMyFlow} 
+                handleMain = {handleMain} />
+              }
               {renderFollower && <Follower />}
               {renderFollowing && <Following />}
               {renderMyFlow && <MyFlow />}
               <button className="button" onClick={handleMain}></button>
-            
         </Sidebar>
       </SideBarWrapper>
-  )
-
-}
+  );
+};
 
 export default SideBar;
