@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
+import Slider from "../components/Slider";
 
 const DiaryLayoutdiv = styled.div`
   /* border: solid 1px red; */
@@ -46,7 +47,8 @@ const DiaryLayoutdiv = styled.div`
 const DiaryLayout = (props) => {
     return(
         <DiaryLayoutdiv>
-            <div className="bar1">
+          <Slider/>
+            {/* <div className="bar1">
                 <h4>{props.name}</h4>
                 <h6>See All</h6>
             </div>
@@ -56,7 +58,7 @@ const DiaryLayout = (props) => {
                     <div className="flex-item">item 3</div>
                     <div className="flex-item">item 4</div>
                     <div className="flex-item">item 5</div>
-                </div>
+                </div> */}
         </DiaryLayoutdiv>
     );
 };
