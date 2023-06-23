@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import {SlMenu} from "react-icons/sl";
 import close from "../images/close.png"
 import SideBarMain from "./SidebarMain";
-import Following from "./Following"
-import Follower from "./Follower"
+import FollowerFollowing from "./FollowerFollowing"
 import MyFlow from "./MyFlow"
 import { CSSTransition } from 'react-transition-group';
+import FollowDummyData from "../dataSet/FollowDummyData"
 
 
 const SidebarButton = styled.button`
@@ -80,7 +80,7 @@ const CloseButton = styled.button`
 
 
 
-const SideBar = ({ children }) => {
+const SideBar = () => {
   // 사이드바 가로이동
   const [translateX, setTranslateX] = useState("-100vw");
   const moveLeft = () => {
@@ -91,39 +91,29 @@ const SideBar = ({ children }) => {
     setTranslateX("-100vw");
   };
 
-
   const [renderMain, setRenderMain] = useState(true);
-  const [renderFollowing, setRenderFollowing] = useState(false);
-  const [renderFollower, setRenderFollower] = useState(false);
+  const [renderFollowerFollowing, setRenderFollowerFollowing] = useState(false);
   const [renderMyFlow, setRenderMyFlow] = useState(false);
 
   const handleMyFlow = () => {
     setRenderMain(false);
-    setRenderFollower(false);
-    setRenderFollowing(false);
+    setRenderFollowerFollowing(false);
     setRenderMyFlow(true);
   }
 
-  const handleFollower = () => {
+  const handleFollowerFollowing = () => {
     setRenderMain(false);
-    setRenderFollower(true);
-    setRenderFollowing(false);
+    setRenderFollowerFollowing(true);
     setRenderMyFlow(false);
-  }
-
-  const handleFollowing = () => {
-    setRenderMain(false);
-    setRenderFollower(false);
-    setRenderFollowing(true);
-    setRenderMyFlow(true);
   }
 
   const handleMain = () => {
     setRenderMain(true);
-    setRenderFollowing(false);
+    setRenderFollowerFollowing(false);
     setRenderMyFlow(false);
-    setRenderFollower(false);
   }
+  const [follower,setFollower] = useState(FollowDummyData.length);
+  const [following,setFollowing] = useState(FollowDummyData.length);
 
   return(
     <SideBarWrapper>
@@ -133,15 +123,14 @@ const SideBar = ({ children }) => {
         <Sidebar translateX={translateX}>
             <CloseButton onClick={() => moveRight()}></CloseButton>
               {renderMain && <SideBarMain 
-                handleFollower = {handleFollower} 
-                handleFollowing = {handleFollowing} 
+                handleFollowerFollowing = {handleFollowerFollowing} 
                 handleMyFlow = {handleMyFlow} 
-                handleMain = {handleMain} />
+                handleMain = {handleMain} 
+                follower = {follower} 
+                following = {following}/>
               }
-              {renderFollower && <Follower />}
-              {renderFollowing && <Following />}
               {renderMyFlow && <MyFlow handleMain={handleMain}/>}
-              {/* <button className="button" onClick={handleMain}></button> */}
+              {renderFollowerFollowing && <FollowerFollowing handleMain={handleMain}/>}
         </Sidebar>
       </SideBarWrapper>
   );
