@@ -11,8 +11,6 @@ const MyInfo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-	top: 7vh;
-  
   .profileImg {
     position: absolute;
     top: 100px;
@@ -99,9 +97,6 @@ const FollowWrapper = styled.div`
 
 const EditButton = styled.button`
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   top: 80px;
   left: 50px;
   width: 35px;
@@ -160,7 +155,6 @@ const ButtonMenu = styled.button`
 `;
 
 const ButtonMenuWrapper = styled.div`
-  
 `;
 
 const InfoInput = styled.input`
@@ -220,7 +214,7 @@ const SaveButton = styled.button`
   }
 `;
 
-const SideBarMain = ({ handleMyFlow, handleFollowerFollowing, follower, following }) => {
+const SideBarMain = ({ handleMyFlow, handleFollower, handleFollowing, follower, following }) => {
   // 정보 수정 관련 요소들
   const [statusMsgValue, setStatusMsgValue] = useState("");  // 상태메시지 관련
   const [isClicked, setIsClicked] = useState(false);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전
@@ -261,16 +255,6 @@ const SideBarMain = ({ handleMyFlow, handleFollowerFollowing, follower, followin
     navigate("/diary");
   }
 
-  const goToFollower = () =>{
-    localStorage.setItem('follower', 'follower');
-    handleFollowerFollowing();
-  };
-
-  const goToFollowing = () =>{
-    localStorage.setItem('following', 'following');
-    handleFollowerFollowing();
-  };
-
   return (
     <MyInfo>
       <EditButton onClick={() => handleClick()} isClicked={isClicked}>
@@ -279,8 +263,8 @@ const SideBarMain = ({ handleMyFlow, handleFollowerFollowing, follower, followin
       <div className="profileImg"></div>
         <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
       <FollowWrapper isBorderVisible={isBorderVisible}>
-        <label onClick={goToFollower}>follower : {follower}</label>
-        <label onClick={goToFollowing}>following : {following}</label>
+        <label onClick={handleFollower}>follower : {follower}</label>
+        <label onClick={handleFollowing}>following : {following}</label>
       </FollowWrapper>
       <StatusMsgWrapper  isBorderVisible={isBorderVisible}>
         <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" readOnly={isReadOnly} value={statusMsgValue} onChange={handleStatusMsgChange}></textarea>

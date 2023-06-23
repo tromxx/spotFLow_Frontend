@@ -1,20 +1,19 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
 import {SlMenu} from "react-icons/sl";
+import {AiOutlineClose} from "react-icons/ai";
 import close from "../images/close.png"
 import SideBarMain from "./SidebarMain";
-import FollowerFollowing from "./FollowerFollowing"
+import Follower from "./Follower";
+import Following from "./Following";
 import MyFlow from "./MyFlow"
 import { CSSTransition } from 'react-transition-group';
-import FollowDummyData from "../dataSet/FollowDummyData"
 
 
 const SidebarButton = styled.button`
-  width: 30px;
-  height: 30px;
   position: absolute;
   z-index: 2;
-  top: 80px;
+  top: 8vh;
   left: 50px;
   border: none;
   background-color: transparent;
@@ -24,7 +23,6 @@ const SidebarButton = styled.button`
   }
 `;
 
-
 const MenuImg = styled(SlMenu)`
   width: 30px;
   height: 30px;
@@ -33,15 +31,11 @@ const MenuImg = styled(SlMenu)`
 
 
 // 여기서부터 사이드바 안쪽
-
-const SideBarWrapper = styled.div`
-`;
-
 const Sidebar = styled.div`
-
+  margin-top: 7vh;
   display: block;
   width: 30vw;
-  height: 100%;
+  height: 93vh;
   min-width: 450px;
   min-height: max-content;
   position: absolute;
@@ -62,16 +56,10 @@ const Sidebar = styled.div`
   }
 `;
 
-const CloseButton = styled.button`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  z-index: 3;
-  top: 70px;
-  right: 20px;
-  border: none;
-  background-color: transparent;
-  background-image: url(${close});
+const CloseButton = styled.h1`
+  float: right;
+  color: var(--grey);
+  margin-right: 30px;
   &:hover {
     cursor: pointer;
     color: var(--blue);
@@ -92,47 +80,76 @@ const SideBar = () => {
   };
 
   const [renderMain, setRenderMain] = useState(true);
-  const [renderFollowerFollowing, setRenderFollowerFollowing] = useState(false);
+  const [renderFollower, setRenderFollower] = useState(false);
+  const [renderFollowing, setRenderFolloweing] = useState(false);
   const [renderMyFlow, setRenderMyFlow] = useState(false);
 
   const handleMyFlow = () => {
     setRenderMain(false);
-    setRenderFollowerFollowing(false);
+    setRenderFollower(false);
+    setRenderFolloweing(false);
     setRenderMyFlow(true);
   }
 
-  const handleFollowerFollowing = () => {
+  const handleFollower = () => {
     setRenderMain(false);
-    setRenderFollowerFollowing(true);
+    setRenderFollower(true);
+    setRenderFolloweing(false);
     setRenderMyFlow(false);
   }
+
+  const handleFolloweing = () => {
+    setRenderMain(false);
+    setRenderFollower(false);
+    setRenderFolloweing(true);
+    setRenderMyFlow(false);
+  }
+
 
   const handleMain = () => {
     setRenderMain(true);
-    setRenderFollowerFollowing(false);
+    setRenderFollower(false);
+    setRenderFolloweing(false);
     setRenderMyFlow(false);
   }
-  const [follower,setFollower] = useState(FollowDummyData.length);
-  const [following,setFollowing] = useState(FollowDummyData.length);
+  const [follower,setFollower] = useState(0);
+  const [following,setFollowing] = useState(0);
 
   return(
-    <SideBarWrapper>
-        <SidebarButton onClick={() => moveLeft()}>
-            <MenuImg/>
-        </SidebarButton>
-        <Sidebar translateX={translateX}>
-            <CloseButton onClick={() => moveRight()}></CloseButton>
-              {renderMain && <SideBarMain 
-                handleFollowerFollowing = {handleFollowerFollowing} 
-                handleMyFlow = {handleMyFlow} 
-                handleMain = {handleMain} 
-                follower = {follower} 
-                following = {following}/>
-              }
-              {renderMyFlow && <MyFlow handleMain={handleMain}/>}
-              {renderFollowerFollowing && <FollowerFollowing handleMain={handleMain}/>}
-        </Sidebar>
-      </SideBarWrapper>
+    <>
+      <SidebarButton onClick={() => moveLeft()}>
+          <MenuImg/>
+      </SidebarButton>
+      <Sidebar translateX={translateX}>
+          <CloseButton onClick={() => moveRight()}>
+            <AiOutlineClose/>
+          </CloseButton>
+            {renderMain && <SideBarMain 
+              handleMyFlow = {handleMyFlow}
+              handleFollower = {handleFollower} 
+              handleFollowing = {handleFolloweing} 
+              handleMain = {handleMain} 
+              follower = {follower} 
+              following = {following}/>
+            }
+            {renderMyFlow && <MyFlow 
+              handleMain={handleMain}/>
+            }
+            {renderFollower && <Follower 
+              handleMain={handleMain} 
+              handleFollower = {handleFollower} 
+              handleFollowing = {handleFolloweing} 
+              follower={follower} 
+              following={following}/>
+            }
+            {renderFollowing && <Following
+              handleMain={handleMain} 
+              handleFollower ={handleFollower} 
+              follower={follower} 
+              following={following}/>
+            }
+      </Sidebar>
+      </>
   );
 };
 

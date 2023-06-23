@@ -18,7 +18,7 @@ const HeaderBarDiv = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   transition: background-color 0.5s ease;
-  z-index: 80;
+  z-index: 5;
   ul{
     display: flex;
     flex-direction: row;
