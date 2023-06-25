@@ -15,7 +15,6 @@ const InputDiv = styled.div`
 `;
 
 const Input = styled.input`
-    width: 300px;
     height: 40px;
     border: 1px solid var(--grey);
     padding-left: 70px;

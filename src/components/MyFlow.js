@@ -10,8 +10,7 @@ const MyFlowDiv = styled.div`
 `;
 
 const BiArrowBacks = styled(BiArrowBack)`
-	margin-top: 47px;
-	margin-left: 10px;
+ 	margin-left: 30px;
 	color: var(--grey);
 	cursor: pointer;
 	&:hover{
