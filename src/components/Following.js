@@ -50,7 +50,13 @@ const SearchDiv = styled.div`
 
 const Following = ({handleMain, handleFollower, handleFollowing, follower, following}) => {
   const [followings, setFollowings] = useState(FollowerDummyData);
-  console.log(FollowerDummyData)
+
+  const unfollow =(nickName) =>{
+    setFollowings((prevFollowings)=>
+      prevFollowings.filter((followings) => followings.nickName !== nickName)
+    );
+  };
+
   return (
     <>
       <h1 onClick={handleMain}>
@@ -65,7 +71,7 @@ const Following = ({handleMain, handleFollower, handleFollowing, follower, follo
       </SearchDiv>
       <FollowingDiv>
       {followings.map((item) => (
-        <FollowingContainer img={item.src} nickname={item.nickName} key={item.id} />
+        <FollowingContainer img={item.src} nickname={item.nickName} key={item.id} unfollow={unfollow}/>
       ))}
       </FollowingDiv>
     </>

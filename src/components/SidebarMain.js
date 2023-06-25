@@ -145,7 +145,7 @@ const ButtonMenu = styled.button`
     top: 490px;
     left: 100px;
     transition: transform 0.7s ease;
-  }
+  } 
 
   &.Theme {
     top: 560px;
