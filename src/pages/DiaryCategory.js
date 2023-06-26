@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from 'styled-components';
 import DiaryCate from "../components/DiaryCate";
 import { BsPeople } from "react-icons/bs";
+import { BsListUl } from "react-icons/bs";
+import { Navigate, useNavigate } from 'react-router-dom';
+
+
 
 const Container = styled.div`
     display: flex;
@@ -28,7 +32,11 @@ const Container = styled.div`
     .right{
         width: 50%;
         display: flex;
+        align-items: center;
         justify-content: flex-end;
+        margin-bottom: 20px;
+        margin-right: 20px;
+        
     }
     .titlebar{
         /* border: solid 1px green; */
@@ -51,9 +59,20 @@ const Container = styled.div`
         height: 30px;
         display: flex;
         justify-content: center;
-        margin-right: 50px;
-        margin-bottom: 40px;
+        /* margin-right: 50px; */
+        /* margin-bottom: 40px; */
     } 
+    .list1{
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        margin-right: 20px;
+        &:hover{
+            color: gray;
+            font-weight: bold;
+        }
+    }
     `; 
 
 const DiaryCategoryDiv = styled.div`
@@ -68,7 +87,16 @@ const DiaryCategoryDiv = styled.div`
 `;
 
 
-const DiaryCategory = () =>{
+const DiaryCategory = (props) =>{
+
+    const navi = useNavigate();
+    let checkbox = 0;
+
+
+    useEffect(() => {
+        checkbox = props.stat;
+    }, [props]);
+
     return(
         <Container>
             <div className="namebar">
@@ -78,6 +106,7 @@ const DiaryCategory = () =>{
                     </div>
                 </div>
                 < div className="right">
+                    <BsListUl onClick={()=>{navi("/diary")}} className="list1"/>
                     <BsPeople className="people"/>
                 </div>
             </div>

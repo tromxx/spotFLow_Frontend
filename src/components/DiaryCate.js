@@ -9,7 +9,7 @@ const DiaryCatediv = styled.div`
 
   .container{
     border-radius: 20px;
-    border: solid 6px black;
+    border: solid 5px black;
     width: 60vw;
     height: 75vh;
     display: grid;

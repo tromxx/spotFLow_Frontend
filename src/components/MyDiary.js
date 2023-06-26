@@ -45,9 +45,26 @@ const MyDiarydiv = styled.div`
   .plus{
     width: 30px;
     height: 30px;
-   
   }
-
+  .check{
+    border: solid 1px red;
+    position: absolute;
+    top:23%;
+    left:15%;
+  }
+  .input[id="check1"] {
+    display: none;
+    }
+    .input[id="check1"] + label {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #bcbcbc;
+	cursor: pointer;
+	}
+	input[id="check1"]:checked + label {
+	background-color: #666666;
+	}
 `;
 
 
@@ -56,6 +73,10 @@ const MyDiary = () => {
         <MyDiarydiv>
             <div className="container">
                   <div class="box">
+                    <div className="check">
+                        <input type="checkbox" id="check1"/>
+                            <label for="check1"></label>
+                            </div>
                     <div className="image">
                     <AiOutlinePlus className="plus"/>
                     </div>

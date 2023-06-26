@@ -1,7 +1,6 @@
 import {styled} from 'styled-components';
 import SideBar from "../components/SideBar";
 import MapView from "./MapView";
-import ConvertBtn, {viewMode} from "../components/ConvertBtn";
 import {useEffect} from "react";
 
 const HomeDiv = styled.div`

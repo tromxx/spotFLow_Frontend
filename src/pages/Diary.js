@@ -4,6 +4,8 @@ import SearchBar from "../components/SearchBar";
 import avatar from "../images/default_avatar.png"
 import { BsPeople } from "react-icons/bs";
 import Slider from "../components/Slider";
+import { Navigate, useNavigate } from 'react-router-dom';
+
 
 
 
@@ -69,6 +71,12 @@ const Container = styled.div`
         justify-content: flex-end;
         margin-right: 30px;
     } 
+    h3{
+        &:hover{
+            color: gray;
+            font-weight: bold;
+        }
+    }
     
 
 `; 
@@ -85,6 +93,9 @@ const DiaryDiv = styled.div`
 
 
 const Diary = () =>{
+
+    const navi = useNavigate();
+
     return(
         <Container>
             <header>
@@ -101,7 +112,7 @@ const Diary = () =>{
                  <div className="namebarright">
                          <div className="menu">
                             <BsPeople className="people"/>
-                            <div className="MY">
+                            <div onClick={()=>{navi("/diaryMypage")}}className="MY">
                                 <h3>MY</h3>
                                  </div>
                             </div>
