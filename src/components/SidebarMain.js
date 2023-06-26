@@ -33,7 +33,7 @@ const NicknameInput = styled.input`
   color: ${props => props.theme.textColor};
   border: ${props =>
   props.isBorderVisible
-    ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
+    ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #d9d9d9'
     : 'transparent'};
   transition: 0.6s ease;
   justify-content: center;
@@ -66,7 +66,7 @@ const StatusMsgWrapper = styled.div`
     height: 50px;
     border: ${props =>
       props.isBorderVisible
-      ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
+      ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #d9d9d9'
       : 'transparent'};
     transition: 0.6s ease;
     border-radius: 8px;
@@ -177,10 +177,7 @@ const InfoInput = styled.input`
   border-radius: 8px;
   background-color: transparent;
   display: flex;
-  border: ${props =>
-  props.isBorderVisible
-    ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
-    : 'transparent'};
+  border: 1px solid #d9d9d9;
   transform: translateX(${({transInfoEditX}) => transInfoEditX});  
   &.password {
     top: 420px;
@@ -284,7 +281,7 @@ const SideBarMain = ({ handleMyFlow, handleFollower, handleFollowing, follower, 
         <ButtonMenu transMenuX = {transMenuX} className="MyFlow" onClick={handleMyFlow}>myFlow</ButtonMenu>
         <ButtonMenu transMenuX = {transMenuX} className="Diary" onClick={goToDiary}>Diary</ButtonMenu>
         <ButtonMenu transMenuX = {transMenuX} className="Theme" onClick={setTheme}
-          mode={ThemeMode}>{ThemeMode === "light" ? "Light Mode" : "Dark Mode"}
+          mode={ThemeMode}>{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}
         </ButtonMenu>
     	</ButtonMenuWrapper>
 			<InfoInput transInfoEditX = {transInfoEditX} className="password" placeholder="비밀번호" isBorderVisible={isBorderVisible}/>
