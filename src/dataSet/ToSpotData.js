@@ -1,5 +1,6 @@
 // mapView 에서 다루는 이벤트에서 사용 될 복잡한 데이터를 저장하거나 불러오는 페이지
 import CityDataApi from "../api/CityDataApi";
+import React from "react";
 
 /*
  * 도시데이터 api 접목
@@ -49,7 +50,7 @@ import CityDataApi from "../api/CityDataApi";
  */
 
 
-const ToSpot = {
+const ToSpotData = {
   getPlace: () => {
     return [{
       num: 1,
@@ -83,27 +84,15 @@ const ToSpot = {
       lng: 127.09800673535563
     }];
   },
-
-  setMapData: (lat, lng, loc) => {
-    const data = {
-      latitude : lat,
-      longitude : lng,
-      location : loc
-    }
-    console.log(data);
-    return data;
-  },
-  // 배열을 인자 만큼 api 에 접근하여 데이터를 다시 배열로 저장해서 반환한다.
-  getCityDataList : async (places) => {
-    const arr = [];
-    for (let i = 0; i < places.length; i++) {
-      console.log(places[i].location);
-      const data =  await CityDataApi.getCityData(places[i].location);
-      arr.push(data)
-    }
-    return arr;
-  }
-  ,
+  // getCityDataList: async (places) => {
+  //   const arr = [];
+  //   for (let i = 0; i < places.length; i++) {
+  //     console.log(places[i].location);
+  //     const data =  await CityDataApi.getCityData(places[i].location);
+  //     arr.push(data)
+  //   }
+  //   return arr;
+  // },
   getClusterSample: () => {
     return {
       "positions": [
@@ -613,7 +602,31 @@ const ToSpot = {
         }
       ]
     };
+  },
+  setOverlay: (data) => {
+    return (<div className="wrap">
+      <div className="info">
+        <div className="body">
+          <div className="img">
+            <img
+              src={data.img}
+              width="90"
+              height="90"
+            />
+          </div>
+          <div className="desc">
+            <div className="ellipsis">
+              {data.name}
+            </div>
+            <div className="jibun ellipsis">
+              {/*{data.lng}*/}
+              {/*{data.lat}*/}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>);
   }
 }
 
-export default ToSpot;
+export default ToSpotData;
