@@ -6,7 +6,7 @@ export const Btn = styled.div`
   position: absolute;
   font-family: 'Prompt', sans-serif;
   top: 8vh;
-  right: 3vh;
+  right: 30px;
   z-index: 2;
 
   * {
@@ -77,7 +77,7 @@ export const Btn = styled.div`
 export const Converter = styled.button`
   position: absolute;
   font-family: 'Prompt', sans-serif;
-  bottom: 20px;
+  bottom: 50px;
   right: 30px;
   z-index: 2;
   width: 50px;
