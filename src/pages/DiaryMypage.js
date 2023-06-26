@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import MyDiary from "../components/MyDiary";
 import SearchBar from "../components/SearchBar";
@@ -6,6 +6,8 @@ import { BsPeople } from "react-icons/bs";
 import avatar from "../images/default_avatar.png"
 import { BsTrash } from "react-icons/bs";
 import { BsListUl } from "react-icons/bs";
+import { Navigate, useNavigate } from 'react-router-dom';
+
 
 
 const Container = styled.div`
@@ -75,6 +77,10 @@ const Container = styled.div`
         height: 30px;
         display: flex;
         justify-content: flex-end;
+        &:hover{
+            color: gray;
+            font-weight: bold;
+        }
         /* margin-right: 10px; */
     }
 
@@ -108,6 +114,16 @@ const DiaryMypagediv = styled.div`
 `;
 
 const DiaryMypage = () => {
+
+    const navi = useNavigate();
+
+    const [isCheckBox, setIsCheckBox] = useState(0);
+
+    const convertCheckBox = () => {
+        if(isCheckBox === 0) setIsCheckBox(1);
+        else setIsCheckBox(0);
+    }
+
     return(
         <Container>
              <header>
@@ -123,15 +139,15 @@ const DiaryMypage = () => {
                  </div>
                  <div className="namebarright">
                          <div className="menu">
-                                <BsListUl className="list"/>
+                                <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
                                 <BsPeople className="people"/>
-                                <BsTrash className="trash"/>
+                                <BsTrash className="trash" onClick={convertCheckBox}/>
                         </div>
                     </div>
                 </div>    
             </header>
             <body>
-        <DiaryMypagediv>
+        <DiaryMypagediv stat={isCheckBox}>
             <MyDiary/>
         </DiaryMypagediv>
         </body>
