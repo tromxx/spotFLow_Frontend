@@ -1,6 +1,5 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
-import SideBarMain from "../components/SidebarMain";
 import SideBar from "../components/SideBar";
 
 const HomeDiv = styled.div`
