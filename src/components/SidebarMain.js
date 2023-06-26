@@ -9,20 +9,24 @@ import { useNavigate } from "react-router-dom";
 const MyInfo = styled.div`
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  .profileImg {
-    position: absolute;
-    top: 100px;
-    justify-content: space-evenly;
-    background-image: url(${defProfile});
-    width: 8vw;
-    height: 8vw;
-    min-width: 120px;
-    min-height: 120px;
-    background-size: cover;
-  }
+  text-align: center;
 `;
+
+
+const ProfileImg = styled.div`
+  position: absolute;
+  top: 60px;
+  background-image: url(${defProfile});
+  width: 6vw;
+  height: 6vw;
+  min-width: 120px;
+  min-height: 120px;
+  background-size: cover;
+`;
+
 
 const NicknameInput = styled.input`
   position: absolute;
@@ -32,7 +36,10 @@ const NicknameInput = styled.input`
     ? props.theme.borderColor === '1px solid #424242' ? '1px solid #d9d9d9' : '1px solid #424242'
     : 'transparent'};
   transition: 0.6s ease;
-  top: 250px;
+  justify-content: center;
+  align-items: center;
+  top: 200px;
+  gap: 25px;
   width: 150px;
   height: 35px;
   border-radius: 8px;
@@ -86,19 +93,23 @@ const StatusMsgWrapper = styled.div`
 
 const FollowWrapper = styled.div`
   position: absolute;
-  top: 280px;
+  top: 260px;
   display: flex;
   gap: 30px;
   label:hover{
+    outline: none;
     color: var(--blue);
-    border: 1px solid black;
+    border: none;
   }
 `;
 
 const EditButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: 80px;
-  left: 50px;
+  top: 50px;
+  left: 100px;
   width: 35px;
   height: 35px;
   background-size: cover;
@@ -260,7 +271,7 @@ const SideBarMain = ({ handleMyFlow, handleFollower, handleFollowing, follower, 
       <EditButton onClick={() => handleClick()} isClicked={isClicked}>
         <EditImg src={ThemeMode === 'dark' ? DarkSetting : setting}/>
       </EditButton>
-      <div className="profileImg"></div>
+      <ProfileImg />
         <NicknameInput type="text" className="nicknameInput" value={nicknameValue} readOnly={isReadOnly} onChange={handleNicknameChange} isBorderVisible={isBorderVisible} />
       <FollowWrapper isBorderVisible={isBorderVisible}>
         <label onClick={handleFollower}>follower : {follower}</label>

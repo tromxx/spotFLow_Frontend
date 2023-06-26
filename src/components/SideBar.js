@@ -13,7 +13,7 @@ import { CSSTransition } from 'react-transition-group';
 const SidebarButton = styled.button`
   position: absolute;
   z-index: 2;
-  top: 8vh;
+  top: 10vh;
   left: 50px;
   border: none;
   background-color: transparent;
@@ -33,10 +33,12 @@ const MenuImg = styled(SlMenu)`
 // 여기서부터 사이드바 안쪽
 const Sidebar = styled.div`
   margin-top: 7vh;
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 30vw;
   height: 93vh;
   min-width: 450px;
+  max-width: 450px;
   min-height: max-content;
   position: absolute;
   z-index: 50;
@@ -57,7 +59,9 @@ const Sidebar = styled.div`
 `;
 
 const CloseButton = styled.h1`
-  float: right;
+position: absolute;
+top: 0px;
+right: 0px;
   color: var(--grey);
   margin-right: 30px;
   &:hover {

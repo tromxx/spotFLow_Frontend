@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const SignUpDiv = styled.div`
   width: auto;
-  height: auto;
+  height: 93vh;
   position: relative;
 `;
 
