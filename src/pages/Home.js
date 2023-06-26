@@ -1,6 +1,8 @@
 import {styled} from 'styled-components';
-import MapView from "./MapView";
 import SideBar from "../components/SideBar";
+import MapView from "./MapView";
+import ConvertBtn, {viewMode} from "../components/ConvertBtn";
+import {useEffect} from "react";
 
 const HomeDiv = styled.div`
   width: auto;
@@ -18,9 +20,10 @@ const HomeDiv = styled.div`
 
 `;
 
-
 const Home = ({children}) => {
-
+  let mapData = {}
+  useEffect(() => {
+  },[localStorage.getItem("lat")])
 
   return (
     <HomeDiv>
