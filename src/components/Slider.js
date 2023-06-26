@@ -121,12 +121,14 @@ const PrevButton = styled.button`
     ${defaultButtonStyle}
     color:white;
     left: 0;
+    top: 35%;
 `;
 
 const NextButton = styled.button`
     color: white;
     ${defaultButtonStyle}
     right: 0;
+    top: 35%;
 `;
 
 const defaultIconStyle = css`
