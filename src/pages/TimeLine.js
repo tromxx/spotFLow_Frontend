@@ -4,7 +4,7 @@ import { useState , useRef ,useEffect } from "react";
 import HeaderBar from "../components/HeaderBarNavi";
 import { FiColumns } from "react-icons/fi";
 import { RiLayoutRowLine } from "react-icons/ri";
-import { AiOutlineSearch,AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "react-icons/ai";
+import { AiOutlineCamera,AiOutlineSearch,AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "react-icons/ai";
 import SearchBar from "../components/SearchBar";
 import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
@@ -101,6 +101,7 @@ const CreatePost = styled.div`
 
 const Container = styled.div`
 
+    background-color: ${(props) => props.theme.timeLineBgColor};
 textarea {
     appearance: none; /* 기본 브라우저 스타일 제거 */
     outline: none; /* 아웃라인 제거 */
@@ -134,11 +135,12 @@ const Header = styled.div`
     ${centerAlign}
     justify-content: start;
     flex-wrap: wrap;
-    background-color: white;
+    background-color: silver;
     height: 20%;
     width: 100%;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-    .Search-bar {
+    .Search-bar {x
         @media (max-width: 850px) {
 	& {
 		width: 105%;
@@ -149,8 +151,8 @@ const Header = styled.div`
         padding-left: 30px;
         height: 0px;
         margin-left: 20px;
-        border:none;
-        background-color: lightblue;
+        border:1px solid ${(props) => props.theme.timeLineBgColor};
+        background-color: ${(props) => props.theme.timeLineBgColor};
         border-radius:15px;
     
     }
@@ -181,11 +183,12 @@ const CreateBtn = styled.div`
     justify-content:center;
     align-items:center; */
     ${centerAlign}
+    border : 1px solid white ;
     border-radius: 5px;
     width: 35px;
     height: 35px;
-    color:white;
-    background-color: lightblue;
+    color: black;
+    background-color: ${(props) => props.theme.timeLineBgColor};
     margin : 5px;
     &:hover{
         background-color: white;
@@ -197,8 +200,11 @@ const CreateBtn = styled.div`
 `
 
 const Main = styled.div`
-     overflow-y: auto;
-  &::-webkit-scrollbar {
+    
+    overflow-y: auto;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  /* &::-webkit-scrollbar {
     background-color: white;
     width: 4px;
   }
@@ -206,23 +212,24 @@ const Main = styled.div`
     border-radius: 15px;
     background: #939393;
      outline: none;
-  }
+  } */
 
 
      @media (min-width: 1300px) {
 	& {
 
         height: 80%;
-        width: 70%;
+        width: 71.9%;
         border: 1px solid silver;
 
    
     }
 } 
-    overflow : scroll;
+   // overflow : scroll;
     display: grid;
+    
     grid-template-rows: 1fr 1fr;
-    background-color:  ${(props) => props.theme.timeLineBgColor};
+    background-color:  silver;
     height: 90%;
     width: 100%;
 
@@ -514,6 +521,31 @@ const TimeLine = () => {
     ]
     );
 
+    // 파일선택하는 핸들링 
+    const fileInput = useRef();
+    const handleOpenImageRef = () => {
+        fileInput.current.click();
+    }
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleUploadImage = (e)=> {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setSelectedImage(reader.result);
+        };
+
+        if (file) {
+          reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
+        } else {
+            setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
+        }
+    }
+    
+
+
 
     const deleteTimeLine = () => {
         if((dummy.filter(i => !isClicked.includes(i.id)))){
@@ -556,10 +588,20 @@ const TimeLine = () => {
                     <div className="create-btns">
                        {/* <CreateBtn className="create-btn">확인</CreateBtn>
                         <CreateBtn className="create-btn">취소</CreateBtn> */}
-                       <div className="button-box">
-                            <CreateBtn className="button-box-btn"/>
-                        </div> 
-                        <button onClick={()=>{setDummy([...dummy, {title: title, content: content}]); setContent("");setTitle("")}}>확인</button>
+                       <div style={{display:"flex",flexDirection:"row",width:"80%"}} >
+                            <div className="button-box" style={{width:"20%"}} onClick={handleOpenImageRef}>
+                                <CreateBtn className="button-box-btn" >
+                                        <AiOutlineCamera/>
+                                </CreateBtn>
+                                <input type="file" accept="image/jpeg, image/png"  style={{display:"none"}} ref={fileInput} onChange={handleUploadImage}/>
+                            </div> 
+                            <div style={{width:"80%"}}>
+                                <ul style={{display:"flex", flexDirection:"row",justifyContent:"start"}}>
+                                    <img src={selectedImage} alt="" style={{width:"50%",height:"50%;"}} /> 
+                                </ul>
+                            </div>
+                       </div>
+                        <button onClick={()=>{setDummy([...dummy, {title: title, content: content , image: selectedImage}]); setContent("");setTitle("")}}>확인</button>
                         <button onClick={()=>setIsCreate(!isCreate)}>취소</button>
                     </div>
                    
@@ -645,7 +687,7 @@ const TimeLine = () => {
 
    
     );
-}
+            }
 
 export default TimeLine;
 

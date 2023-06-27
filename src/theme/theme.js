@@ -7,7 +7,7 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-    timeLineBgColor : 'silver',
+    timeLineBgColor : '#F2F5F7',
     bgColor: '#171010',
     textColor: 'white',
     borderColor: '1px solid #424242',
