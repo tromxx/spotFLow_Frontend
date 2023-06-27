@@ -10,6 +10,36 @@ import {MdOutlineEditOff} from "react-icons/md";
 import { useTheme } from "../context/themeProvider";
 import MainSlider from "../components/Slider";
 import { Navigate, useNavigate } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+const ItemGrid = styled.div`
+     display: grid;
+
+     height: 80%;
+    width: 100%; 
+grid-template-rows: 1fr 1fr;
+ background-color:  silver;
+
+
+@media (max-width: 850px) {
+    ${(props) => props.isSort ? `
+    grid-template-columns: 1fr 1fr;
+` : `      
+`}   
+    }
+// 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
+     ${(props) => props.isSort ? `
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+}   
+
+    ` : `
+        grid-template-columns: 1fr ;
+        grid-template-rows: 1fr 1fr  ;
+    `} 
+    `;
+
+   
+   
 
 
 const centerAlign = css`
@@ -127,10 +157,13 @@ textarea {
     justify-content:center;
     align-items:center;
     flex-direction: column;
+
+   
    
     width: 100vw;
     height: 100vh;
-`
+    
+ `   
 const Header = styled.div`
     ${centerAlign}
     justify-content: start;
@@ -140,7 +173,7 @@ const Header = styled.div`
     width: 100%;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-    .Search-bar {x
+    .Search-bar {
         @media (max-width: 850px) {
 	& {
 		width: 105%;
@@ -201,7 +234,8 @@ const CreateBtn = styled.div`
 
 const Main = styled.div`
     
-    overflow-y: auto;
+
+    overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   /* &::-webkit-scrollbar {
@@ -213,42 +247,48 @@ const Main = styled.div`
     background: #939393;
      outline: none;
   } */
-
+    
 
      @media (min-width: 1300px) {
 	& {
 
-        height: 80%;
+        
+        height:  70%;
+            
         width: 71.9%;
         border: 1px solid silver;
 
    
     }
 } 
+
    // overflow : scroll;
-    display: grid;
-    
+    /* display: grid;
+
+
     grid-template-rows: 1fr 1fr;
     background-color:  silver;
-    height: 90%;
+    height: 80%;
     width: 100%;
 
     @media (max-width: 850px) {
         ${(props) => props.isSort ? `
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr ;
     ` : `      
     `}   
         }
-    // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
+     삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
         ${(props) => props.isSort ? `
             grid-template-columns: 1fr 1fr 1fr 1fr;
     }   
 
         ` : `
+
             grid-template-columns: 1fr ;
-            grid-template-rows: 1fr 1fr ;
-        `}    
-    `; 
+            grid-template-rows: 1fr 1fr  ;
+        `}  */
+    `  
+    ; 
 
    
 
@@ -273,6 +313,7 @@ const Item = styled.div`
       ${centerAlign}
       flex-direction:column;
       &:nth-child(2n){
+
             margin-right:0px;
         }
         &:nth-child(4n){
@@ -282,6 +323,7 @@ const Item = styled.div`
             margin-right:0px;
         }
          &:nth-child(2) {
+
             margin-top : 20px;
         } 
         &:nth-child(3) {
@@ -292,7 +334,7 @@ const Item = styled.div`
         } 
         @media (max-width: 850px) {
             & {
-		        width: 100%;
+		        width: 80%;
                 height:200px;
 	        }
         }
@@ -378,6 +420,7 @@ const ItemContent =styled.div`
         ${centerAlign}
         flex: 10;
         width : 85%;
+        overflow : scroll;
     }
 `
 
@@ -385,15 +428,6 @@ const ItemContent =styled.div`
 
 
 const TimeLine = () => {
-    const Navi = useNavigate();
-    // const input = useRef();
-    // const content = useRef();
-    const [title,setTitle] = useState("");
-    const [content,setContent] = useState("");
-
-
-    const theme = useTheme();
-
     const [dummy,setDummy] = useState(
         [
             {
@@ -519,7 +553,48 @@ const TimeLine = () => {
     
     
     ]
-    );
+   );
+    // 무한스크롤 변수
+    const [items, setItems] = useState(dummy.slice(0, 3));
+    const [hasMore, setHasMore] = useState(true);
+    const [height, setHeight] = useState(0);
+
+const fetchMoreData = () => {
+    setTimeout(() => {
+        if (items.length >= dummy.length ) {
+            setHasMore(false);
+            return;
+        }
+
+        const moreItems = dummy.slice(items.length, items.length + 2);
+        setItems(prevItems => [...prevItems, ...moreItems]);
+        setHeight(height + 1);
+        window.scrollTo(0, document.body.scrollHeight);
+    }, 500);
+
+    
+
+};
+        
+      
+
+
+    //
+
+
+
+
+
+    const Navi = useNavigate();
+    // const input = useRef();
+    // const content = useRef();
+    const [title,setTitle] = useState("");
+    const [content,setContent] = useState("");
+
+
+    const theme = useTheme();
+
+    
 
     // 파일선택하는 핸들링 
     const fileInput = useRef();
@@ -554,7 +629,7 @@ const TimeLine = () => {
 
        // setDummy(dummy.filter(e => e.id !== data.id ))
     }
-    const data = [];
+
 
     
     
@@ -580,7 +655,8 @@ const TimeLine = () => {
         <>
 <HeaderBar/>
 
-        <Container theme={theme}>
+        <Container height={height} theme={theme}>
+       
             {isCreate &&
                 <CreatePost>
                     <input style={{textAlign: "center" , borderBottom: "1px solid silver" , borderRadius:"0px", backgroundColor:"none"}} placeholder="Typing the Title" onChange={e=>{ setTitle(e.target.value)}} type="text" />
@@ -661,10 +737,26 @@ const TimeLine = () => {
                         
 
             </Header>
+
+            
             <Main isSort={isSort}>
+            <InfiniteScroll
+
+                        dataLength={items.length}
+                        next={fetchMoreData}
+                        hasMore={hasMore}
+                        // loader={<h4>불러오는중..</h4>}
+                        endMessage={
+                        <p style={{ textAlign: "center" }}>
+                            <b>끝페이지</b>
+                        </p>
+                        }
+                    >  
+                  <ItemGrid isSort={isSort}> 
                 {
-                dummy.map((e)=> 
-                    <Item isSort={isSort} key={e.id}>
+                items.map((e)=>
+
+                    <Item isSort={isSort} key={e.id} >
                         {isEdit ?  
 
                         <CreateBtn isClicked={isClicked.includes(e.id)}  onClick={()=>{setIsClicked(...isClicked, e.id) }} className="editBtn"></CreateBtn>
@@ -676,11 +768,15 @@ const TimeLine = () => {
                            
                         </ItemContent>
                     </Item>
+
                 )
                 }
-            </Main>
-          
+                </ItemGrid>   
+                  </InfiniteScroll>
+                  </Main>
+                    <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
         </Container>
+        
         {/* <MainSlider name="Popular"/> */}
         </>
 
