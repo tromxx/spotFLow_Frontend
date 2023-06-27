@@ -11,6 +11,7 @@ import { useTheme } from "../context/themeProvider";
 import MainSlider from "../components/Slider";
 import { Navigate, useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import TimeLineModal from "../utils/TimeLineModal";
 
 const ItemGrid = styled.div`
      display: grid;
@@ -579,7 +580,11 @@ const fetchMoreData = () => {
       
 
 
-    //
+    // 모달 함수 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
 
 
@@ -738,8 +743,9 @@ const fetchMoreData = () => {
 
             </Header>
 
-            
+
             <Main isSort={isSort}>
+                        
             <InfiniteScroll
 
                         dataLength={items.length}
@@ -756,7 +762,7 @@ const fetchMoreData = () => {
                 {
                 items.map((e)=>
 
-                    <Item isSort={isSort} key={e.id} >
+                    <Item isSort={isSort} key={e.id} onClick={openModal} >
                         {isEdit ?  
 
                         <CreateBtn isClicked={isClicked.includes(e.id)}  onClick={()=>{setIsClicked(...isClicked, e.id) }} className="editBtn"></CreateBtn>
@@ -775,8 +781,9 @@ const fetchMoreData = () => {
                   </InfiniteScroll>
                   </Main>
                     <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
+                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal}/>
         </Container>
-        
+
         {/* <MainSlider name="Popular"/> */}
         </>
 
