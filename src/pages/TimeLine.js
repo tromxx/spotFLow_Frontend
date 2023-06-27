@@ -521,14 +521,13 @@ const TimeLine = () => {
         name: "안유진",
         image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
       },
-
       {
         id: 16,
         title: "역삼동 맛집",
         content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
         name: "안유진",
         image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      }
+      }]
   );
   // 무한스크롤 변수
   const [items, setItems] = useState(dummy.slice(0, 3));
@@ -761,10 +760,9 @@ const TimeLine = () => {
         </Main>
         <CreateBtn style={{width: "100px", backgroundColor: "silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
       </Container>
-
       {/* <MainSlider name="Popular"/> */}
     </>
-
-  export default TimeLine;
+  );}
+export default TimeLine;
 
 
