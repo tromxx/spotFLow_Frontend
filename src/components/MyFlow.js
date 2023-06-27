@@ -76,9 +76,9 @@ const FlowDiv = styled.div`
 `;
 
 const ScrollBar = styled.div`
-	width: 80%;
+	width: 100%;
 	height: 60vh;
-	
+	margin-top: -20px;
 	::-webkit-scrollbar {
     width: 8px;  /* 스크롤바의 너비 */
 		
@@ -101,10 +101,11 @@ const ScrollBar = styled.div`
 const MenuBar = styled.div`
 	display: flex;
 	justify-content: space-between;
-	width: 80%;
+	width: 75%;
 	height: 30px;
 	border-radius: 8px;
-	background-color: #d9d9d9;
+	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
+	position: relative;
 `;
 
 const SortButton = styled.button`
@@ -134,6 +135,7 @@ const SearchButton = styled.button`
 `;
 
 const SearchImg = styled(AiOutlineSearch)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
@@ -142,6 +144,7 @@ const SearchImg = styled(AiOutlineSearch)`
 `;
 
 const SortAz = styled(CgSortAz)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
@@ -150,6 +153,7 @@ const SortAz = styled(CgSortAz)`
 `;
 
 const SortZa = styled(CgSortZa)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
@@ -158,6 +162,7 @@ const SortZa = styled(CgSortZa)`
 `;
 
 const CheckButton = styled.button`
+	color: ${props => props.theme.textColor};	
 	position: relative;
 	width: 30px;
 	height: 30px;
@@ -170,17 +175,22 @@ const CheckButton = styled.button`
 `;
 
 const CheckImg = styled(CgCheckO)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	left: 2px;
+	right: 2px;
 	top: 2px;	
 `;
 
-const DateDiv = styled.div`
-	width: 100px;
-	height: 20px;
+const SearchBar = styled.input`
+
+	width: 200px;
+	height: 90%;
+	background-color: white;
+	
 `;
+
 
 const MenuButtonWrapper = styled.div`
 	align-self: flex-end;
@@ -191,9 +201,6 @@ const MyFlow = ({ handleMain }) =>{
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
 	const [isSerchBarVisible, setIsSerchBarVisible] = useState(false); // 검색바 보이게 or 안보이게
 
-	const flowRef = useRef(null); // 요소를 선택하기 위한 ref
-  const [topElementId, setTopElementId] = useState(null);
-
 
 	const handleSort = () => {
     setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
@@ -203,24 +210,6 @@ const MyFlow = ({ handleMain }) =>{
 		setIsSerchBarVisible(!isSerchBarVisible);
 		
 	}
-
-	useEffect(() => {
-    const handleScroll = () => {
-      // scroll 이벤트 핸들러 내에서 요소의 정보를 가져옵니다.
-      if (flowRef.current) {
-        const topElementId = flowRef.current.firstChild?.getAttribute('id');
-        setTopElementId(topElementId);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [flowRef.current]); // flowRef.current를 의존성 배열에 포함시킴
-	
-
 
 
     return(
@@ -235,9 +224,8 @@ const MyFlow = ({ handleMain }) =>{
 				</MyFlowMenuName>
 				
 				<MenuBar>
-            <DateDiv>{topElementId}</DateDiv>
-					
 					<MenuButtonWrapper>
+
 						<CheckButton>
 							<CheckImg />
 						</CheckButton>
@@ -252,7 +240,8 @@ const MyFlow = ({ handleMain }) =>{
 					</MenuButtonWrapper>	
 				</MenuBar>
 				<ScrollBar >
-          <FlowDiv ref={flowRef}>
+          <FlowDiv>
+					
             {flow.map((item) => (
               <MyFlowContainer
 								className="myFlowContainer"
@@ -262,6 +251,7 @@ const MyFlow = ({ handleMain }) =>{
                 time={item.time}
                 content={item.content}
                 location={item.location}
+								date={item.date}
               />
             ))}
           </FlowDiv>
