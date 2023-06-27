@@ -5,6 +5,8 @@ const DiaryCatediv = styled.div`
     /* border: solid 1px red; */
     width: 60vw;
     height: 75vh;
+    flex-grow: 1;
+
     
 
   .container{
@@ -28,6 +30,8 @@ const DiaryCatediv = styled.div`
     /* margin: 30px; */
     border: solid 1px black;
     border-radius: 5px;
+    
+
   }
   .image{
     width: 80%;

@@ -47,24 +47,36 @@ const MyDiarydiv = styled.div`
     height: 30px;
   }
   .check{
-    border: solid 1px red;
+    border: solid 2px red;
     position: absolute;
+    width: 30px;
+    height: 30px;
     top:23%;
-    left:15%;
+    left:14%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
   }
+
   .input[id="check1"] {
     display: none;
     }
+
     .input[id="check1"] + label {
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	border: 2px solid #bcbcbc;
-	cursor: pointer;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #bcbcbc;
+      cursor: pointer;
 	}
 	input[id="check1"]:checked + label {
 	background-color: #666666;
 	}
+  .checkboxes{
+    position: relative;
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 
@@ -74,7 +86,7 @@ const MyDiary = () => {
             <div className="container">
                   <div class="box">
                     <div className="check">
-                        <input type="checkbox" id="check1"/>
+                        <input type="checkbox" id="check1" className="checkboxes"/>
                             <label for="check1"></label>
                             </div>
                     <div className="image">
