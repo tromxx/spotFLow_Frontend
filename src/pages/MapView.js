@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {CustomOverlayMap, Map, MapMarker, MarkerClusterer, useMap} from "react-kakao-maps-sdk";
+import {Map, MapMarker, MarkerClusterer} from "react-kakao-maps-sdk";
 import {FaMapMarkerAlt} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import ToSpotData from "../dataSet/ToSpotData";
@@ -57,44 +57,14 @@ const MapView = (props) => {
   }
 
   // viewSet 표시 여부 ex) 0 = 클러스터, 1 = 오버레이
-  const [viewSet, setViewSet] = useState(0);
+  const [viewSet, setViewSet] = useState(1);
   // 맵에 표시할 모드를 변환하는 함수
   const convertViewSet = () => {
     if (viewSet === 0) setViewSet(1);
     else setViewSet(0);
   }
 
-  // 마커등록 및 이벤트 관리
-  const EventMarkerContainer = ({lat, lng, content}) => {
-    const map = useMap()
-    const [isVisible, setIsVisible] = useState(false)
 
-    return (
-      <>
-        <MapMarker
-          position={{
-            lat: lat,
-            lng: lng
-          }} // 마커를 표시할 위치
-          // @ts-ignore
-          onClick={(marker) => {
-            map.panTo(marker.getPosition())
-            if (isVisible) setIsVisible(false);
-            else setIsVisible(true);
-          }}
-        />
-        {
-          isVisible &&
-          <CustomOverlayMap position={{
-            lat: lat,
-            lng: lng
-          }}>
-            {content}
-          </CustomOverlayMap>
-        }
-      </>
-    )
-  }
 
   useEffect(() => {
     // console.log(mapData.lat);
@@ -135,7 +105,7 @@ const MapView = (props) => {
           </MarkerClusterer>
         ) : (
           data.map((value) => (
-            <EventMarkerContainer
+            <ToSpotData.EventMarkerContainer
               // key={`EventMarkerContainer-${value.lat}-${value.lng}`}
               lat={value.lat}
               lng={value.lng}
@@ -175,7 +145,6 @@ const MapView = (props) => {
             <FaMapMarkerAlt className="icon" size={30}/>
           }
         </ToSpot.Converter>
-
       </Map>
     </ToSpot.Container>
   );
