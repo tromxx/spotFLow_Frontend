@@ -11,6 +11,7 @@
   <li> yarn add styled-components </li>
   <li> yarn add react-slick </li>
   <li> yarn add react-kakao-maps-sdk </li>
+  <li> yarn add react-transition-group </li>
 </ul>  
  
 <h1>Rules</h1>
