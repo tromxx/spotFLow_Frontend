@@ -40,12 +40,13 @@ const Image = styled.img`
 `;
 
 const ContentText = styled.p`
-  display: flex;
-  align-self: flex-start;
+  position: absolute;
+  top: -5px;
+  left: -7px;
   font-family: var(--kfont);
   font-size: 12px;
   padding: 5px;
-  width: 200px;
+  width: 235px;
   height: 50px;
 `;
 

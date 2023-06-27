@@ -100,7 +100,6 @@ const ScrollBar = styled.div`
 
 const MenuBar = styled.div`
 	display: flex;
-	justify-content: space-between;
 	width: 75%;
 	height: 30px;
 	border-radius: 8px;
@@ -111,6 +110,7 @@ const MenuBar = styled.div`
 const SortButton = styled.button`
 	position: relative;
 	width: 30px;
+	left: 245px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -126,12 +126,10 @@ const SearchButton = styled.button`
 	position: relative;
 	width: 30px;
 	height: 30px;
+	left: 180px;
 	border: none;
 	background-color: transparent;
 	align-self: flex-end;
-	&:hover {
-		cursor: pointer;
-	}
 `;
 
 const SearchImg = styled(AiOutlineSearch)`
@@ -165,6 +163,7 @@ const CheckButton = styled.button`
 	color: ${props => props.theme.textColor};	
 	position: relative;
 	width: 30px;
+	left: 280px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -179,15 +178,20 @@ const CheckImg = styled(CgCheckO)`
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	right: 2px;
+	left: 0px;
 	top: 2px;	
 `;
 
-const SearchBar = styled.input`
-
+const SearchBarInput = styled.input`
+	position: absolute;
+	top: 4px;
+	left: 5px;
 	width: 200px;
-	height: 90%;
-	background-color: white;
+	height: 75%;
+	border: 1px solid #d9d9d9;
+	border-radius: 8px;
+	background-color: ${props => props.theme.borderColor === '1px solid #424242' ? '#d9d9d9' : 'white'};
+	outline: none;
 	
 `;
 
@@ -199,17 +203,45 @@ const MyFlow = ({ handleMain }) =>{
 
 	const [flow, setFlow] = useState(FlowData); // 플로우 더미데이터
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
-	const [isSerchBarVisible, setIsSerchBarVisible] = useState(false); // 검색바 보이게 or 안보이게
+	const [searchValue, setSearchValue] = useState(""); // 검색창 인풋창 밸류
+	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬
 
 
-	const handleSort = () => {
+	// 들어온 플로우 데이터값을 정렬
+	const handleSort = () => { 
     setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
+		if (sort === "az") {
+			const sorted = [...flow].sort((a, b) => a.id - b.id);
+			setSortedFlow(sorted);
+		} else {
+			const sorted = [...flow].sort((a, b) => b.id - a.id);
+			setSortedFlow(sorted);
+		}
   };
 
-	const handleSearchBar = () => {
-		setIsSerchBarVisible(!isSerchBarVisible);
-		
-	}
+	// 플로우 검색 기능 구현
+	
+	const handleSearch = (searchQuery) => {
+			const filteredFlow = FlowData.filter(
+				(item) =>
+					(item.content && item.content.includes(searchQuery)) ||
+					(item.location && item.location.includes(searchQuery))
+			);
+			setSortedFlow(filteredFlow);
+		};
+	
+
+	const handleSearchChange = (e) => {
+		const { value } = e.target;
+		setSearchValue(value);
+		if (value === "") {
+			setSortedFlow(FlowData);
+		} else {
+			handleSearch(value);
+		}
+  }
+
+	
 
 
     return(
@@ -224,8 +256,9 @@ const MyFlow = ({ handleMain }) =>{
 				</MyFlowMenuName>
 				
 				<MenuBar>
+				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange} />
 					<MenuButtonWrapper>
-
+					
 						<CheckButton>
 							<CheckImg />
 						</CheckButton>
@@ -242,7 +275,7 @@ const MyFlow = ({ handleMain }) =>{
 				<ScrollBar >
           <FlowDiv>
 					
-            {flow.map((item) => (
+            {sortedFlow.map((item) => (
               <MyFlowContainer
 								className="myFlowContainer"
                 key={item.id}

@@ -201,7 +201,7 @@ const InfoInput = styled.input`
 
 const SaveButton = styled.button`
   transform: translateX(${({transInfoEditX}) => transInfoEditX});  
-  background-color: #00B4D8;
+  background-color: ${props => props.theme.divColor};
   font-family: var(--kfont);
   color: white;
   position: absolute;
