@@ -11,6 +11,7 @@ import {useTheme} from "../context/themeProvider";
 import MainSlider from "../components/Slider";
 import {Navigate, useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import TimeLineModal from "../utils/TimeLineModal";
 
 const ItemGrid = styled.div`
   display: grid;
@@ -24,6 +25,7 @@ const ItemGrid = styled.div`
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
     grid-template-columns: 1fr 1fr;
+
 ` : `      
 `}
   }
@@ -142,8 +144,8 @@ const Container = styled.div`
     /* 이외 원하는 스타일을 적용 */
   }
 
-  position: relative;
-  top: 40px;
+    position: relative;
+    top:60px;
 
   @media (min-width: 1300px) {
     & {
@@ -161,11 +163,12 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
 
+   
 
-  width: 100vw;
-  height: 100vh;
-
-`
+    width: 100vw;
+    height: 100vh;
+    
+ `   
 const Header = styled.div`
   ${centerAlign}
   justify-content: start;
@@ -175,7 +178,7 @@ const Header = styled.div`
   width: 100%;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-  Search-bar {
+  .Search-bar {
     @media (max-width: 850px) {
       & {width: 105%;}
     }
@@ -234,8 +237,11 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
-  overflow-y: scroll;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    width: 100%;
+
+   // overflow-y: scroll;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
   /* &::-webkit-scrollbar {
     background-color: white;
     width: 4px;
@@ -286,62 +292,81 @@ const Item = styled.div`
   //width: 50%;
   height: 300px;
 
-  border-radius: 5px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-
-  &:first-child {
-    margin-top: 20px;
-  }
-
-  // 밑에 코드는 정렬 
-  ${(props) => props.isSort ? `
-      ${centerAlign}
+    border-radius:5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom:20px;
+        &:first-child {
+            margin-top : 20px;
+        }
+       // 밑에 코드는 정렬 
+    ${(props) => props.isSort ?`
+       ${centerAlign}
       flex-direction:column;
-      &:nth-child(2n){
-            margin-right:0px;
-        }
-        &:nth-child(4n){
+      &:nth-child(even){
             margin-right:20px;
+
         }
+        // &:nth-child(4n){
+        //     margin-right:0px;
+        // }
       &:nth-child(odd){
             margin-right:0px;
-        }
+        } 
          &:nth-child(2) {
             margin-top : 20px;
         } 
         &:nth-child(3) {
+
             margin-top : 20px;
         } 
         &:nth-child(4) {
             margin-top : 20px;
         } 
+
+        @media (min-width: 1300px) {
+            & {
+		        &:nth-child(even){
+                    margin-right:0px;
+
+                }
+                &:nth-child(4n){
+                    margin-right:20px;
+                    }
+	        }
+        }
+
+
         @media (max-width: 850px) {
             & {
-		        width: 80%;
-                height:200px;
+		        width: auto;
+                height:190px;
 	        }
         }
     ` : `
     height: 160px;
     flex-direction:row;
-    display:flex;      
-    `}
-  .editBtn {
-    position: absolute;
-    background-color: white;
-    opacity: 80%;
-    border: 1px solid silver;
-    border-radius: 30px;
-    top: 0;
-    left: 0;
-
-    &:hover {
-      opacity: 100%;
-      background-color: silver;
+    display:flex; 
+    @media (max-width: 850px) {
+            & {
+		        width: auto;
+	        }
+        }
+        
+    `}  
+    .editBtn {
+        position: absolute;
+        background-color:white;
+        opacity: 80%;
+        border: 1px solid silver;
+        border-radius: 30px;
+        top:0;
+        left:0;
+        &:hover {
+            opacity: 100%;
+            background-color:silver;
+        }
     }
-  }
 
 `
 const ItemImg = styled.div`
@@ -534,31 +559,42 @@ const TimeLine = () => {
   const [hasMore, setHasMore] = useState(true);
   const [height, setHeight] = useState(0);
 
-  const fetchMoreData = () => {
-    setTimeout(() => {
-      if (items.length >= dummy.length) {
-        setHasMore(false);
-        return;
-      }
 
-      const moreItems = dummy.slice(items.length, items.length + 2);
-      setItems(prevItems => [...prevItems, ...moreItems]);
-      setHeight(height + 1);
-      window.scrollTo(0, document.body.scrollHeight);
+    // 무한스크롤 가동 함수 콜백함수로 0.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
+const fetchMoreData = () => {
+    setTimeout(() => {
+        if (items.length >= dummy.length ) {
+            setHasMore(false);
+            return;
+        }
+        const moreItems = dummy.slice(items.length, items.length + 2);
+        setItems(prevItems => [...prevItems, ...moreItems]);
+
+        window.scrollTo(0, document.body.scrollHeight);
     }, 500);
 
+    
 
-  };
+};
+        
+      
 
 
-  //
+    // 모달 함수 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
 
-  const Navi = useNavigate();
-  // const input = useRef();
-  // const content = useRef();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+
+
+
+    const Navi = useNavigate();
+    // const input = useRef();
+    // const content = useRef();
+    const [title,setTitle] = useState("");
+    const [content,setContent] = useState("");
 
 
   const theme = useTheme();
@@ -721,9 +757,12 @@ const TimeLine = () => {
           </div>
 
 
-        </Header>
-        <Main isSort={isSort}>
-          <InfiniteScroll
+            </Header>
+
+
+            <Main isSort={isSort}>
+                        
+            <InfiniteScroll
 
             dataLength={items.length}
             next={fetchMoreData}
@@ -739,8 +778,8 @@ const TimeLine = () => {
               {
                 items.map((e) =>
 
-                  <Item isSort={isSort} key={e.id}>
-                    {isEdit ?
+                    <Item isSort={isSort} key={e.id} onClick={openModal} >
+                        {isEdit ?  
 
                       <CreateBtn isClicked={isClicked.includes(e.id)} onClick={() => {
                         setIsClicked(...isClicked, e.id)
@@ -754,15 +793,22 @@ const TimeLine = () => {
                     </ItemContent>
                   </Item>
                 )
-              }
-            </ItemGrid>
-          </InfiniteScroll>
-        </Main>
-        <CreateBtn style={{width: "100px", backgroundColor: "silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
-      </Container>
-      {/* <MainSlider name="Popular"/> */}
-    </>
-  );}
+                }
+                </ItemGrid>   
+                  </InfiniteScroll>
+                  </Main>
+                    <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
+                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal}/>
+        </Container>
+
+        {/* <MainSlider name="Popular"/> */}
+        </>
+
+
+   
+    );
+            }
+
 export default TimeLine;
 
 

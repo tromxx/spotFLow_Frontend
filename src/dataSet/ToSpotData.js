@@ -1,7 +1,6 @@
 // mapView 에서 다루는 이벤트에서 사용 될 복잡한 데이터를 저장하거나 불러오는 페이지
 import CityDataApi from "../api/CityDataApi";
-import React, {useState} from "react";
-import {CustomOverlayMap, MapMarker, useMap} from "react-kakao-maps-sdk";
+import React from "react";
 
 /*
  * 도시데이터 api 접목
@@ -627,42 +626,6 @@ const ToSpotData = {
         </div>
       </div>
     </div>);
-  },
-  // 마커등록 및 이벤트 관리
-  EventMarkerContainer: ({lat, lng, content}) => {
-    const map = useMap()
-    const [isVisible, setIsVisible] = useState(false)
-
-    return (
-      <>
-        <MapMarker
-          position={{
-            lat: lat,
-            lng: lng
-          }} // 마커를 표시할 위치
-          // @ts-ignore
-          onClick={(marker) => {
-            map.panTo(marker.getPosition())
-            if (isVisible) setIsVisible(false);
-            else {
-              setIsVisible(true);
-              setTimeout(() => {
-                setIsVisible(false);
-              }, 5000);
-            }
-          }}
-        />
-        {
-          isVisible &&
-          <CustomOverlayMap position={{
-            lat: lat,
-            lng: lng
-          }}>
-            {content}
-          </CustomOverlayMap>
-        }
-      </>
-    )
   }
 }
 
