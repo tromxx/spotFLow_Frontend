@@ -10,7 +10,6 @@ import { ThemeProvider } from './context/themeProvider';
 import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
-import AppCopy from "./App copy";
 
 
 
@@ -46,7 +45,6 @@ function App() {
               <DiaryMypage />
             </>} />
             <Route path="/timeline" element={<TimeLine />} />
-            <Route path="/test" element={<AppCopy/>}/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
