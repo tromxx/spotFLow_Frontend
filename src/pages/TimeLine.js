@@ -178,7 +178,7 @@ const Header = styled.div`
   width: 100%;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-  Search-bar {
+  .Search-bar {
     @media (max-width: 850px) {
       & {width: 105%;}
     }
