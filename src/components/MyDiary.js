@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 
@@ -17,9 +17,12 @@ const MyDiarydiv = styled.div`
     width: 70vw;
     height: 70vh;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 2fr); */
     gap: 0px;
     grid-auto-rows: minmax(100px, auto);
+    /* display: grid; */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    grid-gap: 5px;
   }
   .box{
     /* border: solid 1px violet; */
@@ -31,6 +34,7 @@ const MyDiarydiv = styled.div`
     /* margin: 30px; */
     border: solid 1px black;
     /* border-radius: 5px; */
+    position: relative;
   }
   .image{
     width: 80%;
@@ -51,8 +55,8 @@ const MyDiarydiv = styled.div`
     position: absolute;
     width: 30px;
     height: 30px;
-    top:23%;
-    left:14%;
+    top:0%;
+    left:0%;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -80,22 +84,41 @@ const MyDiarydiv = styled.div`
 `;
 
 
-const MyDiary = () => {
+    const MyDiary = ({stat}) => {
+
+      let checkbox = 0;
+
+        useEffect(() =>{
+          // checkbox = stat;
+        } , [stat]);
+
+
     return(
         <MyDiarydiv>
             <div className="container">
                   <div class="box">
+                    {!stat ?
+                    <div className="check">
+                      <input type="checkbox" id="check1" className="checkboxes"/>
+                      <label for="check1"></label>
+                    </div>
+                    : null}
+                    <div className="image">
+                      <AiOutlinePlus className="plus"/>
+                    </div>
+                  </div>
+                    <div class="box">
+                      <div className="check">
+                        <input type="checkbox" id="check1" className="checkboxes"/>
+                        <label for="check1"></label>
+                      </div>
+                    </div>
+                    <div class="box"> 
                     <div className="check">
                         <input type="checkbox" id="check1" className="checkboxes"/>
                             <label for="check1"></label>
                             </div>
-                    <div className="image">
-                    <AiOutlinePlus className="plus"/>
-                    </div>
-                  </div>
-                    <div class="box">
-                    {/* <div className="image"></div> */}
-                      </div>
+                        </div>
                     <div class="box"> 
                     {/* <div className="image"></div> */}
                         </div>
@@ -105,7 +128,13 @@ const MyDiary = () => {
                     <div class="box"> 
                     {/* <div className="image"></div> */}
                         </div>
-                    <div class="box"> 
+                        <div class="box"> 
+                    {/* <div className="image"></div> */}
+                        </div>
+                        <div class="box"> 
+                    {/* <div className="image"></div> */}
+                        </div>
+                        <div class="box"> 
                     {/* <div className="image"></div> */}
                         </div>
                    

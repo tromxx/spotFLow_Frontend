@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from 'styled-components';
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/SearchBar/DiarySearchBar";
 import avatar from "../images/default_avatar.png"
 import { BsPeople } from "react-icons/bs";
 import Slider from "../components/Slider";
@@ -27,7 +27,7 @@ const Container = styled.div`
         justify-content: center;
         align-items: center;
         justify-content: space-between;
-
+        }
         .namebarleft{
             display: flex;
             justify-content: flex-start;
@@ -51,18 +51,17 @@ const Container = styled.div`
             align-items: center;
         }
 
-    }
     .img{
         width: 70px;
         height: 70px;
    //     margin-right: 20px;
     }
 
-    .searchBar{
+    .searchBar1{
         display: flex;
         width: 100px;
         height: 100px;
-        
+       
     }
     .people{
         width: 30px;
@@ -77,7 +76,6 @@ const Container = styled.div`
             font-weight: bold;
         }
     }
-    
 
 `; 
 
@@ -106,7 +104,7 @@ const Diary = () =>{
                         <h6>whddus426</h6>
                      </div>
                 <div className="searchBar1">
-                    <SearchBar  />
+                    <SearchBar/>
                  </div>
                  </div>
                  <div className="namebarright">
