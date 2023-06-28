@@ -42,7 +42,7 @@ const Container = styled.div`
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 50px; 
+            /* margin-right: 50px;  */
         }
 
         .id{
@@ -59,8 +59,8 @@ const Container = styled.div`
 
     .searchBar1{
         display: flex;
-        width: 100px;
-        height: 100px;
+        width: 100%;
+        height: 10%;
        
     }
     .people{

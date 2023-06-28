@@ -70,7 +70,7 @@ const DiaryCate = () => {
                         </div>
                     <div class="box"> 
                       <div className="image"></div>
-                      </div>
+                        </div>
                   </div>
             </DiaryCatediv>
     );
