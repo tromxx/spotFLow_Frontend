@@ -30,7 +30,7 @@ const Content = styled.div`
 border: 1px solid;
     width: 92.5%;
     flex: 30;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 `
 
 const Container = styled.div`
@@ -67,15 +67,15 @@ const Container = styled.div`
     }
 `;
 
-function TimeLineModal({isOpen,closeModal}) {
+function TimeLineModal({isOpen,closeModal, setIsModalOpen}) {
   return (
-    <Container isOpen={isOpen}>
+    <Container isOpen={isOpen} closeModal={closeModal}>
     
         <div className='profile'>
             
                 <Info>
-                    <img src={profile} style={{width:"50px" , height: "50px"}} />
-                    <div style={{width: "100%" , border:"1px solid" , marginLeft:"10px"}}>
+                    <img  src={profile} style={{width:"50px" , height: "50px"}} />
+                    <div  style={{width: "100%" , border:"1px solid" , marginLeft:"10px"}}>
                         <div style={{width: "95%" , border:"1px solid", marginLeft:"10px"}}>이름</div>
                         <div style={{width: "95%" ,border:"1px solid", marginLeft:"10px"}}>날짜</div>
                     </div>
