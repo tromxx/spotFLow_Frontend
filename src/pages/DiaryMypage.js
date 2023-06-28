@@ -113,16 +113,17 @@ const DiaryMypagediv = styled.div`
     border-radius: 10px;
 `;
 
-const DiaryMypage = () => {
+    const DiaryMypage = () => {
 
     const navi = useNavigate();
 
-    const [isCheckBox, setIsCheckBox] = useState(0);
+    const [isCheckBox, setIsCheckBox] = useState(false);
 
     const convertCheckBox = () => {
-        if(isCheckBox === 0) setIsCheckBox(1);
-        else setIsCheckBox(0);
-    }
+        if(isCheckBox === false) setIsCheckBox(true)
+        else setIsCheckBox(false);
+        console.log(isCheckBox);
+    };
 
     return(
         <Container>
@@ -147,8 +148,8 @@ const DiaryMypage = () => {
                 </div>    
             </header>
             <body>
-        <DiaryMypagediv stat={isCheckBox}>
-            <MyDiary/>
+        <DiaryMypagediv>
+            <MyDiary stat={isCheckBox}/>
         </DiaryMypagediv>
         </body>
         </Container>
