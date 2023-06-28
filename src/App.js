@@ -5,7 +5,7 @@ import Diary from './pages/Diary';
 import TimeLine from './pages/TimeLine';
 import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import SignUp from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
 import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
@@ -30,7 +30,7 @@ function App() {
             </>} />
             <Route path="/signup" element={<>
               <HeaderBarNavi />
-              <Signup />
+              <SignUp />
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
