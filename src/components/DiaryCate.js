@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
+import dummy from "../dataSet/TimeLineData";
 
 const DiaryCatediv = styled.div`
     /* border: solid 1px red; */
@@ -15,9 +16,12 @@ const DiaryCatediv = styled.div`
     width: 60vw;
     height: 75vh;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
     gap: 0px;
-    grid-auto-rows: minmax(100px, auto);
+    grid-auto-rows: minmax(170px, auto);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    grid-gap: 0px;
+    overflow-y: scroll;
     
   }
   .box{
@@ -44,7 +48,7 @@ const DiaryCate = () => {
     return(
             <DiaryCatediv>
               <div className="container">
-                  <div class="box">
+                  {/* <div class="box">
                     <div className="image"></div>
                   </div>
                     <div class="box">
@@ -70,7 +74,17 @@ const DiaryCate = () => {
                         </div>
                     <div class="box"> 
                       <div className="image"></div>
-                        </div>
+                        </div>  */}
+                        {
+                          dummy.map((e)=> 
+                            <div class="box">
+                              <img className="image" src={e.image}></img>
+                            </div>
+                          )
+                        }
+                        <div class="box">
+                              <idiv className="image"> ++++++</idiv>
+                            </div>
                   </div>
             </DiaryCatediv>
     );

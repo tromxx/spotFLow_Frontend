@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import MyDiary from "../components/MyDiary";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/SearchBar/DiarySearchBar";
 import { BsPeople } from "react-icons/bs";
 import avatar from "../images/default_avatar.png"
 import { BsTrash } from "react-icons/bs";
@@ -29,14 +29,14 @@ const Container = styled.div`
         justify-content: space-between;
         }
         .namebarleft{
-            width: 50%;
+            width: 80%;
             height: 60px;
             display: flex;
             justify-content: flex-start;
             align-items: end;
         }
         .namebarright{
-            width: 150px;
+            width: 20%;
             height: 60px;
             display: flex;
             justify-content: flex-end;
@@ -66,10 +66,12 @@ const Container = styled.div`
    //     margin-right: 20px;
     }
 
-    .searchBar{
+    .searchBar1{
         display: flex;
-        width: 100px;
-        height: 100px;
+        /* justify-content: center; */
+        align-items:center;
+        width: 100%;
+        height: 100%;
     }
         
     .list{
@@ -108,7 +110,7 @@ const DiaryMypagediv = styled.div`
     justify-content: center;
     align-items: center;
     /* background-color: beige; */
-    margin-top: 40px;
+    margin-top: 20px;
     border: solid 3px black;
     border-radius: 10px;
 `;
@@ -134,9 +136,7 @@ const DiaryMypagediv = styled.div`
                         <img className="img" src={avatar} alt="" />
                         <h6>whddus426</h6>
                      </div>
-                <div className="searchBar1">
-                    <SearchBar  />
-                 </div>
+                
                  </div>
                  <div className="namebarright">
                          <div className="menu">
@@ -145,7 +145,10 @@ const DiaryMypagediv = styled.div`
                                 <BsTrash className="trash" onClick={convertCheckBox}/>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                <div className="searchBar1">
+                    <SearchBar/>
+                 </div>   
             </header>
             <body>
         <DiaryMypagediv>

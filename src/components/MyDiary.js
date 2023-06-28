@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
+import dummy from "../dataSet/TimeLineData";
+
 
 const MyDiarydiv = styled.div`
     /* border: solid 1px red; */
     width: 70vw;
-    height: 70vh;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,12 +19,23 @@ const MyDiarydiv = styled.div`
     width: 70vw;
     height: 70vh;
     display: grid;
-    /* grid-template-columns: repeat(3, 2fr); */
     gap: 0px;
-    grid-auto-rows: minmax(100px, auto);
-    /* display: grid; */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    /* grid-auto-rows: minmax(100px, auto);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr)); */
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+
+    @media (max-width:850px) {
+        grid-template-columns: 1fr 1fr ;
+    }
+    
+    @media (max-width:550px) {
+        grid-template-columns: 1fr;
+    }
+
     grid-gap: 5px;
+    overflow-y: scroll;
+    
   }
   .box{
     /* border: solid 1px violet; */
@@ -30,7 +43,7 @@ const MyDiarydiv = styled.div`
     align-items: center;
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 250px;
     /* margin: 30px; */
     border: solid 1px black;
     /* border-radius: 5px; */
@@ -38,7 +51,7 @@ const MyDiarydiv = styled.div`
   }
   .image{
     width: 80%;
-    height: 80%;
+    height: 90%;
     background-color: #e2e2e2;
     border-radius: 10px;
     align-items: center;
@@ -96,48 +109,50 @@ const MyDiarydiv = styled.div`
     return(
         <MyDiarydiv>
             <div className="container">
-                  <div class="box">
+                  {/* <div class="box">
                     {!stat ?
                     <div className="check">
                       <input type="checkbox" id="check1" className="checkboxes"/>
                       <label for="check1"></label>
                     </div>
                     : null}
-                    <div className="image">
-                      <AiOutlinePlus className="plus"/>
-                    </div>
-                  </div>
-                    <div class="box">
-                      <div className="check">
-                        <input type="checkbox" id="check1" className="checkboxes"/>
-                        <label for="check1"></label>
-                      </div>
-                    </div>
-                    <div class="box"> 
+                   
+                    
+                  </div> */}
+                  
+                    {/* <div class="box"> 
                     <div className="check">
                         <input type="checkbox" id="check1" className="checkboxes"/>
                             <label for="check1"></label>
                             </div>
+                        </div> */}
+                       {
+  dummy.map((e) => (
+    <div class="box">
+      {stat && (
+        <div className="check">
+          <input type="checkbox" id="check1" className="checkboxes" />
+          <label htmlFor="check1"></label>
+        </div>
+      )}
+      <img className="image" src={e.image} alt="" />
+    </div>
+  ))
+}
+
+
+
+
+
+
+
+
+                     <div class="box">
+                  
+                            <div className="image">
+                          <AiOutlinePlus className="plus"/>
                         </div>
-                    <div class="box"> 
-                    {/* <div className="image"></div> */}
-                        </div>
-                    <div class="box"> 
-                    {/* <div className="image"></div> */}
-                        </div>
-                    <div class="box"> 
-                    {/* <div className="image"></div> */}
-                        </div>
-                        <div class="box"> 
-                    {/* <div className="image"></div> */}
-                        </div>
-                        <div class="box"> 
-                    {/* <div className="image"></div> */}
-                        </div>
-                        <div class="box"> 
-                    {/* <div className="image"></div> */}
-                        </div>
-                   
+                    </div>
                   </div>
             
         </MyDiarydiv>
