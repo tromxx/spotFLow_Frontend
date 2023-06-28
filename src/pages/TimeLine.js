@@ -25,6 +25,7 @@ grid-template-rows: 1fr 1fr;
 @media (max-width: 850px) {
     ${(props) => props.isSort ? `
     grid-template-columns: 1fr 1fr;
+
 ` : `      
 `}   
     }
@@ -142,7 +143,7 @@ textarea {
 }
 
     position: relative;
-    top:40px;
+    top:60px;
 
     @media (min-width: 1300px) {
 	& {
@@ -160,7 +161,7 @@ textarea {
     flex-direction: column;
 
    
-   
+
     width: 100vw;
     height: 100vh;
     
@@ -234,9 +235,9 @@ const CreateBtn = styled.div`
 `
 
 const Main = styled.div`
-    
+    width: 100%;
 
-    overflow-y: scroll;
+   // overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   /* &::-webkit-scrollbar {
@@ -311,38 +312,59 @@ const Item = styled.div`
         }
        // 밑에 코드는 정렬 
     ${(props) => props.isSort ?`
-      ${centerAlign}
+       ${centerAlign}
       flex-direction:column;
-      &:nth-child(2n){
-
-            margin-right:0px;
-        }
-        &:nth-child(4n){
+      &:nth-child(even){
             margin-right:20px;
+
         }
+        // &:nth-child(4n){
+        //     margin-right:0px;
+        // }
       &:nth-child(odd){
             margin-right:0px;
-        }
+        } 
          &:nth-child(2) {
 
             margin-top : 20px;
         } 
         &:nth-child(3) {
+
             margin-top : 20px;
         } 
         &:nth-child(4) {
             margin-top : 20px;
         } 
+
+        @media (min-width: 1300px) {
+            & {
+		        &:nth-child(even){
+                    margin-right:0px;
+
+                }
+                &:nth-child(4n){
+                    margin-right:20px;
+                    }
+	        }
+        }
+
+
         @media (max-width: 850px) {
             & {
-		        width: 80%;
-                height:200px;
+		        width: auto;
+                height:190px;
 	        }
         }
     ` : `
     height: 160px;
     flex-direction:row;
-    display:flex;      
+    display:flex; 
+    @media (max-width: 850px) {
+            & {
+		        width: auto;
+	        }
+        }
+        
     `}  
     .editBtn {
         position: absolute;
@@ -560,16 +582,17 @@ const TimeLine = () => {
     const [hasMore, setHasMore] = useState(true);
     const [height, setHeight] = useState(0);
 
+
+    // 무한스크롤 가동 함수 콜백함수로 0.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
 const fetchMoreData = () => {
     setTimeout(() => {
         if (items.length >= dummy.length ) {
             setHasMore(false);
             return;
         }
-
         const moreItems = dummy.slice(items.length, items.length + 2);
         setItems(prevItems => [...prevItems, ...moreItems]);
-        setHeight(height + 1);
+
         window.scrollTo(0, document.body.scrollHeight);
     }, 500);
 

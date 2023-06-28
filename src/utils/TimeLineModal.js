@@ -19,7 +19,7 @@ const Info = styled.div`
 `
 
 const Title = styled.div`
-    boder
+    
     border: 1px solid;
     width: 92.5%;
     flex: 3;
@@ -36,13 +36,22 @@ border: 1px solid;
 const Container = styled.div`
     ${centerAlign}
 
-    position: absolute;
+    position: fixed;
     top:10%;
-    left:30%;
-    width: 40vw;
+    left:25%;
+    width: 50vw;
     height: 80vh;
     border: 1px solid ;
     background-color: white ;
+
+    @media(max-width: 1000px) {
+        & {
+        width: 300px;
+        height: 70%;
+        top:20%;
+    left:10%;
+        }
+    }
 
     display: ${props => props.isOpen ? "block" : "none"}
     
@@ -53,7 +62,7 @@ const Container = styled.div`
         ${centerAlign}
         flex-direction: column;
         height : 100%;
-        width: 92.5%;
+        width: 100%;
         border : 1px solid;
     }
 `;
@@ -66,9 +75,9 @@ function TimeLineModal({isOpen,closeModal}) {
             
                 <Info>
                     <img src={profile} style={{width:"50px" , height: "50px"}} />
-                    <div style={{width: "100%" , border:"1px solid"}}>
-                        <div style={{width: "95%" , border:"1px solid"}}>이름</div>
-                        <div style={{width: "95%" ,border:"1px solid"}}>날짜</div>
+                    <div style={{width: "100%" , border:"1px solid" , marginLeft:"10px"}}>
+                        <div style={{width: "95%" , border:"1px solid", marginLeft:"10px"}}>이름</div>
+                        <div style={{width: "95%" ,border:"1px solid", marginLeft:"10px"}}>날짜</div>
                     </div>
                 </Info>
 
