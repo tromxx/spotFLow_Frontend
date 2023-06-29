@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "../utils/Modal";
+import Modal from "../utils/modal";
 import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi"
 import Policy from "../dataSet/SpotFlowPolicy";
