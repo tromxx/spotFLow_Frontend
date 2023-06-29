@@ -48,20 +48,21 @@ const centerAlign = css`
   align-items: center;
 `;
 
-const Search = `
-    
-`;
+
 
 const CreatePost = styled.div`
+  
+  position : fixed;
+  top : 15%;
   background-color: white;
   ${centerAlign}
   flex-direction: column;
   width: 35%;
-  height: 85%;
+  height: 500px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 
-  position: absolute;
+
   border-radius: 15px;
   z-index: 100;
 
@@ -134,7 +135,6 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
-
   background-color: ${(props) => props.theme.timeLineBgColor};
 
   textarea {
@@ -148,9 +148,9 @@ const Container = styled.div`
     position: relative;
     top:60px;
 
-  @media (min-width: 1300px) {
+  @media (max-width: 850px) {
     & {
-
+      
     }
   }
 
@@ -167,7 +167,8 @@ const Container = styled.div`
    
 
     width: 100vw;
-    height: auto;
+    min-height: 100vh;
+    height:  auto;
     
  `   
 const Header = styled.div`
@@ -238,7 +239,9 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
+
     width: 100%;
+    height: auto;
 
    // overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -288,6 +291,8 @@ const Main = styled.div`
 
 
 const Item = styled.div`
+  
+
 
   position: relative;
   background-color: white;
@@ -450,13 +455,13 @@ const fetchMoreData = () => {
         const moreItems = dummy.slice(items.length, items.length + 2);
         setItems(prevItems => [...prevItems, ...moreItems]);
 
-        window.scrollTo(0, document.body.scrollHeight);
+      
     }, 1500);
 
     
 
 };
-        
+const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:''});      
       
 
 
@@ -468,6 +473,7 @@ const fetchMoreData = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const  node = useRef(null); // 타임라인 모달에 전달해줄 ref
+  const create = useRef(null); // 포스트생성 모달 ref
 
 
   // useEffect 와 ref를 이용하여 모달영역 밖 클릭시 닫을수 있도록 
@@ -477,6 +483,7 @@ const fetchMoreData = () => {
       if (isModalOpen && node.current &&!node.current.contains(e.target)) {
         closeModal();
       }
+      
     };
 
     document.addEventListener("mousedown", clickOutside);
@@ -486,7 +493,8 @@ const fetchMoreData = () => {
       document.removeEventListener("mousedown", clickOutside);
     };
   },[isModalOpen]);
-  
+
+
   
 
 
@@ -560,7 +568,7 @@ const fetchMoreData = () => {
 
       <Container  height={height} theme={theme}>
         {isCreate &&
-          <CreatePost>
+          <CreatePost >
             <input style={{
               textAlign: "center",
               borderBottom: "1px solid silver",
@@ -630,9 +638,9 @@ const fetchMoreData = () => {
               </CreateBtn>
 
 
-              <CreateBtn onClick={deleteTimeLine}>
+              {/* <CreateBtn onClick={deleteTimeLine}>
                 <AiFillDelete></ AiFillDelete>
-              </CreateBtn>
+              </CreateBtn> */}
 
 
               {!isCreate &&
@@ -671,18 +679,24 @@ const fetchMoreData = () => {
             dataLength={items.length}
             next={fetchMoreData}
             hasMore={hasMore}
-            // loader={<h4>불러오는중..</h4>}
+             loader={<div>loading...</div>}
             endMessage={
               <p style={{textAlign: "center"}}>
-                <b>끝페이지</b>
+                {/* <b>끝페이지</b> */}
               </p>
             }
+            
           >
             <ItemGrid isSort={isSort}>
               {
                 items.map((e) =>
 
-                    <Item isSort={isSort} key={e.id} onClick={openModal} >
+                    <Item isSort={isSort} key={e.id} onClick={()=>{
+                      if(!isCreate){
+                        setModalData({ title: e.title, content: e.content , name : e.name , date: e.date});
+                        openModal()
+                      }
+                      }} >
                         {isEdit ?  
 
                       <CreateBtn isClicked={isClicked.includes(e.id)} onClick={() => {
@@ -701,8 +715,8 @@ const fetchMoreData = () => {
                 </ItemGrid>   
                   </InfiniteScroll>
                   </Main>
-                    <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
-                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} />
+                    {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
+                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} />
         </Container>
 
         {/* <MainSlider name="Popular"/> */}
