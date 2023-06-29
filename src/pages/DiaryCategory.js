@@ -8,18 +8,40 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+ 
     /* background-color: gray; */
     position: relative;
-    top:40px;
+    /* @media (max-width:900px) {
+        grid-template-columns: 1fr 1fr ;
+    } */
+    /* top:20px; */
+    .total {
+        position: absolute;
+        width: 70vw;
+        height: 70vh;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* @media (max-width:850px) {
+        grid-template-columns: 1fr 1fr ;
+    }
+        @media (max-width:550px) {
+        grid-template-columns: 1fr;
+    } */
+    }
     
     .namebar{
         display: flex;
         width: 60vw;
-        height: 25vh;
+        height: 20vh;
         /* border: solid 5px red; */
         justify-content: center;
         align-items: end;
@@ -67,7 +89,7 @@ const Container = styled.div`
         height: 30px;
         display: flex;
         justify-content: center;
-        margin-right: 20px;
+        margin-right: 2px;
         &:hover{
             color: gray;
             font-weight: bold;
@@ -76,7 +98,7 @@ const Container = styled.div`
     `; 
 
 const DiaryCategoryDiv = styled.div`
-    width: 60vw;
+    width: 100%;
     height: 75vh;
     display: flex;
     flex-direction: column;
@@ -84,6 +106,9 @@ const DiaryCategoryDiv = styled.div`
     align-items: center;
     /* background-color: beige; */
     border-radius: 10px;
+    /* @media (max-width:900px) {
+        grid-template-columns: 1fr 1fr ;
+    } */
 `;
 
 
@@ -99,20 +124,21 @@ const DiaryCategory = (props) =>{
 
     return(
         <Container>
-            <div className="namebar">
-                <div className="left">
-                    <div className="titlebar">
-                        <h1>Popular</h1>
+            <div className="total">
+                <div className="namebar">
+                    <div className="left">
+                        <div className="titlebar">
+                            <h1>Popular</h1>
+                        </div>
+                    </div>
+                    < div className="right">
+                        <BsListUl onClick={()=>{navi("/diary")}} className="list1"/>
                     </div>
                 </div>
-                < div className="right">
-                    <BsListUl onClick={()=>{navi("/diary")}} className="list1"/>
-                    <BsPeople className="people"/>
-                </div>
+                <DiaryCategoryDiv>
+                        <DiaryCate/>
+                </DiaryCategoryDiv>
             </div>
-            <DiaryCategoryDiv>
-                    <DiaryCate/>
-            </DiaryCategoryDiv>
         </Container>
     );
 };

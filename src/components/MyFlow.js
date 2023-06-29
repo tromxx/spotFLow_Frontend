@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl";
 import FlowModal from "../utils/FlowModal";
-import Modal from "../utils/Modal";
+import Modal from '../utils/Modal';
 
 const MyFlowDiv = styled.div`
   	display: flex;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+
 const ModalStyle = styled.div`
     .modal {
         display: none; // 평소에는 숨겨진 상태로 시작
