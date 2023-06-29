@@ -5,8 +5,6 @@ import styled from "styled-components";
 const PolicyDiv = styled.div`
     border: ${props=> props.theme.borderColor};
     border-radius: 8px;
-    width: 70vw;
-    max-width: 600px;
     height: 180px;
     overflow: auto;
     border: 1px solid #999;
@@ -28,7 +26,7 @@ const Policy = () => {
 	<PolicyDiv>
 		제 1 조 (목적)
                             <br />
-                            이 약관은 벤치클리어링(이하 "사이트"라 합니다)에서 제공하는 인터넷서비스(이하 "서비스"라 합니다)의 이용 조건 및 절차에 관한 기본적인 사항을 규정함을 목적으로 합니다.
+                            이 약관은 스팟플로우(이하 "사이트"라 합니다)에서 제공하는 인터넷서비스(이하 "서비스"라 합니다)의 이용 조건 및 절차에 관한 기본적인 사항을 규정함을 목적으로 합니다.
                             <br />
                             <br /> 
 

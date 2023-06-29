@@ -80,7 +80,7 @@ const SideBar = () => {
   };
 
   const moveRight = () => {
-    setTranslateX("-100vw");
+    setTranslateX("-150vw");
   };
 
   const [renderMain, setRenderMain] = useState(true);

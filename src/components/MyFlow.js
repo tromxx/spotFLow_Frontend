@@ -6,6 +6,9 @@ import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
 import { useState, useEffect, useRef } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
+import { SlPicture } from "react-icons/sl";
+import FlowModal from "../utils/FlowModal";
+import Modal from "../utils/Modal";
 
 const MyFlowDiv = styled.div`
   	display: flex;
@@ -14,6 +17,47 @@ const MyFlowDiv = styled.div`
 		text-align: center;
 		flex-direction: column;
 		position: relative;
+
+		.flowArea {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 3px;
+			padding: 10px;
+			outline: none;
+			width: 100%;
+			height: 100%;
+			resize: none;
+			border: none;
+			border-radius: 8px;
+			font-family: var(--kfont);
+		}
+
+	.title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 90%;
+		height: 10%;
+		border-radius: 8px;
+		background-color: ${props=>props.theme.bgColor};
+		outline: none;
+		border: none;
+		margin-bottom: 10px;
+	}
+
+	.fileSelect {
+		width: auto;
+		height: 50px;
+	}
+
+	.thumbnail {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+	}
+
+
 `;
 
 const BiArrowBacks = styled(BiArrowBack)`
@@ -206,6 +250,52 @@ const MyFlow = ({ handleMain }) =>{
 	const [searchValue, setSearchValue] = useState(""); // 검색창 인풋창 밸류
 	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬
 
+	// 글쓰기 모달 & 알림 모달
+	const [flowModalOpen, setFlowModalOpen] = useState(false);
+	const [flowModalText, setFlowModalText] = useState("샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다");
+	const [modalOpen, setModalOpen] = useState(false);
+  const [modalText, setModalText] = useState("작성된 내용은 저장되지 않습니다. 정말 닫으시겠습니까?");
+
+	const openFlowModal = () => {
+		setFlowModalOpen(true);
+	}
+
+	const closeFlowModal = () => {
+		setModalOpen(true);
+	}
+
+	const closeModal = () => {
+		setModalOpen(false);
+	}
+
+	const closeBoth = () => {
+		setModalOpen(false);
+		setFlowModalOpen(false);
+		setThumbnailSrc("");
+	}
+
+	  // 플로우 작성시 이미지 파일 선택하는 핸들링
+		const fileInput = useRef();
+		const handleOpenImageRef = () => {
+			fileInput.current.click();
+		}
+	
+		const [selectedImage, setSelectedImage] = useState("");
+	
+		const handleUploadImage = (e) => {
+			const file = e.target.files[0];
+			const reader = new FileReader();
+	
+			reader.onloadend = () => {
+				setSelectedImage(reader.result);
+			};
+	
+			if (file) {
+				reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
+			} else {
+				setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
+			}
+		}
 
 	// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
@@ -239,8 +329,27 @@ const MyFlow = ({ handleMain }) =>{
 		} else {
 			handleSearch(value);
 		}
-  }
-
+  };
+	
+  const [thumbnailSrc, setThumbnailSrc] = useState("");
+  
+	const handleImageSelect = (event) => {
+	  const file = event.target.files[0];
+  
+	  if (file && file.type.startsWith("image/")) {
+		const reader = new FileReader();
+  
+		reader.onload = (e) => {
+		  setThumbnailSrc(e.target.result);
+		};
+  
+		reader.readAsDataURL(file);
+	  } else {
+		setThumbnailSrc("");
+	  }
+	};
+  
+	
 	
 
 
@@ -250,7 +359,7 @@ const MyFlow = ({ handleMain }) =>{
 			<MyFlowDiv>
 				<MyFlowMenuName>
 					<p className="title">myFlow</p>
-					<CreateBtn>
+					<CreateBtn onClick={openFlowModal}>
 					<AiOutlinePlus style={{ color: 'grey' }}></AiOutlinePlus>
 				</CreateBtn>
 				</MyFlowMenuName>
@@ -289,6 +398,26 @@ const MyFlow = ({ handleMain }) =>{
             ))}
           </FlowDiv>
         </ScrollBar>
+
+		<FlowModal
+        open={flowModalOpen}
+        close={closeFlowModal}
+        header="Flow"
+        type="y"
+      >
+				
+        <textarea className="flowArea"
+          value={flowModalText}
+          onChange={(e) => setFlowModalText(e.target.value)}
+					
+        />
+				
+				<input type="file" onChange={handleImageSelect} className="fileSelect" />
+      			<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail"/>
+
+
+    </FlowModal>
+		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
 			</MyFlowDiv>
 		</>
     );

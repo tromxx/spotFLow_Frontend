@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const ModalStyle = styled.div`
+	
     .modal {
         display: none; // 평소에는 숨겨진 상태로 시작
         position: fixed; // 스크롤을 했을 경우에도 동일한 위치에 있도록
@@ -9,7 +10,7 @@ const ModalStyle = styled.div`
         right: 0;
         bottom: 0;
         left: 0;
-        z-index: 9999;
+        z-index: 999;
         background-color: rgba(0, 0, 0, 0.6);
     }
     .openModal {
@@ -28,7 +29,7 @@ const ModalStyle = styled.div`
   }
   .modal > section {
     width: 90%;
-    max-width: 400px;
+    height: 50%;
     text-align: center;
     margin: 0 auto;
     border-radius: 0.3rem;
@@ -57,17 +58,23 @@ const ModalStyle = styled.div`
     background-color: transparent;
   }
   .modal > section > main {
-    padding: 16px;
+    padding: 0 16px;
+		height: 70%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
     
   }
   .modal > section > footer {
-    padding: 12px 16px;
+    padding: 0px 16px;
     text-align: right;
   }
   .modal > section > footer button {
     padding: 6px 12px;
-    color: ${props=>props.theme.textColor};
-    background-color: ${props=>props.theme.divColor};
+    color: white;
+    background-color:#424242;
+		border: 1px solid #424242;
     border-radius: 5px;
     font-size: 13px;
   }
@@ -97,9 +104,34 @@ const ModalStyle = styled.div`
   }
 `;
 
+const ModalContent = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 90%;
+	height: 80%;
+	border-radius: 8px;
+	background-color: ${props=>props.theme.bgColor};
+	font-family: var(--kfont);
+`;
 
-const Modal = (props) => {
-    const {open, confirm, close, type, header, children} = props;
+const ModalTitle = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 90%;
+	height: 10%;
+	border-radius: 8px;
+	background-color: ${props=>props.theme.bgColor};
+	outline: none;
+	border: none;
+	margin-bottom: 10px;
+`;
+
+
+const FlowModal = (props) => {
+    const { open, confirm, close, type, header, children } = props;
 
     return(
        <ModalStyle>
@@ -111,8 +143,14 @@ const Modal = (props) => {
                     <button onClick={close}>
                         &times;
                     </button>
+										
                 </header>
-                <main>{children}</main>
+                <main>
+									
+									<ModalContent>
+										{children}
+									</ModalContent>
+								</main>
                 <footer>
                     {type && <button onClick={confirm}>확인</button>}
                     <button onClick={close}>닫기</button>
@@ -126,4 +164,4 @@ const Modal = (props) => {
 
 }
 
-export default Modal;
+export default FlowModal;

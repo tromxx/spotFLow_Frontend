@@ -16,6 +16,11 @@ const Container = styled.div`
   background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
 
+  .policyContainer {
+    width: 70vw;
+    max-width: 600px;
+  }   
+
   .readContainer {
     display: flex;
     justify-content: center;
@@ -26,6 +31,7 @@ const Container = styled.div`
     color: ${props=>props.theme.textColor};
     font-weight: bold;
     font-size: 25px;
+    margin: 0 auto;
     
   }
 	.sign {
@@ -109,7 +115,8 @@ const Container = styled.div`
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 26px;
     font-weight: bold;
-    width: 400px; /* 원하는 너비 설정 */
+    max-width: 400px; /* 원하는 너비 설정 */
+    width: 50vw;
     height: 50px;
     color: white;
     background-color: #395144;
@@ -128,7 +135,8 @@ const Container = styled.div`
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 26px;
     font-weight: bold;
-    width: 400px; /* 원하는 너비 설정 */
+    max-width: 400px; /* 원하는 너비 설정 */
+    width: 50vw;
     height: 50px;
     color: white;
     background-color: #999;
@@ -145,7 +153,8 @@ const Container = styled.div`
     margin-bottom: 50px;
     font-size: 26px;
     font-weight: bold;
-    width: 400px; /* 원하는 너비 설정 */
+    max-width: 400px; /* 원하는 너비 설정 */
+    width: 50vw;
     height: 50px;
     color: white;
     background-color: #999;
@@ -156,8 +165,7 @@ const Container = styled.div`
   }
   
   .InfoNotice {
-    margin-right: 480px;
-    margin-top: 100px;
+    margin: 0 auto;
   }
   #myCheckbox {
     
@@ -171,7 +179,8 @@ const Container = styled.div`
 const Input = styled.input`
   margin-left: 30px;
   margin-right: 30px;
-  width: 400px; /* 원하는 너비 설정 */
+  max-width: 400px; /* 원하는 너비 설정 */
+  width: 50vw;
   height: auto; /* 높이값 초기화 */
   line-height : normal; /* line-height 초기화 */
   padding: .8em .5em; /* 원하는 여백 설정, 상하단 여백으로 높이를 조절 */
@@ -229,7 +238,7 @@ const SignUp = () => {
 
      const closeModal = () => {
         setModalOpen(false);
-        navigate('/');  
+        // navigate('/');  
     };
 
 
@@ -329,8 +338,8 @@ const SignUp = () => {
     
 
     const onClickLogin = async() => {
-        const signUp = await AxiosApi.memberReg(inputId, inputPw, inputNickName);
-        console.log(signUp);
+        // const signUp = await AxiosApi.memberReg(inputId, inputPw, inputNickName);
+       
         setModalText("인증 이메일이 발송되었습니다.");
         setModalOpen(true);
               
@@ -342,7 +351,7 @@ const SignUp = () => {
         <div className="sign">
             <p>회원가입</p>    
         </div>
-        <div>
+        <div className="policyContainer">
             <h3>약관동의</h3>
                 <div className="readContainer">
                     <Policy>
@@ -396,10 +405,10 @@ const SignUp = () => {
         </div>
 
         <div className="item2">
-            {(isPolicyChecked && isLocationPolicyChecked && isId && isPw && isConPw && isNickName) ? 
-            <button className="enable-button" onClick={onClickLogin}>회원가입</button> :
-            <button className="disable-button">회원가입</button>}
-            <Modal open={modalOpen} close={closeModal} header="BENCH CLEARING">{modalText}</Modal>
+            {/* {(isPolicyChecked && isLocationPolicyChecked && isId && isPw && isConPw && isNickName) ?  */}
+            <button className="enable-button" onClick={onClickLogin}>회원가입</button> 
+            {/* : <button className="disable-button">회원가입</button>} */}
+            <Modal open={modalOpen} close={closeModal} header="SpotFlow">{modalText}</Modal>
         </div>
         
         </Container>
