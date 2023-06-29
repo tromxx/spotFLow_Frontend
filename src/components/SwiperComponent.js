@@ -113,8 +113,10 @@ const CommentBox = styled.div`
     opacity: 30%;
   }
   img {
-    width: 100%;
-    height: 100%;
+    max-width: 45px;
+    @media(max-width: 390px) {
+      max-width: 37px;
+    }
   }
   .profile {
     background-color: #61dafb;
