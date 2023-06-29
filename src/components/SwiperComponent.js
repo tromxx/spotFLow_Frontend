@@ -1,14 +1,17 @@
 import {styled} from "styled-components";
 import {Swiper, SwiperSlide} from "swiper/react";
-import {useMemo, useState} from "react";
-import {BsChatDots} from "react-icons/bs";
+import {BsChatDots, BsSend} from "react-icons/bs";
 
 export const DiarySwipe = styled(Swiper)`
-  width: 70vw;
-  height: 90vh;
+  position: absolute;
+  width: 75vw;
+  height: 68vh;
   background-color: white;
   display: flex;
   border-radius: 15px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 export const TimeLine = styled(SwiperSlide)`
   width: 70vw;
@@ -55,6 +58,7 @@ export const Btn = styled.button`
     border-radius: 40px;
     bottom: 20px;
     right: 10px;
+    border: 2px solid #d9d9d9;
   }
 `;
 export const Overlay = styled.div`
@@ -67,7 +71,7 @@ export const Overlay = styled.div`
   z-index: 2;
   color: white;
   padding: 50px;
-  font-size: 3vh;
+  font-size: 20px;
 `
 export const DiaryBox = styled.div`
   width: 100%;
@@ -97,19 +101,28 @@ const CommentBox = styled.div`
   .input {
     width: 100%;
     height: 50px;
-    background-color: rgb(20, 20, 20, 30%);
+    //background-color: rgb(20, 20, 20, 30%);
     border-radius: 5px;
+    position: relative;
     display: flex;
     @media (max-width: 768px) {
       height: 37px;
     }
   }
-
+  hr{
+    opacity: 30%;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
   .profile {
     background-color: #61dafb;
-    border-radius: 50px;
-    width: 50px;
-    height: 50px;
+    border-radius: 45px;
+    width: 45px;
+    height: 45px;
+    margin-top: 2px;
+    margin-left: 5px;
     @media (max-width: 768px) {
       width: 37px;
       height: 37px;
@@ -131,7 +144,37 @@ const CommentBox = styled.div`
       margin: 5px;
     }
   }
-
+  .caption {
+    color: grey;
+    font-size: .8rem;
+    margin-top: 25px;
+    margin-left: 10px;
+  }
+  .btn-send {
+    position: absolute;
+    right: 22px;
+    top: 7px;
+    height: 36px;
+    width: 36px;
+    border-radius: 36px;
+    border: 0;
+    background-color: #caf0f8;
+    @media(max-width: 768px) {
+      width: 24px;
+      height: 24px;
+      border-radius: 24px;
+      top: 6px;
+      right: 8px;
+    }
+  }
+  .send {
+    font-size: 20px;
+    margin-top: 5px;
+    color: #00b4d8;
+    @media(max-width: 768px) {
+      font-size: 12px;
+    }
+  }
   @media (max-width: 768px) {
     width: 340px;
   }
@@ -141,8 +184,18 @@ export const Comment = () => {
     <CommentBox>
       <div className="input">
         <div className="profile">
+          <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
         </div>
         <input type="text" id="comment"/>
+        <button className="btn-send">
+          <BsSend className="send"/>
+        </button>
+      </div>
+      <hr/>
+      <p className="caption">댓글 1</p>
+      <div className="content">
+        <div>
+        </div>
       </div>
     </CommentBox>
   )
