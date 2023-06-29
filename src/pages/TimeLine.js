@@ -167,7 +167,7 @@ const Container = styled.div`
    
 
     width: 100vw;
-    height: 100vh;
+    height: auto;
     
  `   
 const Header = styled.div`
@@ -243,6 +243,7 @@ const Main = styled.div`
    // overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
+  // 스크롤바 세팅 setTimeOut으로 시간지나면 없애는거 추후만들예정  
   /* &::-webkit-scrollbar {
     background-color: white;
     width: 4px;
@@ -391,9 +392,7 @@ const ItemImg = styled.div`
             
     `}
 `
-const ItemTitle = styled.div`
 
-`
 
 const ItemContent = styled.div`
 
@@ -441,7 +440,7 @@ const TimeLine = () => {
   const [height, setHeight] = useState(0);
 
 
-    // 무한스크롤 가동 함수 콜백함수로 0.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
+    // 무한스크롤 가동 함수 콜백함수로 1.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
 const fetchMoreData = () => {
     setTimeout(() => {
         if (items.length >= dummy.length ) {
@@ -464,23 +463,44 @@ const fetchMoreData = () => {
     // 모달 함수 
     const [isModalOpen, setIsModalOpen] = useState(false);
   
+    //모달제어
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const  node = useRef(null); // 타임라인 모달에 전달해줄 ref
 
+
+  // useEffect 와 ref를 이용하여 모달영역 밖 클릭시 닫을수 있도록 
+  useEffect(() => {
+    const clickOutside = (e) => {
+      // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+      if (isModalOpen && node.current &&!node.current.contains(e.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", clickOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", clickOutside);
+    };
+  },[isModalOpen]);
   
   
 
 
-
+    // 뒤로가기
     const Navi = useNavigate();
     // const input = useRef();
     // const content = useRef();
+
+
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
 
-
-  const theme = useTheme();
+    // 색상모드 
+    const theme = useTheme();
 
 
   // 파일선택하는 핸들링
@@ -682,7 +702,7 @@ const fetchMoreData = () => {
                   </InfiniteScroll>
                   </Main>
                     <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
-                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen}/>
+                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} />
         </Container>
 
         {/* <MainSlider name="Popular"/> */}

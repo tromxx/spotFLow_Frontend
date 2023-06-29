@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState , useRef, useEffect , forwardRef } from 'react';
 import styled , {css} from 'styled-components'
 import profile from '../images/default_avatar.png'
 
@@ -67,11 +67,11 @@ const Container = styled.div`
     }
 `;
 
-function TimeLineModal({isOpen,closeModal, setIsModalOpen}) {
+const TimeLineModal =  forwardRef(({isOpen,closeModal, setIsModalOpen},node)=> {
   return (
-    <Container isOpen={isOpen} closeModal={closeModal}>
+    <Container ref={node} isOpen={isOpen} closeModal={closeModal}>
     
-        <div className='profile'>
+        <div  className='profile'>
             
                 <Info>
                     <img  src={profile} style={{width:"50px" , height: "50px"}} />
@@ -92,6 +92,6 @@ function TimeLineModal({isOpen,closeModal, setIsModalOpen}) {
 
     </Container>
   )
-}
+});
 
 export default TimeLineModal
