@@ -72,16 +72,21 @@ const Container = styled.div`
     }
 `;
 
-const TimeLineModal =  forwardRef(({isOpen,closeModal, setIsModalOpen, modalData},node)=> {
+const TimeLineModal =  forwardRef(({isOpen,closeModal, setIsModalOpen, modalData,diffHours},node)=> {
+   
+
+
+
+
   return (
     <Container ref={node} isOpen={isOpen} closeModal={closeModal}>
     
         <div  className='profile'>
             
                 <Info>
-                    <img  src={profile} style={{width:"50px" , height: "50px"}} />
+                    <img alt="" src={modalData.profile} style={{width:"50px" , height: "50px" ,borderRadius:"25px"}} />
                     <div  style={{width: "100%" , border:"1px solid silver" , marginLeft:"10px"}}>
-                        <div style={{width: "95%" , marginLeft:"10px"}}>{modalData.name}</div>
+                        <div style={{width: "95%" , marginLeft:"10px"}}>{modalData.name} {diffHours}</div>
                         <div style={{width: "95%" , marginLeft:"10px"}}>{modalData.date}</div>
                     </div>
                 </Info>

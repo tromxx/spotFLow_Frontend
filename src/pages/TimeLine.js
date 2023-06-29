@@ -461,7 +461,9 @@ const fetchMoreData = () => {
     
 
 };
-const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:''});      
+
+// 모달데이터 설정
+const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:'' , profile: ''});      
       
 
 
@@ -559,7 +561,27 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     setIsSort(!isSort);
   }
 
-  // dummy 임시로 테스트하려고 만든 객체배열
+  
+
+// 시간 계산 함수
+  let [diffHours,setDiffHours] = useState();
+
+const hours = (e) => {
+    let date1 = new Date(e.date);
+    let date2 = new Date();
+    let diffMilliseconds = Math.abs(date2 - date1);
+    if((parseInt(diffMilliseconds / (1000 * 60 * 60))) > 12){
+      setDiffHours(parseInt(diffMilliseconds / (1000 * 60 * 60)/24) + "일 전"); 
+    } else {
+    setDiffHours(parseInt(diffMilliseconds / (1000 * 60 * 60)) + "시간 전");
+    }
+} 
+
+
+
+
+
+
 
 
   return (
@@ -693,7 +715,8 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
-                        setModalData({ title: e.title, content: e.content , name : e.name , date: e.date});
+                        hours(e);
+                        setModalData({ title: e.title, content: e.content , name : e.name , date: e.date , profile: e.profile});
                         openModal()
                       }
                       }} >
@@ -716,7 +739,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                   </InfiniteScroll>
                   </Main>
                     {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
-                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} />
+                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
         </Container>
 
         {/* <MainSlider name="Popular"/> */}
