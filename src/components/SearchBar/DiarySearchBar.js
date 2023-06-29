@@ -1,13 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
-import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDelete} from "react-icons/ai";
+import { AiOutlineSearch} from "react-icons/ai";
 
 const Container = styled.div`
 .Search-bar {
     @media (max-width: 850px) {
-      & {width: 105%;}
+      & {width: 85%;}
     }
-    width: 60%;
+    @media (min-width: 1300px) {
+      & {width: 300%;}
+    }
+    width: 100%;
     padding: 15px;
     padding-left: 30px;
     height: 0px;
@@ -23,10 +26,12 @@ const Container = styled.div`
 
 function DiarySearchBar() {
   return (
+    <Container>
         <div style={{width: "70%", position: "relative"}}>
             <input type="text" className="Search-bar"
             /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
           </div>
+          </Container>
   )
 }
 

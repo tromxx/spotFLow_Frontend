@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState , useRef, useEffect , forwardRef } from 'react';
 import styled , {css} from 'styled-components'
 import profile from '../images/default_avatar.png'
 
@@ -10,6 +10,7 @@ const centerAlign = css`
 `;
 
 const Info = styled.div`
+    
      justify-content: space-evenly;
         flex: 7;
         ${centerAlign}
@@ -19,18 +20,21 @@ const Info = styled.div`
 `
 
 const Title = styled.div`
-    
-    border: 1px solid;
-    width: 92.5%;
-    flex: 3;
+    padding:10px;
+    border: 1px solid silver;
+    border-radius:5px;
+    width: 91.5%;
+    flex: 2;
     margin-bottom: 10px;
 `
 
 const Content = styled.div`
-border: 1px solid;
-    width: 92.5%;
+padding:10px;
+border: 1px solid silver;
+    border-radius:5px;
+    width: 91.5%;
     flex: 30;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 `
 
 const Container = styled.div`
@@ -41,7 +45,8 @@ const Container = styled.div`
     left:25%;
     width: 50vw;
     height: 80vh;
-    border: 1px solid ;
+    border: 1px solid silver ;
+    border-radius: 5px;
     background-color: white ;
 
     @media(max-width: 1000px) {
@@ -63,35 +68,35 @@ const Container = styled.div`
         flex-direction: column;
         height : 100%;
         width: 100%;
-        border : 1px solid;
+       // border : 1px solid;
     }
 `;
 
-function TimeLineModal({isOpen,closeModal}) {
+const TimeLineModal =  forwardRef(({isOpen,closeModal, setIsModalOpen, modalData},node)=> {
   return (
-    <Container isOpen={isOpen}>
+    <Container ref={node} isOpen={isOpen} closeModal={closeModal}>
     
-        <div className='profile'>
+        <div  className='profile'>
             
                 <Info>
-                    <img src={profile} style={{width:"50px" , height: "50px"}} />
-                    <div style={{width: "100%" , border:"1px solid" , marginLeft:"10px"}}>
-                        <div style={{width: "95%" , border:"1px solid", marginLeft:"10px"}}>이름</div>
-                        <div style={{width: "95%" ,border:"1px solid", marginLeft:"10px"}}>날짜</div>
+                    <img  src={profile} style={{width:"50px" , height: "50px"}} />
+                    <div  style={{width: "100%" , border:"1px solid silver" , marginLeft:"10px"}}>
+                        <div style={{width: "95%" , marginLeft:"10px"}}>{modalData.name}</div>
+                        <div style={{width: "95%" , marginLeft:"10px"}}>{modalData.date}</div>
                     </div>
                 </Info>
 
                 <Title>
-                    df
+                    {modalData.title}
                 </Title>
 
                 <Content>
-                    d
+                    {modalData.content}
                 </Content>
         </div>
 
     </Container>
   )
-}
+});
 
 export default TimeLineModal

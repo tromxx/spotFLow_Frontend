@@ -42,7 +42,7 @@ const Container = styled.div`
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 50px; 
+            /* margin-right: 50px;  */
         }
 
         .id{
@@ -59,8 +59,10 @@ const Container = styled.div`
 
     .searchBar1{
         display: flex;
-        width: 100px;
-        height: 100px;
+        width: 82%;
+        height: 10%;
+        margin-bottom: 10px;
+        
        
     }
     .people{
@@ -103,9 +105,7 @@ const Diary = () =>{
                         <img className="img" src={avatar} alt="" />
                         <h6>whddus426</h6>
                      </div>
-                <div className="searchBar1">
-                    <SearchBar/>
-                 </div>
+                
                  </div>
                  <div className="namebarright">
                          <div className="menu">
@@ -117,6 +117,9 @@ const Diary = () =>{
                         </div>
                 </div>
             </header>
+            <div className="searchBar1">
+                <SearchBar/>
+                 </div>
             <body>
             <DiaryDiv>
                 {/* <DiaryLayout name={"Popular"}/>

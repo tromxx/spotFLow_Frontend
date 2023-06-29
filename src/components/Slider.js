@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
@@ -221,6 +221,39 @@ const images = [
 
 const MainSlider = (props) => {
 
+    const [isMobile, setIsMobile] = useState(5);
+
+    useEffect(() => {
+        const handleResize = () => {
+          if (window.innerWidth <= 668) {
+            setIsMobile(1);
+          } else  if (window.innerWidth <= 1268 && window.innerWidth > 1068) {
+            setIsMobile(4);
+          } 
+          else  if (window.innerWidth <= 1068  && window.innerWidth > 868) {
+            setIsMobile(3);
+          } else  if (window.innerWidth <= 868) {
+            setIsMobile(2);
+          } 
+          else  if (window.innerWidth > 1308) {
+            setIsMobile(5);
+          } 
+
+          
+        //   else {
+        //     setIsMobile(5);
+        //   }
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
+
+
+    
     const navi = useNavigate();
 	
     // 5. custom arrows를 만들어 ref를 통해 제어합니다.
@@ -236,8 +269,8 @@ const MainSlider = (props) => {
         // 5. custom arrows를 만들기 위해 기본 arrows옵션을 false로 합니다.
         arrows: false,
         infinite: true,
-        slidesToShow: 5,
-        slidesToScroll: 5,
+        slidesToShow: isMobile,
+        slidesToScroll: isMobile,
         
         // 2. custom pagination을 만듭니다.
         // i(index)를 통해 샘플이미지에서 동일한 이미지를 가져옵니다.

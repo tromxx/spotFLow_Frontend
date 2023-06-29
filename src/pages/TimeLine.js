@@ -12,6 +12,7 @@ import MainSlider from "../components/Slider";
 import {Navigate, useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TimeLineModal from "../utils/TimeLineModal";
+import dummy2 from "../dataSet/TimeLineData";
 
 const ItemGrid = styled.div`
   display: grid;
@@ -47,20 +48,21 @@ const centerAlign = css`
   align-items: center;
 `;
 
-const Search = `
-    
-`;
+
 
 const CreatePost = styled.div`
+  
+  position : fixed;
+  top : 15%;
   background-color: white;
   ${centerAlign}
   flex-direction: column;
   width: 35%;
-  height: 85%;
+  height: 500px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
 
-  position: absolute;
+
   border-radius: 15px;
   z-index: 100;
 
@@ -133,7 +135,6 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
-
   background-color: ${(props) => props.theme.timeLineBgColor};
 
   textarea {
@@ -147,9 +148,9 @@ const Container = styled.div`
     position: relative;
     top:60px;
 
-  @media (min-width: 1300px) {
+  @media (max-width: 850px) {
     & {
-
+      
     }
   }
 
@@ -166,7 +167,8 @@ const Container = styled.div`
    
 
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    height:  auto;
     
  `   
 const Header = styled.div`
@@ -237,11 +239,14 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
+
     width: 100%;
+    height: auto;
 
    // overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
+  // 스크롤바 세팅 setTimeOut으로 시간지나면 없애는거 추후만들예정  
   /* &::-webkit-scrollbar {
     background-color: white;
     width: 4px;
@@ -286,6 +291,8 @@ const Main = styled.div`
 
 
 const Item = styled.div`
+  
+
 
   position: relative;
   background-color: white;
@@ -390,9 +397,7 @@ const ItemImg = styled.div`
             
     `}
 `
-const ItemTitle = styled.div`
 
-`
 
 const ItemContent = styled.div`
 
@@ -433,134 +438,14 @@ const ItemContent = styled.div`
 
 
 const TimeLine = () => {
-  const [dummy, setDummy] = useState(
-    [
-      {
-        id: 1,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/6d/23/89/6d2389ac0bbd5afe74a2633b872d14fc.jpg",
-      },
-      {
-        id: 2,
-        title: "강남역",
-        content: "내가자주가",
-        name: "이은지",
-        image: "https://i.pinimg.com/474x/b3/91/3e/b3913eb2cfef207381eb28d8033229ba.jpg"
-      },
-      {
-        id: 3,
-        title: "선릉역",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "마마무",
-        image: "https://i.pinimg.com/474x/39/03/d4/3903d4a7dfd82def0c1a825416a69853.jpg",
-      },
-      {
-        id: 4,
-        title: "ㅇㄹㅇ",
-        name: "",
-        image: "https://i.pinimg.com/474x/2b/f9/df/2bf9df9d3095b4b6c84a3e4cfb84ba11.jpg",
-      },
-      {
-        id: 5,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/2b/dd/1f/2bdd1fcb3dc2b7f303f143f6395b69d7.jpg",
-      },
-      {
-        id: 6,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-      {
-        id: 7,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 8,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-      {
-        id: 9,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 10,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 11,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 12,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 13,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 14,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-
-      {
-        id: 15,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      },
-      {
-        id: 16,
-        title: "역삼동 맛집",
-        content: "노브랜드 버거 역삼역이랑 가까워서 자주가는곳",
-        name: "안유진",
-        image: "https://i.pinimg.com/474x/10/fb/8e/10fb8e483838c860a06c6e8baf0a1aa1.jpg",
-      }]
-  );
+  const [dummy, setDummy] = useState(dummy2);
   // 무한스크롤 변수
   const [items, setItems] = useState(dummy.slice(0, 3));
   const [hasMore, setHasMore] = useState(true);
   const [height, setHeight] = useState(0);
 
 
-    // 무한스크롤 가동 함수 콜백함수로 0.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
+    // 무한스크롤 가동 함수 콜백함수로 1.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
 const fetchMoreData = () => {
     setTimeout(() => {
         if (items.length >= dummy.length ) {
@@ -570,34 +455,60 @@ const fetchMoreData = () => {
         const moreItems = dummy.slice(items.length, items.length + 2);
         setItems(prevItems => [...prevItems, ...moreItems]);
 
-        window.scrollTo(0, document.body.scrollHeight);
-    }, 500);
+      
+    }, 1500);
 
     
 
 };
-        
+const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:''});      
       
 
 
     // 모달 함수 
     const [isModalOpen, setIsModalOpen] = useState(false);
   
+    //모달제어
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const  node = useRef(null); // 타임라인 모달에 전달해줄 ref
+  const create = useRef(null); // 포스트생성 모달 ref
 
 
+  // useEffect 와 ref를 이용하여 모달영역 밖 클릭시 닫을수 있도록 
+  useEffect(() => {
+    const clickOutside = (e) => {
+      // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+      if (isModalOpen && node.current &&!node.current.contains(e.target)) {
+        closeModal();
+      }
+      
+    };
+
+    document.addEventListener("mousedown", clickOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", clickOutside);
+    };
+  },[isModalOpen]);
 
 
+  
+
+
+    // 뒤로가기
     const Navi = useNavigate();
     // const input = useRef();
     // const content = useRef();
+
+
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
 
-
-  const theme = useTheme();
+    // 색상모드 
+    const theme = useTheme();
 
 
   // 파일선택하는 핸들링
@@ -655,9 +566,9 @@ const fetchMoreData = () => {
     <>
       <HeaderBar/>
 
-      <Container height={height} theme={theme}>
+      <Container  height={height} theme={theme}>
         {isCreate &&
-          <CreatePost>
+          <CreatePost >
             <input style={{
               textAlign: "center",
               borderBottom: "1px solid silver",
@@ -727,9 +638,9 @@ const fetchMoreData = () => {
               </CreateBtn>
 
 
-              <CreateBtn onClick={deleteTimeLine}>
+              {/* <CreateBtn onClick={deleteTimeLine}>
                 <AiFillDelete></ AiFillDelete>
-              </CreateBtn>
+              </CreateBtn> */}
 
 
               {!isCreate &&
@@ -754,6 +665,7 @@ const fetchMoreData = () => {
           <div style={{width: "70%", position: "relative"}}>
             <input type="text" className="Search-bar"
             /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
+            
           </div>
 
 
@@ -767,18 +679,24 @@ const fetchMoreData = () => {
             dataLength={items.length}
             next={fetchMoreData}
             hasMore={hasMore}
-            // loader={<h4>불러오는중..</h4>}
+             loader={<div>loading...</div>}
             endMessage={
               <p style={{textAlign: "center"}}>
-                <b>끝페이지</b>
+                {/* <b>끝페이지</b> */}
               </p>
             }
+            
           >
             <ItemGrid isSort={isSort}>
               {
                 items.map((e) =>
 
-                    <Item isSort={isSort} key={e.id} onClick={openModal} >
+                    <Item isSort={isSort} key={e.id} onClick={()=>{
+                      if(!isCreate){
+                        setModalData({ title: e.title, content: e.content , name : e.name , date: e.date});
+                        openModal()
+                      }
+                      }} >
                         {isEdit ?  
 
                       <CreateBtn isClicked={isClicked.includes(e.id)} onClick={() => {
@@ -797,14 +715,14 @@ const fetchMoreData = () => {
                 </ItemGrid>   
                   </InfiniteScroll>
                   </Main>
-                    <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn>
-                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal}/>
+                    {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
+                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} />
         </Container>
 
         {/* <MainSlider name="Popular"/> */}
         </>
 
-
+ 
    
     );
             }
