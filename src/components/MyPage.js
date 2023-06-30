@@ -18,8 +18,7 @@ const MyInfoDiv = styled.div`
   justify-content: baseline;
   align-items: center;
   border-right: 1px solid var(--grey);
-  background-color: ${props=>props.theme.bgColor};
-  color: ${props=>props.theme.textColor};
+  background-color: white;
   margin-top: 7vh;
   font-family: var(--efont);
   transition: 0.6s ease;
@@ -86,7 +85,7 @@ const MyInfoDiv = styled.div`
 `;
 
 const Paragrph = styled.p`
-transform: ${({ isClicked }) => `translateX(${isClicked ? 0 : -500}%)`};
+transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
   &:hover{
     cursor: pointer;
   }
@@ -101,7 +100,7 @@ transform: ${({ isClicked }) => `translateX(${isClicked ? 0 : -500}%)`};
   }
 `
 const Menu = styled.h1`
-  transform: ${({ isClicked }) => `translateX(${isClicked ? 0 : -200}%)`};
+  transform: ${({ isActive }) => `translateX(${isActive ? 0 : -200}%)`};
   &:hover {
     cursor: pointer;
   }
@@ -120,7 +119,7 @@ const InfoInput = styled.input`
   width: 250px;
   height: 40px;
   border-radius: 8px;
-  transform: ${({ isClicked }) => `translateX(${isClicked ? -200 : 0}%)`};
+  transform: ${({ isActive }) => `translateX(${isActive ? -200 : 0}%)`};
   &.password {
     top: 420px;
     left: 105px;
@@ -133,7 +132,7 @@ const ControlButton = styled(RxGear)`
   width: 30px;
   height: 30px;
   transition: transform 0.7s ease;
-  transform: ${({isClicked}) => (isClicked ? 'rotate(120deg)' : 'rotate(5deg)')};
+  transform: ${({isActive}) => (isActive ? 'rotate(120deg)' : 'rotate(5deg)')};
   &:hover{
     color: skyblue;
   }
@@ -149,44 +148,40 @@ const CloseButton = styled(AiOutlineClose)`
   }
 `;
 
-const MyPage = ({ onClose, goToMyFlow}) => {
-  const [ThemeMode, setTheme] = useTheme(); // 다크모드 라이트모드 State
-  const [isClicked, setIsClicked] = useState(true);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전 (이름 수정 필요)
-  /*
-    1. below state 값들 useMemo 또는 useRef 사용 필요
-  */
-  const [isReadOnly, setIsReadOnly] = useState(true);  // 정보 수정 톱니바퀴를 눌렀을 때 readOnly 속성을 바꿈
-  const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
-  
-  const handleClick = () =>{
-    setIsClicked(!isClicked); 
-  }
+const MyPage = ({ onClose, goToMyFlow }) => {
+  const [ThemeMode, setTheme] = useTheme();
+  const [active, setIsActive] = useState(true);
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isBorderVisible, setIsBorderVisible] = useState(false);
+
+  const handleClick = () => {
+    setIsActive(!active);
+  };
 
   return (
     <MyInfoDiv>
       <div className="controlDiv">
-        <ControlButton onClick={() => handleClick()} isClicked={isClicked}/>
-        <CloseButton onClick={onClose}/>
+        <ControlButton onClick={handleClick} isClicked={active} />
+        <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
         <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="" />
         <div className='caption'>
-          <input type="file"/>
+          <input type="file" />
         </div>
-        <Paragrph isClicked={isClicked} className='NickName'>Trom</Paragrph>
+        <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
-          <Paragrph  isClicked={isClicked} className='Following'>Following : 100</Paragrph>
-          <Paragrph isClicked={isClicked} className='Following'>Follower : 200</Paragrph>
+          <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
+          <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
         </div>
-        <Paragrph isClicked={isClicked} className='Statusmsg'>Hello my name is trom</Paragrph>
-      </div> 
+        <Paragrph isActive={active} className='Statusmsg'>Hello my name is trom</Paragrph>
+      </div>
       <div className='routeDiv'>
         <Menu onClick={goToMyFlow} isClicked = {isClicked} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
         <Menu isClicked = {isClicked} className='Diary'>Diary</Menu>
         <Menu isClicked = {isClicked} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
-      <div className='modifyInputDiv'>
-      </div>
+      <div className='modifyInputDiv'></div>
     </MyInfoDiv>
   );
 };

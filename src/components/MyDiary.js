@@ -33,7 +33,7 @@ const MyDiarydiv = styled.div`
         grid-template-columns: 1fr;
     }
 
-    grid-gap: 5px;
+    grid-gap: 0px;
     overflow-y: scroll;
     
   }
@@ -51,7 +51,7 @@ const MyDiarydiv = styled.div`
   }
   .image{
     width: 80%;
-    height: 90%;
+    height: 80%;
     background-color: #e2e2e2;
     border-radius: 10px;
     align-items: center;

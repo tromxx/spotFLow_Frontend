@@ -40,7 +40,7 @@ const Container = styled.div`
     
     .namebar{
         display: flex;
-        width: 60vw;
+        width: 70vw;
         height: 20vh;
         /* border: solid 5px red; */
         justify-content: center;
