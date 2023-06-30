@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { SlLocationPin } from "react-icons/sl";
 
 const MyFlowContainerDiv = styled.div`
-  width: 110%;
+  width: 100%;
   height: 100px;
   padding: 10px;
   border-radius: 8px;
@@ -71,8 +71,8 @@ const Date = styled.div`
 
 const DateWrapper = styled.div`
   position: relative;
-  width: 110%;
-  height: 30px;
+  width: 103.5%;
+  height: 20px;
   padding: 5px;
   margin-bottom: 3px;
   border-radius: 8px;
