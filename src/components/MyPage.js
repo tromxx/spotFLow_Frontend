@@ -1,13 +1,10 @@
 import React, { useRef } from 'react';
 import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
-import DarkSetting from "../images/DarkSetting.png"
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
-import MyFlow from '../images/myFlow.png'
-import { useEffect } from 'react';
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`
@@ -18,9 +15,12 @@ const MyInfoDiv = styled.div`
   justify-content: baseline;
   align-items: center;
   border-right: 1px solid var(--grey);
-  background-color: white;
+  background-color: ${props=>props.theme.bgColor};
+  color: ${props=>props.theme.textColor};
+  border: ${props=>props.theme.borderColor};
   margin-top: 7vh;
   font-family: var(--efont);
+  transition: 0.6s ease;
   .controlDiv{
     margin-top: 10px;
     display: flex;
@@ -53,7 +53,15 @@ const MyInfoDiv = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    .statusMsg{
+      border: 1px solid ${props => props.theme.textColor};
+      transition: 0.6s ease;
+      border-radius: 8px;
+      background-color: transparent;
+      box-sizing: border-box;
+    }
     textarea{
+      color: ${props => props.theme.textColor};
       resize: none;
       font-family: var(--kfont);
       width: 250px;
@@ -61,7 +69,7 @@ const MyInfoDiv = styled.div`
       margin: 0px;
       padding: 0px;
       background-color: transparent;
-      border: 1px solid black
+      border: none;
       resize: none;
       outline: none;
       padding: 2px;
@@ -84,22 +92,22 @@ const MyInfoDiv = styled.div`
 `;
 
 const Paragrph = styled.p`
-transform: ${({ isClicked }) => `translateX(${isClicked ? 0 : -500}%)`};
+transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
   &:hover{
     cursor: pointer;
   }
   &.NickName{
-    transition: transform 1.2s ease;
+    transition: transform 1.8s ease;
   }
   &.Following{
-    transition: transform 1.4s ease;
+    transition: transform 2.8s ease;
   }
   &.Statusmsg{
-    transition: transform 1.6s ease;
+    transition: transform 2.8s ease;
   }
 `
 const Menu = styled.h1`
-  transform: ${({ isClicked }) => `translateX(${isClicked ? 0 : -200}%)`};
+  transform: ${({ isActive }) => `translateX(${isActive ? 0 : -200}%)`};
   &:hover {
     cursor: pointer;
   }
@@ -118,8 +126,9 @@ const InfoInput = styled.input`
   width: 250px;
   height: 40px;
   border-radius: 8px;
-  transform: ${({ isClicked }) => `translateX(${isClicked ? -200 : 0}%)`};
-  &.password {
+  top: 1vh;
+  transform: ${({ isActive }) => `translateX(${isActive ? -200 : 0}%)`};
+  &.statusMsg {
     top: 420px;
     left: 105px;
     transition: transform 1.0 ease;
@@ -131,7 +140,7 @@ const ControlButton = styled(RxGear)`
   width: 30px;
   height: 30px;
   transition: transform 0.7s ease;
-  transform: ${({isClicked}) => (isClicked ? 'rotate(120deg)' : 'rotate(5deg)')};
+  transform: ${({isActive}) => (isActive ? 'rotate(120deg)' : 'rotate(5deg)')};
   &:hover{
     color: skyblue;
   }
@@ -147,43 +156,40 @@ const CloseButton = styled(AiOutlineClose)`
   }
 `;
 
-const MyPage = ({ onClose, goToMyFlow}) => {
-  const [ThemeMode, setTheme] = useTheme(); // 다크모드 라이트모드 State
-  const [isClicked, setIsClicked] = useState(true);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전 (이름 수정 필요)
-  /*
-    1. below state 값들 useMemo 또는 useRef 사용 필요
-  */
-  const [isReadOnly, setIsReadOnly] = useState(true);  // 정보 수정 톱니바퀴를 눌렀을 때 readOnly 속성을 바꿈
-  const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
-  
-  const handleClick = () =>{
-    setIsClicked(!isClicked); 
-  }
+const MyPage = ({ onClose, goToMyFlow }) => {
+  const [ThemeMode, setTheme] = useTheme(); //useMemo 사용 필요
+  const [active, setIsActive] = useState(true);
+
+
+  const handleClick = () => {
+    setIsActive(!active);
+  };
 
   return (
     <MyInfoDiv>
       <div className="controlDiv">
-        <ControlButton onClick={() => handleClick()} isClicked={isClicked}/>
-        <CloseButton onClick={onClose}/>
+        <ControlButton onClick={handleClick} isClicked={active} />
+        <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
         <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="" />
         <div className='caption'>
-          <input type="file"/>
+          <input type="file" />
         </div>
-        <Paragrph isClicked={isClicked} className='NickName'>Trom</Paragrph>
+        <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
-          <Paragrph  isClicked={isClicked} className='Following'>Following : 100</Paragrph>
-          <Paragrph isClicked={isClicked} className='Following'>Follower : 200</Paragrph>
+          <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
+          <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
         </div>
-        <Paragrph isClicked={isClicked} className='Statusmsg'>Hello my name is trom</Paragrph>
-      </div> 
-      <div className='routeDiv'>
-        <Menu onClick={goToMyFlow} isClicked = {isClicked} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
-        <Menu isClicked = {isClicked} className='Diary'>Diary</Menu>
-        <Menu isClicked = {isClicked} className='Theme'>DarkMode</Menu>
+        <div className='statusMsg'>
+          <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" 
+            ></textarea>
+        </div>
       </div>
-      <div className='modifyInputDiv'>
+      <div className='routeDiv'>
+        <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
+        <Menu isActive={active} className='Diary'>Diary</Menu>
+        <Menu isActive={active} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
     </MyInfoDiv>
   );

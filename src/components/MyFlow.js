@@ -14,18 +14,19 @@ import Modal from '../utils/Modal';
 const MyFlowDiv = styled.div`
 	background-color: white;
 	width: 390px;
-  	height: 93vh;
+  height: 93vh;
 	margin-top: 7vh;
-  	display: flex;
-  	justify-content: center;
-  	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 	text-align: center;
 	flex-direction: column;
 	position: relative;
-	.controlDiv{
-		position: absolute;
-		top : 2px
-	}
+
+	 .controlDiv{
+	  	position: absolute;
+		  top : 2px
+	  }
 		.flowArea {
 			display: flex;
 			align-items: center;
