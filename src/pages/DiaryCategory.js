@@ -105,7 +105,7 @@ const DiaryCategoryDiv = styled.div`
     justify-content: center;
     align-items: center;
     /* background-color: beige; */
-    border-radius: 10px;
+    /* border-radius: 10px; */
     /* @media (max-width:900px) {
         grid-template-columns: 1fr 1fr ;
     } */
