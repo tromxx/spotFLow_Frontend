@@ -1,7 +1,11 @@
 import {styled} from 'styled-components';
-import SideBar from "../components/SideBar";
 import MapView from "./MapView";
-import {useEffect} from "react";
+import {useCallback, useState} from "react";
+import { AiOutlineMenu } from 'react-icons/ai';
+import MyFlow from '../components/MyFlow'
+import SlideDiv from '../components/SlideDiv'
+import MyPage from '../components/MyPage'
+import Following from '../components/Following'
 
 const HomeDiv = styled.div`
   width: auto;
@@ -19,16 +23,47 @@ const HomeDiv = styled.div`
 
 `;
 
-const Home = ({children}) => {
-  let mapData = {}
-  useEffect(() => {
-  },[localStorage.getItem("lat")])
+
+const MenuButton = styled(AiOutlineMenu)`
+  z-index: 2;
+  position: absolute;
+  top: 8vh;
+  left: 30px;
+  width: 40px;
+  height: 40px;
+`;
+
+
+const Home = () => {
+  const [active, setActivate] = useState(false);
+  const [currentPage, setCurrentPage] = useState('MyPage');
+
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'MyPage':
+        return <MyPage  
+          goToMyFlow={()=>setCurrentPage('MyFlow')} 
+          onClose={()=>setActivate(false)}/>;
+        case 'MyFlow':
+          return <MyFlow 
+            goToMyPage={()=>setCurrentPage('MyPage')} 
+            onClose={()=>setActivate(false)} />;
+      case 'Following' :
+        return <Following/>;
+      default:
+        return null;
+    }
+  };
 
   return (
-    <HomeDiv>
-      <SideBar/>
+    <>
+      <MenuButton onClick={()=>setActivate(true)} />
+      <SlideDiv show={active}>
+        {renderPage()}
+      </SlideDiv>
       <MapView/>
-    </HomeDiv>
+    </>
   );
 };
 

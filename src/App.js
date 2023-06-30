@@ -10,6 +10,7 @@ import { ThemeProvider } from './context/themeProvider';
 import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
+import {DiarySwiper} from "./components/DiarySwiper";
 
 
 
@@ -45,6 +46,12 @@ function App() {
               <DiaryMypage />
             </>} />
             <Route path="/timeline" element={<TimeLine />} />
+            <Route path="/diary/detail" element={
+              <>
+                <HeaderBarNavi/>
+                <DiarySwiper/>
+              </>
+            }/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

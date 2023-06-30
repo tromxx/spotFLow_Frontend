@@ -6,18 +6,26 @@ import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
 import { useState, useEffect, useRef } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
-import { SlPicture } from "react-icons/sl";
+import { SlPicture } from "react-icons/sl"
+import { AiOutlineClose } from 'react-icons/ai';
 import FlowModal from "../utils/FlowModal";
-import Modal from "../utils/Modal";
+import Modal from '../utils/Modal';
 
 const MyFlowDiv = styled.div`
+	background-color: white;
+	width: 390px;
+  	height: 93vh;
+	margin-top: 7vh;
   	display: flex;
   	justify-content: center;
   	align-items: center;
-		text-align: center;
-		flex-direction: column;
-		position: relative;
-
+	text-align: center;
+	flex-direction: column;
+	position: relative;
+	.controlDiv{
+		position: absolute;
+		top : 2px
+	}
 		.flowArea {
 			display: flex;
 			align-items: center;
@@ -296,11 +304,21 @@ const PictureImg = styled(SlPicture)`
 	color: ${props=>props.theme.textColor};
 `;
 
+const CloseButton = styled(AiOutlineClose)`
+  width: 35px;
+  height: 35px;
+  &:hover{
+    cursor: pointer;
+    color: var(--lightblue);
+  }
+`;
+
+
 
 const MenuButtonWrapper = styled.div`
 	align-self: flex-end;
 `;
-const MyFlow = ({ handleMain }) =>{
+const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	const [flow, setFlow] = useState(FlowData); // 플로우 더미데이터
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
@@ -416,9 +434,10 @@ const MyFlow = ({ handleMain }) =>{
 
 
     return(
-		<>
-			<h1 onClick={handleMain}><BiArrowBacks/></h1>
 			<MyFlowDiv>
+				     <div className="controlDiv">
+        				<CloseButton onClick={onClose}/>
+      				</div>
 				<MyFlowMenuName>
 					<p className="title">myFlow</p>
 					<CreateBtn onClick={openFlowModal}>
@@ -460,18 +479,15 @@ const MyFlow = ({ handleMain }) =>{
             ))}
           </FlowDiv>
         </ScrollBar>
-
 		<FlowModal
         open={flowModalOpen}
         close={closeFlowModal}
         header="Flow"
         type="y"
-      >
-				
+      	>
         <textarea className="flowArea"
           value={flowModalText}
           onChange={(e) => setFlowModalText(e.target.value)}
-					
         />
 				
 				<FileBox>
@@ -488,8 +504,7 @@ const MyFlow = ({ handleMain }) =>{
 
     </FlowModal>
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
-			</MyFlowDiv>
-		</>
+	</MyFlowDiv>
     );
 };
 

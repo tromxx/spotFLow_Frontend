@@ -49,23 +49,30 @@ const fadeOut = keyframes`
 `;
 
 const FollowerContainerDiv = styled.div`
-    width: 400px; //반응형시 수정 필요
-    height: auto;
-    padding: 10px;
-    border-radius: 20px;
-    border: 1px solid var(--grey);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px;
-    font-family: var(--efont);
-    opacity: ${({ fade }) => (fade ? 0 : 1)};
+  width: 100%; //반응형시 수정 필요
+  height: 150px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--grey);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  font-family: var(--efont);
+  opacity: ${({ fade }) => (fade ? 0 : 1)};
   transition: opacity 1s ease-out;
+  img{
+    width: 80px;
+    height: 80px;
+  }
 `;
  
 const UnfollowButton = styled.button`
     font-family: var(--efont);
-    border-radius: 20px;
+    width: 100px;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
     background-color: var(--lightblue);
 `;
     

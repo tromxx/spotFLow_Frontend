@@ -29,27 +29,29 @@ const Container = styled.div`
         justify-content: space-between;
         }
         .namebarleft{
-            width: 80%;
+            width: 75%;
             height: 60px;
             display: flex;
             justify-content: flex-start;
             align-items: end;
         }
         .namebarright{
-            width: 20%;
+            width: 25%;
             height: 60px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             top:60px;
         }
         
         .menu{
-            width: 100%;
+            width: 75%;
             height: 100%;
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            padding: 5px;
+            justify-content: center;
+            /* padding: 50px; */
+            margin-top: 20px;
+            /* margin-left: 50px; */
             
             /* margin-right: 30px;   */
         }
@@ -58,6 +60,10 @@ const Container = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
+            h6{
+                font-size: 13px;
+                margin-left: 15px;
+            }
         }
 
     .img{
@@ -75,6 +81,7 @@ const Container = styled.div`
     }
         
     .list{
+        /* margin: 80%; */
         width: 30px;
         height: 30px;
         display: flex;
@@ -83,16 +90,16 @@ const Container = styled.div`
             color: gray;
             font-weight: bold;
         }
-        /* margin-right: 10px; */
+        margin-right: 20px;
     }
 
-    .people{
+    /* .people{
         width: 30px;
         height: 30px;
         display: flex;
         justify-content: flex-end;
-        /* margin-right: 20px; */
-    } 
+        margin-right: 20px;
+    }  */
     .trash{
         width: 30px;
         height: 30px;
@@ -141,7 +148,7 @@ const DiaryMypagediv = styled.div`
                  <div className="namebarright">
                          <div className="menu">
                                 <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                <BsPeople className="people"/>
+                                {/* <BsPeople className="people"/> */}
                                 <BsTrash className="trash" onClick={convertCheckBox}/>
                         </div>
                     </div>

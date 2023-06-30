@@ -44,11 +44,19 @@ const Container = styled.div`
             justify-content: center;
             /* margin-right: 50px;  */
         }
+        .MY{
+           margin-right: 35px;
+           margin-top: 50px;
+        }
 
         .id{
             display: flex;
             justify-content: center;
             align-items: center;
+         h6{
+            font-size: 13px;
+            margin-left: 15px;
+            }
         }
 
     .img{
@@ -109,7 +117,7 @@ const Diary = () =>{
                  </div>
                  <div className="namebarright">
                          <div className="menu">
-                            <BsPeople className="people"/>
+                            {/* <BsPeople className="people"/> */}
                             <div onClick={()=>{navi("/diaryMypage")}}className="MY">
                                 <h3>MY</h3>
                                  </div>
