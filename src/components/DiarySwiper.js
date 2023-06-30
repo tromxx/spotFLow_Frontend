@@ -25,7 +25,8 @@ export const DiarySwiper = () => {
     else setThumbs(0);
   }
 
-  function OverlayMode() {
+  function OverlayMode(e) {
+    e.stopPropagation();
     if(chatBox === 1) setChatBox(0);
     if (overlay === 0) setOverlay(1);
     else setOverlay(0);
@@ -35,7 +36,7 @@ export const DiarySwiper = () => {
 
   }, []);
   return (
-    <SC.Container onClick={() => OverlayMode()}>
+    <SC.Container onClick={(event) => OverlayMode(event)}>
       <SC.DiarySwipe
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y]}
