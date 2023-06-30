@@ -27,42 +27,78 @@ const MyFlowDiv = styled.div`
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			margin-left: 3px;
 			padding: 10px;
 			outline: none;
-			width: 100%;
-			height: 100%;
+			width: 90%;
+			height: 90%;
 			resize: none;
 			border: none;
-			border-radius: 8px;
+			border-radius: 5px;
 			font-family: var(--kfont);
-		}
 
-	.title {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 90%;
-		height: 10%;
-		border-radius: 8px;
-		background-color: ${props=>props.theme.bgColor};
-		outline: none;
-		border: none;
-		margin-bottom: 10px;
-	}
+			@media(max-width: 768px) {
+    		width: 80%;
+    		height: 60%;
+  		}
+		}
+`;
+
+
+const FileBox = styled.div`  
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: row;
 
 	.fileSelect {
 		width: auto;
 		height: 50px;
+		border: 1px solid black;
 	}
 
 	.thumbnail {
-        width: 30px;
-        height: 30px;
+        width: 50px;
+        height: 50px;
         object-fit: cover;
 	}
 
+	.filebox {
+		
+		margin-top: 5px;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: flex-start;
+		
+	}
+	.filebox .upload-name {
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 78%;
+    color: #999999;
+	}
+	.filebox label {
+    display: inline-block;
+    color: #fff;
+    cursor: pointer;
+    height: 30px;
+		width: 30px;
+    margin-left: 10px;
+		font-family: var(--kfont);
+		font-size: 12px;
+	}
 
+	.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+	}
 `;
 
 const BiArrowBacks = styled(BiArrowBack)`
@@ -78,12 +114,13 @@ const MyFlowMenuName = styled.p`
 	display: flex;
 	justify-content: space-between;
 	font-family: var(--efont);
-	width: 80%;
+	width: 60%;
 	font-size: 30px;
 	font-weight: bolder;
 	margin-top: -15%;
 	align-self: flex-start; // 왼쪽 정렬을 위해 align-self 속성을 추가합니다.
-  margin-left: 10%; // 원하는 왼쪽 여백을 설정합니다.
+	margin-right: 10%;
+  margin-left: 5%; // 원하는 왼쪽 여백을 설정합니다.
 
 	.title {
 		font-size: 35px;
@@ -99,7 +136,7 @@ const CreateBtn = styled.div`
     width: 35px;
     height: 35px;
     color: white;
-    margin : 5px;
+    
 		align-self: flex-end;
     &:hover{
         background-color: white;
@@ -118,9 +155,9 @@ const FlowDiv = styled.div`
 	margin-top: 30px;
 	width: 100%;
 	height: 60vh;
-	gap: 10px; 
+	gap: 5px; 
 	overflow-y: scroll; 
-	padding-right: 5px;
+	
 	
 `;
 
@@ -149,7 +186,7 @@ const ScrollBar = styled.div`
 
 const MenuBar = styled.div`
 	display: flex;
-	width: 75%;
+	width: 82%;
 	height: 30px;
 	border-radius: 8px;
 	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
@@ -159,7 +196,7 @@ const MenuBar = styled.div`
 const SortButton = styled.button`
 	position: relative;
 	width: 30px;
-	left: 245px;
+	left: 230px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -212,7 +249,7 @@ const CheckButton = styled.button`
 	color: ${props => props.theme.textColor};	
 	position: relative;
 	width: 30px;
-	left: 280px;
+	left: 265px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -233,8 +270,8 @@ const CheckImg = styled(CgCheckO)`
 
 const SearchBarInput = styled.input`
 	position: absolute;
-	top: 4px;
-	left: 5px;
+	top: 2px;
+	left: 2px;
 	width: 200px;
 	height: 75%;
 	border: 1px solid #d9d9d9;
@@ -244,7 +281,16 @@ const SearchBarInput = styled.input`
 	
 `;
 
+const PictureImg = styled(SlPicture)`
+	width: 30px;
+	height: 30px;
+	color: ${props=>props.theme.textColor};
+`;
+
 const CloseButton = styled(AiOutlineClose)`
+	position: absolute;
+	top: 10px;
+	right: -180px;
   width: 35px;
   height: 35px;
   &:hover{
@@ -267,9 +313,14 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	// 글쓰기 모달 & 알림 모달
 	const [flowModalOpen, setFlowModalOpen] = useState(false);
-	const [flowModalText, setFlowModalText] = useState("샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다");
+	const [flowModalText, setFlowModalText] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
-  	const [modalText, setModalText] = useState("작성된 내용은 저장되지 않습니다. 정말 닫으시겠습니까?");
+	const [modalText, setModalText] = useState(
+		<>
+			작성된 내용은 저장되지 않습니다. <br />
+			정말 닫으시겠습니까?
+		</>
+	);
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -424,9 +475,20 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
           value={flowModalText}
           onChange={(e) => setFlowModalText(e.target.value)}
         />
-				<input type="file" onChange={handleImageSelect} className="fileSelect" />
-      			<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail"/>
-    	</FlowModal>
+				
+				<FileBox>
+					<div className="filebox">
+						{thumbnailSrc !== "" && (
+								<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
+						)}
+							<label for="file"><PictureImg /></label> 
+							<input type="file" onChange={handleImageSelect} className="fileSelect" id="file"/>
+					</div>
+				</FileBox>
+				
+
+
+    </FlowModal>
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
 	</MyFlowDiv>
     );

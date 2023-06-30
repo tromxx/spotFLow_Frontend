@@ -35,10 +35,8 @@ const Sidebar = styled.div`
   margin-top: 7vh;
   display: flex;
   flex-direction: column;
-  width: 30vw;
+  width: 390px;
   height: 93vh;
-  min-width: 450px;
-  max-width: 450px;
   min-height: max-content;
   position: absolute;
   z-index: 50;
