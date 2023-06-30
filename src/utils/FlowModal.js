@@ -28,7 +28,7 @@ const ModalStyle = styled.div`
     margin: 5px;
   }
   .modal > section {
-    width: 90%;
+    width: 30%;
     height: 50%;
     text-align: center;
     margin: 0 auto;
@@ -37,6 +37,11 @@ const ModalStyle = styled.div`
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-show 0.3s;
     overflow: hidden;
+
+    @media(max-width: 768px) {
+      width: 80%;
+      height: 60%;
+    }
   }
   .modal > section > header {
     position: relative;
@@ -115,19 +120,13 @@ const ModalContent = styled.div`
 	border-radius: 8px;
 	font-family: var(--kfont);
   background-color: #424242;
+
+  @media(max-width: 768px) {
+    width: 30%;
+    height: 60%;
+  }
 `;
 
-const ModalTitle = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 90%;
-	height: 10%;
-	border-radius: 8px;
-	outline: none;
-	border: none;
-	margin-bottom: 10px;
-`;
 
 
 const FlowModal = (props) => {

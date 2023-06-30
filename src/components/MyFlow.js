@@ -32,35 +32,22 @@ const MyFlowDiv = styled.div`
 			justify-content: center;
 			padding: 10px;
 			outline: none;
-			width: 100%;
-			height: 100%;
+			width: 90%;
+			height: 90%;
 			resize: none;
 			border: none;
 			border-radius: 5px;
 			font-family: var(--kfont);
+
+			@media(max-width: 768px) {
+    		width: 80%;
+    		height: 60%;
+  		}
 		}
-
-	.title {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 90%;
-		height: 10%;
-		border-radius: 8px;
-		background-color: ${props=>props.theme.bgColor};
-		outline: none;
-		border: none;
-		margin-bottom: 10px;
-	}
-
-	
-	
-
-
 `;
 
 
-const FileBox = styled.div`
+const FileBox = styled.div`  
 	display: flex;
 	align-items: flex-start;
 	justify-content: flex-start;
@@ -130,7 +117,7 @@ const MyFlowMenuName = styled.p`
 	display: flex;
 	justify-content: space-between;
 	font-family: var(--efont);
-	width: 80%;
+	width: 60%;
 	font-size: 30px;
 	font-weight: bolder;
 	margin-top: -15%;
@@ -152,8 +139,7 @@ const CreateBtn = styled.div`
     width: 35px;
     height: 35px;
     color: white;
-    margin : 5px;
-		margin-left: 40px;
+    
 		align-self: flex-end;
     &:hover{
         background-color: white;
@@ -172,9 +158,9 @@ const FlowDiv = styled.div`
 	margin-top: 30px;
 	width: 100%;
 	height: 60vh;
-	gap: 10px; 
+	gap: 5px; 
 	overflow-y: scroll; 
-	padding-right: 5px;
+	
 	
 `;
 
@@ -203,7 +189,7 @@ const ScrollBar = styled.div`
 
 const MenuBar = styled.div`
 	display: flex;
-	width: 75%;
+	width: 82%;
 	height: 30px;
 	border-radius: 8px;
 	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
@@ -213,7 +199,7 @@ const MenuBar = styled.div`
 const SortButton = styled.button`
 	position: relative;
 	width: 30px;
-	left: 245px;
+	left: 230px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -266,7 +252,7 @@ const CheckButton = styled.button`
 	color: ${props => props.theme.textColor};	
 	position: relative;
 	width: 30px;
-	left: 280px;
+	left: 265px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -287,8 +273,8 @@ const CheckImg = styled(CgCheckO)`
 
 const SearchBarInput = styled.input`
 	position: absolute;
-	top: 4px;
-	left: 5px;
+	top: 2px;
+	left: 2px;
 	width: 200px;
 	height: 75%;
 	border: 1px solid #d9d9d9;
@@ -305,6 +291,9 @@ const PictureImg = styled(SlPicture)`
 `;
 
 const CloseButton = styled(AiOutlineClose)`
+	position: absolute;
+	top: 10px;
+	right: -180px;
   width: 35px;
   height: 35px;
   &:hover{
