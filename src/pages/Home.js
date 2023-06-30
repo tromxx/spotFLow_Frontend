@@ -43,10 +43,12 @@ const Home = () => {
     switch (currentPage) {
       case 'MyPage':
         return <MyPage  
-                goToFollowing={()=>setCurrentPage('Following')} 
-                onClose={()=>setActivate(false)}/>;
-      case 'MyFlow':
-        return <MyFlow goBack={()=>setCurrentPage('MyFlow')} />;
+          goToMyFlow={()=>setCurrentPage('MyFlow')} 
+          onClose={()=>setActivate(false)}/>;
+        case 'MyFlow':
+          return <MyFlow 
+            goToMyPage={()=>setCurrentPage('MyPage')} 
+            onClose={()=>setActivate(false)} />;
       case 'Following' :
         return <Following/>;
       default:

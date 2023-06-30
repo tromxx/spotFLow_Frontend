@@ -147,7 +147,7 @@ const CloseButton = styled(AiOutlineClose)`
   }
 `;
 
-const MyPage = ({ onClose, goToFollowing}) => {
+const MyPage = ({ onClose, goToMyFlow}) => {
   const [ThemeMode, setTheme] = useTheme(); // 다크모드 라이트모드 State
   const [isClicked, setIsClicked] = useState(true);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전 (이름 수정 필요)
   /*
@@ -179,7 +179,7 @@ const MyPage = ({ onClose, goToFollowing}) => {
         <Paragrph isClicked={isClicked} className='Statusmsg'>Hello my name is trom</Paragrph>
       </div> 
       <div className='routeDiv'>
-        <Menu isClicked = {isClicked} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
+        <Menu onClick={goToMyFlow} isClicked = {isClicked} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
         <Menu isClicked = {isClicked} className='Diary'>Diary</Menu>
         <Menu isClicked = {isClicked} className='Theme'>DarkMode</Menu>
       </div>
