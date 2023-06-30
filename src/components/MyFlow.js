@@ -13,9 +13,6 @@ import Modal from '../utils/Modal';
 
 const MyFlowDiv = styled.div`
 	background-color: white;
-	width: 390px;
-  	height: 93vh;
-	margin-top: 7vh;
   	display: flex;
   	justify-content: center;
   	align-items: center;
