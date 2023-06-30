@@ -10,6 +10,7 @@ import { ThemeProvider } from './context/themeProvider';
 import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
+import MapView from './pages/MapView';
 
 
 
