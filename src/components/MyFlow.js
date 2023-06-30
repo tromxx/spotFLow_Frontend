@@ -22,14 +22,13 @@ const MyFlowDiv = styled.div`
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			margin-left: 3px;
 			padding: 10px;
 			outline: none;
 			width: 100%;
 			height: 100%;
 			resize: none;
 			border: none;
-			border-radius: 8px;
+			border-radius: 5px;
 			font-family: var(--kfont);
 		}
 
@@ -46,18 +45,68 @@ const MyFlowDiv = styled.div`
 		margin-bottom: 10px;
 	}
 
+	
+	
+
+
+`;
+
+
+const FileBox = styled.div`
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: row;
+
 	.fileSelect {
 		width: auto;
 		height: 50px;
+		border: 1px solid black;
 	}
 
 	.thumbnail {
-        width: 30px;
-        height: 30px;
+        width: 50px;
+        height: 50px;
         object-fit: cover;
 	}
 
+	.filebox {
+		
+		margin-top: 5px;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: flex-start;
+		
+	}
+	.filebox .upload-name {
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 78%;
+    color: #999999;
+	}
+	.filebox label {
+    display: inline-block;
+    color: #fff;
+    cursor: pointer;
+    height: 30px;
+		width: 30px;
+    margin-left: 10px;
+		font-family: var(--kfont);
+		font-size: 12px;
+	}
 
+	.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+	}
 `;
 
 const BiArrowBacks = styled(BiArrowBack)`
@@ -78,7 +127,8 @@ const MyFlowMenuName = styled.p`
 	font-weight: bolder;
 	margin-top: -15%;
 	align-self: flex-start; // 왼쪽 정렬을 위해 align-self 속성을 추가합니다.
-  margin-left: 10%; // 원하는 왼쪽 여백을 설정합니다.
+	margin-right: 10%;
+  margin-left: 5%; // 원하는 왼쪽 여백을 설정합니다.
 
 	.title {
 		font-size: 35px;
@@ -95,6 +145,7 @@ const CreateBtn = styled.div`
     height: 35px;
     color: white;
     margin : 5px;
+		margin-left: 40px;
 		align-self: flex-end;
     &:hover{
         background-color: white;
@@ -239,6 +290,12 @@ const SearchBarInput = styled.input`
 	
 `;
 
+const PictureImg = styled(SlPicture)`
+	width: 30px;
+	height: 30px;
+	color: ${props=>props.theme.textColor};
+`;
+
 
 const MenuButtonWrapper = styled.div`
 	align-self: flex-end;
@@ -252,9 +309,14 @@ const MyFlow = ({ handleMain }) =>{
 
 	// 글쓰기 모달 & 알림 모달
 	const [flowModalOpen, setFlowModalOpen] = useState(false);
-	const [flowModalText, setFlowModalText] = useState("샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다");
+	const [flowModalText, setFlowModalText] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
-  const [modalText, setModalText] = useState("작성된 내용은 저장되지 않습니다. 정말 닫으시겠습니까?");
+	const [modalText, setModalText] = useState(
+		<>
+			작성된 내용은 저장되지 않습니다. <br />
+			정말 닫으시겠습니까?
+		</>
+	);
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -412,8 +474,16 @@ const MyFlow = ({ handleMain }) =>{
 					
         />
 				
-				<input type="file" onChange={handleImageSelect} className="fileSelect" />
-      			<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail"/>
+				<FileBox>
+					<div className="filebox">
+						{thumbnailSrc !== "" && (
+								<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
+						)}
+							<label for="file"><PictureImg /></label> 
+							<input type="file" onChange={handleImageSelect} className="fileSelect" id="file"/>
+					</div>
+				</FileBox>
+				
 
 
     </FlowModal>

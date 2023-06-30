@@ -42,7 +42,7 @@ const ModalStyle = styled.div`
     position: relative;
     text-align: left;
     padding: 16px 64px 16px 16px;
-    background-color: ${props=>props.theme.divColor};
+   
     font-weight: 700;
     color: ${props=>props.theme.textColor};
   }
@@ -68,6 +68,7 @@ const ModalStyle = styled.div`
   }
   .modal > section > footer {
     padding: 0px 16px;
+    
     text-align: right;
   }
   .modal > section > footer button {
@@ -112,8 +113,8 @@ const ModalContent = styled.div`
 	width: 90%;
 	height: 80%;
 	border-radius: 8px;
-	background-color: ${props=>props.theme.bgColor};
 	font-family: var(--kfont);
+  background-color: #424242;
 `;
 
 const ModalTitle = styled.div`
@@ -123,7 +124,6 @@ const ModalTitle = styled.div`
 	width: 90%;
 	height: 10%;
 	border-radius: 8px;
-	background-color: ${props=>props.theme.bgColor};
 	outline: none;
 	border: none;
 	margin-bottom: 10px;
@@ -147,9 +147,9 @@ const FlowModal = (props) => {
                 </header>
                 <main>
 									
-									<ModalContent>
+									
 										{children}
-									</ModalContent>
+									
 								</main>
                 <footer>
                     {type && <button onClick={confirm}>확인</button>}
