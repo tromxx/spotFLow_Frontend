@@ -4,9 +4,9 @@ import {BsChatDots, BsSend} from "react-icons/bs";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
-  width: 75vw;
-  height: 68vh;
-  background-color: white;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0, 0);
   display: flex;
   border-radius: 15px;
   top: 50%;
@@ -14,10 +14,27 @@ export const DiarySwipe = styled(Swiper)`
   transform: translate(-50%, -50%);
 `;
 export const TimeLine = styled(SwiperSlide)`
-  width: 70vw;
-  height: 90vh;
-  background-color: #ccc;
+  width: 100%;
+  height: 100%;
+  position: relative;
   padding: 20px;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 1000px;
+    max-height: 700px;
+    @media (max-width: 768px) {
+      max-width: 390px;
+      max-height: 840px;
+    }
+  }
+
+  p {
+    font-size: .8rem;
+  }
 `;
 export const Container = styled.div`
   width: 100vw;
@@ -52,6 +69,7 @@ export const Btn = styled.button`
       font-size: 20px;
     }
   }
+
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;
@@ -109,15 +127,18 @@ const CommentBox = styled.div`
       height: 37px;
     }
   }
-  hr{
+
+  hr {
     opacity: 30%;
   }
+
   img {
     max-width: 45px;
-    @media(max-width: 390px) {
+    @media (max-width: 390px) {
       max-width: 37px;
     }
   }
+
   .profile {
     background-color: #61dafb;
     border-radius: 45px;
@@ -133,25 +154,29 @@ const CommentBox = styled.div`
   }
 
   #comment {
-    background-color: #d9d9d9;
+    background-color: #eee;
     height: 40px;
     width: 380px;
     margin: 5px 20px;
     border: 0;
     border-radius: 30px;
-    padding: 0 15px;
+    padding-left: 15px;
+    padding-right: 45px;
     @media (max-width: 768px) {
       height: 27px;
       width: 260px;
-      margin: 5px;
+      margin: 4px 6px;
+      padding-right: 35px;
     }
   }
+
   .caption {
     color: grey;
     font-size: .8rem;
     margin-top: 25px;
-    margin-left: 10px;
+    margin-left: 5px;
   }
+
   .btn-send {
     position: absolute;
     right: 22px;
@@ -161,7 +186,7 @@ const CommentBox = styled.div`
     border-radius: 36px;
     border: 0;
     background-color: #caf0f8;
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       width: 24px;
       height: 24px;
       border-radius: 24px;
@@ -169,21 +194,79 @@ const CommentBox = styled.div`
       right: 8px;
     }
   }
+
   .send {
     font-size: 20px;
     margin-top: 5px;
     color: #00b4d8;
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       font-size: 12px;
     }
   }
+
+  .content {
+    width: 100%;
+    height: 530px;
+    background-color: #d9d9d9;
+    overflow: auto;
+    border: .2px solid rgb(120, 120, 120);
+    @media(max-width: 768px){
+      height: 405px;
+    }
+  }
+
   @media (max-width: 768px) {
-    width: 340px;
+    width: 300px;
+    height: 530px;
+    padding: 10px;
+    border-radius: 10px;
   }
 `
+const CommentDetail = styled.div`
+  width: 100%;
+  padding: 5px;
+  background-color: white;
+  border: .2px solid rgb(20, 20, 20, 30%);
+  display: flex;
+  flex-direction: row;
+  .comment-info {
+    display: flex;
+    flex-direction: column;
+    width: 395px;
+    max-width: 100%;
+    margin-left: 5px;
+    font-size: .8rem;
+  }
+  .subtitle {
+    display: flex;
+    font-size: .8rem;
+  }
+
+  .time {
+    font-size: .4rem;
+    color: rgb(0, 0, 0, 30%);
+    margin-left: auto;
+    margin-right: 15px;
+  }
+
+  .comment {
+    width: 390px;
+    white-space: normal;
+    font-size: .6rem;
+    @media (max-width: 768px) {
+      width: 220px;
+    }
+  }
+`;
 export const Comment = () => {
+  const BlockBubbling = (e) => {
+    e.stopPropagation();
+  }
+  const array = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
   return (
-    <CommentBox>
+    <CommentBox onClick={(event) => BlockBubbling(event)}>
+
+      {/* 유저 댓글 작성 칸*/}
       <div className="input">
         <div className="profile">
           <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
@@ -193,12 +276,35 @@ export const Comment = () => {
           <BsSend className="send"/>
         </button>
       </div>
+
       <hr/>
-      <p className="caption">댓글 1</p>
+      {/* 구분선 */}
+
+      <p className="caption">댓글 {array.length}</p>
+
+      {/* 댓글 목록 */}
       <div className="content">
-        <div>
-        </div>
+        {/* 댓글 낱개 디자인 */}
+        {array.map(e => (
+          <CommentDetail>
+            <div className="profile">
+              <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
+            </div>
+            <div className="comment-info">
+              <div className="subtitle">
+                <span className="name">홍길동</span>
+                <span className="time">2023-06-30 18:19:27</span>
+              </div>
+              <span className="comment">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean necmollisnulla.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean necmollisnulla.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean necmollisnulla.
+             </span>
+            </div>
+          </CommentDetail>
+        ))}
       </div>
+
     </CommentBox>
   )
 };
@@ -210,7 +316,7 @@ export const Thumbs = styled.button`
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  background-color: rgb(0,0,0,0);
+  background-color: rgb(0, 0, 0, 0);
   border: 0;
   z-index: 3;
 
@@ -221,6 +327,7 @@ export const Thumbs = styled.button`
       font-size: 30px;
     }
   }
+
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;
