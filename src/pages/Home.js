@@ -37,27 +37,23 @@ const MenuButton = styled(AiOutlineMenu)`
 const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
-  const [tseting, setTesting] = useState();
-  console.log(testing);
 
-  const testing = useCallback((newData)=>{
-    setTesting(newData)
-  },[])
 
   const renderPage = () => {
     switch (currentPage) {
       case 'MyPage':
-        return <MyPage  testing={testing} goToFollowing={()=>setCurrentPage('Following')} onClose={()=>setActivate(false)}/>;
+        return <MyPage  
+                goToFollowing={()=>setCurrentPage('Following')} 
+                onClose={()=>setActivate(false)}/>;
       case 'MyFlow':
         return <MyFlow goBack={()=>setCurrentPage('MyFlow')} />;
       case 'Following' :
         return <Following/>;
-        default:
-      
+      default:
         return null;
     }
   };
-  // need to useCallback
+
   return (
     <>
       <MenuButton onClick={()=>setActivate(true)} />

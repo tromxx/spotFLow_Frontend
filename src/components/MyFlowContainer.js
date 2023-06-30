@@ -3,11 +3,11 @@ import { styled } from 'styled-components'
 import { SlLocationPin } from "react-icons/sl";
 
 const MyFlowContainerDiv = styled.div`
-  width: 100%;
-  height: 150px;
+  width: 110%;
+  height: 100px;
   padding: 10px;
   border-radius: 8px;
-  background-color: #d9d9d9;
+  background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -18,6 +18,7 @@ const MyFlowContainerDiv = styled.div`
 const TnLnContentDiv = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 const TimeandLocation = styled.div`
@@ -39,12 +40,13 @@ const Image = styled.img`
 `;
 
 const ContentText = styled.p`
-  display: flex;
-  align-self: flex-start;
+  position: absolute;
+  top: -5px;
+  left: -7px;
   font-family: var(--kfont);
   font-size: 12px;
   padding: 5px;
-  width: 200px;
+  width: 235px;
   height: 50px;
 `;
 
@@ -56,17 +58,61 @@ const Location = styled(SlLocationPin)`
   height: 13px;
 `;
 
-const MyFlowContainer = ({ img, time, content, location }) => {
+const Date = styled.div`
+  color: ${props => props.theme.textColor};
+  width: 100px;
+  height: 20px;
+  font-family: var(--kfont);
+  font-size: 13px;
+  font-weight: bold;
+  position: absolute;
+  left: -10px;
+`;
+
+const DateWrapper = styled.div`
+  position: relative;
+  width: 110%;
+  height: 30px;
+  padding: 5px;
+  margin-bottom: 3px;
+  border-radius: 8px;
+  background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start; /* 수정: 상단 정렬로 변경 */
+  font-family: var(--efont);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+`;
+
+const FlowContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+`;
+
+const MyFlowContainer = ({ img, time, content, location, date }) => {
   return (
-    <MyFlowContainerDiv>
-      <TnLnContentDiv>
-        <TimeandLocation>{time}  <Location />{location}</TimeandLocation>
-        <ContentText>{content}</ContentText>
-      </TnLnContentDiv>
-      
-      <Image src={img} alt="img" />
-      
-    </MyFlowContainerDiv>
+    <FlowContainer>
+      <DateWrapper>
+          <Date>
+            {date}
+          </Date>
+        </DateWrapper>
+      <MyFlowContainerDiv>
+        <TnLnContentDiv>
+          <TimeandLocation>{time}  <Location />{location}</TimeandLocation>
+          <ContentText>{content}</ContentText>
+        </TnLnContentDiv>
+        
+        <Image src={img} alt="img" />
+        
+      </MyFlowContainerDiv>
+
+    </FlowContainer>
   );
 };
 

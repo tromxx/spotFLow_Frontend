@@ -5,12 +5,12 @@ import Diary from './pages/Diary';
 import TimeLine from './pages/TimeLine';
 import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import SignUp from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
 import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
-import MapView from './pages/MapView';
+import {DiarySwiper} from "./components/DiarySwiper";
 
 
 
@@ -31,7 +31,7 @@ function App() {
             </>} />
             <Route path="/signup" element={<>
               <HeaderBarNavi />
-              <Signup />
+              <SignUp />
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
@@ -46,6 +46,12 @@ function App() {
               <DiaryMypage />
             </>} />
             <Route path="/timeline" element={<TimeLine />} />
+            <Route path="/diary/detail" element={
+              <>
+                <HeaderBarNavi/>
+                <DiarySwiper/>
+              </>
+            }/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -6,6 +6,9 @@ import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
 import { useState, useEffect, useRef } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
+import { SlPicture } from "react-icons/sl";
+import FlowModal from "../utils/FlowModal";
+import Modal from '../utils/Modal';
 
 const MyFlowDiv = styled.div`
   	display: flex;
@@ -14,6 +17,47 @@ const MyFlowDiv = styled.div`
 		text-align: center;
 		flex-direction: column;
 		position: relative;
+
+		.flowArea {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 3px;
+			padding: 10px;
+			outline: none;
+			width: 100%;
+			height: 100%;
+			resize: none;
+			border: none;
+			border-radius: 8px;
+			font-family: var(--kfont);
+		}
+
+	.title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 90%;
+		height: 10%;
+		border-radius: 8px;
+		background-color: ${props=>props.theme.bgColor};
+		outline: none;
+		border: none;
+		margin-bottom: 10px;
+	}
+
+	.fileSelect {
+		width: auto;
+		height: 50px;
+	}
+
+	.thumbnail {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+	}
+
+
 `;
 
 const BiArrowBacks = styled(BiArrowBack)`
@@ -76,9 +120,9 @@ const FlowDiv = styled.div`
 `;
 
 const ScrollBar = styled.div`
-	width: 80%;
+	width: 100%;
 	height: 60vh;
-	
+	margin-top: -20px;
 	::-webkit-scrollbar {
     width: 8px;  /* 스크롤바의 너비 */
 		
@@ -100,16 +144,17 @@ const ScrollBar = styled.div`
 
 const MenuBar = styled.div`
 	display: flex;
-	justify-content: space-between;
-	width: 80%;
+	width: 75%;
 	height: 30px;
 	border-radius: 8px;
-	background-color: #d9d9d9;
+	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
+	position: relative;
 `;
 
 const SortButton = styled.button`
 	position: relative;
 	width: 30px;
+	left: 245px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -125,15 +170,14 @@ const SearchButton = styled.button`
 	position: relative;
 	width: 30px;
 	height: 30px;
+	left: 180px;
 	border: none;
 	background-color: transparent;
 	align-self: flex-end;
-	&:hover {
-		cursor: pointer;
-	}
 `;
 
 const SearchImg = styled(AiOutlineSearch)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
@@ -142,6 +186,7 @@ const SearchImg = styled(AiOutlineSearch)`
 `;
 
 const SortAz = styled(CgSortAz)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
@@ -150,6 +195,7 @@ const SortAz = styled(CgSortAz)`
 `;
 
 const SortZa = styled(CgSortZa)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
@@ -158,8 +204,10 @@ const SortZa = styled(CgSortZa)`
 `;
 
 const CheckButton = styled.button`
+	color: ${props => props.theme.textColor};	
 	position: relative;
 	width: 30px;
+	left: 280px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -170,17 +218,27 @@ const CheckButton = styled.button`
 `;
 
 const CheckImg = styled(CgCheckO)`
+	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	left: 2px;
+	left: 0px;
 	top: 2px;	
 `;
 
-const DateDiv = styled.div`
-	width: 100px;
-	height: 20px;
+const SearchBarInput = styled.input`
+	position: absolute;
+	top: 4px;
+	left: 5px;
+	width: 200px;
+	height: 75%;
+	border: 1px solid #d9d9d9;
+	border-radius: 8px;
+	background-color: ${props => props.theme.borderColor === '1px solid #424242' ? '#d9d9d9' : 'white'};
+	outline: none;
+	
 `;
+
 
 const MenuButtonWrapper = styled.div`
 	align-self: flex-end;
@@ -189,38 +247,110 @@ const MyFlow = ({ handleMain }) =>{
 
 	const [flow, setFlow] = useState(FlowData); // 플로우 더미데이터
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
-	const [isSerchBarVisible, setIsSerchBarVisible] = useState(false); // 검색바 보이게 or 안보이게
+	const [searchValue, setSearchValue] = useState(""); // 검색창 인풋창 밸류
+	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬
 
-	const flowRef = useRef(null); // 요소를 선택하기 위한 ref
-  const [topElementId, setTopElementId] = useState(null);
+	// 글쓰기 모달 & 알림 모달
+	const [flowModalOpen, setFlowModalOpen] = useState(false);
+	const [flowModalText, setFlowModalText] = useState("샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다샘플글입니다");
+	const [modalOpen, setModalOpen] = useState(false);
+  const [modalText, setModalText] = useState("작성된 내용은 저장되지 않습니다. 정말 닫으시겠습니까?");
 
-
-	const handleSort = () => {
-    setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
-  };
-
-	const handleSearchBar = () => {
-		setIsSerchBarVisible(!isSerchBarVisible);
-		
+	const openFlowModal = () => {
+		setFlowModalOpen(true);
 	}
 
-	useEffect(() => {
-    const handleScroll = () => {
-      // scroll 이벤트 핸들러 내에서 요소의 정보를 가져옵니다.
-      if (flowRef.current) {
-        const topElementId = flowRef.current.firstChild?.getAttribute('id');
-        setTopElementId(topElementId);
-      }
-    };
+	const closeFlowModal = () => {
+		setModalOpen(true);
+	}
 
-    window.addEventListener("scroll", handleScroll);
+	const closeModal = () => {
+		setModalOpen(false);
+	}
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [flowRef.current]); // flowRef.current를 의존성 배열에 포함시킴
+	const closeBoth = () => {
+		setModalOpen(false);
+		setFlowModalOpen(false);
+		setThumbnailSrc("");
+	}
+
+	  // 플로우 작성시 이미지 파일 선택하는 핸들링
+		const fileInput = useRef();
+		const handleOpenImageRef = () => {
+			fileInput.current.click();
+		}
+	
+		const [selectedImage, setSelectedImage] = useState("");
+	
+		const handleUploadImage = (e) => {
+			const file = e.target.files[0];
+			const reader = new FileReader();
+	
+			reader.onloadend = () => {
+				setSelectedImage(reader.result);
+			};
+	
+			if (file) {
+				reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
+			} else {
+				setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
+			}
+		}
+
+	// 들어온 플로우 데이터값을 정렬
+	const handleSort = () => { 
+    setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
+		if (sort === "az") {
+			const sorted = [...flow].sort((a, b) => a.id - b.id);
+			setSortedFlow(sorted);
+		} else {
+			const sorted = [...flow].sort((a, b) => b.id - a.id);
+			setSortedFlow(sorted);
+		}
+  };
+
+	// 플로우 검색 기능 구현
+	
+	const handleSearch = (searchQuery) => {
+			const filteredFlow = FlowData.filter(
+				(item) =>
+					(item.content && item.content.includes(searchQuery)) ||
+					(item.location && item.location.includes(searchQuery))
+			);
+			setSortedFlow(filteredFlow);
+		};
 	
 
+	const handleSearchChange = (e) => {
+		const { value } = e.target;
+		setSearchValue(value);
+		if (value === "") {
+			setSortedFlow(FlowData);
+		} else {
+			handleSearch(value);
+		}
+  };
+	
+  const [thumbnailSrc, setThumbnailSrc] = useState("");
+  
+	const handleImageSelect = (event) => {
+	  const file = event.target.files[0];
+  
+	  if (file && file.type.startsWith("image/")) {
+		const reader = new FileReader();
+  
+		reader.onload = (e) => {
+		  setThumbnailSrc(e.target.result);
+		};
+  
+		reader.readAsDataURL(file);
+	  } else {
+		setThumbnailSrc("");
+	  }
+	};
+  
+	
+	
 
 
     return(
@@ -229,15 +359,15 @@ const MyFlow = ({ handleMain }) =>{
 			<MyFlowDiv>
 				<MyFlowMenuName>
 					<p className="title">myFlow</p>
-					<CreateBtn>
+					<CreateBtn onClick={openFlowModal}>
 					<AiOutlinePlus style={{ color: 'grey' }}></AiOutlinePlus>
 				</CreateBtn>
 				</MyFlowMenuName>
 				
 				<MenuBar>
-            <DateDiv>{topElementId}</DateDiv>
-					
+				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange} />
 					<MenuButtonWrapper>
+					
 						<CheckButton>
 							<CheckImg />
 						</CheckButton>
@@ -252,8 +382,9 @@ const MyFlow = ({ handleMain }) =>{
 					</MenuButtonWrapper>	
 				</MenuBar>
 				<ScrollBar >
-          <FlowDiv ref={flowRef}>
-            {flow.map((item) => (
+          <FlowDiv>
+					
+            {sortedFlow.map((item) => (
               <MyFlowContainer
 								className="myFlowContainer"
                 key={item.id}
@@ -262,10 +393,31 @@ const MyFlow = ({ handleMain }) =>{
                 time={item.time}
                 content={item.content}
                 location={item.location}
+								date={item.date}
               />
             ))}
           </FlowDiv>
         </ScrollBar>
+
+		<FlowModal
+        open={flowModalOpen}
+        close={closeFlowModal}
+        header="Flow"
+        type="y"
+      >
+				
+        <textarea className="flowArea"
+          value={flowModalText}
+          onChange={(e) => setFlowModalText(e.target.value)}
+					
+        />
+				
+				<input type="file" onChange={handleImageSelect} className="fileSelect" />
+      			<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail"/>
+
+
+    </FlowModal>
+		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
 			</MyFlowDiv>
 		</>
     );

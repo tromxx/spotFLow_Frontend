@@ -1,21 +1,37 @@
 import React from "react";
 import { styled } from "styled-components";
+import dummy from "../dataSet/TimeLineData";
 
 const DiaryCatediv = styled.div`
     /* border: solid 1px red; */
-    width: 60vw;
+    width: 100%;
     height: 75vh;
+    flex-grow: 1;
+    align-items: center;
+    /* @media (max-width:900px) {
+        grid-template-columns: 1fr 1fr ;
+    } */
+    
     
 
   .container{
     border-radius: 20px;
-    border: solid 5px black;
-    width: 60vw;
-    height: 75vh;
+    border: 5px solid black;
+    width: 100%;
+    height: 73vh;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
     gap: 0px;
-    grid-auto-rows: minmax(100px, auto);
+    grid-auto-rows: minmax(170px, auto);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    grid-gap: 10px;
+    overflow-y: scroll;
+  
+    /* @media (min-width:1000px) {
+        grid-template-columns: 1fr 1fr ;
+    }
+     */
+    
     
   }
   .box{
@@ -23,15 +39,17 @@ const DiaryCatediv = styled.div`
     justify-content: center;
     align-items: center;
     display: flex;
-    width: 100%;
+    width: 95%;
     height: 100%;
     /* margin: 30px; */
     border: solid 1px black;
     border-radius: 5px;
+    
+
   }
   .image{
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     background-color: gray;
     /* border: solid 1px red; */
   }
@@ -40,7 +58,7 @@ const DiaryCate = () => {
     return(
             <DiaryCatediv>
               <div className="container">
-                  <div class="box">
+                  {/* <div class="box">
                     <div className="image"></div>
                   </div>
                     <div class="box">
@@ -66,7 +84,17 @@ const DiaryCate = () => {
                         </div>
                     <div class="box"> 
                       <div className="image"></div>
-                      </div>
+                        </div>  */}
+                        {
+                          dummy.map((e)=> 
+                            <div class="box">
+                              <img className="image" src={e.image}/>
+                            </div>
+                          )
+                        }
+                        {/* <div class="box">
+                              <idiv className="image"> ++++++</idiv>
+                            </div> */}
                   </div>
             </DiaryCatediv>
     );

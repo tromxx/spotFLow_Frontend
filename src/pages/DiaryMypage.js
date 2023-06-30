@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import MyDiary from "../components/MyDiary";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/SearchBar/DiarySearchBar";
 import { BsPeople } from "react-icons/bs";
 import avatar from "../images/default_avatar.png"
 import { BsTrash } from "react-icons/bs";
@@ -29,27 +29,29 @@ const Container = styled.div`
         justify-content: space-between;
         }
         .namebarleft{
-            width: 50%;
+            width: 75%;
             height: 60px;
             display: flex;
             justify-content: flex-start;
             align-items: end;
         }
         .namebarright{
-            width: 150px;
+            width: 25%;
             height: 60px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             top:60px;
         }
         
         .menu{
-            width: 100%;
+            width: 75%;
             height: 100%;
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            padding: 5px;
+            justify-content: center;
+            /* padding: 50px; */
+            margin-top: 20px;
+            /* margin-left: 50px; */
             
             /* margin-right: 30px;   */
         }
@@ -58,6 +60,10 @@ const Container = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
+            h6{
+                font-size: 13px;
+                margin-left: 15px;
+            }
         }
 
     .img{
@@ -66,13 +72,16 @@ const Container = styled.div`
    //     margin-right: 20px;
     }
 
-    .searchBar{
+    .searchBar1{
         display: flex;
-        width: 100px;
-        height: 100px;
+        /* justify-content: center; */
+        align-items:center;
+        width: 100%;
+        height: 100%;
     }
         
     .list{
+        /* margin: 80%; */
         width: 30px;
         height: 30px;
         display: flex;
@@ -81,16 +90,16 @@ const Container = styled.div`
             color: gray;
             font-weight: bold;
         }
-        /* margin-right: 10px; */
+        margin-right: 20px;
     }
 
-    .people{
+    /* .people{
         width: 30px;
         height: 30px;
         display: flex;
         justify-content: flex-end;
-        /* margin-right: 20px; */
-    } 
+        margin-right: 20px;
+    }  */
     .trash{
         width: 30px;
         height: 30px;
@@ -108,21 +117,22 @@ const DiaryMypagediv = styled.div`
     justify-content: center;
     align-items: center;
     /* background-color: beige; */
-    margin-top: 40px;
+    margin-top: 20px;
     border: solid 3px black;
     border-radius: 10px;
 `;
 
-const DiaryMypage = () => {
+    const DiaryMypage = () => {
 
     const navi = useNavigate();
 
-    const [isCheckBox, setIsCheckBox] = useState(0);
+    const [isCheckBox, setIsCheckBox] = useState(false);
 
     const convertCheckBox = () => {
-        if(isCheckBox === 0) setIsCheckBox(1);
-        else setIsCheckBox(0);
-    }
+        if(isCheckBox === false) setIsCheckBox(true)
+        else setIsCheckBox(false);
+        console.log(isCheckBox);
+    };
 
     return(
         <Container>
@@ -133,22 +143,23 @@ const DiaryMypage = () => {
                         <img className="img" src={avatar} alt="" />
                         <h6>whddus426</h6>
                      </div>
-                <div className="searchBar1">
-                    <SearchBar  />
-                 </div>
+                
                  </div>
                  <div className="namebarright">
                          <div className="menu">
                                 <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                <BsPeople className="people"/>
+                                {/* <BsPeople className="people"/> */}
                                 <BsTrash className="trash" onClick={convertCheckBox}/>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                <div className="searchBar1">
+                    <SearchBar/>
+                 </div>   
             </header>
             <body>
-        <DiaryMypagediv stat={isCheckBox}>
-            <MyDiary/>
+        <DiaryMypagediv>
+            <MyDiary stat={isCheckBox}/>
         </DiaryMypagediv>
         </body>
         </Container>

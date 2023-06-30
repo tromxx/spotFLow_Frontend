@@ -147,7 +147,7 @@ const CloseButton = styled(AiOutlineClose)`
   }
 `;
 
-const MyPage = ({testing, onClose, goToFollowing}) => {
+const MyPage = ({ onClose, goToFollowing}) => {
   const [ThemeMode, setTheme] = useTheme(); // 다크모드 라이트모드 State
   const [isClicked, setIsClicked] = useState(true);   // 정보 수정 톱니바퀴 눌렀을 때 톱니바퀴 회전 (이름 수정 필요)
   /*
@@ -159,10 +159,6 @@ const MyPage = ({testing, onClose, goToFollowing}) => {
   const handleClick = () =>{
     setIsClicked(!isClicked); 
   }
-  const [value, setValue] = useState();
-  useEffect(()=>{
-    testing(value)
-  },[])
 
   return (
     <MyInfoDiv>
@@ -177,7 +173,7 @@ const MyPage = ({testing, onClose, goToFollowing}) => {
         </div>
         <Paragrph isClicked={isClicked} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
-          <Paragrph  onClick={()=>setValue("its working")} isClicked={isClicked} className='Following'>Following : 100</Paragrph>
+          <Paragrph  isClicked={isClicked} className='Following'>Following : 100</Paragrph>
           <Paragrph isClicked={isClicked} className='Following'>Follower : 200</Paragrph>
         </div>
         <Paragrph isClicked={isClicked} className='Statusmsg'>Hello my name is trom</Paragrph>
