@@ -22,7 +22,7 @@ const DiaryCatediv = styled.div`
     display: grid;
     /* grid-template-columns: repeat(3, 1fr); */
     gap: 0px;
-    grid-auto-rows: minmax(170px, auto);
+    grid-auto-rows: minmax(250px, auto);
     grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
     grid-gap: 10px;
     overflow-y: scroll;
@@ -39,11 +39,12 @@ const DiaryCatediv = styled.div`
     justify-content: center;
     align-items: center;
     display: flex;
-    width: 95%;
+    width: 100%;
     height: 100%;
     /* margin: 30px; */
     border: solid 1px black;
     border-radius: 5px;
+    margin-left: 15px;
     
 
   }
