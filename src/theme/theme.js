@@ -1,5 +1,6 @@
 export const lightTheme = {
-    timeLineBgColor: '#F5F5F4',
+    timeLineHederBgColor: '#A4EBF3',
+    timeLineBgColor: 'white',
     bgColor: 'white',
     textColor: 'black',
     borderColor: '1px solid #d9d9d9',
@@ -7,7 +8,8 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-    timeLineBgColor : '#F2F5F7',
+    timeLineHederBgColor: '#E0E0E0',
+    timeLineBgColor : '#E0E0E0',
     bgColor: '#171010',
     textColor: 'white',
     borderColor: '1px solid #424242',

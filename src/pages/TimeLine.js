@@ -20,8 +20,8 @@ const ItemGrid = styled.div`
   height: 80%;
   width: 100%;
   grid-template-rows: 1fr 1fr;
-  background-color: silver;
-
+  //background-color: white;
+  background-color: ${(props) => props.theme.timeLineBgColor};
 
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
@@ -136,7 +136,7 @@ const CreatePost = styled.div`
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.timeLineBgColor};
-
+  background-color:#F9F9F9;
   textarea {
     appearance: none; /* 기본 브라우저 스타일 제거 */
     outline: none; /* 아웃라인 제거 */
@@ -146,7 +146,7 @@ const Container = styled.div`
   }
 
     position: relative;
-    top:60px;
+    top:40px;
 
   @media (max-width: 850px) {
     & {
@@ -175,9 +175,12 @@ const Header = styled.div`
   ${centerAlign}
   justify-content: start;
   flex-wrap: wrap;
-  background-color: silver;
+  
+  background-color: ${(props) => props.theme.timeLineHederBgColor};
+ // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
+  padding-bottom:20px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   .Search-bar {
@@ -189,15 +192,16 @@ const Header = styled.div`
     padding-left: 30px;
     height: 0px;
     margin-left: 20px;
-    border:1px solid ${(props) => props.theme.timeLineBgColor};
-    background-color: ${(props) => props.theme.timeLineBgColor};
+    border:none;
+  //  border:1px solid ${(props) => props.theme.timeLineBgColor};
+    background-color: white;
     border-radius:15px;
 
   }
   @media (min-width: 1300px) {
     & {
       height: 20%;
-      width: 72%;
+      width: 71.9%;
     }
   }
 `
@@ -227,6 +231,7 @@ const CreateBtn = styled.div`
   height: 35px;
   color: black;
   background-color: ${(props) => props.theme.timeLineBgColor};
+  background-color: white;
   margin: 5px;
 
   &:hover {
@@ -261,7 +266,7 @@ const Main = styled.div`
     & {
       height: 70%;
       width: 71.9%;
-      border: 1px solid silver;
+      //border: 1px solid silver;
     }
   }
           // overflow : scroll;
@@ -314,6 +319,12 @@ const Item = styled.div`
             margin-right:20px;
 
         }
+        &:first-child {
+            margin-top : 40px;
+            margin-bottom: 0px;
+  
+        } 
+    
         // &:nth-child(4n){
         //     margin-right:0px;
         // }
@@ -321,15 +332,17 @@ const Item = styled.div`
             margin-right:0px;
         } 
          &:nth-child(2) {
-            margin-top : 20px;
+            margin-top : 40px;
+            margin-bottom: 0px;
+  
         } 
         &:nth-child(3) {
 
-            margin-top : 20px;
-        } 
-        &:nth-child(4) {
-            margin-top : 20px;
-        } 
+          margin-top : 20px;
+          } 
+          &:nth-child(4) {
+          margin-top : 20px;
+          } 
 
         @media (min-width: 1300px) {
             & {
@@ -340,6 +353,13 @@ const Item = styled.div`
                 &:nth-child(4n){
                     margin-right:20px;
                     }
+               &:nth-child(3) {
+
+                 margin-top : 40px;
+                } 
+                &:nth-child(4) {
+                 margin-top : 40px;
+                }       
 	        }
         }
 
@@ -351,6 +371,15 @@ const Item = styled.div`
 	        }
         }
     ` : `
+    &:first-child {
+            margin-top : 40px;
+            margin-bottom: 0px;
+  
+        } 
+    &:nth-child(2) {
+            margin-top : 20px;
+  
+        } 
     height: 160px;
     flex-direction:row;
     display:flex; 
@@ -566,16 +595,17 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 // 시간 계산 함수
   let [diffHours,setDiffHours] = useState();
 
-const hours = (e) => {
+  const hours = (e) => {
     let date1 = new Date(e.date);
     let date2 = new Date();
     let diffMilliseconds = Math.abs(date2 - date1);
-    if((parseInt(diffMilliseconds / (1000 * 60 * 60))) > 12){
-      setDiffHours(parseInt(diffMilliseconds / (1000 * 60 * 60)/24) + "일 전"); 
+    let diffHours = parseInt(diffMilliseconds / (1000 * 60 * 60));
+    if(diffHours >= 24){
+      setDiffHours(parseInt(diffHours / 24) + "일 전"); 
     } else {
-    setDiffHours(parseInt(diffMilliseconds / (1000 * 60 * 60)) + "시간 전");
+      setDiffHours(diffHours + "시간 전");
     }
-} 
+}
 
 
 
@@ -588,7 +618,7 @@ const hours = (e) => {
     <>
       <HeaderBar/>
 
-      <Container  height={height} theme={theme}>
+      <Container   theme={theme}>
         {isCreate &&
           <CreatePost >
             <input style={{
@@ -665,7 +695,8 @@ const hours = (e) => {
               </CreateBtn> */}
 
 
-              {!isCreate &&
+                 {/* 수정 버튼 없애버림 */}
+              {/* {!isCreate &&
 
                 <CreateBtn onClick={() => {
                   setIsEdit(!isEdit)
@@ -678,7 +709,7 @@ const hours = (e) => {
                 </CreateBtn>
 
 
-              }
+              } */}
 
 
             </HeaderItemRight>
