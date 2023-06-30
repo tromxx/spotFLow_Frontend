@@ -4,9 +4,9 @@ import {BsChatDots, BsSend} from "react-icons/bs";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
-  width: 75vw;
-  height: 68vh;
-  background-color: white;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0,0,0,0);
   display: flex;
   border-radius: 15px;
   top: 50%;
@@ -14,10 +14,25 @@ export const DiarySwipe = styled(Swiper)`
   transform: translate(-50%, -50%);
 `;
 export const TimeLine = styled(SwiperSlide)`
-  width: 70vw;
-  height: 90vh;
-  background-color: #ccc;
+  width: 100%;
+  height: 100%;
+  position: relative;
   padding: 20px;
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 1000px;
+    max-height: 700px;
+    @media(max-width: 768px) {
+      max-width: 390px;
+      max-height: 840px;
+    }
+  }
+  p {
+    font-size: .8rem;
+  }
 `;
 export const Container = styled.div`
   width: 100vw;
@@ -150,7 +165,7 @@ const CommentBox = styled.div`
     color: grey;
     font-size: .8rem;
     margin-top: 25px;
-    margin-left: 10px;
+    margin-left: 5px;
   }
   .btn-send {
     position: absolute;
@@ -177,11 +192,22 @@ const CommentBox = styled.div`
       font-size: 12px;
     }
   }
+  .content {
+    width: 100%;
+    height: 530px;
+    background-color: #d9d9d9;
+  }
+  .comment-detail {
+    padding: 5px;
+    background-color: white;
+    border: .5px solid rgb(20, 20, 20, 30%);
+  }
   @media (max-width: 768px) {
     width: 340px;
   }
 `
 export const Comment = () => {
+
   return (
     <CommentBox>
       <div className="input">
@@ -196,8 +222,11 @@ export const Comment = () => {
       <hr/>
       <p className="caption">댓글 1</p>
       <div className="content">
-        <div>
-        </div>
+        {<div className={"comment-detail"}>
+          <div className="profile">
+            <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
+          </div>
+        </div>}
       </div>
     </CommentBox>
   )
