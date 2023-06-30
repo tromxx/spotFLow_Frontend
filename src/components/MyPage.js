@@ -18,9 +18,11 @@ const MyInfoDiv = styled.div`
   justify-content: baseline;
   align-items: center;
   border-right: 1px solid var(--grey);
-  background-color: white;
+  background-color: ${props=>props.theme.bgColor};
+  color: ${props=>props.theme.textColor};
   margin-top: 7vh;
   font-family: var(--efont);
+  transition: 0.6s ease;
   .controlDiv{
     margin-top: 10px;
     display: flex;
@@ -181,7 +183,7 @@ const MyPage = ({ onClose, goToMyFlow}) => {
       <div className='routeDiv'>
         <Menu onClick={goToMyFlow} isClicked = {isClicked} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
         <Menu isClicked = {isClicked} className='Diary'>Diary</Menu>
-        <Menu isClicked = {isClicked} className='Theme'>DarkMode</Menu>
+        <Menu isClicked = {isClicked} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
       <div className='modifyInputDiv'>
       </div>
