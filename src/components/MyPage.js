@@ -36,7 +36,6 @@ const MyInfoDiv = styled.div`
   }
   .caption{
     position: absolute;
-    border: 1px solid black;
     margin-top: 15px;
     width: 129px;
     height: 129px;
@@ -47,6 +46,7 @@ const MyInfoDiv = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 5;
+    display: ${({ isBorderVisible }) => (isBorderVisible ? 'block' : 'none')};
   }
   .profileDiv{
     display: flex;
@@ -54,7 +54,9 @@ const MyInfoDiv = styled.div`
     align-items: center;
     gap: 10px;
     .statusMsg{
-      border: 1px solid ${props => props.theme.textColor};
+      border: ${props =>
+      props.isBorderVisible
+      ? '1px solid #d9d9d9' : '1px solid #d9d9d9'};
       transition: 0.6s ease;
       border-radius: 8px;
       background-color: transparent;
@@ -110,6 +112,7 @@ const Menu = styled.h1`
   transform: ${({ isActive }) => `translateX(${isActive ? 0 : -200}%)`};
   &:hover {
     cursor: pointer;
+    color : var(--lightblue);
   }
   &.MyFlow {
     transition: transform 1.8s ease;
@@ -121,19 +124,6 @@ const Menu = styled.h1`
     transition: transform 2.2s ease;
   }
 `
-
-const InfoInput = styled.input`
-  width: 250px;
-  height: 40px;
-  border-radius: 8px;
-  top: 1vh;
-  transform: ${({ isActive }) => `translateX(${isActive ? -200 : 0}%)`};
-  &.statusMsg {
-    top: 420px;
-    left: 105px;
-    transition: transform 1.0 ease;
-  }
-`;
 
 // 톱니버튼 CSS
 const ControlButton = styled(RxGear)`
@@ -157,13 +147,17 @@ const CloseButton = styled(AiOutlineClose)`
 `;
 
 const MyPage = ({ onClose, goToMyFlow }) => {
-  const [ThemeMode, setTheme] = useTheme(); //useMemo 사용 필요
+  const [ThemeMode, setTheme] = useTheme(); // black white 변경
   const [active, setIsActive] = useState(true);
-
+  const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setIsActive(!active);
+    setIsBorderVisible(!isBorderVisible);
   };
+
+  console.log(isBorderVisible);
 
   return (
     <MyInfoDiv>
@@ -172,8 +166,8 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
-        <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="" />
-        <div className='caption'>
+        <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="error" />
+        <div className='caption' isBorderVisible={isBorderVisible}>
           <input type="file" />
         </div>
         <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
@@ -181,14 +175,18 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
           <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
         </div>
-        <div className='statusMsg'>
-          <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" 
-            ></textarea>
+        <div className='statusMsg' isBorderVisible={isBorderVisible}>
+          <textarea 
+            cols="20" 
+            rows="2" 
+            spellcheck="false"
+            readOnly={active}>
+            </textarea>
         </div>
       </div>
       <div className='routeDiv'>
         <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
-        <Menu isActive={active} className='Diary'>Diary</Menu>
+        <Menu onClick={()=>navigate("/diary")} isActive={active} className='Diary'>Diary</Menu>
         <Menu isActive={active} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
     </MyInfoDiv>
