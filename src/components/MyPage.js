@@ -1,13 +1,10 @@
 import React, { useRef } from 'react';
 import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
-import DarkSetting from "../images/DarkSetting.png"
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
-import MyFlow from '../images/myFlow.png'
-import { useEffect } from 'react';
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`
@@ -56,8 +53,15 @@ const MyInfoDiv = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 10px;
-
+    .statusMsg{
+      border: 1px solid ${props => props.theme.textColor};
+      transition: 0.6s ease;
+      border-radius: 8px;
+      background-color: transparent;
+      box-sizing: border-box;
+    }
     textarea{
+      color: ${props => props.theme.textColor};
       resize: none;
       font-family: var(--kfont);
       width: 250px;
@@ -65,7 +69,7 @@ const MyInfoDiv = styled.div`
       margin: 0px;
       padding: 0px;
       background-color: transparent;
-      border: 1px solid black;
+      border: none;
       resize: none;
       outline: none;
       padding: 2px;
@@ -93,13 +97,13 @@ transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
     cursor: pointer;
   }
   &.NickName{
-    transition: transform 1.2s ease;
+    transition: transform 1.8s ease;
   }
   &.Following{
-    transition: transform 1.4s ease;
+    transition: transform 2.8s ease;
   }
   &.Statusmsg{
-    transition: transform 1.6s ease;
+    transition: transform 2.8s ease;
   }
 `
 const Menu = styled.h1`
@@ -122,8 +126,9 @@ const InfoInput = styled.input`
   width: 250px;
   height: 40px;
   border-radius: 8px;
+  top: 1vh;
   transform: ${({ isActive }) => `translateX(${isActive ? -200 : 0}%)`};
-  &.password {
+  &.statusMsg {
     top: 420px;
     left: 105px;
     transition: transform 1.0 ease;
@@ -152,10 +157,9 @@ const CloseButton = styled(AiOutlineClose)`
 `;
 
 const MyPage = ({ onClose, goToMyFlow }) => {
-  const [ThemeMode, setTheme] = useTheme();
+  const [ThemeMode, setTheme] = useTheme(); //useMemo 사용 필요
   const [active, setIsActive] = useState(true);
-  const [isReadOnly, setIsReadOnly] = useState(true);
-  const [isBorderVisible, setIsBorderVisible] = useState(false);
+
 
   const handleClick = () => {
     setIsActive(!active);
@@ -177,14 +181,16 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
           <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
         </div>
-        <Paragrph isActive={active} className='Statusmsg'>Hello my name is trom</Paragrph>
+        <div className='statusMsg'>
+          <textarea name="statusMsg" id="statusMsg" cols="20" rows="2" spellcheck="false" 
+            ></textarea>
+        </div>
       </div>
       <div className='routeDiv'>
         <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
         <Menu isActive={active} className='Diary'>Diary</Menu>
         <Menu isActive={active} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
-      <div className='modifyInputDiv'></div>
     </MyInfoDiv>
   );
 };
