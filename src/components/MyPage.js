@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
+import {BsCamera} from 'react-icons/bs'
+import { storage } from '../api/FIrebaseApi';
+
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`
@@ -33,20 +36,6 @@ const MyInfoDiv = styled.div`
     margin-top: 15px;
     z-index: 5;
     float: left;
-  }
-  .caption{
-    position: absolute;
-    margin-top: 15px;
-    width: 129px;
-    height: 129px;
-    text-align: center;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, .6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-    display: ${({ isBorderVisible }) => (isBorderVisible ? 'block' : 'none')};
   }
   .profileDiv{
     display: flex;
@@ -92,6 +81,22 @@ const MyInfoDiv = styled.div`
     left: 100px;
   }
 `;
+
+const Caption = styled.div`
+  position: absolute;
+  display: flex;
+  margin-top: 98px;
+  width: 123px;
+  height: 30px;
+  border-radius: 0 0 130px 130px;
+  background-color: rgba(0, 0, 0, .6);
+  z-index: 5;
+  display: ${({ isBorderVisible }) => (isBorderVisible ? 'block' : 'none')};
+  input{
+    display: none;
+  }
+`;
+
 
 const Paragrph = styled.p`
 transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
@@ -144,32 +149,55 @@ const CloseButton = styled(AiOutlineClose)`
     cursor: pointer;
     color: var(--lightblue);
   }
+  `;
+
+//프로파일 이미지 업로드 수정
+const CameraButton = styled(BsCamera)`
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  margin-left: 49px;
+  &:hover{
+    cursor: pointer;
+    color: var(--lightblue);
+  }
 `;
 
 const MyPage = ({ onClose, goToMyFlow }) => {
   const [ThemeMode, setTheme] = useTheme(); // black white 변경
   const [active, setIsActive] = useState(true);
   const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
+  const [file, setFile] = useState(null); // firebase 필요한 파일 state 
+  const [url, setUrl] = useState(''); // firebase 에서 업로드한 url 경로 가죠오기
+  const imageInput = useRef();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  console.log(active);
+  console.log(file);
 
   const handleClick = () => {
     setIsActive(!active);
     setIsBorderVisible(!isBorderVisible);
   };
 
-  console.log(isBorderVisible);
+  const onCLickImageUpload = () =>{
+    setFile(imageInput.current.click());
+  };
+  
 
   return (
     <MyInfoDiv>
       <div className="controlDiv">
-        <ControlButton onClick={handleClick} isClicked={active} />
+        <ControlButton onClick={handleClick} isActive={active} />
         <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
         <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="error" />
-        <div className='caption' isBorderVisible={isBorderVisible}>
-          <input type="file" />
-        </div>
+        <Caption isBorderVisible={isBorderVisible}>
+          <input type="file" accept='image/gif, image/jpeg, image/png' ref = {imageInput}/>
+          <CameraButton  onClick={onCLickImageUpload}/>
+        </Caption>
         <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
           <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
