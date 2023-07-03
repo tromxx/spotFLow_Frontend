@@ -1,18 +1,26 @@
 import React from "react";
 import { styled } from 'styled-components';
 import { BiArrowBack } from 'react-icons/bi';
-import { AiOutlineSearch, AiOutlinePlus ,AiOutlineEdit , AiFillDelete} from "react-icons/ai";
+import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
+import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
 import { AiOutlineClose } from 'react-icons/ai';
 import FlowModal from "../utils/FlowModal";
 import Modal from '../utils/Modal';
+import { BsPencilSquare } from "react-icons/bs";
+import { BsCheckCircle, BsCircle } from "react-icons/bs";
+import { CSSTransition } from "react-transition-group";
+import "../components/Flowcss.css"
+import { storage } from "../api/FirebaseApi";
 
 const MyFlowDiv = styled.div`
-	background-color: white;
+	background-color: ${props=>props.theme.bgColor};
+  color: ${props=>props.theme.textColor};
+  border: ${props=>props.theme.borderColor};	
 	width: 390px;
   height: 93vh;
 	margin-top: 7vh;
@@ -28,39 +36,38 @@ const MyFlowDiv = styled.div`
 		  top : 2px
 	  }
 		.flowArea {
+			background-color:transparent;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			padding: 10px;
 			outline: none;
-			width: 90%;
-			height: 90%;
+			width: 95%;
+			height: 100%;
 			resize: none;
 			border: none;
 			border-radius: 5px;
 			font-family: var(--kfont);
 
 			@media(max-width: 768px) {
-    		width: 80%;
-    		height: 60%;
+    		width: 95%;
+    		height: 100%;
   		}
 		}
 `;
 
 
 const FileBox = styled.div`  
-	display: flex;
-	align-items: flex-start;
-	justify-content: flex-start;
-	flex-direction: row;
-
+	float: left;
 	.fileSelect {
 		width: auto;
 		height: 50px;
 		border: 1px solid black;
+		
 	}
 
 	.thumbnail {
+		margin-left: 10px;
         width: 50px;
         height: 50px;
         object-fit: cover;
@@ -106,7 +113,11 @@ const FileBox = styled.div`
 `;
 
 const BiArrowBacks = styled(BiArrowBack)`
- 	margin-left: 30px;
+	position: absolute;
+ 	left: -165px;
+	width: 35px;
+	height: 35px;
+	top: 10px;
 	color: var(--grey);
 	cursor: pointer;
 	&:hover{
@@ -118,16 +129,14 @@ const MyFlowMenuName = styled.p`
 	display: flex;
 	justify-content: space-between;
 	font-family: var(--efont);
-	width: 60%;
+	width: 100%;
 	font-size: 30px;
 	font-weight: bolder;
-	margin-top: -15%;
-	align-self: flex-start; // 왼쪽 정렬을 위해 align-self 속성을 추가합니다.
-	margin-right: 10%;
-  margin-left: 5%; // 원하는 왼쪽 여백을 설정합니다.
+	margin-top: -25%;
 
 	.title {
 		font-size: 35px;
+		margin-left: 10%;
 	}
 `;
 
@@ -140,7 +149,7 @@ const CreateBtn = styled.div`
     width: 35px;
     height: 35px;
     color: white;
-    
+    margin-right: 10%;
 		align-self: flex-end;
     &:hover{
         background-color: white;
@@ -189,7 +198,7 @@ const ScrollBar = styled.div`
 `;
 
 const MenuBar = styled.div`
-	display: flex;
+	
 	width: 82%;
 	height: 30px;
 	border-radius: 8px;
@@ -197,38 +206,19 @@ const MenuBar = styled.div`
 	position: relative;
 `;
 
+// Sort
+
 const SortButton = styled.button`
-	position: relative;
-	width: 30px;
-	left: 230px;
-	height: 30px;
-	border: none;
-	background-color: transparent;
-	align-self: flex-end;
-	
-
-	&:hover {
-		cursor: pointer;
-	}
-`;
-
-const SearchButton = styled.button`
-	position: relative;
-	width: 30px;
-	height: 30px;
-	left: 180px;
-	border: none;
-	background-color: transparent;
-	align-self: flex-end;
-`;
-
-const SearchImg = styled(AiOutlineSearch)`
-	color: ${props => props.theme.textColor};
 	position: absolute;
 	width: 30px;
 	height: 30px;
-	left: 0px;
+	left: 290px;
 	top: 0px;
+	border: none;
+	background-color: transparent;
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const SortAz = styled(CgSortAz)`
@@ -236,8 +226,8 @@ const SortAz = styled(CgSortAz)`
 	position: absolute;
 	width: 30px;
 	height: 30px;
-	left: 0px;
-	top: 0px;
+	left: -1px;
+	top: -1.5px;
 `;
 
 const SortZa = styled(CgSortZa)`
@@ -245,15 +235,81 @@ const SortZa = styled(CgSortZa)`
 	position: absolute;
 	width: 30px;
 	height: 30px;
-	left: 0px;
-	top: 0px;
+	left: -1px;
+	top: -1.5px;
 `;
+
+
+// Search
+const SearchImg = styled(AiOutlineSearch)`
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	top: 2px;
+	left: 138px;
+	border: none;
+	color: ${props=>props.theme.divColor};
+`;
+
+const SearchBarInput = styled.input`
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 160px;
+	height: 75%;
+	border: 1px solid #d9d9d9;
+	border-radius: 8px;
+	background-color: ${props => props.theme.borderColor === '1px solid #424242' ? '#d9d9d9' : 'white'};
+	outline: none;
+	
+`;
+
+const DiaryImgSet = styled(BsPencilSquare)`
+	width: 20px;
+	height: 20px;
+`;
+
+const DiaryButton = styled.button`
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	left: 210px;
+	top: 0px;
+	border: none;
+	background-color: transparent;
+	transition: 0.6s ease;
+	&:hover {
+		cursor: pointer;
+	}
+`;
+
+const SelectAllButton = styled.button`
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	left: 183px;
+	top: 0px;
+	border: none;
+	background-color: transparent;
+	transition: 0.6s ease;
+	&:hover {
+		cursor: pointer;
+	}	
+`;
+
+const SelectImg = styled(BiSelectMultiple)`
+	width: 20px;
+	height: 20px;	
+`;
+
+// Check
 
 const CheckButton = styled.button`
 	color: ${props => props.theme.textColor};	
-	position: relative;
+	position: absolute;
 	width: 30px;
 	left: 265px;
+	top: 0px;
 	height: 30px;
 	border: none;
 	background-color: transparent;
@@ -263,27 +319,16 @@ const CheckButton = styled.button`
 	}
 `;
 
-const CheckImg = styled(CgCheckO)`
+const CheckImg = styled(BsCheckCircle)`
 	color: ${props => props.theme.textColor};
 	position: absolute;
-	width: 25px;
-	height: 25px;
-	left: 0px;
-	top: 2px;	
+	width: 20px;
+	height: 20px;
+	left: 3px;
+	top: 4px;	
 `;
 
-const SearchBarInput = styled.input`
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	width: 200px;
-	height: 75%;
-	border: 1px solid #d9d9d9;
-	border-radius: 8px;
-	background-color: ${props => props.theme.borderColor === '1px solid #424242' ? '#d9d9d9' : 'white'};
-	outline: none;
-	
-`;
+
 
 const PictureImg = styled(SlPicture)`
 	width: 30px;
@@ -294,19 +339,42 @@ const PictureImg = styled(SlPicture)`
 const CloseButton = styled(AiOutlineClose)`
 	position: absolute;
 	top: 10px;
-	right: -180px;
+	right: -160px;
   width: 35px;
   height: 35px;
+	color: ${props=>props.theme.divColor};
   &:hover{
     cursor: pointer;
     color: var(--lightblue);
   }
 `;
 
+const DeleteImg = styled(AiFillDelete)`
+	width: 30px;
+	height: 25px;
+	margin-bottom: 2px;
+	margin-left: 1px;
+`;
+
+const DeleteButton = styled.button`
+	color: ${props => props.theme.textColor};	
+	position: absolute;
+	width: 30px;
+	left: 230px;
+	height: 30px;
+	top: 0px;
+	border: none;
+	background-color: transparent;
+	transition: 0.6s ease;
+	&:hover {
+		cursor: pointer;
+	}
+`;
+
 
 
 const MenuButtonWrapper = styled.div`
-	align-self: flex-end;
+
 `;
 const MyFlow = ({ onClose, goToMyPage }) =>{
 
@@ -345,27 +413,71 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	}
 
 	  // 플로우 작성시 이미지 파일 선택하는 핸들링
-		const fileInput = useRef();
-		const handleOpenImageRef = () => {
-			fileInput.current.click();
-		}
+
+		const [file, setFile] = useState(null);
+  	const [url, setUrl] = useState('');
 	
-		const [selectedImage, setSelectedImage] = useState("");
+		const handleUpload = () => {
+			// 이미지 파이어베이스 업로드
+			const storageRef = storage.ref();
+			const fileRef = storageRef.child(file.name);
+			fileRef.put(file).then(() => {
+				console.log('File uploaded successfully!');
+				fileRef.getDownloadURL().then((url) => {
+					console.log("저장경로 확인 : " + url);
+					setUrl(url);
+			
+			// 글 DB에 올리는 부분 구현 필요
+
+
+			setFlowModalOpen(false);
+
+				});
+			});
+		};
+
+	// 플로우 작성 시 이미지 추가 및 추가시 썸네일
+
+  const [thumbnailSrc, setThumbnailSrc] = useState("");
+  
+	const handleFileInputChange = (e) => {
+	  const file = e.target.files[0];
+		setFile(e.target.files[0]);
+	  if (file && file.type.startsWith("image/")) {
+		const reader = new FileReader();
+  
+		reader.onload = (e) => {
+		  setThumbnailSrc(e.target.result);
+		};
+  
+		reader.readAsDataURL(file);
+	  } else {
+		setThumbnailSrc("");
+	  }
+	};
+
+
+		// const fileInput = useRef();
+		// const handleOpenImageRef = () => {
+		// 	fileInput.current.click();
+		// }
 	
-		const handleUploadImage = (e) => {
-			const file = e.target.files[0];
-			const reader = new FileReader();
+		// const [selectedImage, setSelectedImage] = useState("");
 	
-			reader.onloadend = () => {
-				setSelectedImage(reader.result);
-			};
+		// const handleUploadImage = (e) => {
+		// 	const file = e.target.files[0];
+		// 	const reader = new FileReader();
 	
-			if (file) {
-				reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
-			} else {
-				setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
-			}
-		}
+		// 	reader.onloadend = () => {
+		// 		setSelectedImage(reader.result);
+		// 	};
+	
+		// 	if (file) {
+		// 		reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
+		// 	} else {
+		// 		setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
+		// 	}
+		// }
 
 	// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
@@ -401,51 +513,54 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		}
   };
 	
-  const [thumbnailSrc, setThumbnailSrc] = useState("");
+
+
+	const [isVisible, setIsVisible] = useState(false);
+	const handleCheck = () => {
+		setIsVisible(!isVisible);
+
+	}
   
-	const handleImageSelect = (event) => {
-	  const file = event.target.files[0];
-  
-	  if (file && file.type.startsWith("image/")) {
-		const reader = new FileReader();
-  
-		reader.onload = (e) => {
-		  setThumbnailSrc(e.target.result);
-		};
-  
-		reader.readAsDataURL(file);
-	  } else {
-		setThumbnailSrc("");
-	  }
-	};
-  
-	
-	
 
 
     return(
 			<MyFlowDiv>
 				     <div className="controlDiv">
+						 <BiArrowBacks onClick={goToMyPage}/>
         				<CloseButton onClick={onClose}/>
       				</div>
 				<MyFlowMenuName>
-					<p className="title">myFlow</p>
+					<p className="title">
+						my<span style={{ color: '#00B4D8' }}>F</span>low
+					</p>
 					<CreateBtn onClick={openFlowModal}>
 					<AiOutlinePlus style={{ color: 'grey' }}></AiOutlinePlus>
 				</CreateBtn>
 				</MyFlowMenuName>
 				
 				<MenuBar>
-				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange} />
+				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange}  />
 					<MenuButtonWrapper>
-					
-						<CheckButton>
+						<SearchImg />
+						<div>
+							<CSSTransition in={isVisible} timeout={200} classNames="fade" unmountOnExit>
+								<div>
+									<DiaryButton>
+										<DiaryImgSet />
+									</DiaryButton>
+									<DeleteButton>
+										<DeleteImg />
+									</DeleteButton>
+								</div>
+							</CSSTransition>
+						</div>
+						<CheckButton onClick={handleCheck}>
 							<CheckImg />
 						</CheckButton>
 
-						<SearchButton>
-							<SearchImg />
-						</SearchButton>
+				
+							
+				
 
 						<SortButton onClick={handleSort}>
 							{sort === "az" ? <SortAz /> : <SortZa />}
@@ -465,6 +580,9 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
                 content={item.content}
                 location={item.location}
 								date={item.date}
+								isVisible={isVisible}
+								
+								
               />
             ))}
           </FlowDiv>
@@ -474,6 +592,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
         close={closeFlowModal}
         header="Flow"
         type="y"
+				confirm={handleUpload}
       	>
         <textarea className="flowArea"
           value={flowModalText}
@@ -482,11 +601,14 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				
 				<FileBox>
 					<div className="filebox">
-						{thumbnailSrc !== "" && (
-								<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
-						)}
+							
+							{thumbnailSrc !== "" && (
+									<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
+							)}
 							<label for="file"><PictureImg /></label> 
-							<input type="file" onChange={handleImageSelect} className="fileSelect" id="file"/>
+							<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
+							
+					
 					</div>
 				</FileBox>
 				

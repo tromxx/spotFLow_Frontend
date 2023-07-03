@@ -180,7 +180,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         <Paragrph isActive={active} className='Statusmsg'>Hello my name is trom</Paragrph>
       </div>
       <div className='routeDiv'>
-        <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
+        <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{ color: '#00B4D8' }}>F</span>low</Menu>
         <Menu isActive={active} className='Diary'>Diary</Menu>
         <Menu isActive={active} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>

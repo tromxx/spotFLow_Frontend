@@ -1,6 +1,9 @@
 import React from "react";
 import { styled } from 'styled-components'
 import { SlLocationPin } from "react-icons/sl";
+import { useState } from "react";
+import { CSSTransition } from "react-transition-group";
+import "../components/Flowcss.css"
 
 const MyFlowContainerDiv = styled.div`
   width: 100%;
@@ -46,7 +49,7 @@ const ContentText = styled.p`
   font-family: var(--kfont);
   font-size: 12px;
   padding: 5px;
-  width: 235px;
+  width: 215px;
   height: 50px;
 `;
 
@@ -94,25 +97,55 @@ const FlowContainer = styled.div`
   margin-right: 10px;
 `;
 
-const MyFlowContainer = ({ img, time, content, location, date }) => {
-  return (
-    <FlowContainer>
-      <DateWrapper>
-          <Date>
-            {date}
-          </Date>
-        </DateWrapper>
-      <MyFlowContainerDiv>
-        <TnLnContentDiv>
-          <TimeandLocation>{time}  <Location />{location}</TimeandLocation>
-          <ContentText>{content}</ContentText>
-        </TnLnContentDiv>
-        
-        <Image src={img} alt="img" />
-        
-      </MyFlowContainerDiv>
+const FlowContainerWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  .checkBox {
+    position: absolute;
+    left: -30px;
+    top: 80px;
+    transition: 0.6s ease;
+    opacity: 1;
+  }
+`;
 
-    </FlowContainer>
+const MyFlowContainer = ({ img, time, content, location, date, isVisible }) => {
+  const [isChecked, setIsChecked] = useState(false);
+  return (
+    <FlowContainerWrapper>
+      <CSSTransition in={isVisible} timeout={200} classNames="fade" unmountOnExit>
+      <div>
+        
+          <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={() => setIsChecked(!isChecked)}
+          className="checkBox"
+          />
+        
+      
+      </div>
+      </CSSTransition>
+      <FlowContainer>
+        
+        <DateWrapper>
+            <Date>
+              {date}
+            </Date>
+          </DateWrapper>
+        <MyFlowContainerDiv>
+          <TnLnContentDiv>
+            <TimeandLocation>{time}  <Location />{location}</TimeandLocation>
+            <ContentText>{content}</ContentText>
+          </TnLnContentDiv>
+          
+          <Image src={img} alt="img" />
+          
+        </MyFlowContainerDiv>
+
+      </FlowContainer>
+    </FlowContainerWrapper>
   );
 };
 

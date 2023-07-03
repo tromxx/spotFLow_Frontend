@@ -64,7 +64,7 @@ const ModalStyle = styled.div`
   }
   .modal > section > main {
     padding: 0 16px;
-		height: 70%;
+		height: 75%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -77,7 +77,7 @@ const ModalStyle = styled.div`
     text-align: right;
   }
   .modal > section > footer button {
-    padding: 6px 12px;
+    padding: 0px 0px;
     color: white;
     background-color:#424242;
 		border: 1px solid #424242;

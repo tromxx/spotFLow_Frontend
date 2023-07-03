@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import firebase from "firebase/compat/app"
+import "firebase/compat/storage"
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBeCVBJffwWmZKthsES0jbR3pMw-RLOydU",
@@ -11,5 +12,5 @@ const firebaseConfig = {
   measurementId: "G-NG0FQ52HVF"
 };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+firebase.initializeApp(firebaseConfig);
+export const storage = firebase.storage();
