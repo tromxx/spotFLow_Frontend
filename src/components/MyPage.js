@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
-import DarkSetting from "../images/DarkSetting.png"
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
-import MyFlow from '../images/myFlow.png'
-import { useEffect } from 'react';
+import {BsCamera} from 'react-icons/bs'
+import { storage } from '../api/FIrebaseApi';
+
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`
@@ -37,27 +37,22 @@ const MyInfoDiv = styled.div`
     z-index: 5;
     float: left;
   }
-  .caption{
-    position: absolute;
-    border: 1px solid black;
-    margin-top: 15px;
-    width: 129px;
-    height: 129px;
-    text-align: center;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, .6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-  }
   .profileDiv{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-
+    .statusMsg{
+      border: ${props =>
+      props.isBorderVisible
+      ? '1px solid #d9d9d9' : '1px solid #d9d9d9'};
+      transition: 0.6s ease;
+      border-radius: 8px;
+      background-color: transparent;
+      box-sizing: border-box;
+    }
     textarea{
+      color: ${props => props.theme.textColor};
       resize: none;
       font-family: var(--kfont);
       width: 250px;
@@ -65,7 +60,7 @@ const MyInfoDiv = styled.div`
       margin: 0px;
       padding: 0px;
       background-color: transparent;
-      border: 1px solid black;
+      border: none;
       resize: none;
       outline: none;
       padding: 2px;
@@ -87,25 +82,42 @@ const MyInfoDiv = styled.div`
   }
 `;
 
+const Caption = styled.div`
+  position: absolute;
+  display: flex;
+  margin-top: 98px;
+  width: 123px;
+  height: 30px;
+  border-radius: 0 0 130px 130px;
+  background-color: rgba(0, 0, 0, .6);
+  z-index: 5;
+  display: ${({ isBorderVisible }) => (isBorderVisible ? 'block' : 'none')};
+  input{
+    display: none;
+  }
+`;
+
+
 const Paragrph = styled.p`
 transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
   &:hover{
     cursor: pointer;
   }
   &.NickName{
-    transition: transform 1.2s ease;
+    transition: transform 1.8s ease;
   }
   &.Following{
-    transition: transform 1.4s ease;
+    transition: transform 2.8s ease;
   }
   &.Statusmsg{
-    transition: transform 1.6s ease;
+    transition: transform 2.8s ease;
   }
 `
 const Menu = styled.h1`
   transform: ${({ isActive }) => `translateX(${isActive ? 0 : -200}%)`};
   &:hover {
     cursor: pointer;
+    color : var(--lightblue);
   }
   &.MyFlow {
     transition: transform 1.8s ease;
@@ -117,18 +129,6 @@ const Menu = styled.h1`
     transition: transform 2.2s ease;
   }
 `
-
-const InfoInput = styled.input`
-  width: 250px;
-  height: 40px;
-  border-radius: 8px;
-  transform: ${({ isActive }) => `translateX(${isActive ? -200 : 0}%)`};
-  &.password {
-    top: 420px;
-    left: 105px;
-    transition: transform 1.0 ease;
-  }
-`;
 
 // 톱니버튼 CSS
 const ControlButton = styled(RxGear)`
@@ -149,42 +149,74 @@ const CloseButton = styled(AiOutlineClose)`
     cursor: pointer;
     color: var(--lightblue);
   }
+  `;
+
+//프로파일 이미지 업로드 수정
+const CameraButton = styled(BsCamera)`
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  margin-left: 49px;
+  &:hover{
+    cursor: pointer;
+    color: var(--lightblue);
+  }
 `;
 
 const MyPage = ({ onClose, goToMyFlow }) => {
-  const [ThemeMode, setTheme] = useTheme();
+  const [ThemeMode, setTheme] = useTheme(); // black white 변경
   const [active, setIsActive] = useState(true);
-  const [isReadOnly, setIsReadOnly] = useState(true);
-  const [isBorderVisible, setIsBorderVisible] = useState(false);
+  const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
+  const [file, setFile] = useState(null); // firebase 필요한 파일 state 
+  const [url, setUrl] = useState(''); // firebase 에서 업로드한 url 경로 가죠오기
+  const imageInput = useRef();
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  console.log(active);
+  console.log(file);
 
   const handleClick = () => {
     setIsActive(!active);
+    setIsBorderVisible(!isBorderVisible);
   };
+
+  const onCLickImageUpload = () =>{
+    setFile(imageInput.current.click());
+  };
+  
 
   return (
     <MyInfoDiv>
       <div className="controlDiv">
-        <ControlButton onClick={handleClick} isClicked={active} />
+        <ControlButton onClick={handleClick} isActive={active} />
         <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
-        <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="" />
-        <div className='caption'>
-          <input type="file" />
-        </div>
+        <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="error" />
+        <Caption isBorderVisible={isBorderVisible}>
+          <input type="file" accept='image/gif, image/jpeg, image/png' ref = {imageInput}/>
+          <CameraButton  onClick={onCLickImageUpload}/>
+        </Caption>
         <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
           <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
           <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
         </div>
-        <Paragrph isActive={active} className='Statusmsg'>Hello my name is trom</Paragrph>
+        <div className='statusMsg' isBorderVisible={isBorderVisible}>
+          <textarea 
+            cols="20" 
+            rows="2" 
+            spellcheck="false"
+            readOnly={active}>
+            </textarea>
+        </div>
       </div>
       <div className='routeDiv'>
-        <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{ color: '#00B4D8' }}>F</span>low</Menu>
-        <Menu isActive={active} className='Diary'>Diary</Menu>
+        <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
+        <Menu onClick={()=>navigate("/diary")} isActive={active} className='Diary'>Diary</Menu>
         <Menu isActive={active} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
-      <div className='modifyInputDiv'></div>
     </MyInfoDiv>
   );
 };

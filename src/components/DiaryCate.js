@@ -15,17 +15,21 @@ const DiaryCatediv = styled.div`
     
 
   .container{
-    border-radius: 20px;
-    border: 5px solid black;
+    /* border-radius: 20px; */
+    border: 3px solid black;
     width: 100%;
     height: 73vh;
     display: grid;
     /* grid-template-columns: repeat(3, 1fr); */
     gap: 0px;
-    grid-auto-rows: minmax(250px, auto);
+    grid-auto-rows: minmax(260px, auto);
     grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
-    grid-gap: 10px;
+    grid-gap: 5px;
     overflow-y: scroll;
+    overflow-x: none;
+    margin-right: 10px;
+    /* background-color: black; */
+    
   
     /* @media (min-width:1000px) {
         grid-template-columns: 1fr 1fr ;
@@ -42,9 +46,13 @@ const DiaryCatediv = styled.div`
     width: 100%;
     height: 100%;
     /* margin: 30px; */
-    border: solid 1px black;
-    border-radius: 5px;
-    margin-left: 15px;
+    border: solid 5px black;
+    /* border-radius: 5px; */
+    margin-left: 0px;
+    overflow-x :auto;
+    
+    
+
     
 
   }

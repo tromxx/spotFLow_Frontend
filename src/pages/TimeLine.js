@@ -5,10 +5,10 @@ import HeaderBar from "../components/HeaderBarNavi";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
 import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDelete} from "react-icons/ai";
-import SearchBar from "../components/SearchBar";
+
 import {MdOutlineEditOff} from "react-icons/md";
 import {useTheme} from "../context/themeProvider";
-import MainSlider from "../components/Slider";
+
 import {Navigate, useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TimeLineModal from "../utils/TimeLineModal";
@@ -26,7 +26,6 @@ const ItemGrid = styled.div`
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
     grid-template-columns: 1fr 1fr;
-
 ` : `      
 `}
   }
@@ -48,10 +47,7 @@ const centerAlign = css`
   align-items: center;
 `;
 
-
-
 const CreatePost = styled.div`
-  
   position : fixed;
   top : 15%;
   background-color: white;
@@ -60,12 +56,8 @@ const CreatePost = styled.div`
   width: 35%;
   height: 500px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-
-
-
   border-radius: 15px;
   z-index: 100;
-
 
   @media (max-width: 1000px) {
     & {
@@ -77,7 +69,6 @@ const CreatePost = styled.div`
       width: 82%;
     }
   }
-
 
   .create-btns {
     ${centerAlign}
@@ -300,10 +291,10 @@ const Item = styled.div`
 
 
   position: relative;
-  background-color: white;
+  background-color: #FCF9F9;
   //width: 50%;
   height: 300px;
-
+    align-items:center;
     border-radius:5px;
     margin-left: 20px;
     margin-right: 20px;
@@ -364,7 +355,7 @@ const Item = styled.div`
         }
 
 
-        @media (max-width: 850px) {
+        @media (max-width: 844px) {
             & {
 		        width: auto;
                 height:190px;
@@ -380,11 +371,12 @@ const Item = styled.div`
             margin-top : 20px;
   
         } 
-    height: 160px;
+    height: 200px;
     flex-direction:row;
     display:flex; 
     @media (max-width: 850px) {
             & {
+
 		        width: auto;
 	        }
         }
@@ -417,17 +409,23 @@ const ItemImg = styled.div`
         height : 80%;
         width: 90%;
     ` : `
+
+        @media (max-width: 844px) {
+            & {
+		           width: 100%;
+                height:150px;
+                margin-left: 10px;
+	        }
+        }
           margin-left: 30px;
-           margin-bottom: 30px;
+           margin-bottom: 10px;
              margin-top: 10px;
-            height : 140px;
-            width: 30%;
+            height : 90%;
+            width: 40%;
 
             
     `}
 `
-
-
 const ItemContent = styled.div`
 
   ${centerAlign}
@@ -486,9 +484,6 @@ const fetchMoreData = () => {
 
       
     }, 1500);
-
-    
-
 };
 
 // 모달데이터 설정
@@ -524,10 +519,6 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
       document.removeEventListener("mousedown", clickOutside);
     };
   },[isModalOpen]);
-
-
-  
-
 
     // 뒤로가기
     const Navi = useNavigate();
@@ -565,7 +556,6 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     }
   }
 
-
   const deleteTimeLine = () => {
     if ((dummy.filter(i => !isClicked.includes(i.id)))) {
       setDummy(dummy.filter(i => !isClicked.includes(i.id)));
@@ -589,9 +579,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
   const toggleSwitch = () => {
     setIsSort(!isSort);
   }
-
-  
-
+ 
 // 시간 계산 함수
   let [diffHours,setDiffHours] = useState();
 
@@ -608,20 +596,47 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 }
 
 
+  // 게시물 작성하기 조건 로직 ref  
+    const titleRef = useRef();
+    const contentRef = useRef();
 
+    const CreatePostConfirm = () => {
+      if (titleRef.current.value.length < 2) {
+          titleRef.current.focus();
+          return;  
+      }
+      
+      if (contentRef.current.value.length < 5) {
+          contentRef.current.focus();
+          return;  
+      }
+      // 내용초기화 하고 모달창 닫기
+      setDummy([...dummy, {title: title, content: content, image: selectedImage}]);
+                    setContent("");
+                    setTitle("")
+                    setIsCreate(!isCreate);
+      }
 
-
+      // 게시물 취소할때 내용이 한글자도있으면 window.confirm 
+      const CreatePostCancle = () => {
+        if (titleRef.current.value.length >= 1 || contentRef.current.value.length >=1) {
+            if(window.confirm('작성중인 게시물을 취소 하시겠습니까 ?')) {
+                setIsCreate(!isCreate);
+            }
+        }  
+    }
 
 
 
   return (
     <>
-      <HeaderBar/>
+
+      <HeaderBar />
 
       <Container   theme={theme}>
         {isCreate &&
           <CreatePost >
-            <input style={{
+            <input ref={titleRef} style={{
               textAlign: "center",
               borderBottom: "1px solid silver",
               borderRadius: "0px",
@@ -629,7 +644,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
             }} placeholder="Typing the Title" onChange={e => {
               setTitle(e.target.value)
             }} type="text"/>
-            <textarea onChange={e => {
+            <textarea ref={contentRef} onChange={e => {
               setContent(e.target.value)
             }} name="" id="" cols="50" rows="30"></textarea>
             <div className="create-btns">
@@ -649,13 +664,14 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                   </ul>
                 </div>
               </div>
-              <button onClick={() => {
-                setDummy([...dummy, {title: title, content: content, image: selectedImage}]);
-                setContent("");
-                setTitle("")
-              }}>확인
-              </button>
-              <button onClick={() => setIsCreate(!isCreate)}>취소</button>
+             <div style={{width:"100%" ,flexDirection:"row"}}> 
+                  <button style={{width:"50%"}} onClick={() => {
+                    CreatePostConfirm();
+                    
+                  }}>확인
+                  </button>
+                  <button style={{width:"30%"}} onClick={() => CreatePostCancle()}>취소</button>
+              </div>
             </div>
 
           </CreatePost>
@@ -696,7 +712,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 
 
                  {/* 수정 버튼 없애버림 */}
-              {/* {!isCreate &&
+              {!isCreate &&
 
                 <CreateBtn onClick={() => {
                   setIsEdit(!isEdit)
@@ -709,7 +725,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                 </CreateBtn>
 
 
-              } */}
+              }
 
 
             </HeaderItemRight>
@@ -776,8 +792,6 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
         {/* <MainSlider name="Popular"/> */}
         </>
 
- 
-   
     );
             }
 
