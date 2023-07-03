@@ -1,8 +1,8 @@
 import React from 'react'
-import { useState , useRef, useEffect , forwardRef } from 'react';
+import { forwardRef } from 'react';
 import styled , {css , keyframes} from 'styled-components'
 import profile from '../images/default_avatar.png'
-import {useTheme} from "../context/themeProvider";
+
 
 const fadeIn = keyframes`
   0% {
@@ -29,18 +29,19 @@ const centerAlign = css`
 `;
 
 const Info = styled.div`
-    
+    //background-color : #FAFAF6;
      justify-content: space-evenly;
         flex: 7;
         ${centerAlign}
-        width: 92.5%;
+        width: 94.5%;
 
         flex-direction:row;
 `
 
 const Title = styled.div`
     padding:10px;
-    border: 1px solid silver;
+  background-color:#FCF9F9;
+  // border: 1px solid black;
     border-radius:5px;
     width: 91.5%;
     flex: 2;
@@ -50,8 +51,9 @@ const Title = styled.div`
 `
 
 const Content = styled.div`
-padding:10px;
-border: 1px solid silver;
+  background-color: #FCF9F9;
+  padding:10px;
+ // border: 1px solid black;
     border-radius:5px;
     width: 91.5%;
     flex: 30;
@@ -60,6 +62,7 @@ border: 1px solid silver;
 `
 
 const Container = styled.div`
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     ${centerAlign}
     animation: ${fadeIn} 0.15s linear;
     position: fixed;
@@ -67,7 +70,7 @@ const Container = styled.div`
     left:25%;
     width: 50vw;
     height: 80vh;
-    border: 1px solid silver ;
+  //  border: 1px solid silver ;
     border-radius: 5px;
     background-color: white ;
     background-color: ${(props) => props.theme.timeLineBgColor};
