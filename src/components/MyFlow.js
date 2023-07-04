@@ -16,6 +16,7 @@ import { BsCheckCircle, BsCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
 import { storage } from "../api/FirebaseApi";
+import MyFlowDetailModal from "../utils/MyFlowDetailModal";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -456,29 +457,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	  }
 	};
 
-
-		// const fileInput = useRef();
-		// const handleOpenImageRef = () => {
-		// 	fileInput.current.click();
-		// }
-	
-		// const [selectedImage, setSelectedImage] = useState("");
-	
-		// const handleUploadImage = (e) => {
-		// 	const file = e.target.files[0];
-		// 	const reader = new FileReader();
-	
-		// 	reader.onloadend = () => {
-		// 		setSelectedImage(reader.result);
-		// 	};
-	
-		// 	if (file) {
-		// 		reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
-		// 	} else {
-		// 		setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
-		// 	}
-		// }
-
 	// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
     setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
@@ -513,15 +491,38 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		}
   };
 	
-
-
 	const [isVisible, setIsVisible] = useState(false);
 	const handleCheck = () => {
 		setIsVisible(!isVisible);
 
 	}
   
+	// 컨테이너를 클릭했을 때 모달창에 상세정보를 띄워주도록
+	const [clicked, setClicked] = useState("");
 
+	const handleContainerClick = (event, id) => {
+		const clickedId = id;
+		setClicked(clickedId);
+
+		// setIsDetailModalOpen(true);
+		console.log(clickedId)
+	};
+
+	const handleDetailClose = () => {
+		setClicked("");
+		setIsDetailModalOpen(false);
+	}
+
+	const containers = document.getElementsByClassName("myFlowContainer");
+
+// 각 컨테이너에 클릭 이벤트 리스너를 추가합니다.
+	for (const container of containers) {
+  	container.addEventListener('click', handleContainerClick);
+	}
+
+// 플로우디테일모달에 들어갈 데이터를 세팅하는
+	const [modalData, setModalData] = useState("");
+	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
     return(
 			<MyFlowDiv>
@@ -557,11 +558,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 						<CheckButton onClick={handleCheck}>
 							<CheckImg />
 						</CheckButton>
-
-				
-							
-				
-
 						<SortButton onClick={handleSort}>
 							{sort === "az" ? <SortAz /> : <SortZa />}
 						</SortButton>
@@ -569,20 +565,17 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				</MenuBar>
 				<ScrollBar >
           <FlowDiv>
-					
             {sortedFlow.map((item) => (
               <MyFlowContainer
 								className="myFlowContainer"
                 key={item.id}
-                id={item.id}
                 img={item.src}
                 time={item.time}
                 content={item.content}
                 location={item.location}
 								date={item.date}
 								isVisible={isVisible}
-								
-								
+								onClick={(e) => handleContainerClick(e, item.id)}
               />
             ))}
           </FlowDiv>
@@ -598,24 +591,19 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
           value={flowModalText}
           onChange={(e) => setFlowModalText(e.target.value)}
         />
-				
 				<FileBox>
 					<div className="filebox">
-							
 							{thumbnailSrc !== "" && (
 									<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
 							)}
 							<label for="file"><PictureImg /></label> 
 							<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
-							
-					
 					</div>
 				</FileBox>
-				
-
-
     </FlowModal>
+		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
+		<MyFlowDetailModal open={isDetailModalOpen} ></MyFlowDetailModal>
 	</MyFlowDiv>
     );
 };
