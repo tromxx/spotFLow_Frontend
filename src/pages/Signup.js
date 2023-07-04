@@ -119,11 +119,11 @@ const Container = styled.div`
     width: 50vw;
     height: 50px;
     color: white;
-    background-color: #395144;
+    background-color: #00B4D8;
     font-size: 15px;
     font-weight: 400;
-    border-radius: 18px;
-    border: #395144;
+    border-radius: 8px;
+    border: #00B4D8;
     font-weight: 700;
     cursor: pointer;
   }
@@ -142,7 +142,7 @@ const Container = styled.div`
     background-color: #999;
     font-size: 15px;
     font-weight: 400;
-    border-radius: 18px;
+    border-radius: 8px;
     border: #999;
     font-weight: 700;
   }
@@ -160,7 +160,7 @@ const Container = styled.div`
     background-color: #999;
     font-size: 13px;
     font-weight: 400;
-    border-radius: 18px;
+    border-radius: 8px;
     border: #999;
   }
   
@@ -186,7 +186,7 @@ const Input = styled.input`
   padding: .8em .5em; /* 원하는 여백 설정, 상하단 여백으로 높이를 조절 */
   font-family: inherit; /* 폰트 상속 */
   border: 1px solid #999;
-  border-radius: 18px; /* iSO 둥근모서리 제거 */
+  border-radius: 8px; /* iSO 둥근모서리 제거 */
   outline-style: none; /* 포커스시 발생하는 효과 제거를 원한다면 */
   background-color: ${props=>props.theme.divColor === '#d'};
   
@@ -232,6 +232,9 @@ const SignUp = () => {
 
     const handleCheckboxChange = (event) => {
         setIsPolicyChecked(event.target.checked);
+      };
+
+    const handleCheckboxChange2 = (event) => {
         setIsLocationPolicyChecked(event.target.checked);
       };
   
@@ -367,7 +370,7 @@ const SignUp = () => {
                     </LocationPolicy>
                 </div>
                 <label for="myCheckbox">스팟플로우 위치기반서비스 이용약관에 동의합니다(필수)</label>
-                <input type="checkbox" id="myCheckbox" checked={isLocationPolicyChecked} onChange={handleCheckboxChange}/>
+                <input type="checkbox" id="myCheckbox" checked={isLocationPolicyChecked} onChange={handleCheckboxChange2}/>
                 
         </div>
         <div className="InfoNotice">

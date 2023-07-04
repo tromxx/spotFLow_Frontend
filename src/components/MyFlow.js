@@ -49,6 +49,7 @@ const MyFlowDiv = styled.div`
 			border: none;
 			border-radius: 5px;
 			font-family: var(--kfont);
+			color: ${props=>props.theme.textColor};
 
 			@media(max-width: 768px) {
     		width: 95%;
@@ -503,6 +504,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	const handleContainerClick = (event, id) => {
 		const clickedId = id;
 		setClicked(clickedId);
+		
 
 		// setIsDetailModalOpen(true);
 		console.log(clickedId)
