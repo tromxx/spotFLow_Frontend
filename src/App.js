@@ -11,7 +11,7 @@ import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiarySwiper";
-
+import DiaryCreate from './pages/DiaryCreate';
 
 
 function App() {
@@ -44,6 +44,10 @@ function App() {
             <Route path="/diaryMypage" element={<>
               <HeaderBarNavi />
               <DiaryMypage />
+            </>} />
+            <Route path="/diaryCreate" element={<>
+              <HeaderBarNavi />
+              <DiaryCreate />
             </>} />
             <Route path="/timeline" element={<TimeLine />} />
             <Route path="/diary/detail" element={
