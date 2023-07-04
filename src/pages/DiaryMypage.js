@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import MyDiary from "../components/MyDiary";
-import SearchBar from "../components/SearchBar/DiarySearchBar";
+import SearchBar from "../components/SearchBar/DiarySearchBar2";
 import { BsPeople } from "react-icons/bs";
 import avatar from "../images/default_avatar.png"
 import { BsTrash } from "react-icons/bs";
@@ -27,6 +27,9 @@ const Container = styled.div`
         justify-content: center;
         align-items: center;
         justify-content: space-between;
+        @media (max-width: 400px) {
+            width: 90vw;
+        }
         }
         .namebarleft{
             width: 75%;
@@ -44,16 +47,12 @@ const Container = styled.div`
         }
         
         .menu{
-            width: 75%;
+            /* width: 75%; */
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* padding: 50px; */
-            margin-top: 20px;
-            /* margin-left: 50px; */
-            
-            /* margin-right: 30px;   */
+            margin-left: auto;
         }
 
         .id{
@@ -72,13 +71,30 @@ const Container = styled.div`
    //     margin-right: 20px;
     }
 
-    .searchBar1{
+    .searchBarline{
         display: flex;
-        /* justify-content: center; */
+        justify-content: space-between;
         align-items:center;
         width: 100%;
         height: 100%;
     }
+    .cancle{
+        border: solid 1px #00b4d8; 
+        background-color: white;
+        color: black;
+        width: 70px;
+        height: 40px;
+        font-size: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        font-family: 'Black Han Sans', sans-serif;
+
+        
+        /* display: flex;
+        justify-content: center;
+        text-align: center; */
+        }
+
         
     .list{
         /* margin: 80%; */
@@ -107,6 +123,10 @@ const Container = styled.div`
         justify-content: flex-end;
         /* margin-right: 20px; */
     }
+    /* .Search-bar {
+        padding: 0;
+        margin-left: 0;
+    } */
     `;
 
 const DiaryMypagediv = styled.div`
@@ -119,7 +139,13 @@ const DiaryMypagediv = styled.div`
     /* background-color: beige; */
     margin-top: 20px;
     border: solid 3px black;
-    border-radius: 10px;
+    border-radius: 20px;
+    @media (max-width: 400px) {
+        width: 90vw;
+        border: solid 1px black;
+    }
+
+
 `;
 
     const DiaryMypage = () => {
@@ -146,15 +172,42 @@ const DiaryMypagediv = styled.div`
                 
                  </div>
                  <div className="namebarright">
-                         <div className="menu">
-                                <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                {/* <BsPeople className="people"/> */}
-                                <BsTrash className="trash" onClick={convertCheckBox}/>
-                        </div>
+                         {/* <div className="menu">
+                                {isCheckBox ? (
+                                    <>
+                                        <button onClick={convertCheckBox}>취소</button>
+                                        <button>삭제</button>
+                                    </>)
+                                : (
+                                    <>
+                                        <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
+                                        <BsTrash className="trash" onClick={convertCheckBox}/>
+                                    </>)
+                                }
+                        </div> */}
                     </div>
                 </div> 
-                <div className="searchBar1">
+                <div className="searchBarline">
                     <SearchBar/>
+                    <div className="menu">
+                                {isCheckBox ? (
+                                    <>
+                                        <button 
+                                            className="cancle" 
+                                            style={{marginRight: "10px"}}
+                                            onClick={convertCheckBox}>Cancle</button>
+                                        <button 
+                                            className="cancle"
+                                            style={{border:"solid 1px #f24e1e", color:"#f24e1e"}}
+                                            >Delete</button>
+                                    </>)
+                                : (
+                                    <>
+                                        <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
+                                        <BsTrash className="trash" onClick={convertCheckBox}/>
+                                    </>)
+                                }
+                        </div>
                  </div>   
             </header>
             <body>

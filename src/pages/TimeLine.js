@@ -13,6 +13,9 @@ import {Navigate, useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TimeLineModal from "../utils/TimeLineModal";
 import dummy2 from "../dataSet/TimeLineData";
+import LoadingSpinner from "../components/LoadingSpinner";
+import FlowModal from "../utils/FlowModal";
+import { type } from "@testing-library/user-event/dist/type";
 
 const ItemGrid = styled.div`
   display: grid;
@@ -235,7 +238,6 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
-
     width: 100%;
     height: auto;
 
@@ -473,17 +475,23 @@ const TimeLine = () => {
 
 
     // 무한스크롤 가동 함수 콜백함수로 1.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
+    // 로딩상태변수
+    const [isLoading, setIsLoading] = useState(false);
 const fetchMoreData = () => {
+ 
     setTimeout(() => {
+     
         if (items.length >= dummy.length ) {
             setHasMore(false);
             return;
         }
+        setIsLoading(true);
         const moreItems = dummy.slice(items.length, items.length + 2);
         setItems(prevItems => [...prevItems, ...moreItems]);
 
       
     }, 1500);
+    setIsLoading(!isLoading);
 };
 
 // 모달데이터 설정
@@ -617,13 +625,13 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                     setIsCreate(!isCreate);
       }
 
+      const [isCancel,setIsCancle] = useState(false);
       // 게시물 취소할때 내용이 한글자도있으면 window.confirm 
       const CreatePostCancle = () => {
+  
         if (titleRef.current.value.length >= 1 || contentRef.current.value.length >=1) {
-            if(window.confirm('작성중인 게시물을 취소 하시겠습니까 ?')) {
-                setIsCreate(!isCreate);
-            }
-        }  
+            setIsCancle(!isCancel);
+        }  else setIsCreate(!isCreate);
     }
 
 
@@ -748,7 +756,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
             dataLength={items.length}
             next={fetchMoreData}
             hasMore={hasMore}
-             loader={<div>loading...</div>}
+            loader={isLoading ? <LoadingSpinner/> : null}
             endMessage={
               <p style={{textAlign: "center"}}>
                 {/* <b>끝페이지</b> */}
@@ -787,6 +795,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                   </Main>
                     {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
                     <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
+                    <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate)}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
         </Container>
 
         {/* <MainSlider name="Popular"/> */}
