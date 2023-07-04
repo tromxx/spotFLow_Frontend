@@ -110,8 +110,14 @@ const FlowContainerWrapper = styled.div`
   }
 `;
 
-const MyFlowContainer = ({ img, time, content, location, date, isVisible }) => {
+const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, id, onClick }) => {
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleClick = () => {
+    onClick(id);
+  };
+
+
   return (
     <FlowContainerWrapper>
       <CSSTransition in={isVisible} timeout={200} classNames="fade" unmountOnExit>
@@ -127,7 +133,7 @@ const MyFlowContainer = ({ img, time, content, location, date, isVisible }) => {
       
       </div>
       </CSSTransition>
-      <FlowContainer>
+      <FlowContainer onClick={handleClick}>
         
         <DateWrapper>
             <Date>

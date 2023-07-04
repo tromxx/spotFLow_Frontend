@@ -6,7 +6,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
-import { storage } from '../api/FIrebaseApi';
+import { storage } from '../api/FirebaseApi';
 
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중

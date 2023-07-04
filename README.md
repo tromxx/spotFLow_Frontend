@@ -14,6 +14,7 @@
   <li> yarn add react-transition-group </li>
   <li> yarn add react-infinite-scroll-component </li>
   <li> yarn add swiper </li>
+  <li> yarn add firebase </li>
 </ul>  
  
 <h1>Rules</h1>

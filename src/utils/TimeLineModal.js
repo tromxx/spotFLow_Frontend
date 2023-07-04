@@ -26,6 +26,7 @@ const centerAlign = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    
 `;
 
 const Info = styled.div`
@@ -34,7 +35,7 @@ const Info = styled.div`
         flex: 7;
         ${centerAlign}
         width: 94.5%;
-
+        
         flex-direction:row;
 `
 
@@ -62,6 +63,7 @@ const Content = styled.div`
 `
 
 const Container = styled.div`
+    
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     ${centerAlign}
     animation: ${fadeIn} 0.15s linear;
@@ -98,13 +100,17 @@ const Container = styled.div`
     }
 `;
 
-const TimeLineModal =  forwardRef(({isOpen,closeModal, setIsModalOpen, modalData,diffHours },node)=> {
+
+
+const TimeLineModal =  forwardRef(({isOpen, closeModal, setIsModalOpen, modalData,diffHours },node)=> {
    
 
     
     
 
   return (
+
+    
     <Container ref={node} isOpen={isOpen} closeModal={closeModal}>
     
         <div  className='profile'>
@@ -127,6 +133,7 @@ const TimeLineModal =  forwardRef(({isOpen,closeModal, setIsModalOpen, modalData
         </div>
 
     </Container>
+    
   )
 });
 
