@@ -92,7 +92,7 @@ const SlickItems = styled.div`
 
     img {
         /* max-width: 250px */
-        width: 180px;
+        width: 190px;
         height: 120px;
         vertical-align: top;
     }
