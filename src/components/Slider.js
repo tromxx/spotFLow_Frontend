@@ -3,8 +3,10 @@ import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
 import { Navigate, useNavigate } from 'react-router-dom';
-//import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+// import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import DiaryCategory from '../pages/DiaryCategory';
+
+
 
 
 
@@ -21,6 +23,7 @@ const Sliderheader = styled.div`
      .left {
         margin: 30px;
         width: 50%;
+        font-family: 'Black Han Sans', sans-serif;
      }
 
      .right {
@@ -32,6 +35,7 @@ const Sliderheader = styled.div`
             color: gray;
             font-weight: bold;
         }
+        font-family: 'Black Han Sans', sans-serif;
      }
 `;
 
@@ -88,7 +92,7 @@ const SlickItems = styled.div`
 
     img {
         /* max-width: 250px */
-        width: 180px;
+        width: 190px;
         height: 120px;
         vertical-align: top;
     }
