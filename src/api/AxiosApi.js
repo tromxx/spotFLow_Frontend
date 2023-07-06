@@ -35,7 +35,7 @@ const AxiosApi = {
 	// 닉네임 중복 조회
 
 	memberNickname: async(nickname) => {
-			return await axios.get(Backend + `/nickname?nickname=${nickname}`);
+			return await axios.get(Backend + `/    nickname?nickname=${nickname}`);
 	},
 
 	// 회원조회 
