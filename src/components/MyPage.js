@@ -6,12 +6,9 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
-<<<<<<< HEAD
 import ProfileData from '../dataSet/ProfileData';
-=======
 import { storage } from '../api/FirebaseApi';
 
->>>>>>> ae5cfad0351deb6a14a97caf5a637aac683ef7bb
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`
