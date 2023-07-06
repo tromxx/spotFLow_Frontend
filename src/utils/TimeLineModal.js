@@ -123,9 +123,9 @@ const TimeLineModal =  forwardRef(({isOpen, closeModal, setIsModalOpen, modalDat
                     </div>
                 </Info>
 
-                <Title>
+                {/* <Title>
                     {modalData.title}
-                </Title>
+                </Title> */}
 
                 <Content>
                     {modalData.content}
