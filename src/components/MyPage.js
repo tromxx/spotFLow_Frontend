@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
+import ProfileData from '../dataSet/ProfileData';
 import { storage } from '../api/FirebaseApi';
 
 
@@ -35,22 +36,13 @@ const MyInfoDiv = styled.div`
     height: 130px;
     margin-top: 15px;
     z-index: 5;
-    float: left;
+    text-align: center;
   }
   .profileDiv{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    .statusMsg{
-      border: ${props =>
-      props.isBorderVisible
-      ? '1px solid #d9d9d9' : '1px solid #d9d9d9'};
-      transition: 0.6s ease;
-      border-radius: 8px;
-      background-color: transparent;
-      box-sizing: border-box;
-    }
     textarea{
       color: ${props => props.theme.textColor};
       resize: none;
@@ -95,6 +87,14 @@ const Caption = styled.div`
   input{
     display: none;
   }
+`;
+
+const Statusmsg = styled.div`
+  border: ${({ isBorderVisible }) => (isBorderVisible ? '1px solid gray' : 'none')};
+  transition: 0.6s ease;
+  border-radius: 8px;
+  background-color: transparent;
+  box-sizing: border-box;
 `;
 
 
@@ -163,28 +163,30 @@ const CameraButton = styled(BsCamera)`
   }
 `;
 
+
 const MyPage = ({ onClose, goToMyFlow }) => {
   const [ThemeMode, setTheme] = useTheme(); // black white 변경
-  const [active, setIsActive] = useState(true);
+  const [active, setIsActive] = useState(true); //정부 수정시 
   const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
-  const [file, setFile] = useState(null); // firebase 필요한 파일 state 
-  const [url, setUrl] = useState(''); // firebase 에서 업로드한 url 경로 가죠오기
-  const imageInput = useRef();
+  const [image, setImage] = useState("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMTdfMzUg/MDAxNjM0NDAzMDA2ODMy.GHw5PZcGfKmsLaDNHB0dx4pyfEpAkrjykogrswNUgQ4g.Plyxj3MecKqu5GD4Ci2Fi88WHPaZDeq4NqQwppwLxC8g.PNG.rpgrr123/1c8058f087fec5fd9da8aaa66db0eb1ac16a9cc711e0c50dd8f5ccf86e0a43555012746e984f741b26a1035bcc8a4b868ce41c5b890559368b10c0568f11c5c9481dbc596144bb3999cc2dcbb2af0400c1301e4ecab63758036a2afc4830aececf2ad6402c8938d910c4c8ebed4af447.png?type=w800");
+  const [status , setStatus] = useState("tesing")
   const navigate = useNavigate();
-  const fileInputRef = useRef(null);
-
-  console.log(active);
-  console.log(file);
-
+  const [MyPageData, setMyPageData] = useState(ProfileData);
+  
+  console.log(MyPageData)
+  
   const handleClick = () => {
     setIsActive(!active);
     setIsBorderVisible(!isBorderVisible);
-  };
-
-  const onCLickImageUpload = () =>{
-    setFile(imageInput.current.click());
+    setStatus("");
   };
   
+  const handleStatusMsg = (event) =>{
+    setStatus(event.target.value);
+  }
+
+
+
 
   return (
     <MyInfoDiv>
@@ -193,24 +195,26 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
-        <img src="https://img.freepik.com/premium-psd/cute-dog-3d-illustration_541652-270.jpg" alt="error" />
+        <img src={image} alt="" />
         <Caption isBorderVisible={isBorderVisible}>
-          <input type="file" accept='image/gif, image/jpeg, image/png' ref = {imageInput}/>
-          <CameraButton  onClick={onCLickImageUpload}/>
+          <input type="file" accept='image/*' />
+          <CameraButton/>
         </Caption>
         <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
           <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
           <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
         </div>
-        <div className='statusMsg' isBorderVisible={isBorderVisible}>
-          <textarea 
-            cols="20" 
-            rows="2" 
-            spellcheck="false"
-            readOnly={active}>
-            </textarea>
-        </div>
+        <Statusmsg isBorderVisible={isBorderVisible}>
+        <textarea
+          cols="20"
+          rows="2"
+          value={status}
+          spellCheck="false"
+          onChange={handleStatusMsg}
+          readOnly={active}
+        ></textarea>
+        </Statusmsg>
       </div>
       <div className='routeDiv'>
         <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>

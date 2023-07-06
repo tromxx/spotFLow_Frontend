@@ -149,7 +149,7 @@ const DiaryModal = ({setIsCreate}) => {
                         </div>
 
                         <div className='right'>
-                            <button>취소</button>
+                            <button onClick={()=> setIsCreate(false)} >취소</button>
                             <button onClick={handleButtonClick}>완료</button>
                         </div>
                     

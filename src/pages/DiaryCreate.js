@@ -6,7 +6,7 @@ import profile from '../images/default_avatar.png'
 import { AiOutlinePlus} from "react-icons/ai";
 import {MdCancel,MdPostAdd} from "react-icons/md";
 import { useState , useRef } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const centerAlign = css`
@@ -228,7 +228,7 @@ const Container = styled.div`
 `
 
 function DiaryCreate() {
-
+    const navi = useNavigate();
     const [isCreate,setIsCreate] = useState(false);
 
     const [timeline,setTimeLine] = useState([]);
@@ -267,7 +267,8 @@ function DiaryCreate() {
             content: text.current.value
         };
         setDiaryPost(newDiaryPost);
-        alert("제목:"+newDiaryPost.title+"내용:"+newDiaryPost.content+newDiaryPost.image);
+        alert("제목:"+newDiaryPost.title+"내용:"+newDiaryPost.content+"이미지:"+newDiaryPost.image);
+        navi("/diary");
     }
 
     const handleCreate = (newItems) => {

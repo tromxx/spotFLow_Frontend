@@ -8,8 +8,8 @@ import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDe
 
 import {MdOutlineEditOff} from "react-icons/md";
 import {useTheme} from "../context/themeProvider";
-
-import {Navigate, useNavigate} from "react-router-dom";
+import default_avatar from '../images/default_avatar.png'
+import { useNavigate} from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TimeLineModal from "../utils/TimeLineModal";
 import dummy2 from "../dataSet/TimeLineData";
@@ -130,7 +130,7 @@ const CreatePost = styled.div`
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.timeLineBgColor};
-  background-color:#F9F9F9;
+  background-color:white;
   textarea {
     appearance: none; /* 기본 브라우저 스타일 제거 */
     outline: none; /* 아웃라인 제거 */
@@ -170,7 +170,7 @@ const Header = styled.div`
   justify-content: start;
   flex-wrap: wrap;
   
-  background-color: ${(props) => props.theme.timeLineHederBgColor};
+  background-color: white;
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -238,6 +238,7 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
+
     width: 100%;
     height: auto;
 
@@ -289,9 +290,16 @@ const Main = styled.div`
 
 
 const Item = styled.div`
+    transition: all 0.5s ease;
+    .item-header {
+      ${centerAlign}
+      justify-content:flex-start;
+      height: 15%;
+      width: 100%;
+
+      background-color: white;
+    }
   
-
-
   position: relative;
   background-color: #FCF9F9;
   //width: 50%;
@@ -373,8 +381,8 @@ const Item = styled.div`
             margin-top : 20px;
   
         } 
-    height: 200px;
-    flex-direction:row;
+    height: 500px;
+    flex-direction:column;
     display:flex; 
     @media (max-width: 850px) {
             & {
@@ -419,11 +427,11 @@ const ItemImg = styled.div`
                 margin-left: 10px;
 	        }
         }
-          margin-left: 30px;
+          margin-left: 0px;
            margin-bottom: 10px;
-             margin-top: 10px;
+         //    margin-top: 10px;
             height : 90%;
-            width: 40%;
+            width: 100%;
 
             
     `}
@@ -692,9 +700,13 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
               }} style={{borderRadius: "15px"}}>
                 <TfiArrowLeft style={{fontSize: "20px"}}></TfiArrowLeft>
               </CreateBtn>
-
+              <div style={{width: "70%", position: "relative"}}>
+            <input type="text" className="Search-bar"
+            /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
+            
+          </div>
             </HeaderItemLeft>
-
+            
             <HeaderItemRight>
               {isSort ?
                 <CreateBtn>
@@ -707,11 +719,11 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                 </CreateBtn>
 
               }
-              <CreateBtn onClick={() => {
+              {/* <CreateBtn onClick={() => {
                 setIsCreate(!isCreate)
               }}>
                 <AiOutlinePlus></AiOutlinePlus>
-              </CreateBtn>
+              </CreateBtn> */}
 
 
               {/* <CreateBtn onClick={deleteTimeLine}>
@@ -720,7 +732,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 
 
                  {/* 수정 버튼 없애버림 */}
-              {!isCreate &&
+              {/* {!isCreate &&
 
                 <CreateBtn onClick={() => {
                   setIsEdit(!isEdit)
@@ -733,17 +745,13 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                 </CreateBtn>
 
 
-              }
+              } */}
 
 
             </HeaderItemRight>
 
           </HeaderList>
-          <div style={{width: "70%", position: "relative"}}>
-            <input type="text" className="Search-bar"
-            /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
-            
-          </div>
+          
 
 
             </Header>
@@ -767,7 +775,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
             <ItemGrid isSort={isSort}>
               {
                 items.map((e) =>
-
+                  
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         hours(e);
@@ -781,12 +789,17 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                         setIsClicked(...isClicked, e.id)
                       }} className="editBtn"></CreateBtn>
                       : <></>}
-                    <ItemImg isSort={isSort} url={e.image}></ItemImg>
-                    <ItemContent isSort={isSort}>
+                      <div className="item-header">
+                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={e.profile || default_avatar} alt="" />
+                          <div>{e.name}</div>
+                          <div style={{fontSize:"12px", position:"absolute",right:"0"}}> {e.view} view</div>
+                      </div>
+                    <ItemImg  isSort={isSort} url={e.image}></ItemImg>
+                    {/* <ItemContent isSort={isSort}>
                       <div className="title">{e.title}</div>
                       {isSort ? <></> : <div className="content">{e.content}</div>}
 
-                    </ItemContent>
+                    </ItemContent> */}
                   </Item>
                 )
                 }
