@@ -5,7 +5,7 @@ import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
 import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
 import { AiOutlineClose } from 'react-icons/ai';
@@ -17,6 +17,10 @@ import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
 import { storage } from "../api/FirebaseApi";
 import MyFlowDetailModal from "../utils/MyFlowDetailModal";
+import MyFlowApi from "../api/MyFlowApi";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
+import useCurrentLocation from "../utils/Location";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -380,6 +384,9 @@ const MenuButtonWrapper = styled.div`
 `;
 const MyFlow = ({ onClose, goToMyPage }) =>{
 
+	const context = useContext(UserContext);
+	const {email, nickname} = context;
+
 	const [flow, setFlow] = useState(FlowData); // 플로우 더미데이터
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
 	const [searchValue, setSearchValue] = useState(""); // 검색창 인풋창 밸류
@@ -395,6 +402,12 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 			정말 닫으시겠습니까?
 		</>
 	);
+
+	// 유저 위치 찾기
+	const { location, error, getCurrentLocation } = useCurrentLocation();
+	const handleLocation = () => {
+		getCurrentLocation();
+	}
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -430,7 +443,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 					setUrl(url);
 			
 			// 글 DB에 올리는 부분 구현 필요
-
+			MyFlowApi.newFlow(email,location.latitude, location.longitude, flowModalText, url, )
 
 			setFlowModalOpen(false);
 
@@ -471,7 +484,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
   };
 
 	// 플로우 검색 기능 구현
-	
 	const handleSearch = (searchQuery) => {
 			const filteredFlow = FlowData.filter(
 				(item) =>
@@ -526,6 +538,8 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	for (const container of containers) {
   	container.addEventListener('click', handleContainerClick);
 	}
+
+
 
 
     return(
