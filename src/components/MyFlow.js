@@ -499,14 +499,19 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	}
   
 	// 컨테이너를 클릭했을 때 모달창에 상세정보를 띄워주도록
+	// 플로우디테일모달에 들어갈 데이터를 세팅하는
+	const [modalData, setModalData] = useState("");
+	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
 	const [clicked, setClicked] = useState("");
 
 	const handleContainerClick = (event, id) => {
+		setIsDetailModalOpen(true);
+		console.log(isDetailModalOpen);
 		const clickedId = id;
 		setClicked(clickedId);
 		
-
-		// setIsDetailModalOpen(true);
+		
 		console.log(clickedId)
 	};
 
@@ -522,9 +527,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
   	container.addEventListener('click', handleContainerClick);
 	}
 
-// 플로우디테일모달에 들어갈 데이터를 세팅하는
-	const [modalData, setModalData] = useState("");
-	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
     return(
 			<MyFlowDiv>
@@ -605,7 +607,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
     </FlowModal>
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
-		<MyFlowDetailModal open={isDetailModalOpen} ></MyFlowDetailModal>
+		<MyFlowDetailModal open={isDetailModalOpen} close={handleDetailClose} ></MyFlowDetailModal>
 	</MyFlowDiv>
     );
 };
