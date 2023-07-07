@@ -21,25 +21,31 @@ const useCurrentLocation = (options = {}) => {
     setError(error.message);
   };
 
+  useEffect(() => {
+    const { geolocation } = navigator;
+
+    // 사용된 브라우저에서 지리적 위치(Geolocation)가 정의되지 않은 경우 오류로 처리합니다.
+    if (!geolocation) {
+      setError("Geolocation is not supported.");
+      return;
+    }
+
+    // Geolocation API 호출
+    geolocation.getCurrentPosition(handleSuccess, handleError, options);
+  }, [options]);
+
   const getCurrentLocation = () => {
     const { geolocation } = navigator;
 
+    if (!geolocation) {
+      setError("Geolocation is not supported.");
+      return;
+    }
 
-    // 사용된 브라우저에서 지리적 위치(Geolocation)가 정의되지 않은 경우 오류로 처리합니다.
-    const getCurrentLocation = () => {
-      const { geolocation } = navigator;
-  
-      if (!geolocation) {
-        setError("위치를 찾을 수 없습니다.");
-        return;
-      }
-  
-      geolocation.getCurrentPosition(handleSuccess, handleError, options);
-    };
-  
-    return { location, error, getCurrentLocation };
+    geolocation.getCurrentPosition(handleSuccess, handleError, options);
   };
+
+  return { location, error, getCurrentLocation };
 };
-  
 
 export default useCurrentLocation;
