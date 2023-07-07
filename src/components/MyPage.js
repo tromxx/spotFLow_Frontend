@@ -7,7 +7,7 @@ import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import ProfileData from '../dataSet/ProfileData';
-import { storage } from '../api/FirebaseApi';
+import { storage } from '../api/FIrebaseApi';
 
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
