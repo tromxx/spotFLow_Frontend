@@ -1,6 +1,6 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
 import MyFlow from '../components/MyFlow'
 import SlideDiv from '../components/SlideDiv'

@@ -7,13 +7,9 @@ import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import ProfileData from '../dataSet/ProfileData';
-<<<<<<< HEAD
-=======
-import { storage } from '../api/FirebaseApi';
 
->>>>>>> 2a151ec5102108f6577bacc30cfa6fc372a733d5
 
-//SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
+//SideDiv CSS 컴포넌트로 고정 값으로 사용할 고민중
 const MyInfoDiv = styled.div`
   width: 390px;
   height: 93vh;
@@ -25,13 +21,12 @@ const MyInfoDiv = styled.div`
   background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
   border: ${props=>props.theme.borderColor};
-  margin-top: 7vh;
   font-family: var(--efont);
   transition: 0.6s ease;
   .controlDiv{
-    margin-top: 10px;
+    margin-top: 15px;
     display: flex;
-    gap: 290px;
+    gap: 250px;
   }
   img{
     border-radius: 50%;
@@ -137,6 +132,7 @@ const Menu = styled.h1`
 const ControlButton = styled(RxGear)`
   width: 30px;
   height: 30px;
+  color: var(--grey);
   transition: transform 0.7s ease;
   transform: ${({isActive}) => (isActive ? 'rotate(120deg)' : 'rotate(5deg)')};
   &:hover{
@@ -148,6 +144,7 @@ const ControlButton = styled(RxGear)`
 const CloseButton = styled(AiOutlineClose)`
   width: 35px;
   height: 35px;
+  color: var(--grey);
   &:hover{
     cursor: pointer;
     color: var(--lightblue);
@@ -159,6 +156,7 @@ const CameraButton = styled(BsCamera)`
   width: 25px;
   height: 25px;
   position: absolute;
+  color: var(--grey);
   margin-left: 49px;
   &:hover{
     cursor: pointer;
@@ -169,7 +167,7 @@ const CameraButton = styled(BsCamera)`
 
 const MyPage = ({ onClose, goToMyFlow }) => {
   const [ThemeMode, setTheme] = useTheme(); // black white 변경
-  const [active, setIsActive] = useState(true); //정부 수정시 
+  const [isActive, setIsActive] = useState(true); //정부 수정시 
   const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
   const [image, setImage] = useState("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMTdfMzUg/MDAxNjM0NDAzMDA2ODMy.GHw5PZcGfKmsLaDNHB0dx4pyfEpAkrjykogrswNUgQ4g.Plyxj3MecKqu5GD4Ci2Fi88WHPaZDeq4NqQwppwLxC8g.PNG.rpgrr123/1c8058f087fec5fd9da8aaa66db0eb1ac16a9cc711e0c50dd8f5ccf86e0a43555012746e984f741b26a1035bcc8a4b868ce41c5b890559368b10c0568f11c5c9481dbc596144bb3999cc2dcbb2af0400c1301e4ecab63758036a2afc4830aececf2ad6402c8938d910c4c8ebed4af447.png?type=w800");
   const [status , setStatus] = useState("tesing")
@@ -179,7 +177,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
   console.log(MyPageData)
   
   const handleClick = () => {
-    setIsActive(!active);
+    setIsActive(!isActive);
     setIsBorderVisible(!isBorderVisible);
     setStatus("");
   };
@@ -194,7 +192,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
   return (
     <MyInfoDiv>
       <div className="controlDiv">
-        <ControlButton onClick={handleClick} isActive={active} />
+        <ControlButton onClick={handleClick} isActive={isActive} />
         <CloseButton onClick={onClose} />
       </div>
       <div className='profileDiv'>
@@ -203,10 +201,10 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           <input type="file" accept='image/*' />
           <CameraButton/>
         </Caption>
-        <Paragrph isActive={active} className='NickName'>Trom</Paragrph>
+        <Paragrph isActive={isActive} className='NickName'>Trom</Paragrph>
         <div className='followingfollowerDiv'>
-          <Paragrph isActive={active} className='Following'>Following : 100</Paragrph>
-          <Paragrph isActive={active} className='Following'>Follower : 200</Paragrph>
+          <Paragrph isActive={isActive} className='Following'>Following : 100</Paragrph>
+          <Paragrph isActive={isActive} className='Following'>Follower : 200</Paragrph>
         </div>
         <Statusmsg isBorderVisible={isBorderVisible}>
         <textarea
@@ -215,14 +213,14 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           value={status}
           spellCheck="false"
           onChange={handleStatusMsg}
-          readOnly={active}
+          readOnly={isActive}
         ></textarea>
         </Statusmsg>
       </div>
       <div className='routeDiv'>
-        <Menu onClick={goToMyFlow} isActive={active} className='MyFlow'>my<span style={{color : "skyblue"}}>F</span>low</Menu>
-        <Menu onClick={()=>navigate("/diary")} isActive={active} className='Diary'>Diary</Menu>
-        <Menu isActive={active} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
+        <Menu onClick={goToMyFlow} isActive={isActive} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Menu>
+        <Menu onClick={()=>navigate("/diary")} isActive={isActive} className='Diary'>Diary</Menu>
+        <Menu isActive={isActive} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
       </div>
     </MyInfoDiv>
   );

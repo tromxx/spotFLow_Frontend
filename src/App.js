@@ -7,15 +7,13 @@ import HeaderBarNavi from './components/HeaderBarNavi';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
-import { useState } from 'react';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 
-
 function App() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
 
   return (
       <BrowserRouter>

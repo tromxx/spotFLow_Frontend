@@ -25,21 +25,20 @@ import { Map } from "react-kakao-maps-sdk";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
-  color: ${props=>props.theme.textColor};
-  border: ${props=>props.theme.borderColor};	
+  	color: ${props=>props.theme.textColor};
+  	border: ${props=>props.theme.borderColor};	
 	width: 390px;
-  height: 93vh;
-	margin-top: 7vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  	height: 93vh;
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
 	text-align: center;
 	flex-direction: column;
 	position: relative;
 
 	 .controlDiv{
 	  	position: absolute;
-		  top : 2px
+		top : 2px
 	  }
 		.flowArea {
 			background-color:transparent;
