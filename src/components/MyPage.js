@@ -7,6 +7,11 @@ import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import ProfileData from '../dataSet/ProfileData';
+<<<<<<< HEAD
+=======
+import { storage } from '../api/FirebaseApi';
+
+>>>>>>> 2a151ec5102108f6577bacc30cfa6fc372a733d5
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`

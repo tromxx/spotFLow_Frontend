@@ -1,11 +1,11 @@
 import React from "react";
 import { styled } from 'styled-components';
-import { BiArrowBack } from 'react-icons/bi';
+import { BiArrowBack, BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
 import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
 import { AiOutlineClose } from 'react-icons/ai';
@@ -17,6 +17,11 @@ import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
 import { storage } from "../api/FirebaseApi";
 import MyFlowDetailModal from "../utils/MyFlowDetailModal";
+import MyFlowApi from "../api/MyFlowApi";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
+import useCurrentLocation from "../utils/Location";
+import { Map } from "react-kakao-maps-sdk";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -304,6 +309,18 @@ const SelectImg = styled(BiSelectMultiple)`
 	height: 20px;	
 `;
 
+const locationImg = styled(BiCurrentLocation)`
+	width: 50px;
+	height: 50px;
+`;
+
+const locationButton = styled.button`
+	background-color: transparent;
+	border: none;
+	outline: none;
+`;
+
+
 // Check
 
 const CheckButton = styled.button`
@@ -380,6 +397,9 @@ const MenuButtonWrapper = styled.div`
 `;
 const MyFlow = ({ onClose, goToMyPage }) =>{
 
+	// const context = useContext(UserContext);
+	// const {email, nickname} = context;
+
 	const [flow, setFlow] = useState(FlowData); // 플로우 더미데이터
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
 	const [searchValue, setSearchValue] = useState(""); // 검색창 인풋창 밸류
@@ -395,6 +415,23 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 			정말 닫으시겠습니까?
 		</>
 	);
+
+	// 유저 위치 찾기
+	const { location, error, getCurrentLocation } = useCurrentLocation();
+	const {isLocationVisible, setIsLocationVisible} = useState(false);
+	const handleLocation = () => {
+		getCurrentLocation();
+		setIsLocationVisible(true);
+	}
+
+	const [state, setState] = useState({
+		// 지도의 초기 위치
+		center: { lat: props=>props.location.latitude, lng: props=>props.location.longitude },
+		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
+		isPanto: true,
+	  })
+
+
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -430,7 +467,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 					setUrl(url);
 			
 			// 글 DB에 올리는 부분 구현 필요
-
+			// MyFlowApi.newFlow(email,location.latitude, location.longitude, flowModalText, url, )
 
 			setFlowModalOpen(false);
 
@@ -471,7 +508,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
   };
 
 	// 플로우 검색 기능 구현
-	
 	const handleSearch = (searchQuery) => {
 			const filteredFlow = FlowData.filter(
 				(item) =>
@@ -499,14 +535,19 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	}
   
 	// 컨테이너를 클릭했을 때 모달창에 상세정보를 띄워주도록
+	// 플로우디테일모달에 들어갈 데이터를 세팅하는
+	const [modalData, setModalData] = useState("");
+	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
 	const [clicked, setClicked] = useState("");
 
 	const handleContainerClick = (event, id) => {
+		setIsDetailModalOpen(true);
+		console.log(isDetailModalOpen);
 		const clickedId = id;
 		setClicked(clickedId);
 		
-
-		// setIsDetailModalOpen(true);
+		
 		console.log(clickedId)
 	};
 
@@ -522,9 +563,8 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
   	container.addEventListener('click', handleContainerClick);
 	}
 
-// 플로우디테일모달에 들어갈 데이터를 세팅하는
-	const [modalData, setModalData] = useState("");
-	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+
 
     return(
 			<MyFlowDiv>
@@ -593,19 +633,67 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
           value={flowModalText}
           onChange={(e) => setFlowModalText(e.target.value)}
         />
-				<FileBox>
-					<div className="filebox">
-							{thumbnailSrc !== "" && (
-									<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
-							)}
-							<label for="file"><PictureImg /></label> 
-							<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
-					</div>
-				</FileBox>
+				<div className="wrapper">
+					<FileBox className="filebox">
+						<div className="filebox">
+								<label for="file"><PictureImg /></label> 
+								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
+								{thumbnailSrc !== "" && (
+										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
+								)}
+								
+						</div>
+					</FileBox>
+					<Map className="map" // 지도를 표시할 Container 
+									center={state.center}
+									isPanto={state.isPanto}
+									style={{
+									// 지도의 크기
+									width: "150px",
+									height: "150px",
+        					alignSelf: "flex-end",
+        					justifyContent: "flex-end",
+									}}
+									level={2} // 지도의 확대 레벨
+								>
+									<div
+									style={{
+										display: "flex",
+										gap: "10px",
+									}}
+									>
+									<button className="locationButton" style={{
+										width: "35px",
+										height: "35px",
+										alignSelf: "flex-end",
+										justifyContent: "flex-end",
+										border: "none",
+										backgroundColor: "transparent"
+									}}
+										onClick={() =>
+										setState({
+											center: { lat: location.latitude, lng: location.longitude },
+											isPanto: true,
+										})
+										}
+									>
+										<BiCurrentLocation style={{
+											color: "black",
+											width: "35px",
+											height: "35px",
+											alignSelf: "center",
+											justifyContent: "center",
+											border: "none",
+											backgroundColor: "transparent"
+									}} />
+									</button>
+									</div>
+								</Map>
+							</div>
     </FlowModal>
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
-		<MyFlowDetailModal open={isDetailModalOpen} ></MyFlowDetailModal>
+		<MyFlowDetailModal open={isDetailModalOpen} close={handleDetailClose} ></MyFlowDetailModal>
 	</MyFlowDiv>
     );
 };

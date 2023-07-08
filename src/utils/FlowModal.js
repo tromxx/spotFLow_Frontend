@@ -12,6 +12,7 @@ const ModalStyle = styled.div`
         left: 0;
         z-index: 999;
         background-color: rgba(0, 0, 0, 0.6);
+        
     }
     .openModal {
         display: flex; // 모달이 보이도록 함
@@ -28,8 +29,9 @@ const ModalStyle = styled.div`
     margin: 5px;
   }
   .modal > section {
-    width: 30%;
-    height: 50%;
+    position: relative;
+    width: 50%;
+    height: 80%;
     text-align: center;
     margin: 0 auto;
     border-radius: 0.3rem;
@@ -37,7 +39,7 @@ const ModalStyle = styled.div`
     color: ${props=>props.theme.textColor};
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-show 0.3s;
-    overflow: hidden;
+    overflow: visible;
 
     @media(max-width: 768px) {
       width: 80%;
@@ -65,25 +67,42 @@ const ModalStyle = styled.div`
   }
   .modal > section > main {
     padding: 0 16px;
-		height: 75%;
+		height: 80%;
+    min-height: max-content;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
     
+    @media(max-width:768px) {
+      
+    }
+    
   }
   .modal > section > footer {
-    padding: 0px 16px;
+    padding: 0px 16px 0px 16px;
     
     text-align: right;
   }
   .modal > section > footer button {
-    padding: 0px 0px;
+    position: absolute;
     color: white;
     background-color:#424242;
 		border: 1px solid #424242;
     border-radius: 5px;
     font-size: 13px;
+
+    &:first-child {
+      position: absolute;
+      bottom: 0px;
+      right: 70px;
+
+    }
+    &:nth-child(2) {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
   }
   .modal.openModal {
     display: flex;
@@ -109,23 +128,32 @@ const ModalStyle = styled.div`
       opacity: 1;
     }
   }
-`;
-
-const ModalContent = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 90%;
-	height: 80%;
-	border-radius: 8px;
-	font-family: var(--kfont);
-  background-color: #424242;
-
-  @media(max-width: 768px) {
-    width: 30%;
-    height: 60%;
-  }
+  .wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      align-items: end;
+      justify-content: left;
+      padding-top: 10px;
+      .filebox {
+        align-self: flex-end;
+        justify-content: flex-start;
+      }
+      .map {
+        right: 0px;
+        position: absolute;
+        align-self: flex-end;
+        justify-content: flex-end;
+      }
+      .locationButton {
+        bottom: 0px;
+        right: 0px;
+        position: absolute;
+        z-index: 1000;
+      }
+      
+    }
 `;
 
 
@@ -146,14 +174,11 @@ const FlowModal = (props) => {
 										
                 </header>
                 <main>
-									
-									
 										{children}
-									
 								</main>
                 <footer>
-                    {type && <button onClick={confirm}>확인</button>}
-                    <button onClick={close}>닫기</button>
+                    {type && <button onClick={confirm} className="confirm">확인</button>}
+                    <button onClick={close} className="close">닫기</button>
                 </footer>
             </section>
             }
