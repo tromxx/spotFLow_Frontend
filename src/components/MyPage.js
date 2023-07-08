@@ -6,12 +6,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
-<<<<<<< HEAD
 import ProfileData from '../dataSet/ProfileData';
-=======
-import { storage } from '../api/FirebaseApi';
-
->>>>>>> ae5cfad0351deb6a14a97caf5a637aac683ef7bb
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 예저 고민중
 const MyInfoDiv = styled.div`
@@ -173,8 +168,8 @@ const MyPage = ({ onClose, goToMyFlow }) => {
   const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
   const [image, setImage] = useState("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMTdfMzUg/MDAxNjM0NDAzMDA2ODMy.GHw5PZcGfKmsLaDNHB0dx4pyfEpAkrjykogrswNUgQ4g.Plyxj3MecKqu5GD4Ci2Fi88WHPaZDeq4NqQwppwLxC8g.PNG.rpgrr123/1c8058f087fec5fd9da8aaa66db0eb1ac16a9cc711e0c50dd8f5ccf86e0a43555012746e984f741b26a1035bcc8a4b868ce41c5b890559368b10c0568f11c5c9481dbc596144bb3999cc2dcbb2af0400c1301e4ecab63758036a2afc4830aececf2ad6402c8938d910c4c8ebed4af447.png?type=w800");
   const [status , setStatus] = useState("tesing")
+  const [MyPageData, setMyPageData] = useState(ProfileData); //Backend 연결 필요
   const navigate = useNavigate();
-  const [MyPageData, setMyPageData] = useState(ProfileData);
   
   console.log(MyPageData)
   
