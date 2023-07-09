@@ -7,6 +7,8 @@ import {AiOutlinePlus} from "react-icons/ai";
 import {MdCancel, MdPostAdd} from "react-icons/md";
 import {useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
+import DiaryApi from "../api/DiaryApi";
+import diaryApi from "../api/DiaryApi";
 
 
 const centerAlign = css`
@@ -259,9 +261,9 @@ function DiaryCreate() {
       title.current.placeholder = "1글자 이상 입력해주세요"
       return
     }
-    if (text.current.value.length < 5) {
+    if (text.current.value.length < 1) {
       text.current.focus();
-      text.current.placeholder = "5글자 이상 입력해주세요"
+      text.current.placeholder = "1글자 이상 입력해주세요"
       return
     }
     const images = timeline.map(item => item.image);
@@ -274,6 +276,7 @@ function DiaryCreate() {
     setDiaryPost(newDiaryPost);
     alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "이미지:" + newDiaryPost.image);
     navi("/diary");
+    // diaryApi.saveDiary(title,text,timeline);
   }
 
   const handleCreate = (newItems) => {
@@ -295,7 +298,7 @@ function DiaryCreate() {
         <div className='menu'>
           <div className='left'><CreateBtn style={{borderRadius: "20px"}}> <TfiArrowLeft/> </CreateBtn></div>
           <div className='right'><CreateBtn style={{width: "60px"}}
-                                            onClick={() => handlePost(title, text)}>Done</CreateBtn></div>
+                                            onClick={() => handlePost(title, text)}><MdPostAdd/></CreateBtn></div>
         </div>
       </TopMenu>
       <Main>
