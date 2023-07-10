@@ -6,13 +6,13 @@ import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
 import { useState } from "react";
-import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
+import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
 import { AiOutlineClose } from 'react-icons/ai';
 import FlowModal from "../utils/FlowModal";
 import Modal from '../utils/Modal';
 import { BsPencilSquare } from "react-icons/bs";
-import { BsCheckCircle, BsCircle } from "react-icons/bs";
+import { BsCheckCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
 import { storage } from "../api/FirebaseApi";
@@ -25,13 +25,13 @@ import { Map } from "react-kakao-maps-sdk";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
-  	color: ${props=>props.theme.textColor};
-  	border: ${props=>props.theme.borderColor};	
+  color: ${props=>props.theme.textColor};
+  border: ${props=>props.theme.borderColor};	
 	width: 390px;
-  	height: 93vh;
-  	display: flex;
-  	justify-content: center;
-  	align-items: center;
+  height: 93vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 	text-align: center;
 	flex-direction: column;
 	position: relative;
@@ -65,28 +65,24 @@ const MyFlowDiv = styled.div`
 
 const FileBox = styled.div`  
 	float: left;
+
 	.fileSelect {
 		width: auto;
 		height: 50px;
 		border: 1px solid black;
-		
 	}
-
 	.thumbnail {
 		margin-left: 10px;
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 	}
-
 	.filebox {
-		
 		margin-top: 5px;
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
 		justify-content: flex-start;
-		
 	}
 	.filebox .upload-name {
     display: inline-block;
@@ -107,7 +103,6 @@ const FileBox = styled.div`
 		font-family: var(--kfont);
 		font-size: 12px;
 	}
-
 	.filebox input[type="file"] {
     position: absolute;
     width: 0;
@@ -139,7 +134,6 @@ const MyFlowMenuName = styled.p`
 	font-size: 30px;
 	font-weight: bolder;
 	margin-top: -25%;
-
 	.title {
 		font-size: 35px;
 		margin-left: 10%;
@@ -149,7 +143,6 @@ const MyFlowMenuName = styled.p`
 
 
 const CreateBtn = styled.div`
-    
     border-radius: 8px;
 		border: 1px solid #d9d9d9;
     width: 35px;
@@ -197,7 +190,6 @@ const ScrollBar = styled.div`
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		
     background-color: grey;
   }
 	padding-right: 5px;
@@ -308,8 +300,6 @@ const SelectImg = styled(BiSelectMultiple)`
 	height: 20px;	
 `;
 
-
-
 // Check
 
 const CheckButton = styled.button`
@@ -335,8 +325,6 @@ const CheckImg = styled(BsCheckCircle)`
 	left: 3px;
 	top: 4px;	
 `;
-
-
 
 const PictureImg = styled(SlPicture)`
 	width: 30px;
@@ -379,17 +367,16 @@ const DeleteButton = styled.button`
 	}
 `;
 
-
-
 const MenuButtonWrapper = styled.div`
 
 `;
+
+
 const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	// context에서 유저 데이터 받아오기
 	// const context = useContext(UserContext);
 	// const {email, nickname} = context;
-
 
 	const [data, setData] = useState([]); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬

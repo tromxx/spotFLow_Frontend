@@ -12,7 +12,7 @@ import axios from "axios";
 const LogInDiv = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: 7vh;
+	
 	ul{
 		width: 400px;
 		display: flex;
@@ -82,6 +82,10 @@ const LogInDiv = styled.div`
          width: 260px;
       }
 	}
+
+   .logo:hover {
+      cursor: pointer;
+   }
 `;
 
 
@@ -99,8 +103,8 @@ const Login = () => {
 		};
 		try{
 			const response = await axios.post("/auth/login", customerData);
-			const { authToekn} = response.data;
-			localStorage.setItem('authToken', authToekn);
+			const { authToken } = response.data;
+			localStorage.setItem('authToken', authToken);
 		}catch(error){
 			setOpen(true);
 			setMessage("잘못된 아이디 혹은 비밀번호입니다.");
@@ -110,7 +114,7 @@ const Login = () => {
    return(
       <LogInDiv>
          <ul>
-            <li><img src={Logo} alt="" /></li>
+            <li><img src={Logo} onClick={()=>navigate("/")} alt="logo" className="logo" /></li>
             <li><input onChange={(e)=>setInputEmail(e.target.value)} type="text" placeholder="email@gmail.com"/></li>
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">
