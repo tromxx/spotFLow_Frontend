@@ -7,7 +7,7 @@ const Backend = "http://localhost:8111";
 const MyFlowApi = {
 
     // 새 플로우 쓰기
-    newFlow: async(email, lat, lng, content, img, flowId, place) => {
+    newFlow: async(email, lat, lng, content, img, place) => {
 				const token = localStorage.getItem('token');
         const flowData = {
 					email : email,
@@ -28,8 +28,24 @@ const MyFlowApi = {
 					return response;
 
 				} catch (error) {
-					throw new error("새 플로우 게시 실패");
+					throw new error("새 플로우 게시에 실패했습니다.");
 				}
+		},
+
+		getClickedFlow: async (flowId) => {
+			const token = localStorage.getItem('token');
+			try {
+				const response = await axios.post(Backend + "/auth/clickedflow", flowId, {
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`
+				}
+				});
+				return response;
+			} catch (error) {
+				throw new error("클릭한 플로우 정보를 가져오는 데 실패했습니다.");
+			}
+			
 		},
 
 		getmyFlow: async (email) => {
@@ -40,7 +56,9 @@ const MyFlowApi = {
 					'Authorization': `Bearer ${token}`
 			}
 			});
-		}
+		},
+
+	
 
 }
 
