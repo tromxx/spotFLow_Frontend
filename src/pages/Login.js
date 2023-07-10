@@ -13,7 +13,7 @@ import { UserContext } from "../context/UserStore";
 const LogInDiv = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: 7vh;
+	
 	ul{
 		width: 400px;
 		display: flex;
@@ -83,6 +83,10 @@ const LogInDiv = styled.div`
          width: 260px;
       }
 	}
+
+   .logo:hover {
+      cursor: pointer;
+   }
 `;
 
 
@@ -102,11 +106,17 @@ const Login = () => {
 			password : inputPwd
 		};
 		try{
+<<<<<<< HEAD
 			const response = await axios.post(DOMAIN + "/auth/login", customerData);
 			const  {accessToken} = response.data;
 			localStorage.setItem('authToken', accessToken);
          setIsLoggedIn(true);
 			navigate("/")
+=======
+			const response = await axios.post("/auth/login", customerData);
+			const { authToken } = response.data;
+			localStorage.setItem('authToken', authToken);
+>>>>>>> abb59af416611197dfbf9d7245e3c1719ddcc63d
 		}catch(error){
 			setOpen(true);
 			setMessage("잘못된 아이디 혹은 비밀번호입니다.");
@@ -120,7 +130,7 @@ const Login = () => {
    return(
       <LogInDiv>
          <ul>
-            <li><img src={Logo} alt="" /></li>
+            <li><img src={Logo} onClick={()=>navigate("/")} alt="logo" className="logo" /></li>
             <li><input onChange={(e)=>setInputEmail(e.target.value)} type="text" placeholder="email@gmail.com"/></li>
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">

@@ -26,7 +26,6 @@ function App() {
                 <Home/>
               </>} />
             <Route path="/login" element={<>
-              <HeaderBarNavi />
               <Login />
             </>} />
             <Route path="/signup" element={<>

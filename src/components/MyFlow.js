@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from 'styled-components';
 import { BiArrowBack, BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
@@ -6,13 +6,13 @@ import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "./MyFlowContainer"
 import FlowData from "../dataSet/FlowData";
 import { useState } from "react";
-import { CgSortAz, CgSortZa, CgCheckO, CgRadioCheck } from "react-icons/cg";
+import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
 import { AiOutlineClose } from 'react-icons/ai';
 import FlowModal from "../utils/FlowModal";
 import Modal from '../utils/Modal';
 import { BsPencilSquare } from "react-icons/bs";
-import { BsCheckCircle, BsCircle } from "react-icons/bs";
+import { BsCheckCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
 import { storage } from "../api/FirebaseApi";
@@ -25,13 +25,13 @@ import { Map } from "react-kakao-maps-sdk";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
-  	color: ${props=>props.theme.textColor};
-  	border: ${props=>props.theme.borderColor};	
+  color: ${props=>props.theme.textColor};
+  border: ${props=>props.theme.borderColor};	
 	width: 390px;
-  	height: 93vh;
-  	display: flex;
-  	justify-content: center;
-  	align-items: center;
+  height: 93vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 	text-align: center;
 	flex-direction: column;
 	position: relative;
@@ -65,28 +65,24 @@ const MyFlowDiv = styled.div`
 
 const FileBox = styled.div`  
 	float: left;
+
 	.fileSelect {
 		width: auto;
 		height: 50px;
 		border: 1px solid black;
-		
 	}
-
 	.thumbnail {
 		margin-left: 10px;
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 	}
-
 	.filebox {
-		
 		margin-top: 5px;
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
 		justify-content: flex-start;
-		
 	}
 	.filebox .upload-name {
     display: inline-block;
@@ -107,7 +103,6 @@ const FileBox = styled.div`
 		font-family: var(--kfont);
 		font-size: 12px;
 	}
-
 	.filebox input[type="file"] {
     position: absolute;
     width: 0;
@@ -139,7 +134,6 @@ const MyFlowMenuName = styled.p`
 	font-size: 30px;
 	font-weight: bolder;
 	margin-top: -25%;
-
 	.title {
 		font-size: 35px;
 		margin-left: 10%;
@@ -149,7 +143,6 @@ const MyFlowMenuName = styled.p`
 
 
 const CreateBtn = styled.div`
-    
     border-radius: 8px;
 		border: 1px solid #d9d9d9;
     width: 35px;
@@ -197,7 +190,6 @@ const ScrollBar = styled.div`
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		
     background-color: grey;
   }
 	padding-right: 5px;
@@ -308,18 +300,6 @@ const SelectImg = styled(BiSelectMultiple)`
 	height: 20px;	
 `;
 
-const locationImg = styled(BiCurrentLocation)`
-	width: 50px;
-	height: 50px;
-`;
-
-const locationButton = styled.button`
-	background-color: transparent;
-	border: none;
-	outline: none;
-`;
-
-
 // Check
 
 const CheckButton = styled.button`
@@ -345,8 +325,6 @@ const CheckImg = styled(BsCheckCircle)`
 	left: 3px;
 	top: 4px;	
 `;
-
-
 
 const PictureImg = styled(SlPicture)`
 	width: 30px;
@@ -389,20 +367,72 @@ const DeleteButton = styled.button`
 	}
 `;
 
-
-
 const MenuButtonWrapper = styled.div`
 
 `;
+
+
 const MyFlow = ({ onClose, goToMyPage }) =>{
 
+	// context에서 유저 데이터 받아오기
 	// const context = useContext(UserContext);
 	// const {email, nickname} = context;
 
-	const [flow, setFlow] = useState(FlowData); // 플로우 더미데이터
+	const [data, setData] = useState([]); // 가져온 JSON 플로우 데이터를 저장
+	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬
+
+	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
+	useEffect(() => {
+   
+    const fetchData = async () => {
+      try {
+        // const response = MyFlowApi.getmyFlow(email);
+        // const jsonData = response.data;
+        // setData(jsonData);
+      } catch (error) {
+        console.error("플로우 데이터를 불러오는데 실패했습니다.", error);
+      }
+    };
+			fetchData(); // fetchData 함수 호출
+  	}, []);
+
+		// 들어온 플로우 데이터값을 정렬
+	const handleSort = () => { 
+    setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
+		if (sort === "az") {
+			const sorted = [...data].sort((a, b) => a.id - b.id);
+			setSortedFlow(sorted);
+		} else {
+			const sorted = [...data].sort((a, b) => b.id - a.id);
+			setSortedFlow(sorted);
+		}
+  };
+
+	// 플로우 검색 기능 구현
+	const handleSearch = (searchQuery) => {
+			const filteredFlow = data.filter(
+				(item) =>
+					(item.content && item.content.includes(searchQuery)) ||
+					(item.location && item.location.includes(searchQuery))
+			);
+			setSortedFlow(filteredFlow);
+		};
+	
+
+	const handleSearchChange = (e) => {
+		const { value } = e.target;
+		setSearchValue(value);
+		if (value === "") {
+			setSortedFlow(data);
+		} else {
+			handleSearch(value);
+		}
+  };
+
+
 	const [sort, setSort] = useState("az"); // 정렬 아이콘 상태 
 	const [searchValue, setSearchValue] = useState(""); // 검색창 인풋창 밸류
-	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬
+	
 
 	// 글쓰기 모달 & 알림 모달
 	const [flowModalOpen, setFlowModalOpen] = useState(false);
@@ -445,9 +475,10 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	}
 
 	const closeBoth = () => {
-		setModalOpen(false);
+		setModalOpen(false); 
 		setFlowModalOpen(false);
 		setThumbnailSrc("");
+		setFlowModalText("");
 	}
 
 	  // 플로우 작성시 이미지 파일 선택하는 핸들링
@@ -494,38 +525,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	  }
 	};
 
-	// 들어온 플로우 데이터값을 정렬
-	const handleSort = () => { 
-    setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
-		if (sort === "az") {
-			const sorted = [...flow].sort((a, b) => a.id - b.id);
-			setSortedFlow(sorted);
-		} else {
-			const sorted = [...flow].sort((a, b) => b.id - a.id);
-			setSortedFlow(sorted);
-		}
-  };
-
-	// 플로우 검색 기능 구현
-	const handleSearch = (searchQuery) => {
-			const filteredFlow = FlowData.filter(
-				(item) =>
-					(item.content && item.content.includes(searchQuery)) ||
-					(item.location && item.location.includes(searchQuery))
-			);
-			setSortedFlow(filteredFlow);
-		};
 	
-
-	const handleSearchChange = (e) => {
-		const { value } = e.target;
-		setSearchValue(value);
-		if (value === "") {
-			setSortedFlow(FlowData);
-		} else {
-			handleSearch(value);
-		}
-  };
 	
 	const [isVisible, setIsVisible] = useState(false);
 	const handleCheck = () => {
@@ -535,7 +535,10 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
   
 	// 컨테이너를 클릭했을 때 모달창에 상세정보를 띄워주도록
 	// 플로우디테일모달에 들어갈 데이터를 세팅하는
-	const [modalData, setModalData] = useState("");
+	const [responseDate, setResponseDate] = useState("");
+	const [responseTime, setResponseTime] = useState("");
+	const [responseLocation, setResponseLoaction] = useState("");
+	const [responseContent, setResponseContent] = useState("");
 	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
 	const [clicked, setClicked] = useState("");
@@ -545,13 +548,21 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		console.log(isDetailModalOpen);
 		const clickedId = id;
 		setClicked(clickedId);
+		const response = MyFlowApi.getClickedFlow(clickedId);
 		
+		setResponseDate(response.date);
+		setResponseTime(response.time);
+		setResponseLoaction(response.location);
+		setResponseContent(response.content);
 		
-		console.log(clickedId)
 	};
 
 	const handleDetailClose = () => {
 		setClicked("");
+		setResponseDate("");
+		setResponseTime("");
+		setResponseLoaction("");
+		setResponseContent("");
 		setIsDetailModalOpen(false);
 	}
 
@@ -628,7 +639,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
         type="y"
 				confirm={handleUpload}
       	>
-        <textarea className="flowArea"
+        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요"
           value={flowModalText}
           onChange={(e) => setFlowModalText(e.target.value)}
         />
@@ -662,12 +673,14 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									}}
 									>
 									<button className="locationButton" style={{
+										
 										width: "35px",
 										height: "35px",
-										alignSelf: "flex-end",
-										justifyContent: "flex-end",
+										alignItems: "center",
+										justifyContent: "center",
 										border: "none",
-										backgroundColor: "transparent"
+										borderRadius: "100px",
+										backgroundColor: "#d9d9d9"
 									}}
 										onClick={() =>
 										setState({
@@ -677,6 +690,9 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 										}
 									>
 										<BiCurrentLocation style={{
+											position:"absolute",
+											top:"0",
+											left:"0",
 											color: "black",
 											width: "35px",
 											height: "35px",
