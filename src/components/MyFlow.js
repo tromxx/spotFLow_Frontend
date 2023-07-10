@@ -15,7 +15,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { BsCheckCircle, BsCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
-import { storage } from "../api/FirebaseApi";
+import { storage } from "../api/FIrebaseApi";
 import MyFlowDetailModal from "../utils/MyFlowDetailModal";
 import MyFlowApi from "../api/MyFlowApi";
 import { useContext } from "react";
@@ -25,21 +25,20 @@ import { Map } from "react-kakao-maps-sdk";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
-  color: ${props=>props.theme.textColor};
-  border: ${props=>props.theme.borderColor};	
+  	color: ${props=>props.theme.textColor};
+  	border: ${props=>props.theme.borderColor};	
 	width: 390px;
-  height: 93vh;
-	margin-top: 7vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  	height: 93vh;
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
 	text-align: center;
 	flex-direction: column;
 	position: relative;
 
 	 .controlDiv{
 	  	position: absolute;
-		  top : 2px
+		top : 2px
 	  }
 		.flowArea {
 			background-color:transparent;

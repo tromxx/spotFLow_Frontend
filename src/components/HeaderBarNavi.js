@@ -4,13 +4,13 @@ import Logo from '../images/logo.png';
 import { useNavigate } from "react-router";
 import DarkLogo from "../images/DarkLogo.png"
 import { useTheme } from "../context/themeProvider";
-
+import { useState } from "react";
+import { useEffect } from "react";
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
   height: 7vh;
   min-height: 50px;
-  position: absolute;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,34 +54,20 @@ const LogoImg = styled.img`
 const HeaderBar = ({ children }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  console.log(theme.bgColor);
-  const goToLogin = () => {
-    navigate("/login");
-  };
-
-  const goToHome = () => {
-    navigate("/");
-  };
-
-  const goToSignUp = () => {
-    navigate("/signup");
-  };
-
   const [ThemeMode, setTheme] = useTheme();
-
-  console.log(ThemeMode)
+  
   return (
-      <HeaderBarDiv>
-        <LogoImg
-          src={ThemeMode === 'dark' ? DarkLogo : Logo}
-          onClick={goToHome}
-        />
-        <ul>
-          <li onClick={goToLogin}>Login</li>
-          <li>/</li>
-          <li onClick={goToSignUp}>Sign up</li>
-        </ul>
-      </HeaderBarDiv>
+    <HeaderBarDiv>
+      <LogoImg
+        src={ThemeMode === 'dark' ? DarkLogo : Logo}
+        onClick={()=>navigate("/")}
+      />
+      <ul>
+        <li onClick={()=>navigate("/login")}>Login</li>
+        <li>/</li>
+        <li onClick={()=>navigate("/signup")}>Sign up</li>
+      </ul>
+    </HeaderBarDiv>
   );
 };
 

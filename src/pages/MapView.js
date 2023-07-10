@@ -100,7 +100,7 @@ const MapView = React.memo((props) => {
         }}
         style={{
           width: "100%",
-          height: "100vh",
+          height: "93vh",
           position: "relative",
           zIndex: 1
         }}
