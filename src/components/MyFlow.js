@@ -15,7 +15,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { BsCheckCircle, BsCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
-import { storage } from "../api/FIrebaseApi";
+import { storage } from "../api/FirebaseApi";
 import MyFlowDetailModal from "../utils/MyFlowDetailModal";
 import MyFlowApi from "../api/MyFlowApi";
 import { useContext } from "react";
