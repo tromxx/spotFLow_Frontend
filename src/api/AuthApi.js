@@ -27,18 +27,6 @@ const CustomerApi = {
   // Post : 회원 가입하기 
   customerSignUp : async(customerData) => {
     return await axios.post(DOMAIN + "/auth/signup", customerData)
-  },
-
-  // Post : 로그인하기
-  customerLogin : async(customerData) => {
-    try{
-      const response = await axios.post("/auth/login", customerData);
-      const { authToekn} = response.data;
-      localStorage.setItem('authToken', authToekn);
-      return response.data;
-    }catch(error){
-      throw new Error('로그인 실패했습니다.')
-    }
   }
 };
 export default CustomerApi;  

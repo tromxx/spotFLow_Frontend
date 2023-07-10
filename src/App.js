@@ -11,11 +11,13 @@ import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
+import UserStore from './context/UserStore';
 
 function App() {
 
 
   return (
+    <UserStore>
       <BrowserRouter>
         <ThemeProvider>
           <Routes>
@@ -57,6 +59,7 @@ function App() {
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
+    </UserStore> 
   );
 }
 

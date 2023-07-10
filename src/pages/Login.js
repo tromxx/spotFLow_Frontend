@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from 'styled-components'
 import Logo from "../images/logo.png"
 import GoogleLogo from "../images/GoogleLogin.png"
 import KakaoLogo from "../images/KakaoLogin.png"
 import SpotLogo from "../images/SpotFlowLogin.png"
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import TestingModal from '../utils/TestingModal'
 import axios from "axios";
+import { UserContext } from "../context/UserStore";
 
 const LogInDiv = styled.div`
 	display: flex;
@@ -91,21 +92,30 @@ const Login = () => {
    const [inputPwd , setInputPwd] = useState();
 	const [open, setOpen] = useState(false);
 	const [message, setMessage] = useState("");
+	const context = useContext(UserContext);
+   const {setIsLoggedIn} = context;
+   const DOMAIN = "http://localhost:8111";
 
 	const onClickChecking = async() =>{
 		const customerData = {
 			email : inputEmail,
-			passWord : inputPwd
+			password : inputPwd
 		};
 		try{
-			const response = await axios.post("/auth/login", customerData);
-			const { authToekn} = response.data;
-			localStorage.setItem('authToken', authToekn);
+			const response = await axios.post(DOMAIN + "/auth/login", customerData);
+			const  {accessToken} = response.data;
+			localStorage.setItem('authToken', accessToken);
+         setIsLoggedIn(true);
+			navigate("/")
 		}catch(error){
 			setOpen(true);
 			setMessage("잘못된 아이디 혹은 비밀번호입니다.");
 		}
 	};
+
+   useEffect(()=>{
+      localStorage.setItem('authToken', null);
+   },[])
 
    return(
       <LogInDiv>
