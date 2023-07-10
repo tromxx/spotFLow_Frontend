@@ -43,7 +43,6 @@ export const Container = styled.div`
   flex-direction: column;
   /* background-color: gray; */
   position: relative;
-  top: 7vh;
   background-color: black;
   justify-content: center;
 
