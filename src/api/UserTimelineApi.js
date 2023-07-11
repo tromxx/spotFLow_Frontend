@@ -15,20 +15,20 @@ const userTimelineApi = {
   // 특정 타임라인 정보를 가져옴
   getTimeline: async (timeline) => {
     return await axios.get(DOMAIN + "/timeline/" + timeline.index);
-  },
-  // 타임라인 정보를 저장함
+  }, 
+  // 타임라인 정보를 저장함 (이성근 수정중)
   setUserTimeline: async (props) => {
     const data = {
-      email : props.email,
+      userEmail : props.email,
       lat : props.lat,
       lng : props.lng,
-      image : props.image,
+      tl_profile_pic : props.image,
       title : props.title,
       content : props.content,
-      time : props.time,
+      updateTime : props.date,
       category : props.category,
     }
-    return await axios.post(DOMAIN + "/timeline/" + props.email, data);
+    return await axios.post(DOMAIN + "/timeline/post" , data);
   },
   // 타임라인 정보를 수정함
   reWrite: async (timeline) => {
