@@ -11,6 +11,13 @@ const DiaryApi = {
       timeLineList : timeLineList
     }
     return axios.post(DOMAIN + "/diary", requestData);
+  },
+  // id = 다이어리 식별 번호
+  findDiary : async (id) => {
+    return axios.get(DOMAIN + "/diary");
+  },
+  findMyDiary(email) {
+    return axios.get(DOMAIN + "/diary/all");
   }
 }
 

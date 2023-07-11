@@ -49,7 +49,7 @@ function App() {
               <DiaryCreate />
             </>} />
             <Route path="/timeline" element={<TimeLine />} />
-            <Route path="/diary/detail" element={
+            <Route path="/diary/detail/:id" element={
               <>
                 <HeaderBarNavi/>
                 <DiarySwiper/>
