@@ -140,7 +140,7 @@ const DiaryModal = ({setIsCreate}) => {
       const handleButtonClick = () => {
         setIsCreate(selectedItems);
       };
-
+    
       useEffect(()=>{
         const fetchData = async () => {
           const  res =  await userTimelineApi.getUserTimelineList()

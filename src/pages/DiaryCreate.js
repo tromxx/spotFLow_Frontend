@@ -276,7 +276,7 @@ function DiaryCreate() {
     setDiaryPost(newDiaryPost);
     alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "이미지:" + newDiaryPost.image);
     navi("/diary");
-    // diaryApi.saveDiary(title,text,timeline);
+    diaryApi.saveDiary("whddus426@gmail.com", title, text, timeline);
   }
 
   const handleCreate = (newItems) => {
@@ -296,7 +296,7 @@ function DiaryCreate() {
     <Container>
       <TopMenu>
         <div className='menu'>
-          <div className='left'><CreateBtn style={{borderRadius: "20px"}}> <TfiArrowLeft/> </CreateBtn></div>
+          <div onClick={()=>navi(-1)} className='left'><CreateBtn style={{borderRadius: "20px"}}> <TfiArrowLeft/> </CreateBtn></div>
           <div className='right'><CreateBtn style={{width: "60px"}}
                                             onClick={() => handlePost(title, text)}><MdPostAdd/></CreateBtn></div>
         </div>

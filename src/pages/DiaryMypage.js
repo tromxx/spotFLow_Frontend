@@ -7,6 +7,8 @@ import avatar from "../images/default_avatar.png"
 import { BsTrash } from "react-icons/bs";
 import { BsListUl } from "react-icons/bs";
 import { Navigate, useNavigate } from 'react-router-dom';
+import DiaryApi from "../api/DiaryApi";
+
 
 
 
@@ -159,8 +161,30 @@ const DiaryMypagediv = styled.div`
         else setIsCheckBox(false);
         console.log(isCheckBox);
     };
+    
+        const [item, setItem] = useState({
+          id: 1,
+          title: "삭제된 게시글입니다.",
+          content:"삭제된 게시글입니다.",
+          timeLineList: [
+            { id: 2 },
+            { id: 3 }
+          ]
+        });
+        const handleDeleteItem = async () => {
+            try {
+              const response = await DiaryApi.delete('/api/items/' + item.id); // 백엔드 API 엔드포인트를 적절하게 수정하세요
+              console.log('아이템 삭제 성공:', response.data);
+              // 삭제 성공 후 필요한 동작 수행
+            } catch (error) {
+              console.error('아이템 삭제 실패:', error);
+              // 삭제 실패 시 처리할 로직
+            }
+          };
+      
 
     return(
+        
         <Container>
              <header>
                 <div className="namebar">
@@ -197,6 +221,7 @@ const DiaryMypagediv = styled.div`
                                             style={{marginRight: "10px"}}
                                             onClick={convertCheckBox}>Cancle</button>
                                         <button 
+                                            onClick={handleDeleteItem}                                      
                                             className="cancle"
                                             style={{border:"solid 1px #f24e1e", color:"#f24e1e"}}
                                             >Delete</button>
