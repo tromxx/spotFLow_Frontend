@@ -16,6 +16,7 @@ const DiaryApi = {
     }
     return axios.post(DOMAIN + "/diary", requestData);
   },
+<<<<<<< HEAD
   findDiary : async () => {
     const params = {
       email: "whddus426@gmail.com"
@@ -37,6 +38,14 @@ const DiaryApi = {
       ]
   }
   return new axios.delete(DOMAIN + "/diary", data);
+=======
+  // id = 다이어리 식별 번호
+  findDiary : async (id) => {
+    return axios.get(DOMAIN + "/diary");
+  },
+  findMyDiary(email) {
+    return axios.get(DOMAIN + "/diary/all");
+>>>>>>> 094adec684842bfba552a3db5ef21c083e2805d8
   }
 }
 

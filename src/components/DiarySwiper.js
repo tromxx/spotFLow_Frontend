@@ -5,8 +5,10 @@ import * as SC from "./SwiperComponent"
 import {BsChatDots} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import dummy from "../dataSet/TimeLineData";
+import {useParams} from "react-router-dom";
 
 export const DiarySwiper = () => {
+  const { id } = useParams();
   // 오버레이 표시 여부
   const [overlay, setOverlay] = useState(0);
   // 댓글 표시 여부
@@ -33,7 +35,7 @@ export const DiarySwiper = () => {
   }
 
   useEffect(() => {
-
+    console.log(id);
   }, []);
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>
