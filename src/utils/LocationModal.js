@@ -10,7 +10,7 @@ const ModalStyle = styled.div`
         right: 0;
         bottom: 0;
         left: 0;
-        z-index: 999;
+        z-index: 1999;
         background-color: rgba(0, 0, 0, 0.6);
         
     }
@@ -30,8 +30,8 @@ const ModalStyle = styled.div`
   }
   .modal > section {
     position: relative;
-    width: 50%;
-    height: 80%;
+    width: 40%;
+    height: 60%;
     text-align: center;
     margin: 0 auto;
     border-radius: 0.3rem;
@@ -129,7 +129,6 @@ const ModalStyle = styled.div`
     }
   }
   .wrapper {
-      width: 100%;
       display: flex;
       flex-direction: row;
       position: relative;
@@ -140,18 +139,10 @@ const ModalStyle = styled.div`
         align-self: flex-end;
         justify-content: flex-start;
       }
-      
-      .placeDiv {
-        right: 0px;
-        bottom: 150px;
-        position: absolute;
-        align-self: flex-end;
-        justify-content: flex-start;
+      .locationDiv {
+        margin-bottom: 25px;
       }
-      .locationInputBtn {
-        right: 0px;
-        position: absolute;
-        align-self: flex-end;
+      .location {
         background-color: transparent;
         outline: none;
         color: ${props=>props.theme.textColor};
@@ -163,13 +154,27 @@ const ModalStyle = styled.div`
         position: absolute;
       }
 
+      .locationButton {
+        bottom: 0px;
+        right: 0px;
+        position: absolute;
+        z-index: 1000;
+      }
+      .placeDiv {
+        right: 0px;
+        bottom: 1000px;
+        position: absolute;
+        align-self: flex-end;
+        justify-content: flex-start;
+        z-index: 999999;
+      }
       
     }
 `;
 
 
 
-const FlowModal = (props) => {
+const LocationModal = (props) => {
     const { open, confirm, close, type, header, children } = props;
 
     return(
@@ -200,4 +205,4 @@ const FlowModal = (props) => {
 
 }
 
-export default FlowModal;
+export default LocationModal;

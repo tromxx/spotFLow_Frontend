@@ -106,17 +106,11 @@ const Login = () => {
 			password : inputPwd
 		};
 		try{
-<<<<<<< HEAD
 			const response = await axios.post(DOMAIN + "/auth/login", customerData);
 			const  {accessToken} = response.data;
 			localStorage.setItem('authToken', accessToken);
          setIsLoggedIn(true);
 			navigate("/")
-=======
-			const response = await axios.post("/auth/login", customerData);
-			const { authToken } = response.data;
-			localStorage.setItem('authToken', authToken);
->>>>>>> abb59af416611197dfbf9d7245e3c1719ddcc63d
 		}catch(error){
 			setOpen(true);
 			setMessage("잘못된 아이디 혹은 비밀번호입니다.");

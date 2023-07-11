@@ -4,7 +4,6 @@ import { BiArrowBack, BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
 import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "./MyFlowContainer"
-import FlowData from "../dataSet/FlowData";
 import { useState } from "react";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
@@ -22,6 +21,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserStore";
 import useCurrentLocation from "../utils/Location";
 import { Map } from "react-kakao-maps-sdk";
+import { SlLocationPin } from "react-icons/sl";
+import LocationModal from "../utils/LocationModal";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -41,23 +42,24 @@ const MyFlowDiv = styled.div`
 		top : 2px
 	  }
 		.flowArea {
-			background-color:transparent;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 10px;
-			outline: none;
-			width: 95%;
-			height: 100%;
-			resize: none;
-			border: none;
-			border-radius: 5px;
-			font-family: var(--kfont);
-			color: ${props=>props.theme.textColor};
+        background-color:transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        outline: none;
+        width: 95%;
+        height:80%;
+        resize: none;
+        border: none;
+				border-bottom: 1px solid #999999;
+        border-top: 1px solid #999999;
+        font-family: var(--kfont);
+        color: ${props=>props.theme.textColor};
 
 			@media(max-width: 768px) {
     		width: 95%;
-    		height: 100%;
+    		height: 80%;
   		}
 		}
 `;
@@ -73,8 +75,8 @@ const FileBox = styled.div`
 	}
 	.thumbnail {
 		margin-left: 10px;
-    width: 50px;
-    height: 50px;
+    width: 15%;
+    height: 15%;
     object-fit: cover;
 	}
 	.filebox {
@@ -375,20 +377,20 @@ const MenuButtonWrapper = styled.div`
 const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	// context에서 유저 데이터 받아오기
-	// const context = useContext(UserContext);
-	// const {email, nickname} = context;
+	const context = useContext(UserContext);
+	const {email, nickname} = context;
 
 	const [data, setData] = useState([]); // 가져온 JSON 플로우 데이터를 저장
-	const [sortedFlow, setSortedFlow] = useState(FlowData); // 플로우 데이터 정렬
+	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
 	useEffect(() => {
    
     const fetchData = async () => {
       try {
-        // const response = MyFlowApi.getmyFlow(email);
-        // const jsonData = response.data;
-        // setData(jsonData);
+        const response = MyFlowApi.getmyFlow(email);
+        const jsonData = response.data;
+        setData(jsonData);
       } catch (error) {
         console.error("플로우 데이터를 불러오는데 실패했습니다.", error);
       }
@@ -437,6 +439,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	// 글쓰기 모달 & 알림 모달
 	const [flowModalOpen, setFlowModalOpen] = useState(false);
 	const [flowModalText, setFlowModalText] = useState("");
+	const [place, setPlace] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [modalText, setModalText] = useState(
 		<>
@@ -446,19 +449,24 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	);
 
 	// 유저 위치 찾기
+	const [locationModalOpen, setLocationModalOpen] = useState(false);
 	const { location, error, getCurrentLocation } = useCurrentLocation();
-	const {isLocationVisible, setIsLocationVisible} = useState(false);
-	const handleLocation = () => {
-		getCurrentLocation();
-		setIsLocationVisible(true);
-	}
-
+	const [locationValue, setLocationValue] = useState("");
 	const [state, setState] = useState({
 		// 지도의 초기 위치
-		center: { lat: props=>props.location.latitude, lng: props=>props.location.longitude },
+		center: { lat: 33.452613, lng: 126.570888 },
 		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
-		isPanto: true,
+		isPanto: false,
 	  })
+		
+	const handleLocationModal = () => {
+		setLocationModalOpen(!locationModalOpen);
+	}
+
+	const locationConfirm = () => {
+		setLocationValue(place);
+		setLocationModalOpen(false);
+	}
 
 
 
@@ -479,6 +487,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		setFlowModalOpen(false);
 		setThumbnailSrc("");
 		setFlowModalText("");
+		setPlace("");
 	}
 
 	  // 플로우 작성시 이미지 파일 선택하는 핸들링
@@ -497,7 +506,11 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 					setUrl(url);
 			
 			// 글 DB에 올리는 부분 구현 필요
-			// MyFlowApi.newFlow(email,location.latitude, location.longitude, flowModalText, url, )
+			MyFlowApi.newFlow(email, location.latitude, location.longitude, flowModalText, url, place, function() {
+				const response = MyFlowApi.getmyFlow(email);
+				const jsonData = response.data;
+        setData(jsonData);
+			});
 
 			setFlowModalOpen(false);
 
@@ -632,39 +645,42 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
             ))}
           </FlowDiv>
         </ScrollBar>
-		<FlowModal
-        open={flowModalOpen}
-        close={closeFlowModal}
-        header="Flow"
-        type="y"
-				confirm={handleUpload}
-      	>
-        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요"
-          value={flowModalText}
-          onChange={(e) => setFlowModalText(e.target.value)}
-        />
-				<div className="wrapper">
-					<FileBox className="filebox">
-						<div className="filebox">
-								<label for="file"><PictureImg /></label> 
-								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
-								{thumbnailSrc !== "" && (
-										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
-								)}
-								
-						</div>
-					</FileBox>
+				<LocationModal 
+					open={locationModalOpen}
+					close={handleLocationModal}
+					type="y"
+					confirm={locationConfirm}
+				 	header="Flow">
+			
+					<div className="placeDiv" style={{
+							position:"absolute",
+							top:"45px",
+							left:"30px",
+							zIndex:"9999999"
+									}}>
+						<label for="location" className="locationPin"><SlLocationPin /></label>
+						<input type="text" value={place} onChange={(e) => setPlace(e.target.value)} id="location" placeholder="장소를 입력해주세요" 
+						style={{
+							backgroundColor: "transparent",
+        			outline: "none",
+        			color: `${props=>props.theme.textColor}`,
+        			border: "none"
+						}}
+						/>
+					</div>
 					<Map className="map" // 지도를 표시할 Container 
 									center={state.center}
 									isPanto={state.isPanto}
 									style={{
 									// 지도의 크기
-									width: "150px",
-									height: "150px",
-        					alignSelf: "flex-end",
-        					justifyContent: "flex-end",
+									width: "90%",
+									height: "75%",
+									position:"absolute",
+        					alignSelf: "center",
+        					justifyContent: "center",
+									
 									}}
-									level={2} // 지도의 확대 레벨
+									level={3} // 지도의 확대 레벨
 								>
 									<div
 									style={{
@@ -680,7 +696,11 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 										justifyContent: "center",
 										border: "none",
 										borderRadius: "100px",
-										backgroundColor: "#d9d9d9"
+										backgroundColor: "#d9d9d9",
+										position:"absolute",
+										right:"40px",
+										bottom:"70px",
+										zIndex:"9999"
 									}}
 										onClick={() =>
 										setState({
@@ -704,7 +724,36 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									</button>
 									</div>
 								</Map>
-							</div>
+								    <>
+    </>
+		
+		</LocationModal>
+		<FlowModal
+        open={flowModalOpen}
+        close={closeFlowModal}
+        header="Flow"
+        type="y"
+				confirm={handleUpload}
+      	>
+        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요"
+          value={flowModalText}
+          onChange={(e) => setFlowModalText(e.target.value)}
+        />
+				<div className="wrapper">
+					<FileBox className="filebox">
+						<div className="filebox">
+								<label for="file"><PictureImg /></label> 
+								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
+								{thumbnailSrc !== "" && (
+										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
+								)}	
+						</div>
+					</FileBox>
+					<div className="locationDiv">
+						<label for="locationBtn" className="locationPin"><SlLocationPin /></label>
+						<input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
+					</div>
+				</div>
     </FlowModal>
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
