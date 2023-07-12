@@ -243,7 +243,7 @@ function DiaryCreate() {
   const title = useRef(null);
   const text = useRef(null);
 
-  const [diaryPost, setDiaryPost] = useState({image: "", title: "", content: ""});
+  const [diaryPost, setDiaryPost] = useState({id: [], title: "", content: ""});
 
 
   const now = new Date();
@@ -266,15 +266,16 @@ function DiaryCreate() {
       text.current.placeholder = "1글자 이상 입력해주세요"
       return
     }
-    const images = timeline.map(item => item.image);
+    // const images = timeline.map(item => item.image);
     const newDiaryPost = {
       ...diaryPost,
       title: title.current.value,
-      image: images,
+ 
       content: text.current.value
     };
     setDiaryPost(newDiaryPost);
-    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "이미지:" + newDiaryPost.image);
+    console.log(timeline);
+    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "타임라인:"+ timeline);
     navi("/diary");
     diaryApi.saveDiary("whddus426@gmail.com", title, text, timeline);
   }
@@ -333,7 +334,7 @@ function DiaryCreate() {
                   <MdCancel onClick={() => {
                     handleDelete(e)
                   }} className='button'/>
-                  {e.content}
+                  {e.id}
                 </div>)}
             </div>
             <CreateBtn className='btnplus' onClick={() => {

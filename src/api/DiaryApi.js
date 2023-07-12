@@ -8,8 +8,7 @@ const DiaryApi = {
       title : title,
       content : content,
       email : email,
-
-      timeLineList 
+      timeLineList : timeLineList 
       // timeLineList : [
       //   {
       //     id : 1
