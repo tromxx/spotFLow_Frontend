@@ -8,11 +8,13 @@ const DiaryApi = {
       title : title,
       content : content,
       email : email,
-      timeLineList : [
-        {
-          id : 1
-        }
-      ]
+      timeLineList 
+      // timeLineList : [
+      //   {
+      //     id : 1
+      //   }
+      // ]
+      
     }
     return axios.post(DOMAIN + "/diary", requestData);
   },

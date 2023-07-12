@@ -146,13 +146,13 @@ const MyDiarydiv = styled.div`
     
       const navigate = useNavigate();
 
-      useEffect(()=>{
-        const fetchData = async()=>{
-        const res =  await DiaryApi.findDiary();
-        setData(res.data)
-        }
-        fetchData();
-      },[])
+      // useEffect(()=>{
+      //   const fetchData = async()=>{
+      //   const res =  await DiaryApi.findDiary();
+      //   setData(res.data)
+      //   }
+      //   fetchData();
+      // },[])
 
     return(
         <MyDiarydiv>

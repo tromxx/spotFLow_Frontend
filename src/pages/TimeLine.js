@@ -837,7 +837,7 @@ useEffect(() => {
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         hours(e);
-                        setModalData({ title: e.title, content: e.content , name : e.member.name , date: e.date , profile: e.profile});
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.date , profile: e.profile});
                         openModal()
                       }
                       }} >
@@ -849,7 +849,7 @@ useEffect(() => {
                       : <></>}
                       <div className="item-header">
                           <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.profile || default_avatar} alt="" />
-                          <div>{e.member.name}</div>
+                          <div>{e.nickName}</div>
                           <div style={{fontSize:"12px", position:"absolute",right:"0"}}> {e.view} view</div>
                       </div>
                     <ItemImg  isSort={isSort} url={e.tl_profile_pic}></ItemImg>

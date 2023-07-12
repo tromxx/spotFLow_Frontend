@@ -333,7 +333,7 @@ function DiaryCreate() {
                   <MdCancel onClick={() => {
                     handleDelete(e)
                   }} className='button'/>
-                  {e.title}
+                  {e.content}
                 </div>)}
             </div>
             <CreateBtn className='btnplus' onClick={() => {
