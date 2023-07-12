@@ -48,13 +48,15 @@ const MyFlowApi = {
 			
 		},
 
-		getmyFlow: async (email) => {
-			const token = localStorage.getItem('token');
-			return await axios.post(Backend + "/auth/myflow", email, {
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${token}`
+		getmyFlow: async () => {
+			const email = {
+				email : "testAccount0"
 			}
+			return await axios.post(Backend + "/auth/myflow", email, 
+			{
+				headers: {
+					'Content-Type': 'application/json',	
+				}
 			});
 		},
 
