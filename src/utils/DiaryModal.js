@@ -125,21 +125,23 @@ const List = styled.div`
 `
 
 const DiaryModal = ({setIsCreate}) => {
-    const [selectedItems, setSelectedItems] = useState([]);
+
     const [data,setData] = useState([]);
 
 
+    const [selectedItems, setSelectedItems] = useState([]);
+
     const handleCheckboxChange = (e, item) => {
         if (e.target.checked) {
-          setSelectedItems([...selectedItems, item]);
+            setSelectedItems([...selectedItems, {id: item.id}]);
         } else {
-          setSelectedItems(selectedItems.filter(i => i !== item));
+            setSelectedItems(selectedItems.filter(i => i.id !== item));
         }
-      };
+    };
     
-      const handleButtonClick = () => {
+    const handleButtonClick = () => {
         setIsCreate(selectedItems);
-      };
+    };
     
       useEffect(()=>{
         const fetchData = async () => {
