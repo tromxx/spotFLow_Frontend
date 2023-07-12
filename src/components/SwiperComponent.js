@@ -4,6 +4,7 @@ import {BsChatDots, BsSend} from "react-icons/bs";
 import {useEffect, useMemo, useState} from "react";
 import moment from 'moment';
 import 'moment/locale/ko';
+import diaryApi from "../api/DiaryApi";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -263,6 +264,18 @@ const CommentDetail = styled.div`
   }
 `;
 export const Comment = (props) => {
+  const [text, setText] = useState("");
+  const onChangeComment = (e) => {
+    setText(e.target.value);
+  }
+  const Send = () => {
+    // const props = {
+    //   diary :
+    // }
+    diaryApi.sendComment();
+    setText("");
+  }
+
   const BlockBubbling = (e) => {
     e.stopPropagation();
   }
@@ -274,7 +287,7 @@ export const Comment = (props) => {
   const [array, setArray] = useState([]);
   useEffect(() => {
     setArray(props.commentList);
-  }, [props]);
+  }, [props, text]);
   return (
     <CommentBox onClick={(event) => BlockBubbling(event)}>
 
@@ -283,9 +296,9 @@ export const Comment = (props) => {
         <div className="profile">
           <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
         </div>
-        <input type="text" id="comment"/>
+        <input type="text" id="comment" onChange={onChangeComment}/>
         <button className="btn-send">
-          <BsSend className="send"/>
+          <BsSend className="send" onClick={()=>Send()}/>
         </button>
       </div>
 
