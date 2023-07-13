@@ -8,7 +8,7 @@ import {MdCancel, MdPostAdd} from "react-icons/md";
 import {useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
-import diaryApi from "../api/DiaryApi";
+
 
 
 const centerAlign = css`
@@ -243,7 +243,7 @@ function DiaryCreate() {
   const title = useRef(null);
   const text = useRef(null);
 
-  const [diaryPost, setDiaryPost] = useState({image: "", title: "", content: ""});
+  const [diaryPost, setDiaryPost] = useState({id: [], title: "", content: ""});
 
 
   const now = new Date();
@@ -266,17 +266,19 @@ function DiaryCreate() {
       text.current.placeholder = "1글자 이상 입력해주세요"
       return
     }
-    const images = timeline.map(item => item.image);
+    // const images = timeline.map(item => item.image);
     const newDiaryPost = {
       ...diaryPost,
       title: title.current.value,
-      image: images,
-      content: text.current.value
+
+      content: text.current.value,
+      timeline : timeline
     };
     setDiaryPost(newDiaryPost);
-    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "이미지:" + newDiaryPost.image);
+    console.log(timeline);
+    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
     navi("/diary");
-    // diaryApi.saveDiary(title,text,timeline);
+    DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
   }
 
   const handleCreate = (newItems) => {
@@ -296,7 +298,7 @@ function DiaryCreate() {
     <Container>
       <TopMenu>
         <div className='menu'>
-          <div className='left'><CreateBtn style={{borderRadius: "20px"}}> <TfiArrowLeft/> </CreateBtn></div>
+          <div onClick={()=>navi(-1)} className='left'><CreateBtn style={{borderRadius: "20px"}}> <TfiArrowLeft/> </CreateBtn></div>
           <div className='right'><CreateBtn style={{width: "60px"}}
                                             onClick={() => handlePost(title, text)}><MdPostAdd/></CreateBtn></div>
         </div>
@@ -333,7 +335,7 @@ function DiaryCreate() {
                   <MdCancel onClick={() => {
                     handleDelete(e)
                   }} className='button'/>
-                  {e.title}
+                  {e.id}
                 </div>)}
             </div>
             <CreateBtn className='btnplus' onClick={() => {

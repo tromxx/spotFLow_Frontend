@@ -15,6 +15,7 @@
   <li> yarn add react-infinite-scroll-component </li>
   <li> yarn add swiper </li>
   <li> yarn add firebase </li>
+  <li> yarn add moment </li>
 </ul>  
  
 <h1>Rules</h1>

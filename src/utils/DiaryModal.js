@@ -1,6 +1,8 @@
 import React from 'react'
+import { useEffect } from 'react';
 import { useState } from 'react';
 import styled , {css }from 'styled-components';
+import userTimelineApi from '../api/UserTimelineApi';
 import timelinedata from '../dataSet/TimeLineData';
 
 const centerAlign = css`
@@ -123,20 +125,32 @@ const List = styled.div`
 `
 
 const DiaryModal = ({setIsCreate}) => {
-    const [selectedItems, setSelectedItems] = useState([]);
 
+    const [data,setData] = useState([]);
+
+
+    const [selectedItems, setSelectedItems] = useState([]);
 
     const handleCheckboxChange = (e, item) => {
         if (e.target.checked) {
-          setSelectedItems([...selectedItems, item]);
+            setSelectedItems([...selectedItems, {id: item.id}]);
         } else {
-          setSelectedItems(selectedItems.filter(i => i !== item));
+            setSelectedItems(selectedItems.filter(i => i.id !== item));
         }
       };
     
       const handleButtonClick = () => {
         setIsCreate(selectedItems);
       };
+    
+      useEffect(()=>{
+        const fetchData = async () => {
+          const  res =  await userTimelineApi.getUserTimelineList()
+        setData(res.data);
+        }
+        fetchData();
+      },[])
+      
     
 
     return (
@@ -156,15 +170,15 @@ const DiaryModal = ({setIsCreate}) => {
                 </div>
                 <div className='list'>
                         {
-                        timelinedata.map((item)=>
+                        data.map((item)=>
                             <div className='item' key={item.id}>
                                 <label>
                                     <input type="checkbox" onChange={e => handleCheckboxChange(e, item)}/>
                                 </label>
-                                <img src={item.image} alt="" />
+                                <img src={item.tl_profile_pic} alt="" />
 
                                 <div className='content'>
-                                        <div>{item.title}</div>
+                                        <div>{item.id}</div>
                                         <div>{item.content}</div>
                                 </div>
                             </div>

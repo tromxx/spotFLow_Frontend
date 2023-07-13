@@ -16,6 +16,7 @@ import dummy2 from "../dataSet/TimeLineData";
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
 import { type } from "@testing-library/user-event/dist/type";
+import userTimelineApi from "../api/UserTimelineApi";
 
 const ItemGrid = styled.div`
   display: grid;
@@ -437,7 +438,7 @@ const ItemImg = styled.div`
     `}
 `
 const ItemContent = styled.div`
-
+  
   ${centerAlign}
   width: 100%;
   flex-direction: column;
@@ -476,30 +477,60 @@ const ItemContent = styled.div`
 
 const TimeLine = () => {
   const [dummy, setDummy] = useState(dummy2);
-  // 무한스크롤 변수
-  const [items, setItems] = useState(dummy.slice(0, 3));
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await userTimelineApi.getUserTimelineList();
+        setDummy(res.data);
+    };
+    fetchData();
+  }, []);  
+  
+  
+  // []를 추가함으로써 이펙트는 한 번만 실행되며, 컴포넌트가 마운트 될 때만 실행됩니다.
+  // 무한스크롤 변수[dummy.slice(0, 3));
+  const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [height, setHeight] = useState(0);
+
 
 
     // 무한스크롤 가동 함수 콜백함수로 1.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
     // 로딩상태변수
     const [isLoading, setIsLoading] = useState(false);
-const fetchMoreData = () => {
+// const fetchMoreData = () => {
  
-    setTimeout(() => {
+//     setTimeout(() => {
      
-        if (items.length >= dummy.length ) {
-            setHasMore(false);
-            return;
-        }
-        setIsLoading(true);
-        const moreItems = dummy.slice(items.length, items.length + 2);
-        setItems(prevItems => [...prevItems, ...moreItems]);
+//         if (items.length >= dummy.length ) {
+//             setHasMore(false);
+//             return;
+//         }
+//         setIsLoading(true);
+//         const moreItems = dummy.slice(items.length, items.length + 2);
+//         setItems(prevItems => [...prevItems, ...moreItems]);
 
       
-    }, 1500);
-    setIsLoading(!isLoading);
+//     }, 1500);
+//     setIsLoading(!isLoading);
+// };
+const fetchMoreData = () => {
+  if (!dummy) {
+    return;
+  }
+
+  setTimeout(() => {
+    if (items.length >= dummy.length) {
+      setHasMore(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const moreItems = dummy.slice(items.length, items.length + 2);
+    setItems(prevItems => [...prevItems, ...moreItems]);
+  }, 1500);
+  
+  setIsLoading(!isLoading);
 };
 
 // 모달데이터 설정
@@ -615,26 +646,54 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
   // 게시물 작성하기 조건 로직 ref  
     const titleRef = useRef();
     const contentRef = useRef();
+    const [data,setData] = useState({
+      title : "",
+      image : "",
+      email : "test@example.com",
+      content : "" ,
+      lat : null ,
+      lng : null , 
+      date : "" 
+    })
 
-    const CreatePostConfirm = () => {
-      if (titleRef.current.value.length < 2) {
-          titleRef.current.focus();
-          return;  
-      }
-      
+    const CreatePostConfirm = async () => {
       if (contentRef.current.value.length < 5) {
-          contentRef.current.focus();
-          return;  
-      }
-      // 내용초기화 하고 모달창 닫기
-      setDummy([...dummy, {title: title, content: content, image: selectedImage}]);
-                    setContent("");
-                    setTitle("")
-                    setIsCreate(!isCreate);
-      }
+        contentRef.current.focus();
+        return;  
+    }
+    setData(prevState => ({
+        ...prevState, 
+        title: title, 
+        content: content,
+        image:  selectedImage
+    }));
+    userTimelineApi.setUserTimeline(data);
+}
 
+
+// useEffect(() => {
+//   if(data.title !== "" && data.content !== ""){
+//     userTimelineApi.setUserTimeline(data);
+//       setContent("");
+//       setTitle("")
+//       setIsCreate(!isCreate);
+//   }
+// }, [data]); // data 상태가 변경될 때마다 이 useEffect는 호출됩니다.
+
+
+
+
+
+
+
+
+
+      
       const [isCancel,setIsCancle] = useState(false);
       // 게시물 취소할때 내용이 한글자도있으면 window.confirm 
+
+
+
       const CreatePostCancle = () => {
   
         if (titleRef.current.value.length >= 1 || contentRef.current.value.length >=1) {
@@ -719,11 +778,11 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                 </CreateBtn>
 
               }
-              {/* <CreateBtn onClick={() => {
+              <CreateBtn onClick={() => {
                 setIsCreate(!isCreate)
               }}>
                 <AiOutlinePlus></AiOutlinePlus>
-              </CreateBtn> */}
+              </CreateBtn>
 
 
               {/* <CreateBtn onClick={deleteTimeLine}>
@@ -779,7 +838,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         hours(e);
-                        setModalData({ title: e.title, content: e.content , name : e.name , date: e.date , profile: e.profile});
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.profile});
                         openModal()
                       }
                       }} >
@@ -790,11 +849,11 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                       }} className="editBtn"></CreateBtn>
                       : <></>}
                       <div className="item-header">
-                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={e.profile || default_avatar} alt="" />
-                          <div>{e.name}</div>
+                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.profile || default_avatar} alt="" />
+                          <div>{e.nickName}</div>
                           <div style={{fontSize:"12px", position:"absolute",right:"0"}}> {e.view} view</div>
                       </div>
-                    <ItemImg  isSort={isSort} url={e.image}></ItemImg>
+                    <ItemImg  isSort={isSort} url={e.tl_profile_pic}></ItemImg>
                     {/* <ItemContent isSort={isSort}>
                       <div className="title">{e.title}</div>
                       {isSort ? <></> : <div className="content">{e.content}</div>}

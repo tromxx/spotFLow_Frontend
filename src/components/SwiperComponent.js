@@ -1,6 +1,10 @@
 import {styled} from "styled-components";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {BsChatDots, BsSend} from "react-icons/bs";
+import {useEffect, useMemo, useState} from "react";
+import moment from 'moment';
+import 'moment/locale/ko';
+import diaryApi from "../api/DiaryApi";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -209,7 +213,7 @@ const CommentBox = styled.div`
     background-color: #d9d9d9;
     overflow: auto;
     border: .2px solid rgb(120, 120, 120);
-    @media(max-width: 768px){
+    @media (max-width: 768px) {
       height: 405px;
     }
   }
@@ -228,6 +232,7 @@ const CommentDetail = styled.div`
   border: .2px solid rgb(20, 20, 20, 30%);
   display: flex;
   flex-direction: row;
+
   .comment-info {
     display: flex;
     flex-direction: column;
@@ -236,6 +241,7 @@ const CommentDetail = styled.div`
     margin-left: 5px;
     font-size: .8rem;
   }
+
   .subtitle {
     display: flex;
     font-size: .8rem;
@@ -257,11 +263,31 @@ const CommentDetail = styled.div`
     }
   }
 `;
-export const Comment = () => {
+export const Comment = (props) => {
+  const [text, setText] = useState("");
+  const onChangeComment = (e) => {
+    setText(e.target.value);
+  }
+  const Send = () => {
+    // const props = {
+    //   diary :
+    // }
+    diaryApi.sendComment();
+    setText("");
+  }
+
   const BlockBubbling = (e) => {
     e.stopPropagation();
   }
-  const array = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+  // 시간 포맷팅 하는 함수
+  const timeData = (timeString) => {
+    moment.locale('ko');
+    return moment(timeString).format('YYYY년 MM월 DD일 A h시 mm분');
+  };
+  const [array, setArray] = useState([]);
+  useEffect(() => {
+    setArray(props.commentList);
+  }, [props, text]);
   return (
     <CommentBox onClick={(event) => BlockBubbling(event)}>
 
@@ -270,9 +296,9 @@ export const Comment = () => {
         <div className="profile">
           <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
         </div>
-        <input type="text" id="comment"/>
+        <input type="text" id="comment" onChange={onChangeComment}/>
         <button className="btn-send">
-          <BsSend className="send"/>
+          <BsSend className="send" onClick={()=>Send()}/>
         </button>
       </div>
 
@@ -284,28 +310,23 @@ export const Comment = () => {
       {/* 댓글 목록 */}
       <div className="content">
         {/* 댓글 낱개 디자인 */}
-        {array.map(e => (
-          <CommentDetail>
+        {array.map(e => (<CommentDetail>
             <div className="profile">
               <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
             </div>
             <div className="comment-info">
               <div className="subtitle">
-                <span className="name">홍길동</span>
-                <span className="time">2023-06-30 18:19:27</span>
+                <span className="name">{e.customer.nickName}</span>
+                <span className="time">{timeData(e.joinDate)}</span>
               </div>
               <span className="comment">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean necmollisnulla.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean necmollisnulla.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean necmollisnulla.
-             </span>
+                {e.content}
+              </span>
             </div>
-          </CommentDetail>
-        ))}
+          </CommentDetail>))}
       </div>
 
-    </CommentBox>
-  )
+    </CommentBox>)
 };
 
 export const Thumbs = styled.button`

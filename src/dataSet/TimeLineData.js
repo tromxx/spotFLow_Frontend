@@ -2,6 +2,7 @@ const dummy =
     [
       {
         id: 1,
+        userEmail:"yusin@naver.com",
         title: "안유진임돠",
         content: "파이브가이즈..",
         name: "안유진",

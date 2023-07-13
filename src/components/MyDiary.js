@@ -3,6 +3,8 @@ import { styled } from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 import dummy from "../dataSet/TimeLineData";
 import Checkbox from "./CheckBox";
+import { useNavigate } from "react-router-dom";
+import DiaryApi from "../api/DiaryApi";
 
 
 const MyDiarydiv = styled.div`
@@ -124,6 +126,7 @@ const MyDiarydiv = styled.div`
 
     const MyDiary = ({stat}) => {
       const [items, setItems] = useState(new Set());
+      const [data,setData] = useState([]);
 
       const itemHandler = (id, isChecked) => {
         if(isChecked) {
@@ -140,6 +143,16 @@ const MyDiarydiv = styled.div`
         
       } , [stat]);
 
+    
+      const navigate = useNavigate();
+
+      // useEffect(()=>{
+      //   const fetchData = async()=>{
+      //   const res =  await DiaryApi.findDiary();
+      //   setData(res.data)
+      //   }
+      //   fetchData();
+      // },[])
 
     return(
         <MyDiarydiv>
@@ -162,7 +175,7 @@ const MyDiarydiv = styled.div`
                             </div>
                         </div> */}
                        {
-                  dummy.map((data, index) => (
+                  data.map((data, index) => (
                     <div class="box">
                       {stat && (
                         <Checkbox
@@ -181,7 +194,7 @@ const MyDiarydiv = styled.div`
                      <div class="box"  style={{backgroundColor:"#d9d9d9"}}>
                   
                             <div className="image-box">
-                          <AiOutlinePlus className="plus"/>
+                          <AiOutlinePlus onClick={()=>navigate("/diaryCreate")} className="plus"/>
                         </div>
                     </div>
                   </div>

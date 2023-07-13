@@ -5,13 +5,31 @@ import * as SC from "./SwiperComponent"
 import {BsChatDots} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import dummy from "../dataSet/TimeLineData";
+import {useParams} from "react-router-dom";
+import diaryApi from "../api/DiaryApi";
 
 export const DiarySwiper = () => {
+  const { id } = useParams();
   // 오버레이 표시 여부
   const [overlay, setOverlay] = useState(0);
   // 댓글 표시 여부
   const [chatBox, setChatBox] = useState(0);
   const [thumbs, setThumbs] = useState(0);
+
+
+  const [diary, setDiary] = useState({})
+  const [timeline, setTimeLine] = useState([]);
+  const [comment, setComment] = useState([]);
+
+  const DiaryInit = async () => {
+    let res =  await diaryApi.findDiary(id);
+    setDiary(res.data);
+    setTimeLine(res.data.timeLineList);
+    setComment(res.data.commentList);
+    console.log(res.data.commentList);
+    console.log(res.data.timeLineList);
+    console.log(res.data);
+  }
 
   function OpenChat(e) {
     e.stopPropagation();
@@ -32,8 +50,8 @@ export const DiarySwiper = () => {
     else setOverlay(0);
   }
 
-  useEffect(() => {
-
+  useEffect( () => {
+    DiaryInit();
   }, []);
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>
@@ -49,17 +67,17 @@ export const DiarySwiper = () => {
         onSlideChange={() => console.log('slide change')}
 
       >
-        {dummy.map(e=> (
+        {timeline.map(e => (
           <SC.TimeLine>
           {overlay === 1 &&
             <>
               <SC.Overlay>
                 <SC.DiaryBox>
-                  <span>diaryTitle</span>
-                  <p>diaryContent</p>
+                  <span>{diary.title}</span>
+                  <p>{diary.content}</p>
                 </SC.DiaryBox>
                 <SC.TimeLineBox>
-                  <span>{e.title}</span>
+                  <span>TimeLine</span>
                   <p>{e.content}</p>
                 </SC.TimeLineBox>
               </SC.Overlay>
@@ -71,7 +89,7 @@ export const DiarySwiper = () => {
         )
         }
       </SC.DiarySwipe>
-      {chatBox === 1 &&  <SC.Comment/>}
+      {chatBox === 1 &&  <SC.Comment commentList={comment}/>}
 
       <SC.Btn onClick={(event) => OpenChat(event)}>
         <BsChatDots className="comment"/>
