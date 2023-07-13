@@ -8,7 +8,7 @@ import {MdCancel, MdPostAdd} from "react-icons/md";
 import {useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
-import diaryApi from "../api/DiaryApi";
+
 
 
 const centerAlign = css`
@@ -270,13 +270,14 @@ function DiaryCreate() {
     const newDiaryPost = {
       ...diaryPost,
       title: title.current.value,
-      image: images,
-      content: text.current.value
+      content: text.current.value,
+      timeline : timeline
     };
     setDiaryPost(newDiaryPost);
-    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "이미지:" + newDiaryPost.image);
+    console.log(timeline);
+    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
     navi("/diary");
-    diaryApi.saveDiary("whddus426@gmail.com", title, text, timeline);
+    DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
   }
 
   const handleCreate = (newItems) => {
@@ -333,7 +334,7 @@ function DiaryCreate() {
                   <MdCancel onClick={() => {
                     handleDelete(e)
                   }} className='button'/>
-                  {e.title}
+                  {e.id}
                 </div>)}
             </div>
             <CreateBtn className='btnplus' onClick={() => {
