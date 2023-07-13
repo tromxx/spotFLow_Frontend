@@ -14,6 +14,7 @@ const useCurrentLocation = (options = {}) => {
       latitude,
       longitude,
     });
+    return { location, error, getCurrentLocation };
   };
 
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
