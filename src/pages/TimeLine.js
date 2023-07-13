@@ -667,17 +667,18 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
         content: content,
         image:  selectedImage
     }));
+    userTimelineApi.setUserTimeline(data);
 }
 
-useEffect(() => {
-    if(data.title !== "" && data.content !== ""){
-        userTimelineApi.setUserTimeline(data);
-        setContent("");
-        setTitle("")
-        setIsCreate(!isCreate);
-    }
-}, [data]); // data 상태가 변경될 때마다 이 useEffect는 호출됩니다.
 
+// useEffect(() => {
+//   if(data.title !== "" && data.content !== ""){
+//     userTimelineApi.setUserTimeline(data);
+//       setContent("");
+//       setTitle("")
+//       setIsCreate(!isCreate);
+//   }
+// }, [data]); // data 상태가 변경될 때마다 이 useEffect는 호출됩니다.
 
 
 
@@ -837,7 +838,7 @@ useEffect(() => {
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         hours(e);
-                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.date , profile: e.profile});
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.profile});
                         openModal()
                       }
                       }} >

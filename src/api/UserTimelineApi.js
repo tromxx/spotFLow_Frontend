@@ -6,7 +6,9 @@ const DOMAIN = "http://localhost:8111"
 const userTimelineApi = {
   // 모든 타임라인 정보를 가져옴
   getUserTimelineList: async () => {
-    return await axios.get(DOMAIN + "/timeline/testing");
+
+    return await axios.post(DOMAIN + "/timeline/find");
+
   },
   // 특정 유저의 타임라인 정보를 가져옴
   getUserTimeline: async (email) => {

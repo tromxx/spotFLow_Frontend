@@ -8,7 +8,7 @@ import {MdCancel, MdPostAdd} from "react-icons/md";
 import {useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
-import diaryApi from "../api/DiaryApi";
+
 
 
 const centerAlign = css`
@@ -270,14 +270,15 @@ function DiaryCreate() {
     const newDiaryPost = {
       ...diaryPost,
       title: title.current.value,
- 
-      content: text.current.value
+
+      content: text.current.value,
+      timeline : timeline
     };
     setDiaryPost(newDiaryPost);
     console.log(timeline);
-    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "타임라인:"+ timeline);
+    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
     navi("/diary");
-    diaryApi.saveDiary("whddus426@gmail.com", title, text, timeline);
+    DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
   }
 
   const handleCreate = (newItems) => {
