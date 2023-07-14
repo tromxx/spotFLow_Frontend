@@ -190,11 +190,17 @@ const DiaryMypagediv = styled.div`
             const fetchData = async () => {
                 const email = "test@example.com";
                 const res = await DiaryApi.findMyDiary(email);
+                
                 setData(res.data);
+                
             };
             fetchData();
+            
           }, []);  
         
+          useEffect(() => {
+            console.log(data);
+        }, [data]);
       
 
     return(

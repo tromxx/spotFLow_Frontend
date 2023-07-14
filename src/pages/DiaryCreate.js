@@ -287,9 +287,10 @@ function DiaryCreate() {
     setIsCreate(!isCreate);
 
     if (newItems) {
-      setTimeLine([...timeline, ...newItems]);
+      setTimeLine([...timeline, ...newItems.map(item => ({id: item.id, image: item.image}))]);
     }
-  };
+};
+
 
   const handleDelete = (itemToRemove) => {
     setTimeLine(prevTimeLine => prevTimeLine.filter(item => item.id !== itemToRemove.id))

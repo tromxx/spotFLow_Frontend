@@ -133,11 +133,12 @@ const DiaryModal = ({setIsCreate}) => {
 
     const handleCheckboxChange = (e, item) => {
         if (e.target.checked) {
-            setSelectedItems([...selectedItems, {id: item.id}]);
+            setSelectedItems([...selectedItems, item]);
         } else {
-            setSelectedItems(selectedItems.filter(i => i.id !== item));
+            setSelectedItems(selectedItems.filter(i => i.id !== item.id));
         }
-      };
+    };
+    
     
       const handleButtonClick = () => {
         setIsCreate(selectedItems);
