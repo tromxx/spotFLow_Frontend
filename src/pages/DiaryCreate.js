@@ -243,7 +243,7 @@ function DiaryCreate() {
   const title = useRef(null);
   const text = useRef(null);
 
-  const [diaryPost, setDiaryPost] = useState({image: "", title: "", content: ""});
+  const [diaryPost, setDiaryPost] = useState({id: [], title: "", content: ""});
 
 
   const now = new Date();
@@ -266,10 +266,11 @@ function DiaryCreate() {
       text.current.placeholder = "1글자 이상 입력해주세요"
       return
     }
-    const images = timeline.map(item => item.image);
+    // const images = timeline.map(item => item.image);
     const newDiaryPost = {
       ...diaryPost,
       title: title.current.value,
+
       content: text.current.value,
       timeline : timeline  
     };

@@ -137,11 +137,11 @@ const DiaryModal = ({setIsCreate}) => {
         } else {
             setSelectedItems(selectedItems.filter(i => i.id !== item));
         }
-    };
+      };
     
-    const handleButtonClick = () => {
+      const handleButtonClick = () => {
         setIsCreate(selectedItems);
-    };
+      };
     
       useEffect(()=>{
         const fetchData = async () => {
