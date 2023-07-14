@@ -124,7 +124,7 @@ const MyDiarydiv = styled.div`
 `;
 
 
-    const MyDiary = ({stat}) => {
+    const MyDiary = (props) => {
       const [items, setItems] = useState(new Set());
       const [data,setData] = useState([]);
 
@@ -141,7 +141,7 @@ const MyDiarydiv = styled.div`
 
       useEffect(() =>{
         
-      } , [stat]);
+      } , [props.stat]);
 
     
       const navigate = useNavigate();
@@ -175,21 +175,27 @@ const MyDiarydiv = styled.div`
                             </div>
                         </div> */}
                        {
-                  data.map((data, index) => (
-                    <div class="box">
-                      {stat && (
+                  props.data.map((data, index) => (
+                    <div class="box" key={index}>
+                      {props.stat && (
                         <Checkbox
                           key = {index}
                           id = {data.id}
                           itemHandler = {itemHandler}
                         />
                       )}
-                      <div className="img-box">
-                        <img className="image" src={data.image} alt="" />
-                      </div>
+
+
+
+                            <div className="img-box">
+                            <img  className="image" src={data.timeLineList[index].image} alt="" />
+                            </div>
+                      
                     </div>
+                    
                   ))
                 }
+                
 
                      <div class="box"  style={{backgroundColor:"#d9d9d9"}}>
                   

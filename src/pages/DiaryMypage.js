@@ -8,6 +8,8 @@ import { BsTrash } from "react-icons/bs";
 import { BsListUl } from "react-icons/bs";
 import { Navigate, useNavigate } from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
+import { useEffect } from "react";
+import axios from "axios";
 
 
 
@@ -156,6 +158,8 @@ const DiaryMypagediv = styled.div`
 
     const [isCheckBox, setIsCheckBox] = useState(false);
 
+    const [data,setData] = useState([]);
+
     const convertCheckBox = () => {
         if(isCheckBox === false) setIsCheckBox(true)
         else setIsCheckBox(false);
@@ -181,6 +185,16 @@ const DiaryMypagediv = styled.div`
               // 삭제 실패 시 처리할 로직
             }
           };
+
+          useEffect(() => {
+            const fetchData = async () => {
+                const email = "test@example.com";
+                const res = await DiaryApi.findMyDiary(email);
+                setData(res.data);
+            };
+            fetchData();
+          }, []);  
+        
       
 
     return(
@@ -191,7 +205,7 @@ const DiaryMypagediv = styled.div`
                     <div className="namebarleft">
                     <div className="id">
                         <img className="img" src={avatar} alt="" />
-                        <h6>whddus426</h6>
+                        <h6>whddus425</h6>
                      </div>
                 
                  </div>
@@ -237,7 +251,7 @@ const DiaryMypagediv = styled.div`
             </header>
             <body>
         <DiaryMypagediv>
-            <MyDiary stat={isCheckBox}/>
+            <MyDiary stat={isCheckBox} data={data}/>
         </DiaryMypagediv>
         </body>
         </Container>
