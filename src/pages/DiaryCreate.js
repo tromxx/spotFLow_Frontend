@@ -271,13 +271,15 @@ function DiaryCreate() {
       ...diaryPost,
       title: title.current.value,
       content: text.current.value,
-      timeline : timeline
+      timeline : timeline  
     };
     setDiaryPost(newDiaryPost);
     console.log(timeline);
+   const sss = DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
+    console.log(sss);
     alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
     navi("/diary");
-    DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
+    
   }
 
   const handleCreate = (newItems) => {

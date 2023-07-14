@@ -19,13 +19,13 @@ import { type } from "@testing-library/user-event/dist/type";
 import userTimelineApi from "../api/UserTimelineApi";
 
 const ItemGrid = styled.div`
+  min-height: 80vh;
   display: grid;
-
   height: 80%;
   width: 100%;
   grid-template-rows: 1fr 1fr;
   //background-color: white;
-  background-color: ${(props) => props.theme.timeLineBgColor};
+
 
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
@@ -130,6 +130,7 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+
   background-color: ${(props) => props.theme.timeLineBgColor};
   background-color:white;
   textarea {
@@ -172,6 +173,7 @@ const Header = styled.div`
   flex-wrap: wrap;
   
   background-color: white;
+  background-color: ${(props) => props.theme.bgColor};
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -188,8 +190,10 @@ const Header = styled.div`
     height: 0px;
     margin-left: 20px;
     border:none;
+    
   //  border:1px solid ${(props) => props.theme.timeLineBgColor};
     background-color: white;
+
     border-radius:15px;
 
   }
@@ -823,7 +827,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
             dataLength={items.length}
             next={fetchMoreData}
             hasMore={hasMore}
-            loader={isLoading ? <LoadingSpinner/> : null}
+            // 잠시제거 loader={isLoading ? <LoadingSpinner/> : null}
             endMessage={
               <p style={{textAlign: "center"}}>
                 {/* <b>끝페이지</b> */}
@@ -838,7 +842,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         hours(e);
-                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.profile});
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.ct_profile_pic});
                         openModal()
                       }
                       }} >
@@ -849,7 +853,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                       }} className="editBtn"></CreateBtn>
                       : <></>}
                       <div className="item-header">
-                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.profile || default_avatar} alt="" />
+                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.ct_profile_pic || default_avatar} alt="" />
                           <div>{e.nickName}</div>
                           <div style={{fontSize:"12px", position:"absolute",right:"0"}}> {e.view} view</div>
                       </div>
