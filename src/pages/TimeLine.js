@@ -634,17 +634,25 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 // 시간 계산 함수
   let [diffHours,setDiffHours] = useState();
 
-  const hours = (e) => {
-    let date1 = new Date(e.date);
-    let date2 = new Date();
-    let diffMilliseconds = Math.abs(date2 - date1);
-    let diffHours = parseInt(diffMilliseconds / (1000 * 60 * 60));
-    if(diffHours >= 24){
-      setDiffHours(parseInt(diffHours / 24) + "일 전"); 
-    } else {
-      setDiffHours(diffHours + "시간 전");
-    }
-}
+      const calculateTime = (date) => {
+        let date1 = new Date(date); // This is in local time
+        let date2 = new Date();
+        let diffMilliseconds = Math.abs(date2 - date1);
+        let diffSeconds = Math.floor(diffMilliseconds / 1000);
+        let diffMinutes = Math.floor(diffSeconds / 60);
+        let diffHours = Math.floor(diffMinutes / 60);
+        let diffDays = Math.floor(diffHours / 24);
+
+        if(diffDays > 0){
+          setDiffHours(diffDays + "일 전"); 
+        } else if(diffHours > 0) {
+          setDiffHours(diffHours + "시간 전");
+        } else if(diffMinutes > 0) {
+          setDiffHours(diffMinutes + "분 전");
+        } else {
+          setDiffHours(diffSeconds + "초 전");
+        }
+      }
 
 
   // 게시물 작성하기 조건 로직 ref  
@@ -841,7 +849,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                   
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
-                        hours(e);
+                        calculateTime(e.updateTime);
                         setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.ct_profile_pic});
                         openModal()
                       }

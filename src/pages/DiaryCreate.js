@@ -279,7 +279,7 @@ function DiaryCreate() {
    const sss = DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
     console.log(sss);
     alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
-    navi("/diary");
+    navi("/diaryMypage");
     
   }
 
