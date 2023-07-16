@@ -2,13 +2,8 @@ import React, { useCallback, useRef, useState, useEffect } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import DiaryCategory from '../pages/DiaryCategory';
-
-
-
-
 
 const Sliderheader = styled.div`
     display:flex;

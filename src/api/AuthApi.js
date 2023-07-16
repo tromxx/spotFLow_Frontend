@@ -3,7 +3,7 @@ import axios from "axios";
 
 const DOMAIN = "http://localhost:8111";
 
-const CustomerApi = {
+const AuthApi = {
   // Get : 이메일 중복 확인 
   checkEmail: async (email) => {
     return await axios.get(DOMAIN + `/auth/check-duplicate-email?email=${email}`);
@@ -29,5 +29,5 @@ const CustomerApi = {
     return await axios.post(DOMAIN + "/auth/signup", customerData)
   }
 };
-export default CustomerApi;  
+export default AuthApi;  
 

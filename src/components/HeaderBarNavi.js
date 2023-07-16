@@ -4,8 +4,9 @@ import Logo from '../images/logo.png';
 import { useNavigate } from "react-router";
 import DarkLogo from "../images/DarkLogo.png"
 import { useTheme } from "../context/themeProvider";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
+import {BiExit} from 'react-icons/bi'
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -35,38 +36,64 @@ const HeaderBarDiv = styled.div`
     transition: 0.25s;
     color: var(--blue);
   }
-  img {
-    padding-left: 3%;
-    width:20vh;
-    height: 100%;
-    cursor: pointer;
-  }
 `;
 
 const LogoImg = styled.img`
   width: 20vh;
   min-width: 150px;
-  height: 100%;
   cursor: pointer;
+  padding-left: 25px;
+`;
+
+const ProfImg = styled.img`
+  width: 49px;
+  height: 5vh;
+  padding-top: 5px;
+`
+
+const LoggedInUl = styled.ul`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Exit = styled(BiExit)`
+  width: 30px;
+  height: 3vh;
+  padding-top: 5px;
 `;
 
 
-const HeaderBar = ({ children }) => {
+const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  
+  const{isLoggedIn,setIsLoggedIn ,nickname, profilePic} = useContext(UserContext);
+
+  const logOut = () =>{
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+  }
+
   return (
     <HeaderBarDiv>
       <LogoImg
         src={ThemeMode === 'dark' ? DarkLogo : Logo}
         onClick={()=>navigate("/")}
       />
-      <ul>
-        <li onClick={()=>navigate("/login")}>Login</li>
-        <li>/</li>
-        <li onClick={()=>navigate("/signup")}>Sign up</li>
-      </ul>
+      {isLoggedIn ? 
+        <LoggedInUl>
+          <li><ProfImg src={profilePic}/></li>
+          <li>{nickname}</li>
+          <li onClick={logOut}><Exit/></li>
+        </LoggedInUl>
+        :
+        <ul>
+          <li onClick={()=>navigate("/login")}>Login</li>
+          <li>/</li>
+          <li onClick={()=>navigate("/signup")}>Sign up</li>
+        </ul>
+      }
     </HeaderBarDiv>
   );
 };

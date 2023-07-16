@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +6,8 @@ import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import ProfileData from '../dataSet/ProfileData';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserStore';
 
 
 //SideDiv CSS 컴포넌트로 고정 값으로 사용할 고민중
@@ -97,7 +98,7 @@ const Statusmsg = styled.div`
 
 
 const Paragrph = styled.p`
-transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
+transform: ${props  => `translateX(${props.isActive ? 0 : -500}%)`};
   &:hover{
     cursor: pointer;
   }
@@ -112,7 +113,7 @@ transform: ${({ isActive }) => `translateX(${isActive ? 0 : -500}%)`};
   }
 `
 const Menu = styled.h1`
-  transform: ${({ isActive }) => `translateX(${isActive ? 0 : -200}%)`};
+  transform: ${props => `translateX(${props.isActive ? 0 : -200}%)`};
   &:hover {
     cursor: pointer;
     color : var(--lightblue);
@@ -166,15 +167,12 @@ const CameraButton = styled(BsCamera)`
 
 
 const MyPage = ({ onClose, goToMyFlow }) => {
-  const [ThemeMode, setTheme] = useTheme(); // black white 변경
-  const [isActive, setIsActive] = useState(true); //정부 수정시 
-  const [isBorderVisible, setIsBorderVisible] = useState(false); // 정보 수정 톱니바퀴를 눌렀을 때 닉네임 input의 border 보이게 할 것인지
-  const [image, setImage] = useState("https://mblogthumb-phinf.pstatic.net/MjAyMTEwMTdfMzUg/MDAxNjM0NDAzMDA2ODMy.GHw5PZcGfKmsLaDNHB0dx4pyfEpAkrjykogrswNUgQ4g.Plyxj3MecKqu5GD4Ci2Fi88WHPaZDeq4NqQwppwLxC8g.PNG.rpgrr123/1c8058f087fec5fd9da8aaa66db0eb1ac16a9cc711e0c50dd8f5ccf86e0a43555012746e984f741b26a1035bcc8a4b868ce41c5b890559368b10c0568f11c5c9481dbc596144bb3999cc2dcbb2af0400c1301e4ecab63758036a2afc4830aececf2ad6402c8938d910c4c8ebed4af447.png?type=w800");
+  const [ThemeMode, setTheme] = useTheme(); 
+  const [isActive, setIsActive] = useState(true);  
+  const [isBorderVisible, setIsBorderVisible] = useState(false); 
   const [status , setStatus] = useState("tesing")
-  const [MyPageData, setMyPageData] = useState(ProfileData); //Backend 연결 필요
   const navigate = useNavigate();
-  
-  console.log(MyPageData)
+  const{nickname, profilePic, statMsg, isLoggedIn} = useContext(UserContext)
   
   const handleClick = () => {
     setIsActive(!isActive);
@@ -185,43 +183,19 @@ const MyPage = ({ onClose, goToMyFlow }) => {
   const handleStatusMsg = (event) =>{
     setStatus(event.target.value);
   }
-
-
-
-
   return (
     <MyInfoDiv>
-      <div className="controlDiv">
-        <ControlButton onClick={handleClick} isActive={isActive} />
-        <CloseButton onClick={onClose} />
-      </div>
-      <div className='profileDiv'>
-        <img src={image} alt="" />
-        <Caption isBorderVisible={isBorderVisible}>
-          <input type="file" accept='image/*' />
-          <CameraButton/>
-        </Caption>
-        <Paragrph isActive={isActive} className='NickName'>Trom</Paragrph>
-        <div className='followingfollowerDiv'>
-          <Paragrph isActive={isActive} className='Following'>Following : 100</Paragrph>
-          <Paragrph isActive={isActive} className='Following'>Follower : 200</Paragrph>
+      {isLoggedIn ? 
+        <div className="controlDiv">
+          <ControlButton onClick={handleClick} isActive={isActive} />
+          <CloseButton onClick={onClose} />
         </div>
-        <Statusmsg isBorderVisible={isBorderVisible}>
-        <textarea
-          cols="20"
-          rows="2"
-          value={status}
-          spellCheck="false"
-          onChange={handleStatusMsg}
-          readOnly={isActive}
-        ></textarea>
-        </Statusmsg>
-      </div>
-      <div className='routeDiv'>
-        <Menu onClick={goToMyFlow} isActive={isActive} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Menu>
-        <Menu onClick={()=>navigate("/diary")} isActive={isActive} className='Diary'>Diary</Menu>
-        <Menu isActive={isActive} onClick={setTheme} mode={ThemeMode} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Menu>
-      </div>
+        :
+        <div className="controlDiv">
+          <h1>로그인 하삼</h1>
+          <CloseButton onClick={onClose} />
+        </div>
+      }
     </MyInfoDiv>
   );
 };

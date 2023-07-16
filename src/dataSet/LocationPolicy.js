@@ -1,22 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 
-
-const LocationPolicyDiv = styled.div`
-    border: ${props=> props.theme.borderColor};
-    border-radius: 8px;
-    width: 600px;
-    height: 180px;
-    overflow: auto;
-    border: 1px solid #999;
-    padding: 10px;
-    white-space: pre-wrap;
-    border-radius: 5px;
-    font-size: 12px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-`;
-    
 
 
 const LocationPolicy = () => {
@@ -24,7 +7,7 @@ const LocationPolicy = () => {
 
     return(
 
-	<LocationPolicyDiv>
+	<>
 		위치기반서비스 이용약관 <br />
 제1조 （목적）<br />
 본 약관은 회원（마이플로우의 서비스 약관에 동의한 자를 말하며 이하 '회원'이라고 합니다）이 마이플로
@@ -159,7 +142,7 @@ const LocationPolicy = () => {
 2. 성명 : 김준혁<br />
 3. 직위 : 담당자<br />
 4. 전화 : <br />
-	</LocationPolicyDiv>
+	</>
     );
 }
 

@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import styled from 'styled-components'
 import Logo from "../images/logo.png"
 import GoogleLogo from "../images/GoogleLogin.png"
@@ -6,14 +5,15 @@ import KakaoLogo from "../images/KakaoLogin.png"
 import SpotLogo from "../images/SpotFlowLogin.png"
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
-import TestingModal from '../utils/TestingModal'
+import LoginSignUpModal from "../utils/LoginSignUpModal"
 import axios from "axios";
 import { UserContext } from "../context/UserStore";
 
 const LogInDiv = styled.div`
 	display: flex;
-	justify-content: center;
-	
+   justify-content: center;
+   align-items: center;
+   margin-top: 5%;
 	ul{
 		width: 400px;
 		display: flex;
@@ -89,24 +89,21 @@ const LogInDiv = styled.div`
    }
 `;
 
-
 const Login = () => {
    const navigate = useNavigate();
    const [inputEmail, setInputEmail] = useState();
    const [inputPwd , setInputPwd] = useState();
 	const [open, setOpen] = useState(false);
 	const [message, setMessage] = useState("");
-	const context = useContext(UserContext);
-   const {setIsLoggedIn} = context;
-   const DOMAIN = "http://localhost:8111";
-
+   const {setIsLoggedIn} = useContext(UserContext);
+   
 	const onClickChecking = async() =>{
 		const customerData = {
 			email : inputEmail,
 			password : inputPwd
 		};
 		try{
-			const response = await axios.post(DOMAIN + "/auth/login", customerData);
+			const response = await axios.post("http://localhost:8111/auth/login", customerData);
 			const  {accessToken} = response.data;
 			localStorage.setItem('authToken', accessToken);
          setIsLoggedIn(true);
@@ -117,9 +114,6 @@ const Login = () => {
 		}
 	};
 
-   useEffect(()=>{
-      localStorage.setItem('authToken', null);
-   },[])
 
    return(
       <LogInDiv>
@@ -135,7 +129,7 @@ const Login = () => {
             <li><img src={KakaoLogo} alt="" /></li>
 				<li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
          </ul>
-			<TestingModal 
+			<LoginSignUpModal 
 				children={message} 
 				type={true} 
 				confirm={()=>setOpen(false)} 
