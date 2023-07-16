@@ -102,7 +102,6 @@ const Login = () => {
 			email : inputEmail,
 			password : inputPwd
 		};
-      console.log(customerData);
 		try{
 			const response = await axios.post("http://localhost:8111/auth/login", customerData);
 			const  {accessToken} = response.data;

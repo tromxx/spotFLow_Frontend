@@ -2,12 +2,11 @@ import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose, AiOutlineLogin } from 'react-icons/ai'
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserStore';
-import Logo from "../images/logo.png"
 
 const LogInDiv = styled.div`
   width: 390px;
@@ -38,7 +37,6 @@ const LogInDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
     textarea{
       color: ${props => props.theme.textColor};
       resize: none;
@@ -54,19 +52,13 @@ const LogInDiv = styled.div`
       padding: 2px;
     }
   }
-  .profileDiv p:nth-child(3){
-    font-weight: bold;
-    font-size: 25px;
-    height: 10px;
-  }
   .followingfollowerDiv{
     display: flex;
     gap: 50px;
+    margin: 0px;
   }
-  .modifyInputDiv{
-    position: absolute;
-    top: 100px;
-    left: 100px;
+  button{
+    display: ${(props) => (props.$isactive === "false" ? "block" : "none")};
   }
 `;
 
@@ -96,69 +88,76 @@ const LogOutDiv=styled.div`
 `;
 
 const Caption = styled.div`
+  margin: 0px;
+  padding: 0px;
   position: absolute;
-  display: flex;
-  margin-top: 98px;
-  width: 123px;
-  height: 30px;
-  border-radius: 0 0 130px 130px;
-  background-color: rgba(0, 0, 0, .6);
+  bottom: 65px;
+  width: 130px; 
+  height: 65px; 
+  border-radius: 0 0 70px 70px;
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: 5;
-  display: ${({ isBorderVisible }) => (isBorderVisible ? 'block' : 'none')};
-  input{
+  display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
+  input {
     display: none;
   }
 `;
 
-const Statusmsg = styled.div`
-  border: ${({ isBorderVisible }) => (isBorderVisible ? '1px solid gray' : 'none')};
-  transition: 0.6s ease;
-  border-radius: 8px;
-  background-color: transparent;
-  box-sizing: border-box;
-`;
-
-
 const Paragrph = styled.p`
-transform: ${props  => `translateX(${props.isActive ? 0 : -500}%)`};
-  &:hover{
-    cursor: pointer;
-  }
+  margin: 15px;
+  transform: ${props  => `translateX(${props.$isactive === "true" ? 0 : -500}%)`};
   &.NickName{
     transition: transform 1.8s ease;
+    font-size: 20px;
+    font-weight: bolder;
   }
   &.Following{
-    transition: transform 2.8s ease;
-  }
-  &.Statusmsg{
-    transition: transform 2.8s ease;
-  }
-`
-const Menu = styled.h1`
-  transform: ${props => `translateX(${props.isActive ? 0 : -200}%)`};
-  &:hover {
-    cursor: pointer;
-    color : var(--lightblue);
-  }
-  &.MyFlow {
-    transition: transform 1.8s ease;
-  }
-  &.Diary {
     transition: transform 2.0s ease;
-  } 
-  &.Theme {
+    &:hover {
+      color: var(--lightblue);
+      cursor: pointer;
+    }
+  }
+  &.StatMsg{
     transition: transform 2.2s ease;
   }
+  &.MyFlow {
+    transition: transform 2.4s ease;
+    font-size : 30px;
+    font-weight : bolder;
+    &:hover {
+      color: var(--lightblue);
+      cursor: pointer;
+    }
+  }
+  &.Diary {
+    transition: transform 2.6s ease;
+    font-size : 30px;
+    font-weight : bolder;
+    &:hover {
+      color: var(--lightblue);
+      cursor: pointer;
+    }
+  } 
+  &.Theme {
+    transition: transform 2.8s ease;
+    font-size : 30px;
+    font-weight : bolder;
+    &:hover {
+      color: var(--lightblue);
+      cursor: pointer;
+    }
+  }
 `
-
 // 톱니버튼 CSS
 const ControlButton = styled(RxGear)`
   width: 30px;
   height: 30px;
   color: var(--grey);
   transition: transform 0.7s ease;
-  transform: ${({isActive}) => (isActive ? 'rotate(120deg)' : 'rotate(5deg)')};
-  &:hover{
+  transform: ${props => (props.$isactive === "true" ? 'rotate(120deg)' : 'rotate(5deg)')};
+
+  &:hover {
     color: skyblue;
   }
 `;
@@ -185,13 +184,12 @@ const LoginButton = styled(AiOutlineLogin)`
   }
 `;
 
-
 //프로파일 이미지 업로드 수정
 const CameraButton = styled(BsCamera)`
-  width: 25px;
-  height: 25px;
-  position: absolute;
+  width: 30px;
+  height: 30px;
   color: var(--grey);
+  margin-top: 10px;
   margin-left: 49px;
   &:hover{
     cursor: pointer;
@@ -199,43 +197,77 @@ const CameraButton = styled(BsCamera)`
   }
 `;
 
-
-
-
 const MyPage = ({ onClose, goToMyFlow }) => {
   const [ThemeMode, setTheme] = useTheme(); 
-  const [isActive, setIsActive] = useState(true);  
-  const [isBorderVisible, setIsBorderVisible] = useState(false); 
-  const [status , setStatus] = useState("tesing")
+  const [isactive, setIsActive] = useState(true);
+  const [imgFile, setImgFile] = useState("");
+  const imgRef = useRef();
   const navigate = useNavigate();
   const{nickname, profilePic, statMsg, isLoggedIn} = useContext(UserContext)
   
   const handleClick = () => {
-    setIsActive(!isActive);
-    setIsBorderVisible(!isBorderVisible);
-    setStatus("");
+    setIsActive(!isactive);
+    setImgFile("");
   };
   
-  const handleStatusMsg = (event) =>{
-    setStatus(event.target.value);
-  }
+   const handleCameraClick = () => {
+    if (imgRef.current) {
+      imgRef.current.click();
+    }
+  };
+
+  const saveImgFile = () => {
+    const file = imgRef.current.files[0];
+    const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+          setImgFile(reader.result);
+          console.log(imgFile);
+       };
+  };
+  
   return (
     <>
     {isLoggedIn ? 
       <LogInDiv>
         <div className="controlDiv">
-          <ControlButton onClick={handleClick} isActive={isActive} />
+          <ControlButton onClick={handleClick}  $isactive={isactive.toString()}  />
           <CloseButton onClick={onClose} />
         </div>
+        <div className='profileDiv'>
+        <img
+              src={imgFile ? imgFile : profilePic || "/images/icon/user.png"}
+              alt="프로필 이미지"
+            />
+          <Caption $isactive={isactive.toString()}>
+            <input
+              type="file"
+              accept="image/*"
+              id="profileImg"
+              onChange={saveImgFile}
+              ref={imgRef}
+            />
+            <CameraButton onClick={handleCameraClick}/>
+          </Caption>
+          <Paragrph $isactive={isactive.toString()} className='NickName'>{nickname}</Paragrph>
+          <div className='followingfollowerDiv'>
+            <Paragrph $isactive={isactive.toString()} className='Following'>Following : 100</Paragrph>
+            <Paragrph $isactive={isactive.toString()} className='Following'>Follower : 200</Paragrph>
+         </div>
+          <Paragrph $isactive={isactive.toString()} className='StatMsg'>Testing Testing</Paragrph>
+        </div>
+        <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph>
+        <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
+        <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
+        <button $isactive={isactive.toString()}>저장하기</button>
       </LogInDiv>
-        :
+      :
       <LogOutDiv>
         <div className="controlDiv">
           <LoginButton onClick={()=>navigate("/login")}/>
           <CloseButton onClick={onClose} />
         </div>
         <div className="logoutdivService">
-          <img src={Logo} alt="" />
           <p>로그인이 필요한 서비스입니다.</p>
         </div>
       </LogOutDiv>

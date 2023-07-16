@@ -15,7 +15,7 @@ const HeaderBarDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 20px;
+  font-size: 23px;
   border-bottom: ${props => props.theme.borderColor};
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
@@ -47,13 +47,6 @@ const LoggedInDiv = styled.div`
   align-items: center;
   padding-right: 65px;
   gap: 15px;
-  img{
-    width: 50px;
-    min-width: 20px;
-    height: 50px;
-    min-height: 20px;;
-    border-radius: 100px;
-  }
 `;
 
 const Exit = styled(BiExit)`
@@ -69,7 +62,7 @@ const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const{isLoggedIn,setIsLoggedIn ,nickname, profilePic} = useContext(UserContext);
+  const{isLoggedIn,setIsLoggedIn ,nickname} = useContext(UserContext);
 
   const logOut = () =>{
     localStorage.removeItem('authToken');
@@ -84,7 +77,6 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <img src={profilePic}/>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>
         </LoggedInDiv>

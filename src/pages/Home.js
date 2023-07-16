@@ -21,6 +21,7 @@ const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
 
+
   const renderPage = () => {
     switch (currentPage) {
       case 'MyPage':
