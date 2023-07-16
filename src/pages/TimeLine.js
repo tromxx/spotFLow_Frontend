@@ -19,13 +19,13 @@ import { type } from "@testing-library/user-event/dist/type";
 import userTimelineApi from "../api/UserTimelineApi";
 
 const ItemGrid = styled.div`
+  min-height: 80vh;
   display: grid;
-
   height: 80%;
   width: 100%;
   grid-template-rows: 1fr 1fr;
   //background-color: white;
-  background-color: ${(props) => props.theme.timeLineBgColor};
+
 
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
@@ -130,6 +130,7 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+
   background-color: ${(props) => props.theme.timeLineBgColor};
   background-color:white;
   textarea {
@@ -172,6 +173,7 @@ const Header = styled.div`
   flex-wrap: wrap;
   
   background-color: white;
+  background-color: ${(props) => props.theme.bgColor};
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -188,8 +190,10 @@ const Header = styled.div`
     height: 0px;
     margin-left: 20px;
     border:none;
+    
   //  border:1px solid ${(props) => props.theme.timeLineBgColor};
     background-color: white;
+
     border-radius:15px;
 
   }
@@ -630,17 +634,25 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 // 시간 계산 함수
   let [diffHours,setDiffHours] = useState();
 
-  const hours = (e) => {
-    let date1 = new Date(e.date);
-    let date2 = new Date();
-    let diffMilliseconds = Math.abs(date2 - date1);
-    let diffHours = parseInt(diffMilliseconds / (1000 * 60 * 60));
-    if(diffHours >= 24){
-      setDiffHours(parseInt(diffHours / 24) + "일 전"); 
-    } else {
-      setDiffHours(diffHours + "시간 전");
-    }
-}
+      const calculateTime = (date) => {
+        let date1 = new Date(date); // This is in local time
+        let date2 = new Date();
+        let diffMilliseconds = Math.abs(date2 - date1);
+        let diffSeconds = Math.floor(diffMilliseconds / 1000);
+        let diffMinutes = Math.floor(diffSeconds / 60);
+        let diffHours = Math.floor(diffMinutes / 60);
+        let diffDays = Math.floor(diffHours / 24);
+
+        if(diffDays > 0){
+          setDiffHours(diffDays + "일 전"); 
+        } else if(diffHours > 0) {
+          setDiffHours(diffHours + "시간 전");
+        } else if(diffMinutes > 0) {
+          setDiffHours(diffMinutes + "분 전");
+        } else {
+          setDiffHours(diffSeconds + "초 전");
+        }
+      }
 
 
   // 게시물 작성하기 조건 로직 ref  
@@ -667,17 +679,18 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
         content: content,
         image:  selectedImage
     }));
+    userTimelineApi.setUserTimeline(data);
 }
 
-useEffect(() => {
-    if(data.title !== "" && data.content !== ""){
-        userTimelineApi.setUserTimeline(data);
-        setContent("");
-        setTitle("")
-        setIsCreate(!isCreate);
-    }
-}, [data]); // data 상태가 변경될 때마다 이 useEffect는 호출됩니다.
 
+// useEffect(() => {
+//   if(data.title !== "" && data.content !== ""){
+//     userTimelineApi.setUserTimeline(data);
+//       setContent("");
+//       setTitle("")
+//       setIsCreate(!isCreate);
+//   }
+// }, [data]); // data 상태가 변경될 때마다 이 useEffect는 호출됩니다.
 
 
 
@@ -822,7 +835,7 @@ useEffect(() => {
             dataLength={items.length}
             next={fetchMoreData}
             hasMore={hasMore}
-            loader={isLoading ? <LoadingSpinner/> : null}
+            // 잠시제거 loader={isLoading ? <LoadingSpinner/> : null}
             endMessage={
               <p style={{textAlign: "center"}}>
                 {/* <b>끝페이지</b> */}
@@ -836,8 +849,8 @@ useEffect(() => {
                   
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
-                        hours(e);
-                        setModalData({ title: e.title, content: e.content , name : e.member.name , date: e.date , profile: e.profile});
+                        calculateTime(e.updateTime);
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.ct_profile_pic});
                         openModal()
                       }
                       }} >
@@ -848,8 +861,8 @@ useEffect(() => {
                       }} className="editBtn"></CreateBtn>
                       : <></>}
                       <div className="item-header">
-                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.profile || default_avatar} alt="" />
-                          <div>{e.member.name}</div>
+                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.ct_profile_pic || default_avatar} alt="" />
+                          <div>{e.nickName}</div>
                           <div style={{fontSize:"12px", position:"absolute",right:"0"}}> {e.view} view</div>
                       </div>
                     <ItemImg  isSort={isSort} url={e.tl_profile_pic}></ItemImg>

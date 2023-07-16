@@ -124,7 +124,7 @@ const MyDiarydiv = styled.div`
 `;
 
 
-    const MyDiary = ({stat}) => {
+    const MyDiary = (props) => {
       const [items, setItems] = useState(new Set());
       const [data,setData] = useState([]);
 
@@ -141,18 +141,18 @@ const MyDiarydiv = styled.div`
 
       useEffect(() =>{
         
-      } , [stat]);
+      } , [props.stat]);
 
     
       const navigate = useNavigate();
 
-      useEffect(()=>{
-        const fetchData = async()=>{
-        const res =  await DiaryApi.findDiary();
-        setData(res.data)
-        }
-        fetchData();
-      },[])
+      // useEffect(()=>{
+      //   const fetchData = async()=>{
+      //   const res =  await DiaryApi.findDiary();
+      //   setData(res.data)
+      //   }
+      //   fetchData();
+      // },[])
 
     return(
         <MyDiarydiv>
@@ -174,22 +174,42 @@ const MyDiarydiv = styled.div`
                             <label for="check1"></label>
                             </div>
                         </div> */}
-                       {
-                  data.map((data, index) => (
-                    <div class="box">
-                      {stat && (
+                       {/* {
+                  props.data.map((data, index) => (
+                    <div class="box" key={index}>
+                      {props.stat && (
                         <Checkbox
                           key = {index}
                           id = {data.id}
                           itemHandler = {itemHandler}
                         />
                       )}
-                      <div className="img-box">
-                        <img className="image" src={data.image} alt="" />
-                      </div>
+
+
+                            <div className="img-box">
+                            <img  className="image" src={data.timeLineList[0].image} alt="" />
+                            </div>
+                      
                     </div>
+                    
                   ))
-                }
+                } */}
+               { props.data.map((data, index) => (
+              <div class="box" key={index}>
+                {props.stat && (
+                  <Checkbox
+                    key = {index}
+                    id = {data.id}
+                    itemHandler = {itemHandler}
+                  />
+                )}
+
+                <div className="img-box">
+                  <img className="image" src={data.timeLineList[0]?.image} alt="" />
+                </div>
+              </div>
+            ))}
+                
 
                      <div class="box"  style={{backgroundColor:"#d9d9d9"}}>
                   

@@ -133,15 +133,16 @@ const DiaryModal = ({setIsCreate}) => {
 
     const handleCheckboxChange = (e, item) => {
         if (e.target.checked) {
-            setSelectedItems([...selectedItems, {id: item.id}]);
+            setSelectedItems([...selectedItems, item]);
         } else {
-            setSelectedItems(selectedItems.filter(i => i.id !== item));
+            setSelectedItems(selectedItems.filter(i => i.id !== item.id));
         }
     };
     
-    const handleButtonClick = () => {
+    
+      const handleButtonClick = () => {
         setIsCreate(selectedItems);
-    };
+      };
     
       useEffect(()=>{
         const fetchData = async () => {
@@ -178,7 +179,7 @@ const DiaryModal = ({setIsCreate}) => {
                                 <img src={item.tl_profile_pic} alt="" />
 
                                 <div className='content'>
-                                        <div>{item.title}</div>
+                                        <div>{item.id}</div>
                                         <div>{item.content}</div>
                                 </div>
                             </div>

@@ -8,7 +8,7 @@ import {MdCancel, MdPostAdd} from "react-icons/md";
 import {useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
-import diaryApi from "../api/DiaryApi";
+
 
 
 const centerAlign = css`
@@ -243,7 +243,7 @@ function DiaryCreate() {
   const title = useRef(null);
   const text = useRef(null);
 
-  const [diaryPost, setDiaryPost] = useState({image: "", title: "", content: ""});
+  const [diaryPost, setDiaryPost] = useState({id: [], title: "", content: ""});
 
 
   const now = new Date();
@@ -266,26 +266,31 @@ function DiaryCreate() {
       text.current.placeholder = "1글자 이상 입력해주세요"
       return
     }
-    const images = timeline.map(item => item.image);
+    // const images = timeline.map(item => item.image);
     const newDiaryPost = {
       ...diaryPost,
       title: title.current.value,
-      image: images,
-      content: text.current.value
+
+      content: text.current.value,
+      timeline : timeline  
     };
     setDiaryPost(newDiaryPost);
-    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "이미지:" + newDiaryPost.image);
-    navi("/diary");
-    diaryApi.saveDiary("whddus426@gmail.com", title, text, timeline);
+    console.log(timeline);
+   const sss = DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
+    console.log(sss);
+    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
+    navi("/diaryMypage");
+    
   }
 
   const handleCreate = (newItems) => {
     setIsCreate(!isCreate);
 
     if (newItems) {
-      setTimeLine([...timeline, ...newItems]);
+      setTimeLine([...timeline, ...newItems.map(item => ({id: item.id, image: item.image}))]);
     }
-  };
+};
+
 
   const handleDelete = (itemToRemove) => {
     setTimeLine(prevTimeLine => prevTimeLine.filter(item => item.id !== itemToRemove.id))
@@ -333,7 +338,7 @@ function DiaryCreate() {
                   <MdCancel onClick={() => {
                     handleDelete(e)
                   }} className='button'/>
-                  {e.title}
+                  {e.id}
                 </div>)}
             </div>
             <CreateBtn className='btnplus' onClick={() => {

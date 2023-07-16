@@ -24,6 +24,7 @@ import { Map } from "react-kakao-maps-sdk";
 import { SlLocationPin } from "react-icons/sl";
 import LocationModal from "../utils/LocationModal";
 
+
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
@@ -385,12 +386,14 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
 	useEffect(() => {
-   
+		getCurrentLocation();
     const fetchData = async () => {
       try {
-        const response = MyFlowApi.getmyFlow(email);
+        const response = MyFlowApi.getmyFlow();
         const jsonData = response.data;
+				
         setData(jsonData);
+				console.log(jsonData);
       } catch (error) {
         console.error("플로우 데이터를 불러오는데 실패했습니다.", error);
       }
@@ -454,7 +457,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	const [locationValue, setLocationValue] = useState("");
 	const [state, setState] = useState({
 		// 지도의 초기 위치
-		center: { lat: 33.452613, lng: 126.570888 },
+		center: { lat: location?.latitude, lng: location?.longitude },
 		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
 		isPanto: false,
 	  })
@@ -496,26 +499,35 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
   	const [url, setUrl] = useState('');
 	
 		const handleUpload = () => {
-			// 이미지 파이어베이스 업로드
-			const storageRef = storage.ref();
-			const fileRef = storageRef.child(file.name);
-			fileRef.put(file).then(() => {
-				console.log('File uploaded successfully!');
-				fileRef.getDownloadURL().then((url) => {
-					console.log("저장경로 확인 : " + url);
-					setUrl(url);
-			
-			// 글 DB에 올리는 부분 구현 필요
+			// 파일이 있는지 확인
+			if (file) {
+				// 이미지 파이어베이스 업로드
+				const storageRef = storage.ref();
+				const fileRef = storageRef.child(file.name);
+		
+				fileRef.put(file).then(() => {
+					console.log('File uploaded successfully!');
+					fileRef.getDownloadURL().then((url) => {
+						console.log("저장경로 확인 : " + url);
+						setUrl(url);
+						continueToDB();
+					});
+				});
+			} else {
+				console.log('파일이 없습니다.');
+				continueToDB();
+			}
+		};
+
+		// 글 DB에 올리는 부분 구현
+		const continueToDB = () => {
 			MyFlowApi.newFlow(email, location.latitude, location.longitude, flowModalText, url, place, function() {
 				const response = MyFlowApi.getmyFlow(email);
 				const jsonData = response.data;
-        setData(jsonData);
+				setData(jsonData);
 			});
-
+		
 			setFlowModalOpen(false);
-
-				});
-			});
 		};
 
 	// 플로우 작성 시 이미지 추가 및 추가시 썸네일
@@ -630,17 +642,17 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				</MenuBar>
 				<ScrollBar >
           <FlowDiv>
-            {sortedFlow.map((item) => (
+            {sortedFlow.map((data) => (
               <MyFlowContainer
 								className="myFlowContainer"
-                key={item.id}
-                img={item.src}
-                time={item.time}
-                content={item.content}
-                location={item.location}
-								date={item.date}
+                key={data.id}
+                img={data.image}
+                time={data.joinDate}
+                content={data.content}
+                location={data.place}
+								date={data.joinDate}
 								isVisible={isVisible}
-								onClick={(e) => handleContainerClick(e, item.id)}
+								onClick={(e) => handleContainerClick(e, data.id)}
               />
             ))}
           </FlowDiv>
@@ -702,12 +714,16 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 										bottom:"70px",
 										zIndex:"9999"
 									}}
-										onClick={() =>
-										setState({
-											center: { lat: location.latitude, lng: location.longitude },
-											isPanto: true,
-										})
-										}
+									onClick={() => { 
+										getCurrentLocation();
+										setState(
+											{
+												center: { lat: location.latitude, lng: location.longitude },
+												isPanto: true,
+											},
+										);
+									}}
+									
 									>
 										<BiCurrentLocation style={{
 											position:"absolute",

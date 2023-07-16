@@ -95,18 +95,23 @@ const Login = () => {
    const [inputPwd , setInputPwd] = useState();
 	const [open, setOpen] = useState(false);
 	const [message, setMessage] = useState("");
+<<<<<<< HEAD
    const {setIsLoggedIn} = useContext(UserContext);
    
+=======
+   const DOMAIN = "http://localhost:8111";
+
+>>>>>>> 886030e01f57bfa05f0bf2f93a1d6fa9dee1e623
 	const onClickChecking = async() =>{
 		const customerData = {
 			email : inputEmail,
 			password : inputPwd
 		};
+      console.log(customerData);
 		try{
 			const response = await axios.post("http://localhost:8111/auth/login", customerData);
 			const  {accessToken} = response.data;
 			localStorage.setItem('authToken', accessToken);
-         setIsLoggedIn(true);
 			navigate("/")
 		}catch(error){
 			setOpen(true);
