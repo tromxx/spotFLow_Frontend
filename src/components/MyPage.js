@@ -1,17 +1,15 @@
 import {styled} from 'styled-components';
 import {useTheme} from "../context/themeProvider";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineLogin } from 'react-icons/ai'
 import { useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
-import ProfileData from '../dataSet/ProfileData';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserStore';
+import Logo from "../images/logo.png"
 
-
-//SideDiv CSS 컴포넌트로 고정 값으로 사용할 고민중
-const MyInfoDiv = styled.div`
+const LogInDiv = styled.div`
   width: 390px;
   height: 93vh;
   display: flex;
@@ -23,7 +21,6 @@ const MyInfoDiv = styled.div`
   color: ${props=>props.theme.textColor};
   border: ${props=>props.theme.borderColor};
   font-family: var(--efont);
-  transition: 0.6s ease;
   .controlDiv{
     margin-top: 15px;
     display: flex;
@@ -70,6 +67,31 @@ const MyInfoDiv = styled.div`
     position: absolute;
     top: 100px;
     left: 100px;
+  }
+`;
+
+const LogOutDiv=styled.div`
+  width: 390px;
+  height: 93vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: center;
+  border-right: 1px solid var(--grey);
+  background-color: white;
+  font-family: var(--efont);
+  .controlDiv{
+    margin-top: 15px;
+    display: flex;
+    gap: 250px;
+  }
+  .logoutdivService{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-weight: bolder;
+    margin-top: 200px;
   }
 `;
 
@@ -152,6 +174,18 @@ const CloseButton = styled(AiOutlineClose)`
   }
   `;
 
+//login 버튼 css
+const LoginButton = styled(AiOutlineLogin)`
+  width: 35px;
+  height: 35px;
+  color: var(--grey);
+  &:hover{
+    cursor: pointer;
+    color: var(--lightblue);
+  }
+`;
+
+
 //프로파일 이미지 업로드 수정
 const CameraButton = styled(BsCamera)`
   width: 25px;
@@ -164,6 +198,8 @@ const CameraButton = styled(BsCamera)`
     color: var(--lightblue);
   }
 `;
+
+
 
 
 const MyPage = ({ onClose, goToMyFlow }) => {
@@ -184,19 +220,27 @@ const MyPage = ({ onClose, goToMyFlow }) => {
     setStatus(event.target.value);
   }
   return (
-    <MyInfoDiv>
-      {isLoggedIn ? 
+    <>
+    {isLoggedIn ? 
+      <LogInDiv>
         <div className="controlDiv">
           <ControlButton onClick={handleClick} isActive={isActive} />
           <CloseButton onClick={onClose} />
         </div>
+      </LogInDiv>
         :
+      <LogOutDiv>
         <div className="controlDiv">
-          <h1>로그인 하삼</h1>
+          <LoginButton onClick={()=>navigate("/login")}/>
           <CloseButton onClick={onClose} />
         </div>
+        <div className="logoutdivService">
+          <img src={Logo} alt="" />
+          <p>로그인이 필요한 서비스입니다.</p>
+        </div>
+      </LogOutDiv>
       }
-    </MyInfoDiv>
+    </>
   );
 };
 

@@ -15,52 +15,53 @@ const HeaderBarDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 20px;
   border-bottom: ${props => props.theme.borderColor};
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   transition: background-color 0.5s ease;
   z-index: 5;
-  ul{
-    display: flex;
-    flex-direction: row;
-    padding-right: 3vw;
-    gap: 15px;
-    cursor: pointer;
-  }
-  li {
-    font-family: var(--efont);
-    font-size: 2vh;
-    list-style: none;
-  }
-  li:hover {
-    transition: 0.25s;
-    color: var(--blue);
-  }
 `;
+
+const LoggedOutDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-right: 3vw;
+  gap: 15px;
+  cursor: pointer;
+  p:nth-child(odd):hover{
+    color: var(--lightblue);
+  }
+`
 
 const LogoImg = styled.img`
   width: 20vh;
   min-width: 150px;
   cursor: pointer;
-  padding-left: 25px;
+  padding-left: 35px;
 `;
 
-const ProfImg = styled.img`
-  width: 49px;
-  height: 5vh;
-  padding-top: 5px;
-`
-
-const LoggedInUl = styled.ul`
+const LoggedInDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-right: 65px;
+  gap: 15px;
+  img{
+    width: 50px;
+    min-width: 20px;
+    height: 50px;
+    min-height: 20px;;
+    border-radius: 100px;
+  }
 `;
 
 const Exit = styled(BiExit)`
   width: 30px;
-  height: 3vh;
-  padding-top: 5px;
+  height: 30px;
+  &:hover{
+    color: var(--lightblue);
+  }
 `;
 
 
@@ -82,17 +83,17 @@ const HeaderBar = () => {
         onClick={()=>navigate("/")}
       />
       {isLoggedIn ? 
-        <LoggedInUl>
-          <li><ProfImg src={profilePic}/></li>
-          <li>{nickname}</li>
-          <li onClick={logOut}><Exit/></li>
-        </LoggedInUl>
+        <LoggedInDiv>
+          <img src={profilePic}/>
+          <p>{nickname}</p>
+          <Exit onClick={logOut}/>
+        </LoggedInDiv>
         :
-        <ul>
-          <li onClick={()=>navigate("/login")}>Login</li>
-          <li>/</li>
-          <li onClick={()=>navigate("/signup")}>Sign up</li>
-        </ul>
+        <LoggedOutDiv>
+          <p onClick={()=>navigate("/login")}>Login</p>
+          <p>/</p>
+          <p onClick={()=>navigate("/signup")}>Sign up</p>
+        </LoggedOutDiv>
       }
     </HeaderBarDiv>
   );

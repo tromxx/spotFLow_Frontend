@@ -13,11 +13,12 @@ const UserStore = (props) => {
   useEffect(() => {
     const getCustomerInfo = async () => {
       const token = localStorage.getItem('authToken');
-      if (token != null && isLoggedIn) {
+      if (token != null) {
         try {
           const response = await CustomerApi.getCustomerInfo(token);
           setEmail(response.data.email);
           setNickname(response.data.nickName);
+          console.log(nickname);
           setProfilePic(response.data.profilePic);
           setStatMsg(response.data.statMsg);
           setIsLoggedIn(true);
