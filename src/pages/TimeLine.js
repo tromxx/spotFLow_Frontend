@@ -200,7 +200,7 @@ const Header = styled.div`
   @media (min-width: 1300px) {
     & {
       height: 20%;
-      width: 71.9%;
+      width: 60.9%;
     }
   }
 `
@@ -264,139 +264,125 @@ const Main = styled.div`
   @media (min-width: 1300px) {
     & {
       height: 70%;
-      width: 71.9%;
+      width: 60.9%;
       //border: 1px solid silver;
     }
   }
-          // overflow : scroll;
-            /* display: grid;
-    grid-template-rows: 1fr 1fr;
-    background-color:  silver;
-    height: 80%;
-    width: 100%;
-
-  @media (max-width: 850px) {
-    ${(props) => props.isSort ? `
-        grid-template-columns: 1fr 1fr;
-    ` : `      
-    `}
-  }
-  // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
-  ${(props) => props.isSort ? `
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-    }   
-
-        ` : `
-            grid-template-columns: 1fr ;
-            grid-template-rows: 1fr 1fr  ;
-        `}  */
+         
   `
+; 
+const Item = styled.div`
+transition: all 0.5s ease;
+
+.item-header {
+  ${centerAlign}
+  justify-content: flex-start;
+  height: 15%;
+  width: 100%;
+  background-color: #FCF9F9;
+}
+
+position: relative;
+background-color: #FCF9F9;
+align-items: center;
+border-radius: 5px;
+margin-left: 20px;
+margin-right: 20px;
+margin-bottom: 20px;
+
+&:first-child {
+  margin-top: 20px;
+}
+
+${(props) =>
+  props.isSort
+    ? `
+  ${centerAlign}
+  flex-direction: column;
+
+  &:nth-child(even){
+      margin-right: 20px;
+  }
+
+  &:first-child {
+      margin-top: 40px;
+      margin-bottom: 0px;
+  }
+
+  &:nth-child(odd) {
+      margin-right: 0px;
+  }
+
+  &:nth-child(2) {
+      margin-top: 40px;
+      margin-bottom: 0px;
+  }
+
+  &:nth-child(3) {
+      margin-top: 20px;
+  }
+
+  &:nth-child(4) {
+      margin-top: 20px;
+  }
+  `
+    : `
+  &:first-child {
+      margin-top: 40px;
+      margin-bottom: 0px;
+  }
+
+  &:nth-child(2) {
+      margin-top: 20px;
+  }
+
+  height: 500px;
+  flex-direction: column;
+  display: flex;
+  `}
+
+@media (min-width: 1300px) {
+  ${(props) =>
+    props.isSort
+      ? `
+    height: 250px;
+
+    &:nth-child(even) {
+        margin-right: 0px;
+    }
+
+    &:nth-child(4n) {
+        margin-right: 20px;
+    }
+
+    &:nth-child(3), &:nth-child(4) {
+        margin-top: 40px;
+    }
+    `
+      : ``}
+}
+
+@media (max-width: 845px) {
+  ${(props) =>
+    props.isSort
+      ? `
+    width: auto;
+    height: 150px;
+    .item-header {
+      height: auto;
+    }
+
+    `
+      : `
+    width: auto;
+    height: auto;
+    .item-header {
+       height: 50px;
+    }
+    `}
+}
 ;
 
-
-const Item = styled.div`
-    transition: all 0.5s ease;
-    .item-header {
-      ${centerAlign}
-      justify-content:flex-start;
-      height: 15%;
-      width: 100%;
-
-      background-color: white;
-    }
-  
-  position: relative;
-  background-color: #FCF9F9;
-  //width: 50%;
-  height: 300px;
-    align-items:center;
-    border-radius:5px;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom:20px;
-        &:first-child {
-            margin-top : 20px;
-        }
-       // 밑에 코드는 정렬 
-    ${(props) => props.isSort ?`
-       ${centerAlign}
-      flex-direction:column;
-      &:nth-child(even){
-            margin-right:20px;
-
-        }
-        &:first-child {
-            margin-top : 40px;
-            margin-bottom: 0px;
-  
-        } 
-    
-        // &:nth-child(4n){
-        //     margin-right:0px;
-        // }
-      &:nth-child(odd){
-            margin-right:0px;
-        } 
-         &:nth-child(2) {
-            margin-top : 40px;
-            margin-bottom: 0px;
-  
-        } 
-        &:nth-child(3) {
-
-          margin-top : 20px;
-          } 
-          &:nth-child(4) {
-          margin-top : 20px;
-          } 
-
-        @media (min-width: 1300px) {
-            & {
-		        &:nth-child(even){
-                    margin-right:0px;
-
-                }
-                &:nth-child(4n){
-                    margin-right:20px;
-                    }
-               &:nth-child(3) {
-
-                 margin-top : 40px;
-                } 
-                &:nth-child(4) {
-                 margin-top : 40px;
-                }       
-	        }
-        }
-
-
-        @media (max-width: 844px) {
-            & {
-		        width: auto;
-                height:190px;
-	        }
-        }
-    ` : `
-    &:first-child {
-            margin-top : 40px;
-            margin-bottom: 0px;
-  
-        } 
-    &:nth-child(2) {
-            margin-top : 20px;
-  
-        } 
-    height: 500px;
-    flex-direction:column;
-    display:flex; 
-    @media (max-width: 850px) {
-            & {
-
-		        width: auto;
-	        }
-        }
-        
-    `}  
     .editBtn {
         position: absolute;
         background-color:white;
@@ -427,7 +413,7 @@ const ItemImg = styled.div`
 
         @media (max-width: 844px) {
             & {
-		           width: 100%;
+		           width: 99%;
                 height:150px;
                 margin-left: 10px;
 	        }
@@ -436,7 +422,7 @@ const ItemImg = styled.div`
            margin-bottom: 10px;
          //    margin-top: 10px;
             height : 90%;
-            width: 100%;
+            width: 99%;
 
             
     `}
@@ -448,7 +434,7 @@ const ItemContent = styled.div`
   flex-direction: column;
 
   ${(props) => props.isSort ? `
-
+      
     ` : `
     ${centerAlign}
     margin:20px;
@@ -480,18 +466,20 @@ const ItemContent = styled.div`
 
 
 const TimeLine = () => {
-  const [dummy, setDummy] = useState(dummy2);
-
+  const [dummy, setDummy] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await userTimelineApi.getUserTimelineList();
         setDummy(res.data);
+        setItems(res.data.slice(0,8));
     };
     fetchData();
+  
   }, []);  
   
-  
+
   // []를 추가함으로써 이펙트는 한 번만 실행되며, 컴포넌트가 마운트 될 때만 실행됩니다.
   // 무한스크롤 변수[dummy.slice(0, 3));
   const [items, setItems] = useState([]);
@@ -501,23 +489,8 @@ const TimeLine = () => {
 
     // 무한스크롤 가동 함수 콜백함수로 1.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
     // 로딩상태변수
-    const [isLoading, setIsLoading] = useState(false);
-// const fetchMoreData = () => {
- 
-//     setTimeout(() => {
-     
-//         if (items.length >= dummy.length ) {
-//             setHasMore(false);
-//             return;
-//         }
-//         setIsLoading(true);
-//         const moreItems = dummy.slice(items.length, items.length + 2);
-//         setItems(prevItems => [...prevItems, ...moreItems]);
+  
 
-      
-//     }, 1500);
-//     setIsLoading(!isLoading);
-// };
 const fetchMoreData = () => {
   if (!dummy) {
     return;
@@ -634,6 +607,25 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 // 시간 계산 함수
   let [diffHours,setDiffHours] = useState();
 
+      // const calculateTime = (date) => {
+      //   let date1 = new Date(date); // This is in local time
+      //   let date2 = new Date();
+      //   let diffMilliseconds = Math.abs(date2 - date1);
+      //   let diffSeconds = Math.floor(diffMilliseconds / 1000);
+      //   let diffMinutes = Math.floor(diffSeconds / 60);
+      //   let diffHours = Math.floor(diffMinutes / 60);
+      //   let diffDays = Math.floor(diffHours / 24);
+
+      //   if(diffDays > 0){
+      //     setDiffHours(diffDays + "일 전"); 
+      //   } else if(diffHours > 0) {
+      //     setDiffHours(diffHours + "시간 전");
+      //   } else if(diffMinutes > 0) {
+      //     setDiffHours(diffMinutes + "분 전");
+      //   } else {
+      //     setDiffHours(diffSeconds + "초 전");
+      //   }
+      // }
       const calculateTime = (date) => {
         let date1 = new Date(date); // This is in local time
         let date2 = new Date();
@@ -642,17 +634,28 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
         let diffMinutes = Math.floor(diffSeconds / 60);
         let diffHours = Math.floor(diffMinutes / 60);
         let diffDays = Math.floor(diffHours / 24);
-
+        let diffTime; 
+    
         if(diffDays > 0){
-          setDiffHours(diffDays + "일 전"); 
+          diffTime = diffDays + "일 전"; 
         } else if(diffHours > 0) {
-          setDiffHours(diffHours + "시간 전");
+          diffTime = diffHours + "시간 전";
         } else if(diffMinutes > 0) {
-          setDiffHours(diffMinutes + "분 전");
+          diffTime = diffMinutes + "분 전";
         } else {
-          setDiffHours(diffSeconds + "초 전");
+          diffTime = diffSeconds + "초 전";
         }
-      }
+    
+        return diffTime;  // diffTime 반환
+    } 
+    
+
+      // 모달 클릭시 날짜파싱해주는 함수
+    function timeParse (time)  {
+       let dateObj = new Date(time);
+       let formattedDate = dateObj.toISOString().slice(0,19).replace("T"," ");
+       return formattedDate;
+    }  
 
 
   // 게시물 작성하기 조건 로직 ref  
@@ -682,15 +685,6 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     userTimelineApi.setUserTimeline(data);
 }
 
-
-// useEffect(() => {
-//   if(data.title !== "" && data.content !== ""){
-//     userTimelineApi.setUserTimeline(data);
-//       setContent("");
-//       setTitle("")
-//       setIsCreate(!isCreate);
-//   }
-// }, [data]); // data 상태가 변경될 때마다 이 useEffect는 호출됩니다.
 
 
 
@@ -797,28 +791,6 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
               </CreateBtn>
 
 
-              {/* <CreateBtn onClick={deleteTimeLine}>
-                <AiFillDelete></ AiFillDelete>
-              </CreateBtn> */}
-
-
-                 {/* 수정 버튼 없애버림 */}
-              {/* {!isCreate &&
-
-                <CreateBtn onClick={() => {
-                  setIsEdit(!isEdit)
-                }}>
-                  {isEdit ? <MdOutlineEditOff/>
-                    : <AiOutlineEdit onClick={() => {
-                      setIsEdit(!isEdit)
-                    }}></AiOutlineEdit>}
-
-                </CreateBtn>
-
-
-              } */}
-
-
             </HeaderItemRight>
 
           </HeaderList>
@@ -849,8 +821,8 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                   
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
-                        calculateTime(e.updateTime);
-                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: e.updateTime , profile: e.ct_profile_pic});
+                        setDiffHours(calculateTime(e.updateTime));
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: timeParse(e.updateTime) , profile: e.ct_profile_pic});
                         openModal()
                       }
                       }} >
@@ -861,9 +833,18 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                       }} className="editBtn"></CreateBtn>
                       : <></>}
                       <div className="item-header">
-                          <img style={{margin:"10px",width: "55px", height:"55px", borderRadius:"25px"}} src={ e.ct_profile_pic || default_avatar} alt="" />
-                          <div>{e.nickName}</div>
-                          <div style={{fontSize:"12px", position:"absolute",right:"0"}}> {e.view} view</div>
+                      <img className="profile" style={
+                              isSort
+                              ? { margin: "10px", width: "30px", height:"30px", borderRadius:"25px" }
+                              : { margin: "10px", width: "55px", height:"55px", borderRadius:"25px" }
+                          }
+                      src={ e.ct_profile_pic || default_avatar} alt="" />
+                          <div style={{margin:"10px",height:"75%", display:"flex", flexDirection:"column",alignItems:"center"}}>
+                              <div>{e.nickName}</div>
+                            <p style={{fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
+                            
+                          </div>
+                          <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
                       </div>
                     <ItemImg  isSort={isSort} url={e.tl_profile_pic}></ItemImg>
                     {/* <ItemContent isSort={isSort}>
