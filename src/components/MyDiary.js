@@ -139,20 +139,29 @@ const MyDiarydiv = styled.div`
         console.log(items)
       }
 
-      useEffect(() =>{
-        
-      } , [props.stat]);
+     
 
     
       const navigate = useNavigate();
 
-      // useEffect(()=>{
-      //   const fetchData = async()=>{
-      //   const res =  await DiaryApi.findDiary();
-      //   setData(res.data)
-      //   }
-      //   fetchData();
-      // },[])
+      const diaryDelete = async (id) =>  {
+        console.log(id);
+        const res = await DiaryApi.deleteDiary(id);
+        if(res.status=== 200) {
+            // console.log(res.data);
+            alert("다이어리가 삭제되었습니다.");
+        }
+      }
+ 
+      useEffect(()=>{
+        const fetchData = async()=>{
+        const res =  await DiaryApi.findMyDiary("test@example.com");
+        setData(res.data);
+        console.log(res.data);
+        }
+        fetchData();
+       
+      },[])
 
     return(
         <MyDiarydiv>
@@ -194,16 +203,16 @@ const MyDiarydiv = styled.div`
                     
                   ))
                 } */}
-               { props.data.map((data, index) => (
-              <div class="box" key={index}>
-                {props.stat && (
+               {data.map((data, index) => data.delete || (
+              <div class="box" key={data.id}>
+                { props.stat && (
                   <Checkbox
                     key = {index}
                     id = {data.id}
                     itemHandler = {itemHandler}
                   />
                 )}
-
+                <button onClick={()=>diaryDelete(data.id)}>삭제하기</button>
                 <div className="img-box">
                   <img className="image" src={data.timeLineList[0]?.image} alt="" />
                 </div>
