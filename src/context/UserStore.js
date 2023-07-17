@@ -11,8 +11,8 @@ const UserStore = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
     const getCustomerInfo = async () => {
-      const token = localStorage.getItem('authToken');
       if (token != null) {
         try {
           const response = await CustomerApi.getCustomerInfo(token);

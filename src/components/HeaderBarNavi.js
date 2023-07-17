@@ -65,7 +65,7 @@ const HeaderBar = () => {
   const{isLoggedIn,setIsLoggedIn ,nickname} = useContext(UserContext);
 
   const logOut = () =>{
-    localStorage.removeItem('authToken');
+    localStorage.clear();
     setIsLoggedIn(false);
   }
 

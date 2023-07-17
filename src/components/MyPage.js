@@ -58,7 +58,18 @@ const LogInDiv = styled.div`
     margin: 0px;
   }
   button{
-    display: ${(props) => (props.$isactive === "false" ? "block" : "none")};
+    width: 200px;
+    height: 50px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    background-color: var(--blue);
+    &:hover{
+      color: var(--lightblue);
+    }
   }
 `;
 
@@ -91,7 +102,7 @@ const Caption = styled.div`
   margin: 0px;
   padding: 0px;
   position: absolute;
-  bottom: 65px;
+  bottom: 700px;
   width: 130px; 
   height: 65px; 
   border-radius: 0 0 70px 70px;
@@ -259,7 +270,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph>
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
-        <button $isactive={isactive.toString()}>저장하기</button>
+        <button>저장하기</button>
       </LogInDiv>
       :
       <LogOutDiv>
