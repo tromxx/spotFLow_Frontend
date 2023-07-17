@@ -1,5 +1,5 @@
-import firebase from "firebase/compat/app"
-import "firebase/compat/storage"
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 
 const firebaseConfig = {
@@ -13,4 +13,5 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 export const storage = firebase.storage();

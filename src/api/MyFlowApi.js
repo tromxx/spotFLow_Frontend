@@ -33,7 +33,7 @@ const MyFlowApi = {
 		},
 
 		getClickedFlow: async (flowId) => {
-			const token = localStorage.getItem('token');
+			const token = localStorage.getItem('authToken');
 			try {
 				const response = await axios.post(Backend + "/auth/clickedflow", flowId, {
 					headers: {
@@ -48,16 +48,14 @@ const MyFlowApi = {
 			
 		},
 
-		getmyFlow: async () => {
-			const email = {
-				email : "testAccount0"
-			}
-			return await axios.post(Backend + "/auth/myflow", email, 
-			{
-				headers: {
-					'Content-Type': 'application/json',	
-				}
-			});
+		getmyFlow: async (token) => {
+			
+			return await axios.post(Backend + "/myflow/getmyflow",{},{
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
 		},
 
 	

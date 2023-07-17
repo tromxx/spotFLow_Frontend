@@ -34,6 +34,10 @@ const TimeandLocation = styled.div`
   font-family: var(--kfont);
   font-size: 13px;
   font-weight: bold;
+
+  @media(min-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Image = styled.img`
@@ -147,7 +151,7 @@ const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, i
           </TnLnContentDiv>
           
           <Image src={img} alt="img" />
-          
+
         </MyFlowContainerDiv>
 
       </FlowContainer>

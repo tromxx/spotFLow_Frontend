@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { BiArrowBack, BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
 import { BiSelectMultiple } from "react-icons/bi";
-import MyFlowContainer from "./MyFlowContainer"
+import MyFlowContainer from "../components/MyFlowContainer"
 import { useState } from "react";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
@@ -24,12 +24,21 @@ import { Map } from "react-kakao-maps-sdk";
 import { SlLocationPin } from "react-icons/sl";
 import LocationModal from "../utils/LocationModal";
 
+const MyFlowWrapper = styled.div`
+ 	display: flex;
+  justify-content: center;
+  align-items: center;
+	text-align: center;
+	background-color: ${props=>props.theme.bgColor};
+`;
+
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
   border: ${props=>props.theme.borderColor};	
-	width: 390px;
+	width: 60%;
+	margin-top: 40px;
   height: 93vh;
   display: flex;
   justify-content: center;
@@ -136,7 +145,7 @@ const MyFlowMenuName = styled.p`
 	width: 100%;
 	font-size: 30px;
 	font-weight: bolder;
-	margin-top: -25%;
+	margin-top: -10%;
 	.title {
 		font-size: 35px;
 		margin-left: 10%;
@@ -213,7 +222,7 @@ const SortButton = styled.button`
 	position: absolute;
 	width: 30px;
 	height: 30px;
-	left: 290px;
+	right: 0px;
 	top: 0px;
 	border: none;
 	background-color: transparent;
@@ -265,69 +274,12 @@ const SearchBarInput = styled.input`
 	
 `;
 
-const DiaryImgSet = styled(BsPencilSquare)`
-	width: 20px;
-	height: 20px;
-`;
 
-const DiaryButton = styled.button`
-	position: absolute;
-	width: 30px;
-	height: 30px;
-	left: 210px;
-	top: 0px;
-	border: none;
-	background-color: transparent;
-	transition: 0.6s ease;
-	&:hover {
-		cursor: pointer;
-	}
-`;
 
-const SelectAllButton = styled.button`
-	position: absolute;
-	width: 30px;
-	height: 30px;
-	left: 183px;
-	top: 0px;
-	border: none;
-	background-color: transparent;
-	transition: 0.6s ease;
-	&:hover {
-		cursor: pointer;
-	}	
-`;
-
-const SelectImg = styled(BiSelectMultiple)`
-	width: 20px;
-	height: 20px;	
-`;
 
 // Check
 
-const CheckButton = styled.button`
-	color: ${props => props.theme.textColor};	
-	position: absolute;
-	width: 30px;
-	left: 265px;
-	top: 0px;
-	height: 30px;
-	border: none;
-	background-color: transparent;
-	align-self: flex-end;
-	&:hover {
-		cursor: pointer;
-	}
-`;
 
-const CheckImg = styled(BsCheckCircle)`
-	color: ${props => props.theme.textColor};
-	position: absolute;
-	width: 20px;
-	height: 20px;
-	left: 3px;
-	top: 4px;	
-`;
 
 const PictureImg = styled(SlPicture)`
 	width: 30px;
@@ -335,18 +287,7 @@ const PictureImg = styled(SlPicture)`
 	color: ${props=>props.theme.textColor};
 `;
 
-const CloseButton = styled(AiOutlineClose)`
-	position: absolute;
-	top: 10px;
-	right: -160px;
-  width: 35px;
-  height: 35px;
-	color: ${props=>props.theme.divColor};
-  &:hover{
-    cursor: pointer;
-    color: var(--lightblue);
-  }
-`;
+
 
 const DeleteImg = styled(AiFillDelete)`
 	width: 30px;
@@ -381,22 +322,21 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	const context = useContext(UserContext);
 	const {email, nickname} = context;
 
-	const [data, setData] = useState([]); // 가져온 JSON 플로우 데이터를 저장
+	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
 	useEffect(() => {
-		getCurrentLocation();
+		const token = localStorage.getItem('authToken');
+		console.log(token);
+		console.log("useEffect 실행");
     const fetchData = async () => {
-      try {
-        const response = MyFlowApi.getmyFlow();
-        const jsonData = response.data;
-				
-        setData(jsonData);
-				console.log(jsonData);
-      } catch (error) {
-        console.error("플로우 데이터를 불러오는데 실패했습니다.", error);
-      }
+        const response = await MyFlowApi.getmyFlow(token);
+				console.log("데이터 받음");
+        setData(response.data);
+				setSortedFlow(response.data);
+				console.log(response);
+				console.log(response.data);
     };
 			fetchData(); // fetchData 함수 호출
   	}, []);
@@ -568,17 +508,15 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	const [clicked, setClicked] = useState("");
 
-	const handleContainerClick = (event, id) => {
+	const handleContainerClick = async (event, id) => {
 		setIsDetailModalOpen(true);
-		console.log(isDetailModalOpen);
 		const clickedId = id;
 		setClicked(clickedId);
-		const response = MyFlowApi.getClickedFlow(clickedId);
-		
-		setResponseDate(response.date);
-		setResponseTime(response.time);
-		setResponseLoaction(response.location);
-		setResponseContent(response.content);
+		const response = await MyFlowApi.getClickedFlow(clickedId);
+		setResponseDate(response.data.date);
+		setResponseTime(response.data.time);
+		setResponseLoaction(response.data.location);
+		setResponseContent(response.data.content);
 		
 	};
 
@@ -602,11 +540,8 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 
 
     return(
+			<MyFlowWrapper>
 			<MyFlowDiv>
-				     <div className="controlDiv">
-						 <BiArrowBacks onClick={goToMyPage}/>
-        				<CloseButton onClick={onClose}/>
-      				</div>
 				<MyFlowMenuName>
 					<p className="title">
 						my<span style={{ color: '#00B4D8' }}>F</span>low
@@ -620,21 +555,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange}  />
 					<MenuButtonWrapper>
 						<SearchImg />
-						<div>
-							<CSSTransition in={isVisible} timeout={200} classNames="fade" unmountOnExit>
-								<div>
-									<DiaryButton>
-										<DiaryImgSet />
-									</DiaryButton>
-									<DeleteButton>
-										<DeleteImg />
-									</DeleteButton>
-								</div>
-							</CSSTransition>
-						</div>
-						<CheckButton onClick={handleCheck}>
-							<CheckImg />
-						</CheckButton>
 						<SortButton onClick={handleSort}>
 							{sort === "az" ? <SortAz /> : <SortZa />}
 						</SortButton>
@@ -642,17 +562,21 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				</MenuBar>
 				<ScrollBar >
           <FlowDiv>
-            {sortedFlow.map((data) => (
+            {sortedFlow && sortedFlow.map((sortedFlow) => (
               <MyFlowContainer
 								className="myFlowContainer"
-                key={data.id}
-                img={data.image}
-                time={data.joinDate}
-                content={data.content}
-                location={data.place}
-								date={data.joinDate}
+                key={sortedFlow.id}
+                img={sortedFlow.img}
+                time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
+                content={sortedFlow.content}
+                location={sortedFlow.location}
+								date={new Date(sortedFlow.date).toLocaleDateString([], {
+									year: 'numeric',
+									month: '2-digit',
+									day: '2-digit',
+								})}
 								isVisible={isVisible}
-								onClick={(e) => handleContainerClick(e, data.id)}
+								
               />
             ))}
           </FlowDiv>
@@ -680,7 +604,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 						}}
 						/>
 					</div>
-					<Map className="map" // 지도를 표시할 Container 
+					{/* <Map className="map" // 지도를 표시할 Container 
 									center={state.center}
 									isPanto={state.isPanto}
 									style={{
@@ -739,7 +663,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									}} />
 									</button>
 									</div>
-								</Map>
+								</Map> */}
 								    <>
     </>
 		
@@ -773,8 +697,8 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
     </FlowModal>
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
-		<MyFlowDetailModal open={isDetailModalOpen} close={handleDetailClose} ></MyFlowDetailModal>
 	</MyFlowDiv>
+	</MyFlowWrapper>
     );
 };
 

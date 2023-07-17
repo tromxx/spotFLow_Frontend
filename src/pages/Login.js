@@ -95,7 +95,7 @@ const Login = () => {
    const [inputPwd , setInputPwd] = useState();
 	const [open, setOpen] = useState(false);
 	const [message, setMessage] = useState("");
-   const {setIsLoggedIn} = useContext(UserContext);
+   const { setEmail, setIsLoggedIn} = useContext(UserContext);
 
 	const onClickChecking = async() =>{
 		const customerData = {
@@ -108,6 +108,7 @@ const Login = () => {
 			localStorage.setItem('authToken', accessToken);
 			navigate("/")
          setIsLoggedIn(true);
+         setEmail(inputEmail);
 		}catch(error){
 			setOpen(true);
 			setMessage("잘못된 아이디 혹은 비밀번호입니다.");

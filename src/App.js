@@ -12,6 +12,7 @@ import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
+import MyFlow from './pages/MyFlow';
 
 function App() {
 
@@ -55,6 +56,13 @@ function App() {
                 <DiarySwiper/>
               </>
             }/>
+
+            <Route path='/myflow' element={
+            <>
+            <HeaderBarNavi/>
+             <MyFlow />
+            </>
+           }/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

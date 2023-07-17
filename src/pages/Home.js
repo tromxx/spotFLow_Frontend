@@ -2,7 +2,7 @@ import {styled} from 'styled-components';
 import MapView from "./MapView";
 import {useState} from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
-import MyFlow from '../components/MyFlow'
+import MyFlow from './MyFlow'
 import SlideDiv from '../components/SlideDiv'
 import MyPage from '../components/MyPage'
 import Following from '../components/Following'
