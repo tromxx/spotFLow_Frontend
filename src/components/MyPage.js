@@ -69,6 +69,7 @@ const LogInDiv = styled.div`
     background-color: var(--blue);
     &:hover{
       color: var(--lightblue);
+      cursor: pointer;
     }
   }
 `;
@@ -102,7 +103,7 @@ const Caption = styled.div`
   margin: 0px;
   padding: 0px;
   position: absolute;
-  bottom: 700px;
+  bottom: 572px;
   width: 130px; 
   height: 65px; 
   border-radius: 0 0 70px 70px;
@@ -265,10 +266,10 @@ const MyPage = ({ onClose, goToMyFlow }) => {
             <Paragrph $isactive={isactive.toString()} className='Following'>Following : 100</Paragrph>
             <Paragrph $isactive={isactive.toString()} className='Following'>Follower : 200</Paragrph>
          </div>
-          <Paragrph $isactive={isactive.toString()} className='StatMsg'>Testing Testing</Paragrph>
+          <Paragrph $isactive={isactive.toString()} className='StatMsg'>{statMsg}</Paragrph>
         </div>
-        <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph>
-        <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
+        <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>Spot</Paragrph>
+        <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'><span style={{color : "#00B4D8"}}>F</span>low</Paragrph>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
         <button>저장하기</button>
       </LogInDiv>

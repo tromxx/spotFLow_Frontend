@@ -18,7 +18,6 @@ const UserStore = (props) => {
           const response = await CustomerApi.getCustomerInfo(token);
           setEmail(response.data.email);
           setNickname(response.data.nickName);
-          console.log(nickname);
           setProfilePic(response.data.profilePic);
           setStatMsg(response.data.statMsg);
           setIsLoggedIn(true);
