@@ -186,17 +186,17 @@ const DiaryMypagediv = styled.div`
             }
           };
 
-          useEffect(() => {
-            const fetchData = async () => {
-                const email = "test@example.com";
-                const res = await DiaryApi.findMyDiary(email);
+        //   useEffect(() => {
+        //     const fetchData = async () => {
+        //         const email = "test@example.com";
+        //         const res = await DiaryApi.findMyDiary(email);
                 
-                setData(res.data);
+        //         setData(res.data);
                 
-            };
-            fetchData();
+        //     };
+        //     fetchData();
             
-          }, []);  
+        //   }, []);  
         
           useEffect(() => {
             console.log(data);
