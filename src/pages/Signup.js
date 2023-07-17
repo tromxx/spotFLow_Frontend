@@ -243,7 +243,7 @@ const SignUp = () => {
         setIdMessage("사용 가능한 이메일입니다.");
         setIsId(true);
       } else {
-        setIdMessage("이미 사용중인 이메일이아닙니다.");
+        setIdMessage("이미 사용중인 이메일입니다.");
         setIsId(false); 
       }
     }else{
@@ -264,7 +264,7 @@ const SignUp = () => {
       setSwitchButton(false);
       await AuthApi.sendEmailauth(inputId);
     }else{
-      setAuthMessage("이메일 중복을 확인하세요.");
+      setAuthMessage("인증번호 전송에 실패했습니다. 다시 확인해주세요.");
     }
   };
 
@@ -322,10 +322,10 @@ const SignUp = () => {
     if(nickNameMessage === "올바른 형식 입니다."){
       const mailCheck = await AuthApi.checkNickname(isNickName);
       if(mailCheck.data === false) {
-        setNickNameMessage("사용 가능한 닉내입니다.")
+        setNickNameMessage("사용 가능한 닉네임 입니다.")
         setIsNickName(true);
       } else {
-        setIdMessage("이미 사용중인 닉내입이닙니다.")
+        setIdMessage("이미 사용중인 닉네임 입니다.")
         setIsNickName(false); 
       }
     }
@@ -341,10 +341,10 @@ const SignUp = () => {
     const signUpCheck = await AuthApi.customerSignUp(customerData);
     if(signUpCheck.data === true){
       setModalOpen(true)
-      setModalText("회원가입이 완료입니다.");
+      setModalText("SpotFlow에 가입하신 것을 환영합니다.");
     }else{
       setModalOpen(true)
-      setModalText("회원가입 오류");
+      setModalText("회원가입에 실패했습니다.");
     }
   }
 
@@ -358,7 +358,7 @@ const SignUp = () => {
 
   const onClickCheckSignUp = () =>{
     setModalOpen(true);
-    setModalText("회원가입을 하세요.")
+    setModalText("정보를 모두 입력해주세요.")
   }
   
   return(

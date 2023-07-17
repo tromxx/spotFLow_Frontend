@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { BiArrowBack, BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
 import { BiSelectMultiple } from "react-icons/bi";
-import MyFlowContainer from "./MyFlowContainer"
+import MyFlowContainer from "../components/MyFlowContainer"
 import { useState } from "react";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl"
