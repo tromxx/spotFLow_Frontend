@@ -7,6 +7,8 @@ import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserStore';
+import { storage } from '../api/FirebaseApi'
+import CustomerApi from '../api/CustomerApi';
 
 const LogInDiv = styled.div`
   width: 390px;
@@ -37,40 +39,11 @@ const LogInDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    textarea{
-      color: ${props => props.theme.textColor};
-      resize: none;
-      font-family: var(--kfont);
-      width: 250px;
-      height: 50px;
-      margin: 0px;
-      padding: 0px;
-      background-color: transparent;
-      border: none;
-      resize: none;
-      outline: none;
-      padding: 2px;
-    }
   }
   .followingfollowerDiv{
     display: flex;
     gap: 50px;
     margin: 0px;
-  }
-  button{
-    width: 200px;
-    height: 50px;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    border: none;
-    outline: none;
-    border-radius: 20px;
-    background-color: var(--blue);
-    &:hover{
-      color: var(--lightblue);
-      cursor: pointer;
-    }
   }
 `;
 
@@ -103,7 +76,7 @@ const Caption = styled.div`
   margin: 0px;
   padding: 0px;
   position: absolute;
-  bottom: 572px;
+  margin-top: 80px;
   width: 130px; 
   height: 65px; 
   border-radius: 0 0 70px 70px;
@@ -112,6 +85,38 @@ const Caption = styled.div`
   display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
   input {
     display: none;
+  }
+`;
+
+const TextArea = styled.textarea`
+  color: ${props => props.theme.textColor};
+  position: absolute;
+  margin-top: 300px;
+  resize: none;
+  font-family: var(--kfont);
+  width: 300px;
+  height: 70px;
+  border-radius: 20px;
+  text-align: center;
+  resize: none;
+  padding: 2px;
+  display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
+`;
+
+const Button = styled.button`
+  width: 200px;
+  height: 50px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background-color: var(--blue);
+  display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
+  &:hover{
+    color: var(--lightblue);
+    cursor: pointer;
   }
 `;
 
@@ -212,14 +217,18 @@ const CameraButton = styled(BsCamera)`
 const MyPage = ({ onClose, goToMyFlow }) => {
   const [ThemeMode, setTheme] = useTheme(); 
   const [isactive, setIsActive] = useState(true);
-  const [imgFile, setImgFile] = useState("");
+  const [prevImgFile, setPrevImgFile] = useState("");
+  const [imgFile, setImgFile] = useState(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [url, setUrl] = useState("");
   const imgRef = useRef();
   const navigate = useNavigate();
-  const{nickname, profilePic, statMsg, isLoggedIn} = useContext(UserContext)
+  const{nickname, profilePic, setProfilePic,statMsg,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
   const handleClick = () => {
     setIsActive(!isactive);
-    setImgFile("");
+    setPrevImgFile("");
+    setImgFile(null);
   };
   
    const handleCameraClick = () => {
@@ -228,16 +237,62 @@ const MyPage = ({ onClose, goToMyFlow }) => {
     }
   };
 
-  const saveImgFile = () => {
+  const savePrevImgFile = (e) => {
     const file = imgRef.current.files[0];
+    setImgFile(e.target.files[0]);
     const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-          setImgFile(reader.result);
-          console.log(imgFile);
+          setPrevImgFile(reader.result);
+          console.log();
        };
   };
+
+  //여기다 로직 수정 필요
+  const saveImgFile = async() => {
+    const token = localStorage.getItem('authToken');
+    
+    if(imgFile === null){
+      const updateData = {
+        statMsg : statusMessage
+      };
+      try {
+        const response = await CustomerApi.updateProfile(token,updateData);
+        setStatMsg(response.data.statMsg);
+        setIsLoggedIn(true);
+        setIsActive(!isactive);
+        setPrevImgFile("");
+      } catch (error) {
+        throw error;
+      }
+    }else if(statusMessage === ""){
+      console.log("img activate")
+      const storageRef = storage.ref();
+      const fileRef = storageRef.child(imgFile.name);
+      fileRef.put(imgFile).then(() => {
+        console.log('File uploaded successfully!');
+        fileRef.getDownloadURL().then((url) => {
+          setUrl(url);
+          console.log(url);
+        });
+      });
+      const updateData = {
+        profilePic : url,
+      };
+      try {
+        const response = await CustomerApi.updateProfile(token,updateData);
+        console.log("success")
+        setProfilePic(response.data.profilePic);
+        setIsLoggedIn(true);
+        setIsActive(!isactive);
+        setPrevImgFile("");
+      } catch (error) {
+        throw error;
+      };
+    }
+  };
   
+
   return (
     <>
     {isLoggedIn ? 
@@ -248,7 +303,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         </div>
         <div className='profileDiv'>
         <img
-              src={imgFile ? imgFile : profilePic || "/images/icon/user.png"}
+              src={prevImgFile ? prevImgFile : profilePic || "/images/icon/user.png"}
               alt="프로필 이미지"
             />
           <Caption $isactive={isactive.toString()}>
@@ -256,7 +311,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
               type="file"
               accept="image/*"
               id="profileImg"
-              onChange={saveImgFile}
+              onChange={savePrevImgFile}
               ref={imgRef}
             />
             <CameraButton onClick={handleCameraClick}/>
@@ -268,15 +323,18 @@ const MyPage = ({ onClose, goToMyFlow }) => {
          </div>
           <Paragrph $isactive={isactive.toString()} className='StatMsg'>{statMsg}</Paragrph>
         </div>
-<<<<<<< HEAD
         <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>Spot</Paragrph>
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'><span style={{color : "#00B4D8"}}>F</span>low</Paragrph>
-=======
-        {/* <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph> */}
-        <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
->>>>>>> 00676ed94e00899bba3866553675ace18cfd8d11
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
-        <button>저장하기</button>
+        <Button $isactive={isactive.toString() } onClick={saveImgFile}>저장하기</Button>
+        <TextArea
+          cols="20"
+          rows="2"
+          spellCheck="false"
+          placeholder="상태 메시지를 입력하세요"
+          onChange={(e)=> setStatusMessage(e.target.value)}
+          $isactive={isactive.toString() }
+        ></TextArea>
       </LogInDiv>
       :
       <LogOutDiv>
@@ -288,7 +346,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           <p>로그인이 필요한 서비스입니다.</p>
         </div>
       </LogOutDiv>
-      }
+    }
     </>
   );
 };

@@ -8,6 +8,7 @@ import { useState, useContext } from "react";
 import LoginSignUpModal from "../utils/LoginSignUpModal"
 import axios from "axios";
 import { UserContext } from "../context/UserStore";
+import { useEffect } from 'react'
 
 const LogInDiv = styled.div`
 	display: flex;
@@ -96,6 +97,11 @@ const Login = () => {
 	const [open, setOpen] = useState(false);
 	const [message, setMessage] = useState("");
    const { setEmail, setIsLoggedIn} = useContext(UserContext);
+
+   useEffect(()=>{
+      console.log("Login useEffect acitivated");
+      localStorage.clear();
+   },[])
 
 	const onClickChecking = async() =>{
 		const customerData = {
