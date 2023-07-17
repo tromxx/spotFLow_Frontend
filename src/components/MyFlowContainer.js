@@ -147,7 +147,7 @@ const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, i
           </TnLnContentDiv>
           
           <Image src={img} alt="img" />
-          
+
         </MyFlowContainerDiv>
 
       </FlowContainer>

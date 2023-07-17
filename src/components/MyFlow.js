@@ -381,22 +381,21 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	const context = useContext(UserContext);
 	const {email, nickname} = context;
 
-	const [data, setData] = useState([]); // 가져온 JSON 플로우 데이터를 저장
+	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
 	useEffect(() => {
-		getCurrentLocation();
+		const token = localStorage.getItem('authToken');
+		console.log(token);
+		console.log("useEffect 실행");
     const fetchData = async () => {
-      try {
-        const response = MyFlowApi.getmyFlow();
-        const jsonData = response.data;
-				
-        setData(jsonData);
-				console.log(jsonData);
-      } catch (error) {
-        console.error("플로우 데이터를 불러오는데 실패했습니다.", error);
-      }
+        const response = await MyFlowApi.getmyFlow(token);
+				console.log("데이터 받음");
+        setData(response.data);
+				setSortedFlow(response.data);
+				console.log(response);
+				console.log(response.data);
     };
 			fetchData(); // fetchData 함수 호출
   	}, []);
@@ -568,17 +567,15 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	const [clicked, setClicked] = useState("");
 
-	const handleContainerClick = (event, id) => {
+	const handleContainerClick = async (event, id) => {
 		setIsDetailModalOpen(true);
-		console.log(isDetailModalOpen);
 		const clickedId = id;
 		setClicked(clickedId);
-		const response = MyFlowApi.getClickedFlow(clickedId);
-		
-		setResponseDate(response.date);
-		setResponseTime(response.time);
-		setResponseLoaction(response.location);
-		setResponseContent(response.content);
+		const response = await MyFlowApi.getClickedFlow(clickedId);
+		setResponseDate(response.data.date);
+		setResponseTime(response.data.time);
+		setResponseLoaction(response.data.location);
+		setResponseContent(response.data.content);
 		
 	};
 
@@ -642,17 +639,21 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				</MenuBar>
 				<ScrollBar >
           <FlowDiv>
-            {sortedFlow.map((data) => (
+            {sortedFlow && sortedFlow.map((sortedFlow) => (
               <MyFlowContainer
 								className="myFlowContainer"
-                key={data.id}
-                img={data.image}
-                time={data.joinDate}
-                content={data.content}
-                location={data.place}
-								date={data.joinDate}
+                key={sortedFlow.id}
+                img={sortedFlow.img}
+                time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
+                content={sortedFlow.content}
+                location={sortedFlow.location}
+								date={new Date(sortedFlow.date).toLocaleDateString([], {
+									year: 'numeric',
+									month: '2-digit',
+									day: '2-digit',
+								})}
 								isVisible={isVisible}
-								onClick={(e) => handleContainerClick(e, data.id)}
+								onClick={(e) => handleContainerClick(e, sortedFlow.id)}
               />
             ))}
           </FlowDiv>
@@ -680,7 +681,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 						}}
 						/>
 					</div>
-					<Map className="map" // 지도를 표시할 Container 
+					{/* <Map className="map" // 지도를 표시할 Container 
 									center={state.center}
 									isPanto={state.isPanto}
 									style={{
@@ -739,7 +740,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									}} />
 									</button>
 									</div>
-								</Map>
+								</Map> */}
 								    <>
     </>
 		
