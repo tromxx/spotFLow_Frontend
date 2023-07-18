@@ -65,7 +65,6 @@ export const DiarySwiper = () => {
         scrollbar={{draggable: true}}
         onSwiper={(swiper) => console.log(swiper)}
         onSlideChange={() => console.log('slide change')}
-
       >
         {timeline.map(e => (
           <SC.TimeLine>

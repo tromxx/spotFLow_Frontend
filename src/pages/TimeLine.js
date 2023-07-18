@@ -173,7 +173,8 @@ const Header = styled.div`
   flex-wrap: wrap;
   
   background-color: white;
-  background-color: ${(props) => props.theme.bgColor};
+  
+  background-color: ${(props) => props.theme.divColor};
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -686,7 +687,14 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 }
 
 
-
+const handlePostClick = async (postId) => {
+  try {
+    await userTimelineApi.upView(postId);
+    // 그 외 필요한 동작들...
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 
 
@@ -821,6 +829,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                   
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
+                        handlePostClick(e.id);
                         setDiffHours(calculateTime(e.updateTime));
                         setModalData({ title: e.title, content: e.content , name : e.nickName , date: timeParse(e.updateTime) , profile: e.ct_profile_pic});
                         openModal()

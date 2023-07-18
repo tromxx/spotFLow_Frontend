@@ -212,7 +212,7 @@ const MyDiarydiv = styled.div`
                     itemHandler = {itemHandler}
                   />
                 )}
-                <button onClick={()=>diaryDelete(data.id)}>삭제하기</button>
+                <button style={{position:"absolute", top:"0" , right: "0" }} onClick={()=>diaryDelete(data.id)}>삭제하기</button>
                 <div className="img-box">
                   <img className="image" src={data.timeLineList[0]?.image} alt="" />
                 </div>
