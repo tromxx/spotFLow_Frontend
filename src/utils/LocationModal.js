@@ -31,7 +31,7 @@ const ModalStyle = styled.div`
   .modal > section {
     position: relative;
     width: 40%;
-    height: 60%;
+    height: 65%;
     text-align: center;
     margin: 0 auto;
     border-radius: 0.3rem;
@@ -87,9 +87,7 @@ const ModalStyle = styled.div`
   .modal > section > footer button {
     position: absolute;
     color: white;
-    background-color:#424242;
-		border: 1px solid #424242;
-    border-radius: 5px;
+    background-color: transparent;
     font-size: 13px;
 
     &:first-child {

@@ -32,36 +32,40 @@ const ModalStyle = styled.div`
     position: relative;
     padding: 20px 20px 20px;
     border-radius: 20px 20px 0 0 ;
-    background-color: white;
+    background-color: ${props=>props.theme.divColor};
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   font-weight: bold;
   .modal > section > header > p {
+    color: ${props=>props.theme.textColor};
     font-size: 17px;
     margin: 0px;
   }
   .modal > section > main {
     padding: 60px;
     font-size: 15px;
-    background-color: white;
+    background-color: ${props=>props.theme.divColor};
+    color: ${props=>props.theme.textColor};
   }
   .modal > section > footer {
-    background-color: white;
+    background-color: ${props=>props.theme.divColor};
+    color: ${props=>props.theme.textColor};
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px 15px 15px;
     border-radius: 0 0 25px 25px;
+    border-top: background-color: ${props=>props.theme.borderColor};
   }
   .modal > section > footer > button {
     border: none;
     outline: none;
     font-size: 15px;
     font-weight: bold;
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: transparent;
     cursor: pointer;
   }
   .modal > section > footer > button:hover {
@@ -95,6 +99,7 @@ const ModalStyle = styled.div`
 const CloseButton = styled(AiOutlineClose)`
   font-weight: bold;
   font-size: 20px;
+  color: ${props=>props.theme.textColor};
   :hover{
     color: var(--lightblue);
     cursor: pointer;
