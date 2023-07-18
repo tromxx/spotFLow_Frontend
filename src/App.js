@@ -13,6 +13,7 @@ import {DiarySwiper} from "./components/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
+import FindPwEmail from './pages/FindPwEmail';
 
 function App() {
 
@@ -32,6 +33,9 @@ function App() {
             <Route path="/signup" element={<>
               <HeaderBarNavi />
               <SignUp />
+            </>} />
+            <Route path="/findpwemail" element={<>
+              <FindPwEmail />
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />

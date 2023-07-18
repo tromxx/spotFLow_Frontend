@@ -89,7 +89,6 @@ const Caption = styled.div`
 `;
 
 const TextArea = styled.textarea`
-  color: ${props => props.theme.textColor};
   position: absolute;
   margin-top: 300px;
   resize: none;
@@ -154,6 +153,9 @@ const Paragrph = styled.p`
     &:hover {
       color: var(--lightblue);
       cursor: pointer;
+    }
+    &.nickName{
+      margin-left : 10px;
     }
   } 
   &.Theme {
@@ -220,78 +222,83 @@ const MyPage = ({ onClose, goToMyFlow }) => {
   const [prevImgFile, setPrevImgFile] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [url, setUrl] = useState("");
-  const imgRef = useRef();
+  const imgRef = useRef(); //요기
   const navigate = useNavigate();
   const{nickname, profilePic, setProfilePic,statMsg,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
   const handleClick = () => {
     setIsActive(!isactive);
     setPrevImgFile("");
-    setImgFile(null);
+    setStatMsg("");
   };
   
    const handleCameraClick = () => {
     if (imgRef.current) {
-      imgRef.current.click();
-    }
-  };
-
-  const savePrevImgFile = (e) => {
-    const file = imgRef.current.files[0];
+        imgRef.current.click();
+      }
+    };
+    
+    //미리보기
+    const savePrevImgFile = (e) => {
     setImgFile(e.target.files[0]);
-    const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-          setPrevImgFile(reader.result);
-          console.log();
-       };
+    // const file = imgRef.current.files[0];
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file);
+    // reader.onloadend = () => {
+    //  setPrevImgFile(reader.result);
+    // };
   };
   
-  //여기다 로직 수정 필요 
-  const saveImgFile = async() => {
+  // firebase 로 보내기 
+  const saveImgFile = () => {
+    console.log(imgFile);
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(imgFile.name);
+    console.log("firebaseUpload ready");
+    fileRef.put(imgFile).then(() => {
+      fileRef.getDownloadURL().then((url) => {
+      console.log("firebaseUpload finish"); //1
+      setUrl(url);
+    });
+  })};
+
+  //여기다 로직 수정 필요 UseEffect 가능한지
+  const updateProfiles = async() => {
+
     const token = localStorage.getItem('authToken');
-    
     if(imgFile === null){
+   
+      // 데이타 준비
       const updateData = {
         statMsg : statMsg
       };
-      try {
-        const response = await CustomerApi.updateProfile(token,updateData);
-        setStatMsg(response.data.statMsg);
-        setIsLoggedIn(true);
-        setIsActive(!isactive);
-        setPrevImgFile("");
-      } catch (error) {
-        throw error;
-      }
+      // 데이터 전송
+      const response = await CustomerApi.updateProfile(token,updateData);
+      setStatMsg(response.data.statMsg);
+      setIsLoggedIn(true);
+      setIsActive(!isactive);
+      setPrevImgFile("");
+    
     }else if(statMsg === ""){
-      console.log("img activate")
-      const storageRef = storage.ref();
-      const fileRef = storageRef.child(imgFile.name);
-      fileRef.put(imgFile).then(() => {
-        console.log('File uploaded successfully!');
-        fileRef.getDownloadURL().then((url) => {
-          setUrl(url);
-          console.log(url);
-        });
-      });
+   
+      // 데이타 준비      
+      saveImgFile();
+      console.log(url); //2
       const updateData = {
-        profilePic : url,
-      };
-      try {
-        const response = await CustomerApi.updateProfile(token,updateData);
-        console.log("success")
-        setProfilePic(response.data.profilePic);
-        setIsLoggedIn(true);
-        setIsActive(!isactive);
-        setPrevImgFile("");
-      } catch (error) {
-        throw error;
-      };
-    }
+        profilePic : url
+      }
+      console.log(updateData); //3
+      
+      // 데이터 전송
+      const response = await CustomerApi.updateProfile(token, updateData);
+      setProfilePic(response.data.profilePic);
+      setIsLoggedIn(true);
+      setIsActive(!isactive);
+      setPrevImgFile("");
+      console.log("finish"); //4
+    };
   };
   
-  console.log(statMsg);
   return (
     <>
     {isLoggedIn ? 
@@ -325,7 +332,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>Spot</Paragrph>
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'><span style={{color : "#00B4D8"}}>F</span>low</Paragrph>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
-        <Button $isactive={isactive.toString() } onClick={saveImgFile}>저장하기</Button>
+        <Button $isactive={isactive.toString() } onClick={updateProfiles}>저장하기</Button>
         <TextArea
           cols="20"
           rows="2"

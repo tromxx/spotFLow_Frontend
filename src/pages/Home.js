@@ -1,6 +1,6 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
 import MyFlow from './MyFlow'
 import SlideDiv from '../components/SlideDiv'
@@ -20,7 +20,6 @@ const MenuButton = styled(AiOutlineMenu)`
 const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
-
 
   const renderPage = () => {
     switch (currentPage) {

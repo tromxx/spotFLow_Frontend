@@ -130,7 +130,7 @@ const Login = () => {
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">
                <p onClick={()=>navigate("/signup")}>회원가입</p>
-               <p>아이디/비번찾기</p>
+               <p onClick={()=>navigate("/findpwemail")}>아이디/비번찾기</p>
             </div>
             <li><img src={GoogleLogo} alt="" /></li>
             <li><img src={KakaoLogo} alt="" /></li>

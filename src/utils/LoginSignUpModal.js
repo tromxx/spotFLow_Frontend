@@ -65,7 +65,7 @@ const ModalStyle = styled.div`
     cursor: pointer;
   }
   .modal > section > footer > button:hover {
-    color: var(--lightblue);
+    color: var(--blue);
   }
   .modal.openModal {
     display: flex;
