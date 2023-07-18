@@ -64,7 +64,7 @@ const ModalStyle = styled.div`
     outline: none;
     font-size: 15px;
     font-weight: bold;
-    color: white;
+    color: black;
     background-color: transparent;
     cursor: pointer;
   }

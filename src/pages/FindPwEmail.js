@@ -3,6 +3,8 @@ import Logo from "../images/logo.png"
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import LoginSignUpModal from "../utils/LoginSignUpModal"
+import AuthApi from "../api/AuthApi"
 
 const FindPwEmailDiv = styled.div`
     display: flex;
@@ -38,23 +40,19 @@ const FindPwEmailDiv = styled.div`
 	li:nth-last-child(2) {
 		color: grey;
 	}
-`;
-
-const CheckButton = styled.div`
-	      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 400px;
-      height: 50px;
-      font-size: 20px;
-      border: 0;
-      border-radius: 20px;
-      outline: none;
-      padding-left: 10px;
-      text-align: center;
-      background-color: ${props => (props.$condition === true ? 'red' : 'grey')};
-      border: 2px solid var(--grey);
-      cursor: pointer;
+	li:nth-last-child(1){
+		display: flex;
+   	justify-content: center;
+   	align-items: center;
+   	width: 400px;
+   	height: 50px;
+   	border-radius: 20px;
+   	outline: none;
+   	padding-left: 10px;
+      font-weight: bold;
+   	border: 2px solid var(--grey);
+   	cursor: pointer;
+	}
 `;
 
 const FindPwEmail = () =>{
@@ -62,6 +60,9 @@ const FindPwEmail = () =>{
 	const [email, setEmail] = useState();
 	const [message, setMessage] = useState();
 	const [condition, setCondition] = useState(false); 
+   const [isConfirm, setIsConfirm] = useState(false);
+   const [modal, setModal] = useState(false);
+   const [text, setText] = useState("");
 
 	const checkRegXEmail = (e) => {
 		const validateEmail = (email) => {
@@ -71,22 +72,62 @@ const FindPwEmail = () =>{
 		setEmail(e.target.value);
 		if (!validateEmail(e.target.value)) {
 			setMessage("이메일 형식으로 입력해주세요");
+			setCondition(false);
 		} else {
 			setMessage("올바른 형식입니다.");
 			setCondition(true);
 		}
-	 };
+	};
+
+   const errorModal = () =>{
+      setModal(true);
+      setText("이메일을 입력하세요");
+   }
+   
+   const sendTempPwd = async()=>{
+      console.log("working");
+      try{
+         const response = await AuthApi.customerTmpPwd(email);
+         if(response){
+            setIsConfirm(true);
+            setModal(true);
+            setText("이메일을 확인 부탁드립니다.");
+         }
+      }catch(error){
+         setModal(true)
+         setText("없는 이메일 입니다.");
+      }
+   }
+
+   const check = () => {
+      if(isConfirm){
+         navigate("/login");
+      }else{
+         setModal(false);
+      }
+   }
+   
    return(
         <FindPwEmailDiv>
+         {console.log(isConfirm)}
             <ul>
-                <li><img src={Logo} alt="" onClick={()=>navigate("/")}/></li>
-                <li><h3>로그인에 문제가 있나요?</h3></li>
-                <li>이메일 주소를 입력하시면 계정에 다시 액세스할 수 있는 임시 비밀번호를 보내드립니다.</li>
-                <li><input placeholder="email@gmail.com" onChange={checkRegXEmail}/></li>
-					 <li>{message}</li>
-					 <CheckButton $condition={condition.toString()}>로그인 링크 보내기</CheckButton>
-
+               <li><img src={Logo} alt="" onClick={()=>navigate("/")}/></li>
+               <li><h3>로그인에 문제가 있나요?</h3></li>
+               <li>이메일 주소를 입력하시면 계정에 다시 액세스할 수 있는 임시 비밀번호를 보내드립니다.</li>
+               <li><input placeholder="email@gmail.com" onChange={checkRegXEmail}/></li>
+					<li>{message}</li>
+					{condition ? 
+						<li onClick={sendTempPwd} style={{background:'var(--lightblue)'}}>로그인 링크 보내기</li>:	//true			 
+						<li onClick={errorModal} style={{background:'var(--grey)'}}>로그인 링크 보내기</li>	//false			 
+					}
             </ul>
+            <LoginSignUpModal
+               open = {modal}
+               children = {text}
+               close = {()=>setModal(false)}
+               type ={true}
+               confirm = {check}
+            />
         </FindPwEmailDiv>
     );
 };
