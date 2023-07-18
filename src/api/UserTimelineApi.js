@@ -3,6 +3,11 @@ import axios from "axios";
 
 const DOMAIN = "http://localhost:8111"
 
+const api = axios.create({
+
+  withCredentials: true,  // 쿠키 자동 포함 설정
+});
+
 const userTimelineApi = {
   // 모든 타임라인 정보를 가져옴
   getUserTimelineList: async () => {
@@ -35,8 +40,8 @@ const userTimelineApi = {
     return await axios.put(DOMAIN + "/timeline/" + timeline.index, timeline);
   },
   // 조회수를 올려줌
-  upView: async (index) => {
-    return await axios.put(DOMAIN + "/timeline/view/" + index);
+  upView: async (postId) => {
+    return await api.put( DOMAIN + `/timeline/${postId}/views` );
   },
 
 }

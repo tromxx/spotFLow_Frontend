@@ -7,6 +7,10 @@ import Slider from "../components/Slider";
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
+import { UserContext} from '../context/UserStore';
+
+import { useEffect ,  useContext } from "react";
+
 
 
 
@@ -102,7 +106,15 @@ const DiaryDiv = styled.div`
 
 const Diary = () =>{
 
+    const user = useContext(UserContext);
+    
     const navi = useNavigate();
+
+    useEffect(()=> {
+        if(!user.isLoggedIn) {
+            console.log("로그인이 안되었어요");
+        }
+    })
 
     return(
         <Container>
@@ -111,9 +123,9 @@ const Diary = () =>{
                     <div className="namebarleft">
                     <div className="id">
                         <img className="img" src={avatar} alt="" />
-                        <h6>whddus426</h6>
+                        <h6>{user.nickname}</h6>
                      </div>
-                
+                       
                  </div>
                  <div className="namebarright">
                          <div className="menu">
