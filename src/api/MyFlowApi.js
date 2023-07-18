@@ -7,10 +7,9 @@ const Backend = "http://localhost:8111";
 const MyFlowApi = {
 
     // 새 플로우 쓰기
-    newFlow: async(email, lat, lng, content, img, place) => {
-				const token = localStorage.getItem('token');
+    newFlow: async(lat, lng, content, img, place) => {
+				const token = localStorage.getItem('authToken');
         const flowData = {
-					email : email,
 					place : place,
 					lat : lat,
 					lng  :lng,
@@ -19,7 +18,7 @@ const MyFlowApi = {
 				};
 
 			try {
-					const response = await axios.post('/auth/myflownew', flowData, {
+					const response = await axios.post('/myflow/myflownew', flowData, {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${token}`

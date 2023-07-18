@@ -34,10 +34,6 @@ const TimeandLocation = styled.div`
   font-family: var(--kfont);
   font-size: 13px;
   font-weight: bold;
-
-  @media(min-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const Image = styled.img`
@@ -78,7 +74,7 @@ const Date = styled.div`
 
 const DateWrapper = styled.div`
   position: relative;
-  width: 103.5%;
+  width: 101.5%;
   height: 20px;
   padding: 5px;
   margin-bottom: 3px;
@@ -92,19 +88,21 @@ const DateWrapper = styled.div`
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 1;
 `;
 
 const FlowContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 10px;
+  width: 100%;
 `;
 
 const FlowContainerWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
+  width: 80%;
   .checkBox {
     position: absolute;
     left: -30px;

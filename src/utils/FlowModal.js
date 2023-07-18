@@ -10,7 +10,7 @@ const ModalStyle = styled.div`
         right: 0;
         bottom: 0;
         left: 0;
-        z-index: 999;
+        z-index: 2;
         background-color: rgba(0, 0, 0, 0.6);
         
     }
@@ -34,7 +34,7 @@ const ModalStyle = styled.div`
     height: 80%;
     text-align: center;
     margin: 0 auto;
-    border-radius: 0.3rem;
+    border-radius: 15px;
     background-color: ${props=>props.theme.divColor};
     color: ${props=>props.theme.textColor};
     /* 팝업이 열릴때 스르륵 열리는 효과 */
@@ -86,9 +86,8 @@ const ModalStyle = styled.div`
   }
   .modal > section > footer button {
     position: absolute;
-    color: white;
-    background-color:#424242;
-		border: 1px solid #424242;
+    color: ${props=>props.theme.textColor};
+    background-color: transparent;
     border-radius: 5px;
     font-size: 13px;
 
@@ -189,7 +188,7 @@ const FlowModal = (props) => {
 								</main>
                 <footer>
                     {type && <button onClick={confirm} className="confirm">확인</button>}
-                    <button onClick={close} className="close">닫기</button>
+                    <button onClick={close} className="close">취소</button>
                 </footer>
             </section>
             }

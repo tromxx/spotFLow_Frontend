@@ -269,6 +269,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         </div>
         {/* <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph> */}
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
+        <button onClick={()=>navigate("/myflow")}>플로우샘플</button>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
         <button>저장하기</button>
       </LogInDiv>
