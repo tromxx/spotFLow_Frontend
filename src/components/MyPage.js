@@ -219,7 +219,6 @@ const MyPage = ({ onClose, goToMyFlow }) => {
   const [isactive, setIsActive] = useState(true);
   const [prevImgFile, setPrevImgFile] = useState("");
   const [imgFile, setImgFile] = useState(null);
-  const [statusMessage, setStatusMessage] = useState("");
   const [url, setUrl] = useState("");
   const imgRef = useRef();
   const navigate = useNavigate();
@@ -247,14 +246,14 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           console.log();
        };
   };
-
-  //여기다 로직 수정 필요
+  
+  //여기다 로직 수정 필요 
   const saveImgFile = async() => {
     const token = localStorage.getItem('authToken');
     
     if(imgFile === null){
       const updateData = {
-        statMsg : statusMessage
+        statMsg : statMsg
       };
       try {
         const response = await CustomerApi.updateProfile(token,updateData);
@@ -265,7 +264,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
       } catch (error) {
         throw error;
       }
-    }else if(statusMessage === ""){
+    }else if(statMsg === ""){
       console.log("img activate")
       const storageRef = storage.ref();
       const fileRef = storageRef.child(imgFile.name);
@@ -292,7 +291,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
     }
   };
   
-
+  console.log(statMsg);
   return (
     <>
     {isLoggedIn ? 
@@ -332,7 +331,8 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           rows="2"
           spellCheck="false"
           placeholder="상태 메시지를 입력하세요"
-          onChange={(e)=> setStatusMessage(e.target.value)}
+          value={statMsg}
+          onChange={(e)=> setStatMsg(e.target.value)}
           $isactive={isactive.toString() }
         ></TextArea>
       </LogInDiv>

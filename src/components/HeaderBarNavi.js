@@ -66,8 +66,9 @@ const HeaderBar = () => {
   const{setEmail, nickname, setNickname,setProfilePic,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
 
   useEffect(() => {
-    console.log("UseEffect Activated");
+    localStorage.clear();
     const token = localStorage.getItem('authToken');
+    console.log(token);
     const getCustomerInfo = async () => {
       if (token != null) {
         try {

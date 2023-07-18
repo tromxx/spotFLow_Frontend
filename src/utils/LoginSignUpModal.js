@@ -48,21 +48,20 @@ const ModalStyle = styled.div`
     background-color: white;
   }
   .modal > section > footer {
-    background-color: var(--blue);
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px 15px 15px;
     border-radius: 0 0 25px 25px;
-    border-top: 1px solid var(--grey);
   }
   .modal > section > footer > button {
     border: none;
     outline: none;
     font-size: 15px;
     font-weight: bold;
-    color: white;
-    background-color: var(--blue);
+    color: black;
+    background-color: white;
     cursor: pointer;
   }
   .modal > section > footer > button:hover {
