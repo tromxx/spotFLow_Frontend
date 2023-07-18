@@ -8,6 +8,7 @@ import { useState, useContext } from "react";
 import LoginSignUpModal from "../utils/LoginSignUpModal"
 import axios from "axios";
 import { UserContext } from "../context/UserStore";
+import { useEffect } from 'react'
 
 const LogInDiv = styled.div`
 	display: flex;
@@ -97,6 +98,11 @@ const Login = () => {
 	const [message, setMessage] = useState("");
    const { setEmail, setIsLoggedIn} = useContext(UserContext);
 
+   useEffect(()=>{
+      console.log("Login useEffect acitivated");
+      localStorage.clear();
+   },[])
+
 	const onClickChecking = async() =>{
 		const customerData = {
 			email : inputEmail,
@@ -124,7 +130,7 @@ const Login = () => {
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">
                <p onClick={()=>navigate("/signup")}>회원가입</p>
-               <p>아이디/비번찾기</p>
+               <p onClick={()=>navigate("/findpwemail")}>아이디/비번찾기</p>
             </div>
             <li><img src={GoogleLogo} alt="" /></li>
             <li><img src={KakaoLogo} alt="" /></li>

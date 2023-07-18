@@ -7,6 +7,8 @@ import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserStore';
+import { storage } from '../api/FirebaseApi'
+import CustomerApi from '../api/CustomerApi';
 
 const LogInDiv = styled.div`
   width: 390px;
@@ -37,39 +39,11 @@ const LogInDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    textarea{
-      color: ${props => props.theme.textColor};
-      resize: none;
-      font-family: var(--kfont);
-      width: 250px;
-      height: 50px;
-      margin: 0px;
-      padding: 0px;
-      background-color: transparent;
-      border: none;
-      resize: none;
-      outline: none;
-      padding: 2px;
-    }
   }
   .followingfollowerDiv{
     display: flex;
     gap: 50px;
     margin: 0px;
-  }
-  button{
-    width: 200px;
-    height: 50px;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    border: none;
-    outline: none;
-    border-radius: 20px;
-    background-color: var(--blue);
-    &:hover{
-      color: var(--lightblue);
-    }
   }
 `;
 
@@ -102,7 +76,7 @@ const Caption = styled.div`
   margin: 0px;
   padding: 0px;
   position: absolute;
-  bottom: 700px;
+  margin-top: 80px;
   width: 130px; 
   height: 65px; 
   border-radius: 0 0 70px 70px;
@@ -111,6 +85,37 @@ const Caption = styled.div`
   display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
   input {
     display: none;
+  }
+`;
+
+const TextArea = styled.textarea`
+  position: absolute;
+  margin-top: 300px;
+  resize: none;
+  font-family: var(--kfont);
+  width: 300px;
+  height: 70px;
+  border-radius: 20px;
+  text-align: center;
+  resize: none;
+  padding: 2px;
+  display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
+`;
+
+const Button = styled.button`
+  width: 200px;
+  height: 50px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background-color: var(--blue);
+  display: ${props => (props.$isactive === "false" ? 'block' : 'none')};
+  &:hover{
+    color: var(--lightblue);
+    cursor: pointer;
   }
 `;
 
@@ -148,6 +153,9 @@ const Paragrph = styled.p`
     &:hover {
       color: var(--lightblue);
       cursor: pointer;
+    }
+    &.nickName{
+      margin-left : 10px;
     }
   } 
   &.Theme {
@@ -211,30 +219,84 @@ const CameraButton = styled(BsCamera)`
 const MyPage = ({ onClose, goToMyFlow }) => {
   const [ThemeMode, setTheme] = useTheme(); 
   const [isactive, setIsActive] = useState(true);
-  const [imgFile, setImgFile] = useState("");
-  const imgRef = useRef();
+  const [prevImgFile, setPrevImgFile] = useState("");
+  const [imgFile, setImgFile] = useState(null);
+  const [url, setUrl] = useState("");
+  const imgRef = useRef(); //요기
   const navigate = useNavigate();
-  const{nickname, profilePic, statMsg, isLoggedIn} = useContext(UserContext)
+  const{nickname, profilePic, setProfilePic,statMsg,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
   const handleClick = () => {
     setIsActive(!isactive);
-    setImgFile("");
+    setPrevImgFile("");
+    setStatMsg("");
   };
   
    const handleCameraClick = () => {
     if (imgRef.current) {
-      imgRef.current.click();
-    }
+        imgRef.current.click();
+      }
+    };
+    
+    //미리보기
+    const savePrevImgFile = (e) => {
+    setImgFile(e.target.files[0]);
+    // const file = imgRef.current.files[0];
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file);
+    // reader.onloadend = () => {
+    //  setPrevImgFile(reader.result);
+    // };
   };
-
+  
+  // firebase 로 보내기 
   const saveImgFile = () => {
-    const file = imgRef.current.files[0];
-    const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-          setImgFile(reader.result);
-          console.log(imgFile);
-       };
+    console.log(imgFile);
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(imgFile.name);
+    console.log("firebaseUpload ready");
+    fileRef.put(imgFile).then(() => {
+      fileRef.getDownloadURL().then((url) => {
+      console.log("firebaseUpload finish"); //1
+      setUrl(url);
+    });
+  })};
+
+  //여기다 로직 수정 필요 UseEffect 가능한지
+  const updateProfiles = async() => {
+
+    const token = localStorage.getItem('authToken');
+    if(imgFile === null){
+   
+      // 데이타 준비
+      const updateData = {
+        statMsg : statMsg
+      };
+      // 데이터 전송
+      const response = await CustomerApi.updateProfile(token,updateData);
+      setStatMsg(response.data.statMsg);
+      setIsLoggedIn(true);
+      setIsActive(!isactive);
+      setPrevImgFile("");
+    
+    }else if(statMsg === ""){
+   
+      // 데이타 준비      
+      saveImgFile();
+      console.log(url); //2
+      const updateData = {
+        profilePic : url
+      }
+      console.log(updateData); //3
+      
+      // 데이터 전송
+      const response = await CustomerApi.updateProfile(token, updateData);
+      setProfilePic(response.data.profilePic);
+      setIsLoggedIn(true);
+      setIsActive(!isactive);
+      setPrevImgFile("");
+      console.log("finish"); //4
+    };
   };
   
   return (
@@ -247,7 +309,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         </div>
         <div className='profileDiv'>
         <img
-              src={imgFile ? imgFile : profilePic || "/images/icon/user.png"}
+              src={prevImgFile ? prevImgFile : profilePic || "/images/icon/user.png"}
               alt="프로필 이미지"
             />
           <Caption $isactive={isactive.toString()}>
@@ -255,7 +317,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
               type="file"
               accept="image/*"
               id="profileImg"
-              onChange={saveImgFile}
+              onChange={savePrevImgFile}
               ref={imgRef}
             />
             <CameraButton onClick={handleCameraClick}/>
@@ -265,13 +327,21 @@ const MyPage = ({ onClose, goToMyFlow }) => {
             <Paragrph $isactive={isactive.toString()} className='Following'>Following : 100</Paragrph>
             <Paragrph $isactive={isactive.toString()} className='Following'>Follower : 200</Paragrph>
          </div>
-          <Paragrph $isactive={isactive.toString()} className='StatMsg'>Testing Testing</Paragrph>
+          <Paragrph $isactive={isactive.toString()} className='StatMsg'>{statMsg}</Paragrph>
         </div>
         {/* <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph> */}
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
-        <button onClick={()=>navigate("/myflow")}>플로우샘플</button>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
-        <button>저장하기</button>
+        <Button $isactive={isactive.toString() } onClick={updateProfiles}>저장하기</Button>
+        <TextArea
+          cols="20"
+          rows="2"
+          spellCheck="false"
+          placeholder="상태 메시지를 입력하세요"
+          value={statMsg}
+          onChange={(e)=> setStatMsg(e.target.value)}
+          $isactive={isactive.toString() }
+        ></TextArea>
       </LogInDiv>
       :
       <LogOutDiv>
@@ -283,7 +353,7 @@ const MyPage = ({ onClose, goToMyFlow }) => {
           <p>로그인이 필요한 서비스입니다.</p>
         </div>
       </LogOutDiv>
-      }
+    }
     </>
   );
 };
