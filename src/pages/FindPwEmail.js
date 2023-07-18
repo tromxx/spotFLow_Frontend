@@ -38,8 +38,10 @@ const FindPwEmailDiv = styled.div`
 	li:nth-last-child(2) {
 		color: grey;
 	}
-   li:nth-last-child(1) {
-      display: flex;
+`;
+
+const CheckButton = styled.div`
+	      display: flex;
       justify-content: center;
       align-items: center;
       width: 400px;
@@ -50,10 +52,9 @@ const FindPwEmailDiv = styled.div`
       outline: none;
       padding-left: 10px;
       text-align: center;
-      background-color: ${props => (props.condition? 'blue' : 'grey')};
+      background-color: ${props => (props.$condition === true ? 'red' : 'grey')};
       border: 2px solid var(--grey);
       cursor: pointer;
-	}
 `;
 
 const FindPwEmail = () =>{
@@ -83,7 +84,7 @@ const FindPwEmail = () =>{
                 <li>이메일 주소를 입력하시면 계정에 다시 액세스할 수 있는 임시 비밀번호를 보내드립니다.</li>
                 <li><input placeholder="email@gmail.com" onChange={checkRegXEmail}/></li>
 					 <li>{message}</li>
-					 <li condition={condition}>로그인 링크 보내기</li>
+					 <CheckButton $condition={condition.toString()}>로그인 링크 보내기</CheckButton>
 
             </ul>
         </FindPwEmailDiv>
