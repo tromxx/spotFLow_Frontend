@@ -166,6 +166,12 @@ const Container = styled.div`
   label {
     font-size: 12px;
   }
+  @media(max-width : 844px){
+    
+    .readContainer{
+      width: 310px;
+    } 
+  }
 `;
 
 const Input = styled.input`

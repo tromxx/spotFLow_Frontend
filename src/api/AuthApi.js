@@ -27,6 +27,11 @@ const AuthApi = {
   // Post : 회원 가입하기 
   customerSignUp : async(customerData) => {
     return await axios.post(DOMAIN + "/auth/signup", customerData)
+  },
+
+  //Get : 방식으로  임시 비밀번호 가죠오기
+  customerTmpPwd : async(email) => {
+    return await axios.get(DOMAIN +`/auth/temppwd?email=${email}`)
   }
 };
 export default AuthApi;  

@@ -6,7 +6,7 @@ import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
 import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDelete} from "react-icons/ai";
 
-import {MdOutlineEditOff} from "react-icons/md";
+import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
 import {useTheme} from "../context/themeProvider";
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
@@ -17,6 +17,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
 import { type } from "@testing-library/user-event/dist/type";
 import userTimelineApi from "../api/UserTimelineApi";
+import { useCallback } from "react";
+
 
 const ItemGrid = styled.div`
   min-height: 80vh;
@@ -173,7 +175,8 @@ const Header = styled.div`
   flex-wrap: wrap;
   
   background-color: white;
-  background-color: ${(props) => props.theme.bgColor};
+  
+  background-color: ${(props) => props.theme.divColor};
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -467,48 +470,16 @@ const ItemContent = styled.div`
 
 const TimeLine = () => {
   const [dummy, setDummy] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await userTimelineApi.getUserTimelineList();
-        setDummy(res.data);
-        setItems(res.data.slice(0,8));
-    };
-    fetchData();
-  
-  }, []);  
-  
 
   // []를 추가함으로써 이펙트는 한 번만 실행되며, 컴포넌트가 마운트 될 때만 실행됩니다.
   // 무한스크롤 변수[dummy.slice(0, 3));
   const [items, setItems] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
 
 
 
-    // 무한스크롤 가동 함수 콜백함수로 1.5초딜레이를 주고 moreitems에서 불러올 데이터수를 조절 
-    // 로딩상태변수
-  
 
-const fetchMoreData = () => {
-  if (!dummy) {
-    return;
-  }
 
-  setTimeout(() => {
-    if (items.length >= dummy.length) {
-      setHasMore(false);
-      return;
-    }
-
-    setIsLoading(true);
-    const moreItems = dummy.slice(items.length, items.length + 2);
-    setItems(prevItems => [...prevItems, ...moreItems]);
-  }, 1500);
-  
-  setIsLoading(!isLoading);
-};
 
 // 모달데이터 설정
 const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:'' , profile: ''});      
@@ -607,25 +578,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 // 시간 계산 함수
   let [diffHours,setDiffHours] = useState();
 
-      // const calculateTime = (date) => {
-      //   let date1 = new Date(date); // This is in local time
-      //   let date2 = new Date();
-      //   let diffMilliseconds = Math.abs(date2 - date1);
-      //   let diffSeconds = Math.floor(diffMilliseconds / 1000);
-      //   let diffMinutes = Math.floor(diffSeconds / 60);
-      //   let diffHours = Math.floor(diffMinutes / 60);
-      //   let diffDays = Math.floor(diffHours / 24);
-
-      //   if(diffDays > 0){
-      //     setDiffHours(diffDays + "일 전"); 
-      //   } else if(diffHours > 0) {
-      //     setDiffHours(diffHours + "시간 전");
-      //   } else if(diffMinutes > 0) {
-      //     setDiffHours(diffMinutes + "분 전");
-      //   } else {
-      //     setDiffHours(diffSeconds + "초 전");
-      //   }
-      // }
+     
       const calculateTime = (date) => {
         let date1 = new Date(date); // This is in local time
         let date2 = new Date();
@@ -686,7 +639,14 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 }
 
 
-
+const handlePostClick = async (postId) => {
+  try {
+    await userTimelineApi.upView(postId);
+    // 그 외 필요한 동작들...
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 
 
@@ -707,8 +667,81 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
         }  else setIsCreate(!isCreate);
     }
 
+    const [search,setSearch] = useState('');
+
+    const filteredItems = items.filter(item => item.place.includes(search));
+
+    // 디바운스 작업 필요 ?? 필터링 
+//   const debounce = (func, delay) => {
+//     let debounceTimer;
+//     return function() {
+//         const context = this;
+//         const args = arguments;
+//         clearTimeout(debounceTimer);
+//         debounceTimer = setTimeout(() => func.apply(context, args), delay);
+//     }
+// }
 
 
+    // const fetchMoreData = async (lastId) => { // 마지막 ID를 매개변수로 받습니다.
+    //   const res = await userTimelineApi.getUserTimelineList(lastId);
+    //   setItems(prevItems => [...prevItems, ...res.data]);
+    // };
+    
+
+  const obsRef = useRef(null); // observer Element
+  const [page, setPage] = useState(1); //현재 페이지
+  const preventRef = useRef(true); // Observer repeat execution prevention
+  const endRef = useRef(false); // All posts loaded check
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+
+
+
+
+  useEffect(()=> { // Observer creation
+    const observer = new IntersectionObserver(obsHandler, { threshold : 1 });
+    if(obsRef.current) observer.observe(obsRef.current);
+    return () => observer.disconnect();
+  }, [])
+
+  useEffect(()=> {
+    fetchMoreData(items[items.length-1]?.id);
+  }, [page])
+
+  const obsHandler = ((entries) => { // Observer callback function
+    const target = entries[0];
+    if(!endRef.current && target.isIntersecting && preventRef.current){ // Observer repeat execution prevention
+      preventRef.current = false; // Observer repeat execution prevention
+      setPage(prev => prev +1);
+    }
+  })
+
+  const fetchMoreData = useCallback(async(lastId) => { // Get more posts  
+    setIsLoading(true);
+  try {
+    const res = await userTimelineApi.getUserTimelineList(lastId);
+    if(res.data.length === 0){ // If there is no more posts
+      endRef.current = true;
+    }
+    setTimeout(() => {
+      setItems(prevItems => [...prevItems, ...res.data]); // Add new items to the list
+      setIsLoading(false); // Stop loading after 1.5 seconds
+      preventRef.current = true; // Allow observer to fetch more data again
+    }, 1500);
+  } catch (e) {
+    setIsLoading(false);
+    console.error(e);
+  } 
+  }, []);
+
+    // 무한스크롤 하단 감시 변수 
+    const target = useRef(null);
+   
+    
+   
+
+
+  
   return (
     <>
 
@@ -766,7 +799,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                 <TfiArrowLeft style={{fontSize: "20px"}}></TfiArrowLeft>
               </CreateBtn>
               <div style={{width: "70%", position: "relative"}}>
-            <input type="text" className="Search-bar"
+            <input type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
             /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
             
           </div>
@@ -802,25 +835,26 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 
             <Main isSort={isSort}>
                         
-            <InfiniteScroll
-
-            dataLength={items.length}
-            next={fetchMoreData}
-            hasMore={hasMore}
-            // 잠시제거 loader={isLoading ? <LoadingSpinner/> : null}
-            endMessage={
-              <p style={{textAlign: "center"}}>
-                {/* <b>끝페이지</b> */}
-              </p>
-            }
+            <div
+            // 인피니티 스크롤 제거할 예정 
+            // dataLength={items.length}
+            // next={fetchMoreData}
+            // hasMore={hasMore}
+            // // 잠시제거 loader={isLoading ? <LoadingSpinner/> : null}
+            // endMessage={
+            //   <p style={{textAlign: "center"}}>
+            //     {/* <b>끝페이지</b> */}
+            //   </p>
+            // }
             
           >
             <ItemGrid isSort={isSort}>
               {
-                items.map((e) =>
+                filteredItems.map((e , index) =>
                   
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
+                        handlePostClick(e.id);
                         setDiffHours(calculateTime(e.updateTime));
                         setModalData({ title: e.title, content: e.content , name : e.nickName , date: timeParse(e.updateTime) , profile: e.ct_profile_pic});
                         openModal()
@@ -856,14 +890,15 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
                 )
                 }
                 </ItemGrid>   
-                  </InfiniteScroll>
+                  </div>
+                  <div ref={obsRef} style={{ width: '100%', height: 30, }}>{isLoading && <LoadingSpinner></LoadingSpinner>}</div>
                   </Main>
                     {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
                     <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
                     <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate)}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
         </Container>
 
-        {/* <MainSlider name="Popular"/> */}
+
         </>
 
     );
