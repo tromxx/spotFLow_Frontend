@@ -1,8 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import {useTheme} from "../context/themeProvider";
+
+
 
 
 // 로딩 상태를 나타내는 애니메이션 css 참고사이트 :https://tobiasahlin.com/spinkit/
+
 
 const Container = styled.div`
     position: fixed;
@@ -18,7 +22,8 @@ const Container = styled.div`
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: #333;
+
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "#1BD6F5"};
 
   border-radius: 100%;
   display: inline-block;
@@ -53,8 +58,9 @@ const Container = styled.div`
 `
 
 function LoadingSpinner() {
+  const theme = useTheme();
   return (
-    <Container>
+    <Container props={theme}>
         <div class="spinner">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
