@@ -10,9 +10,13 @@ const api = axios.create({
 
 const userTimelineApi = {
   // 모든 타임라인 정보를 가져옴
-  getUserTimelineList: async () => {
-    return await axios.get(DOMAIN + "/timeline/testing");
-  },
+  getUserTimelineList: async (lastId) => {
+    return await axios.get(DOMAIN + "/timeline/testing", {
+      params: {
+        lastTimeLineId: lastId
+    }
+  });
+},
   // 특정 유저의 타임라인 정보를 가져옴
   getUserTimeline: async (email) => {
     return await axios.get(DOMAIN + "/timeline/user/" + email);
@@ -43,6 +47,8 @@ const userTimelineApi = {
   upView: async (postId) => {
     return await api.put( DOMAIN + `/timeline/${postId}/views` );
   },
+
+  
 
 }
 
