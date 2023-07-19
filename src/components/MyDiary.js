@@ -96,7 +96,7 @@ const MyDiarydiv = styled.div`
       width: 30px;
       height: 30px;
       top:0%;
-      left:0%;
+      left:90%;
       align-items: center;
       justify-content: center;
       display: flex;
