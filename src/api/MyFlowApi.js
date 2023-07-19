@@ -10,25 +10,21 @@ const MyFlowApi = {
     newFlow: async(lat, lng, content, img, place) => {
 				const token = localStorage.getItem('authToken');
         const flowData = {
-					place : place,
 					lat : lat,
-					lng  :lng,
+					lng : lng,
 					content : content,
 					img : img,
+					place : place
 				};
 
-			try {
-					const response = await axios.post('/myflow/myflownew', flowData, {
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${token}`
+				return await axios.post(Backend +'/myflow/myflownew', flowData, {
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`
 					}
-					});
-					return response;
+				});
+				
 
-				} catch (error) {
-					throw new error("새 플로우 게시에 실패했습니다.");
-				}
 		},
 
 		getClickedFlow: async (flowId) => {

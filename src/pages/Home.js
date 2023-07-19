@@ -6,7 +6,7 @@ import MyFlow from './MyFlow'
 import SlideDiv from '../components/SlideDiv'
 import MyPage from '../components/MyPage'
 import Following from '../components/Following'
-
+import { useNavigate } from 'react-router-dom';
 const MenuButton = styled(AiOutlineMenu)`
   z-index: 2;
   position: absolute;
@@ -20,7 +20,7 @@ const MenuButton = styled(AiOutlineMenu)`
 const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
-
+  const navigate = useNavigate();
   const renderPage = () => {
     switch (currentPage) {
       case 'MyPage':
@@ -41,6 +41,7 @@ const Home = () => {
   return (
     <>
       <MenuButton onClick={()=>setActivate(true)} />
+      <button onClick={()=>{navigate("/myflow")}}>마이플로우마이플로우</button>
       <SlideDiv show={active}>
         {renderPage()}
       </SlideDiv>

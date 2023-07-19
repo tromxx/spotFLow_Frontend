@@ -22,6 +22,8 @@ const TnLnContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 70%;
+  height: 100%;
 `;
 
 const TimeandLocation = styled.div`
@@ -29,7 +31,7 @@ const TimeandLocation = styled.div`
   flex-direction: row;
   align-self: flex-start; /* 수정: 상단 정렬로 변경 */
   margin-top: -10px;
-  width: 200px;
+  width: 100%;
   height: 10px;
   font-family: var(--kfont);
   font-size: 13px;
@@ -40,6 +42,8 @@ const Image = styled.img`
   width: 80px;
   height: 80px;
   align-self: flex-end;
+  position: absolute;
+  right: 10px;
 `;
 
 const ContentText = styled.p`
@@ -49,8 +53,9 @@ const ContentText = styled.p`
   font-family: var(--kfont);
   font-size: 12px;
   padding: 5px;
-  width: 215px;
-  height: 50px;
+  height: 100%;
+  overflow: hidden;
+  flex: 1;
 `;
 
 const Location = styled(SlLocationPin)`
@@ -112,12 +117,10 @@ const FlowContainerWrapper = styled.div`
   }
 `;
 
-const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, id, onClick }) => {
+const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, id}) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleClick = () => {
-    onClick(id);
-  };
+ 
 
 
   return (
@@ -135,7 +138,7 @@ const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, i
       
       </div>
       </CSSTransition>
-      <FlowContainer onClick={handleClick}>
+      <FlowContainer>
         
         <DateWrapper>
             <Date>

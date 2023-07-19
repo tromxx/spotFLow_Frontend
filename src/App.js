@@ -13,6 +13,7 @@ import {DiarySwiper} from "./components/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
+import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
 import { useLayoutEffect, useState } from 'react';
 
@@ -68,7 +69,7 @@ function App() {
               <HeaderBarNavi />
               <DiaryCreate />
             </>} />
-            <Route path="/timeline" element={<TimeLine />} />
+            <Route path="/flow" element={<TimeLine />} />
             <Route path="/diary/detail/:id" element={
               <>
                 <HeaderBarNavi/>
@@ -78,8 +79,9 @@ function App() {
 
             <Route path='/myflow' element={
             <>
-            <HeaderBarNavi/>
-             <MyFlow />
+            {windowWidth <= 840 ? null : <HeaderBarNavi />}
+            {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
+             
             </>
            }/>
           </Routes>

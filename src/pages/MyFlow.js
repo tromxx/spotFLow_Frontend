@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { styled } from 'styled-components';
+import { useNavigate } from "react-router-dom";
 import { BiArrowBack, BiCurrentLocation, BiSelectMultiple } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera} from "react-icons/ai";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
@@ -16,6 +17,7 @@ import MyFlowApi from "../api/MyFlowApi";
 import MyFlowContainer from "../components/MyFlowContainer"
 import LocationModal from "../utils/LocationModal";
 import { useTheme } from "styled-components";
+import { TfiArrowLeft } from "react-icons/tfi";
 
 const MyFlowWrapper = styled.div`
  	display: flex;
@@ -31,8 +33,9 @@ const MyFlowDiv = styled.div`
   color: ${props=>props.theme.textColor};
   border: ${props=>props.theme.borderColor};	
 	width: 60%;
-	margin-top: 80px;
+	margin-top: 40px;
   height: 93vh;
+	min-height: 93vh;
   display: flex;
   align-items: center;
 	text-align: center;
@@ -119,13 +122,17 @@ const FileBox = styled.div`
 
 const MyFlowMenuName = styled.div`
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	font-family: var(--efont);
 	width: 100%;
 	font-size: 30px;
 	font-weight: bolder;
 	margin-top: 5%;
+	position: relative;
+	
 	.title {
+		position: absolute;
+		left: 0px;
 		font-size: 35px;
 		margin-left: 10%;
 	}
@@ -135,13 +142,15 @@ const MyFlowMenuName = styled.div`
 
 const CreateBtn = styled.div`
     border-radius: 8px;
-		border: 1px solid #d9d9d9;
+		/* border: 1px solid #d9d9d9; */
     width: 35px;
     height: 35px;
     color: white;
     margin-right: 10%;
 		align-self: flex-end;
 		margin-top: -10%;
+		position: absolute;
+		right: 0px;
     &:hover{
         background-color: white;
         border: 1px solid silver;
@@ -296,9 +305,33 @@ const MenuButtonWrapper = styled.div`
 
 `;
 
+const CreateBtn2 = styled.div`
+
+  display: flex;
+  justify-content:center;
+  align-items:center; 
+  border: 1px solid white;
+  border-radius: 8px;
+  width: 35px;
+  height: 35px;
+  color: black;
+  background-color: ${(props) => props.theme.timeLineBgColor};
+  background-color: white;
+  margin: 5px;
+
+  &:hover {
+    background-color: white;
+    border: 1px solid silver;
+  }
+
+  ${(props) => props.isClicked &&
+          `background-color: black; `
+  }
+`
+
 
 const MyFlow = () =>{
-
+	const navigate = useNavigate();
 	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
@@ -310,11 +343,8 @@ const MyFlow = () =>{
 		console.log("useEffect 실행");
     const fetchData = async () => {
         const response = await MyFlowApi.getmyFlow(token);
-				console.log("데이터 받음");
         setData(response.data);
 				setSortedFlow(response.data);
-				console.log(response);
-				console.log(response.data);
     };
 			fetchData(); // fetchData 함수 호출
   	}, []);
@@ -439,7 +469,10 @@ const MyFlow = () =>{
 		const continueToDB = async () => {
 			MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, url, place, async function() {
 				const response = await MyFlowApi.getmyFlow();
+				setSortedFlow("");
 				setData(response.data);
+				setSortedFlow(response.data);
+				handleSort();
 			});
 		
 			setFlowModalOpen(false);
@@ -465,10 +498,25 @@ const MyFlow = () =>{
 	  }
 	};
 
+	const textLimit = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 90) {
+      setFlowModalText(inputText);
+    }
+  };
+
+	const goToFlow =()=> {
+		navigate("/flow");
+	}
+
     return(
 			<MyFlowWrapper>
 			<MyFlowDiv>
 				<MyFlowMenuName>
+				<CreateBtn2 onClick={goToFlow}>
+					<TfiArrowLeft style={{fontSize: "20px"}}/>
+				</CreateBtn2>
+				
 				<div className="title">
   				my<span style={{ color: '#00B4D8' }}>F</span>low
 				</div>
@@ -601,17 +649,19 @@ const MyFlow = () =>{
         type="y"
 				confirm={handleUpload}
       	>
-        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(50자 이내)"
+        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
           value={flowModalText}
-          onChange={(e) => setFlowModalText(e.target.value)}
+          onChange={textLimit}
         />
+				<p className="textLength">{flowModalText.length}/90</p>
 				<div className="wrapper">
 					<FileBox className="filebox">
 						<div className="filebox">
 								<label htmlFor="file"><AiOutlineCamera style={
 									{ width: "25px",
 										height: "25px",
-										color: theme.textColor}} /></label> 
+										color: theme.textColor}} />
+								</label> 
 								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
 								{thumbnailSrc !== "" && (
 										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />

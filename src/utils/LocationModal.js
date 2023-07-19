@@ -37,6 +37,7 @@ const ModalStyle = styled.div`
     border-radius: 0.3rem;
     background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
+    font-family: var(--kfont);
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-show 0.3s;
     overflow: visible;
@@ -86,9 +87,10 @@ const ModalStyle = styled.div`
   }
   .modal > section > footer button {
     position: absolute;
-    color: white;
+    color: ${props=>props.theme.textColor};
     background-color: transparent;
     font-size: 13px;
+    font-family: var(--kfont);
 
     &:first-child {
       position: absolute;
