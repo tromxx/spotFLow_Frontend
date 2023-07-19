@@ -10,9 +10,9 @@ import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
 import {useTheme} from "../context/themeProvider";
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroll-component";
+
 import TimeLineModal from "../utils/TimeLineModal";
-import dummy2 from "../dataSet/TimeLineData";
+
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
 import { type } from "@testing-library/user-event/dist/type";
@@ -132,9 +132,22 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+  background-color: ${(props) => props.theme.bgColor === "#171010" ? "black" : "#C3F8FF"};
+  position:relative;
+  .Name {
+    margin-top:0px;
+    position:absolute;
+    top:0;
+    left:20%;
+    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
+    font-size: 3em;
+    span {
+      color: #00C2FA;
+    }
+  }
 
-  background-color: ${(props) => props.theme.timeLineBgColor};
-  background-color:white;
+ 
+
   textarea {
     appearance: none; /* 기본 브라우저 스타일 제거 */
     outline: none; /* 아웃라인 제거 */
@@ -142,9 +155,6 @@ const Container = styled.div`
     resize: none; /* 크기 조절 제거 */
     /* 이외 원하는 스타일을 적용 */
   }
-
-    position: relative;
-    top:40px;
 
   @media (max-width: 850px) {
     & {
@@ -167,6 +177,8 @@ const Container = styled.div`
     width: 100vw;
     min-height: 100vh;
     height:  auto;
+
+
     
  `   
 const Header = styled.div`
@@ -174,9 +186,11 @@ const Header = styled.div`
   justify-content: start;
   flex-wrap: wrap;
   
-  background-color: white;
+ 
+  margin-top : 80px;
+
   
-  background-color: ${(props) => props.theme.divColor};
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -195,7 +209,7 @@ const Header = styled.div`
     border:none;
     
   //  border:1px solid ${(props) => props.theme.timeLineBgColor};
-    background-color: white;
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "#F8F6F4"};
 
     border-radius:15px;
 
@@ -227,18 +241,19 @@ const CreateBtn = styled.div`
   justify-content:center;
   align-items:center; */
   ${centerAlign}
-  border: 1px solid white;
+ // border: 1px solid white;
   border-radius: 5px;
   width: 35px;
   height: 35px;
-  color: black;
-  background-color: ${(props) => props.theme.timeLineBgColor};
-  background-color: white;
+  color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "#817D88" : "white"};
+
   margin: 5px;
 
   &:hover {
-    background-color: white;
-    border: 1px solid silver;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "#2C2636"};
+    color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "white"};
+
   }
 
   ${(props) => props.isClicked &&
@@ -246,10 +261,9 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
-
     width: 100%;
     height: auto;
-
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
    // overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
@@ -683,12 +697,6 @@ const handlePostClick = async (postId) => {
 // }
 
 
-    // const fetchMoreData = async (lastId) => { // 마지막 ID를 매개변수로 받습니다.
-    //   const res = await userTimelineApi.getUserTimelineList(lastId);
-    //   setItems(prevItems => [...prevItems, ...res.data]);
-    // };
-    
-
   const obsRef = useRef(null); // observer Element
   const [page, setPage] = useState(1); //현재 페이지
   const preventRef = useRef(true); // Observer repeat execution prevention
@@ -699,7 +707,7 @@ const handlePostClick = async (postId) => {
 
 
   useEffect(()=> { // Observer creation
-    const observer = new IntersectionObserver(obsHandler, { threshold : 1 });
+    const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
     if(obsRef.current) observer.observe(obsRef.current);
     return () => observer.disconnect();
   }, [])
@@ -746,8 +754,9 @@ const handlePostClick = async (postId) => {
     <>
 
       <HeaderBar />
-
-      <Container   theme={theme}>
+      
+      <Container   >
+      <p className="Name"><span>F</span>low</p>
         {isCreate &&
           <CreatePost >
             <input ref={titleRef} style={{
@@ -806,6 +815,9 @@ const handlePostClick = async (postId) => {
             </HeaderItemLeft>
             
             <HeaderItemRight>
+                <CreateBtn onClick={()=>{Navi('/myflow')}} style={{fontSize:"8px"}}>
+                    MyFlow
+                </CreateBtn>
               {isSort ?
                 <CreateBtn>
                   <FiColumns style={{fontSize: "25px"}} onClick={toggleSwitch}/>
@@ -836,16 +848,7 @@ const handlePostClick = async (postId) => {
             <Main isSort={isSort}>
                         
             <div
-            // 인피니티 스크롤 제거할 예정 
-            // dataLength={items.length}
-            // next={fetchMoreData}
-            // hasMore={hasMore}
-            // // 잠시제거 loader={isLoading ? <LoadingSpinner/> : null}
-            // endMessage={
-            //   <p style={{textAlign: "center"}}>
-            //     {/* <b>끝페이지</b> */}
-            //   </p>
-            // }
+           
             
           >
             <ItemGrid isSort={isSort}>
