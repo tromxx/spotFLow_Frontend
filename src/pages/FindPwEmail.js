@@ -53,6 +53,24 @@ const FindPwEmailDiv = styled.div`
    	border: 2px solid var(--grey);
    	cursor: pointer;
 	}
+   @media (max-width : 844px){
+      ul{
+         padding: 0;
+         border: none;
+      }
+      input{
+         width: 260px;
+      }
+      li{
+         width: 260px;
+      }
+      ul>.activeLi{
+         width: 260px;
+      }
+      ul>.notactiveLi{
+         width: 260px;
+      }
+   }
 `;
 
 const FindPwEmail = () =>{
@@ -117,8 +135,8 @@ const FindPwEmail = () =>{
                <li><input placeholder="email@gmail.com" onChange={checkRegXEmail}/></li>
 					<li>{message}</li>
 					{condition ? 
-						<li onClick={sendTempPwd} style={{background:'var(--lightblue)'}}>로그인 링크 보내기</li>:	//true			 
-						<li onClick={errorModal} style={{background:'var(--grey)'}}>로그인 링크 보내기</li>	//false			 
+						<li className="activeLi" onClick={sendTempPwd} style={{background:'var(--lightblue)'}}>로그인 링크 보내기</li>:	//true			 
+						<li className="notactiveLi" onClick={errorModal} style={{background:'var(--grey)'}}>로그인 링크 보내기</li>	//false			 
 					}
             </ul>
             <LoginSignUpModal

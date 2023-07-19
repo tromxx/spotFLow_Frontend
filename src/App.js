@@ -14,9 +14,22 @@ import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
 import FindPwEmail from './pages/FindPwEmail';
+import { useLayoutEffect, useState } from 'react';
 
 function App() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <UserStore>
@@ -28,13 +41,15 @@ function App() {
                 <Home/>
               </>} />
             <Route path="/login" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Login />
             </>} />
             <Route path="/signup" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <SignUp />
             </>} />
             <Route path="/findpwemail" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <FindPwEmail />
             </>} />
             <Route path="/diary" element={<>
