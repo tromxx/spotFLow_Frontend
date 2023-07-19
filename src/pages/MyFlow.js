@@ -15,6 +15,7 @@ import { UserContext } from "../context/UserStore";
 import MyFlowApi from "../api/MyFlowApi";
 import MyFlowContainer from "../components/MyFlowContainer"
 import LocationModal from "../utils/LocationModal";
+import { useTheme } from "styled-components";
 
 const MyFlowWrapper = styled.div`
  	display: flex;
@@ -298,10 +299,7 @@ const MenuButtonWrapper = styled.div`
 
 const MyFlow = () =>{
 
-	// context에서 유저 데이터 받아오기
-	const context = useContext(UserContext);
-	const {email, nickname} = context;
-
+	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
 
@@ -364,7 +362,7 @@ const MyFlow = () =>{
 	const [flowModalText, setFlowModalText] = useState("");
 	const [place, setPlace] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
-	const [modalText, setModalText] = useState(
+	const [modalText] = useState(
 		<>
 			작성된 내용은 저장되지 않습니다. <br />
 			정말 닫으시겠습니까?
@@ -373,11 +371,11 @@ const MyFlow = () =>{
 
 	// 유저 위치 찾기
 	const [locationModalOpen, setLocationModalOpen] = useState(false);
-	const { location, error, getCurrentLocation } = useCurrentLocation();
+	const { location, getCurrentLocation } = useCurrentLocation();
 	const [locationValue, setLocationValue] = useState("");
 	const [state, setState] = useState({
 		// 지도의 초기 위치
-		center: { lat: location?.latitude, lng: location?.longitude },
+		center: { lat: 37.497931, lng: 127.027838 },
 		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
 		isPanto: false,
 	  })
@@ -390,8 +388,6 @@ const MyFlow = () =>{
 		setLocationValue(place);
 		setLocationModalOpen(false);
 	}
-
-
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -469,12 +465,6 @@ const MyFlow = () =>{
 	  }
 	};
 
-	
-	
-
-	
-
-
     return(
 			<MyFlowWrapper>
 			<MyFlowDiv>
@@ -550,7 +540,6 @@ const MyFlow = () =>{
 									position:"absolute",
         					alignSelf: "center",
         					justifyContent: "center",
-									
 									}}
 									level={3} // 지도의 확대 레벨
 								>
@@ -561,7 +550,6 @@ const MyFlow = () =>{
 									}}
 									>
 									<button className="locationButton" style={{
-										
 										width: "35px",
 										height: "35px",
 										alignItems: "center",
@@ -581,9 +569,9 @@ const MyFlow = () =>{
 												center: { lat: location.latitude, lng: location.longitude },
 												isPanto: true,
 											},
+											
 										);
 									}}
-									
 									>
 										<BiCurrentLocation style={{
 											position:"absolute",
@@ -622,7 +610,8 @@ const MyFlow = () =>{
 						<div className="filebox">
 								<label htmlFor="file"><AiOutlineCamera style={
 									{ width: "25px",
-										height: "25px",}} /></label> 
+										height: "25px",
+										color: theme.textColor}} /></label> 
 								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
 								{thumbnailSrc !== "" && (
 										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />

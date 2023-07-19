@@ -14,6 +14,7 @@ const ModalStyle = styled.div`
     left: 0;
     z-index: 2;
     background-color: rgba(0, 0, 0, 0.6);
+    
   }
   .openModal {
     display: flex; 
@@ -28,12 +29,13 @@ const ModalStyle = styled.div`
     border-radius: 0.3rem;
     animation: modal-show 0.3s;
     overflow: hidden;
+    font-family: var(--kfont);
   }
   .modal > section > header {
     position: relative;
     padding: 20px 20px 20px;
     border-radius: 20px 20px 0 0 ;
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -47,12 +49,14 @@ const ModalStyle = styled.div`
   .modal > section > main {
     padding: 60px;
     font-size: 15px;
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
+    font-family: var(--kfont);
   }
   .modal > section > footer {
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
+    font-family: var(--kfont);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,7 +69,8 @@ const ModalStyle = styled.div`
     outline: none;
     font-size: 15px;
     font-weight: bold;
-    color: white;
+    color: ${props=>props.theme.textColor};
+    font-family: var(--kfont);
     background-color: transparent;
     cursor: pointer;
   }

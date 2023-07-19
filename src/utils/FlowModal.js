@@ -35,7 +35,7 @@ const ModalStyle = styled.div`
     text-align: center;
     margin: 0 auto;
     border-radius: 15px;
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-show 0.3s;
