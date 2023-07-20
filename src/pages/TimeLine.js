@@ -247,7 +247,7 @@ const CreateBtn = styled.div`
   height: 35px;
   color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
   background-color: ${(props) => props.theme.bgColor === '#171010' ? "#817D88" : "white"};
-
+  
   margin: 5px;
 
   &:hover {
@@ -637,7 +637,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
       lng : null , 
       date : "" 
     })
-
+    
     const CreatePostConfirm = async () => {
       if (contentRef.current.value.length < 5) {
         contentRef.current.focus();
@@ -683,7 +683,7 @@ const handlePostClick = async (postId) => {
 
     const [search,setSearch] = useState('');
 
-    const filteredItems = items.filter(item => item.place.includes(search));
+    //const filteredItems = items.filter(item => item.place.includes(search));
 
     // 디바운스 작업 필요 ?? 필터링 
 //   const debounce = (func, delay) => {
@@ -746,8 +746,12 @@ const handlePostClick = async (postId) => {
     const target = useRef(null);
    
     
-   
-
+    const handleSearch = async () => {
+        const res = await userTimelineApi.getTimePlace(search);
+        console.log(res.data);
+        setItems(res.data);
+    }
+  
 
   
   return (
@@ -758,6 +762,40 @@ const handlePostClick = async (postId) => {
       <Container   >
       <p className="Name"><span>F</span>low</p>
         {isCreate &&
+        //     <FlowModal
+        //     open={()=>setIsCreate(true)}
+        //     close={()=>setIsCreate(false)}
+        //     header={<div className="title">
+        //     <span style={{ color: '#00B4D8' }}>F</span>low
+        //     </div>}
+        //     type="y"
+        //     confirm={handleUploadImage}
+        //     >
+        //     <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
+        //       value={content}
+        //       onChange={textLimit}
+        //     />
+        //     <p className="textLength">{flowModalText.length}/90</p>
+        //     <div className="wrapper">
+        //       <FileBox className="filebox">
+        //         <div className="filebox">
+        //             <label htmlFor="file"><AiOutlineCamera style={
+        //               { width: "25px",
+        //                 height: "25px",
+        //                 color: theme.textColor}} />
+        //             </label> 
+        //             <input type="file" onChange={handleOpenImageRef} className="fileSelect" id="file"/>
+        //             {thumbnailSrc !== "" && (
+        //                 <img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
+        //             )}	
+        //         </div>
+        //       </FileBox>
+        //       <div className="locationDiv">
+        //         <label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
+        //         <input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
+        //       </div>
+        //     </div>
+        // </FlowModal>
           <CreatePost >
             <input ref={titleRef} style={{
               textAlign: "center",
@@ -809,7 +847,7 @@ const handlePostClick = async (postId) => {
               </CreateBtn>
               <div style={{width: "70%", position: "relative"}}>
             <input type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
-            /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
+            /> <AiOutlineSearch onClick={handleSearch} style={{position: "absolute", left: "30px", bottom: "7px"}}/>
             
           </div>
             </HeaderItemLeft>
@@ -852,9 +890,8 @@ const handlePostClick = async (postId) => {
             
           >
             <ItemGrid isSort={isSort}>
-              {
-                filteredItems.map((e , index) =>
-                  
+              { 
+                items.map((e , index) =>
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         handlePostClick(e.id);
