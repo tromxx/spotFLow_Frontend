@@ -166,43 +166,7 @@ const MyDiarydiv = styled.div`
     return(
         <MyDiarydiv>
             <div className="container">
-                  {/* <div class="box">
-                    {!stat ?
-                    <div className="check">
-                      <input type="checkbox" id="check1" className="checkboxes"/>
-                      <label for="check1"></label>
-                    </div>
-                    : null}
-                   
-                    
-                  </div> */}
-                  
-                    {/* <div class="box"> 
-                    <div className="check">
-                        <input type="checkbox" id="check1" className="checkboxes"/>
-                            <label for="check1"></label>
-                            </div>
-                        </div> */}
-                       {/* {
-                  props.data.map((data, index) => (
-                    <div class="box" key={index}>
-                      {props.stat && (
-                        <Checkbox
-                          key = {index}
-                          id = {data.id}
-                          itemHandler = {itemHandler}
-                        />
-                      )}
-
-
-                            <div className="img-box">
-                            <img  className="image" src={data.timeLineList[0].image} alt="" />
-                            </div>
-                      
-                    </div>
-                    
-                  ))
-                } */}
+                
                {data.map((data, index) => data.delete || (
               <div class="box" key={data.id}>
                 { props.stat && (

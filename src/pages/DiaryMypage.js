@@ -186,23 +186,12 @@ const DiaryMypagediv = styled.div`
             }
           };
 
-        //   useEffect(() => {
-        //     const fetchData = async () => {
-        //         const email = "test@example.com";
-        //         const res = await DiaryApi.findMyDiary(email);
-                
-        //         setData(res.data);
-                
-        //     };
-        //     fetchData();
-            
-        //   }, []);  
+        
         
           useEffect(() => {
             console.log(data);
         }, [data]);
       
-
     return(
         
         <Container>
@@ -216,19 +205,7 @@ const DiaryMypagediv = styled.div`
                 
                  </div>
                  <div className="namebarright">
-                         {/* <div className="menu">
-                                {isCheckBox ? (
-                                    <>
-                                        <button onClick={convertCheckBox}>취소</button>
-                                        <button>삭제</button>
-                                    </>)
-                                : (
-                                    <>
-                                        <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                        <BsTrash className="trash" onClick={convertCheckBox}/>
-                                    </>)
-                                }
-                        </div> */}
+                       
                     </div>
                 </div> 
                 <div className="searchBarline">

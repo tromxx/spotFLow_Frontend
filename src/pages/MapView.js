@@ -37,7 +37,7 @@ const MapView = React.memo((props) => {
 
   const ToTimeLine = (location) => {
     console.log(location);
-    navigate("/timeline", {
+    navigate("/flow", {
       state: {
         loc: location
       }
