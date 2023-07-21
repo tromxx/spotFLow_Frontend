@@ -4,7 +4,6 @@ import axios from "axios";
 const DOMAIN = "http://localhost:8111"
 
 const api = axios.create({
-
   withCredentials: true,  // 쿠키 자동 포함 설정
 });
 
@@ -25,6 +24,16 @@ const userTimelineApi = {
   getTimeline: async (timeline) => {
     return await axios.get(DOMAIN + "/timeline/" + timeline.index);
   }, 
+
+  // 특정 타임라인의 장소별 검색 결과가져옴
+  getTimePlace: async (place) => {
+  return await axios.get(DOMAIN + "/timeline/search"  , {
+    params: {
+      place: place
+    }
+  });
+  }, 
+
   // 타임라인 정보를 저장함 (이성근 수정중)
   setUserTimeline: async (props) => {
     const data = {

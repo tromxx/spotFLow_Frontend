@@ -152,6 +152,7 @@ const DiaryMypagediv = styled.div`
 
 `;
 
+
     const DiaryMypage = () => {
 
     const navi = useNavigate();
@@ -159,6 +160,10 @@ const DiaryMypagediv = styled.div`
     const [isCheckBox, setIsCheckBox] = useState(false);
 
     const [data,setData] = useState([]);
+
+    const [checkid, setCheckId] = useState([]) ; 
+
+
 
     const convertCheckBox = () => {
         if(isCheckBox === false) setIsCheckBox(true)
@@ -175,34 +180,23 @@ const DiaryMypagediv = styled.div`
             { id: 3 }
           ]
         });
+
+
         const handleDeleteItem = async () => {
-            try {
-              const response = await DiaryApi.delete('/api/items/' + item.id); // 백엔드 API 엔드포인트를 적절하게 수정하세요
-              console.log('아이템 삭제 성공:', response.data);
-              // 삭제 성공 후 필요한 동작 수행
-            } catch (error) {
-              console.error('아이템 삭제 실패:', error);
-              // 삭제 실패 시 처리할 로직
-            }
+                try {
+                const res = await DiaryApi.deleteDiary(checkid);
+                console.log(res.data);
+                } catch(error) {
+                    console.log("삭제실패",error);
+                }
           };
 
-        //   useEffect(() => {
-        //     const fetchData = async () => {
-        //         const email = "test@example.com";
-        //         const res = await DiaryApi.findMyDiary(email);
-                
-        //         setData(res.data);
-                
-        //     };
-        //     fetchData();
-            
-        //   }, []);  
+        
         
           useEffect(() => {
             console.log(data);
         }, [data]);
       
-
     return(
         
         <Container>
@@ -216,19 +210,7 @@ const DiaryMypagediv = styled.div`
                 
                  </div>
                  <div className="namebarright">
-                         {/* <div className="menu">
-                                {isCheckBox ? (
-                                    <>
-                                        <button onClick={convertCheckBox}>취소</button>
-                                        <button>삭제</button>
-                                    </>)
-                                : (
-                                    <>
-                                        <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                        <BsTrash className="trash" onClick={convertCheckBox}/>
-                                    </>)
-                                }
-                        </div> */}
+                       
                     </div>
                 </div> 
                 <div className="searchBarline">
@@ -257,7 +239,7 @@ const DiaryMypagediv = styled.div`
             </header>
             <body>
         <DiaryMypagediv>
-            <MyDiary stat={isCheckBox} data={data}/>
+            <MyDiary stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
         </DiaryMypagediv>
         </body>
         </Container>
