@@ -34,6 +34,10 @@ const DiaryApi = {
     }
     return await axios.post(DOMAIN + "/diary/comment", comment);
   }
+  ,
+  // diaryMyPage : async () => {
+  //   return await axios.post(DOMAIN + "diary/mypage", )
+  // }
 }
 
 export default DiaryApi;
