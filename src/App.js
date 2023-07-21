@@ -70,10 +70,15 @@ function App() {
               <HeaderBarNavi />
               <DiaryCreate />
             </>} />
-            <Route path="/flow" element={<TimeLine />} />
+            <Route path="/flow" element={
+              <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <TimeLine />
+              </>
+            }/>
             <Route path="/diary/detail/:id" element={
               <>
-                <HeaderBarNavi/>
+                <HeaderBarNavi />
                 <DiarySwiper/>
               </>
             }/>

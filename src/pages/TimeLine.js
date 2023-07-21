@@ -32,19 +32,24 @@ const ItemGrid = styled.div`
 
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
+   
     grid-template-columns: 1fr 1fr;
-` : `      
+` : `  
+
 `}
   }
   // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
   ${(props) => props.isSort ? `
+
         grid-template-columns: 1fr 1fr 1fr 1fr;
 }   
 
     ` : `
+
         grid-template-columns: 1fr ;
         grid-template-rows: 1fr 1fr  ;
     `}
+
 `;
 
 
@@ -159,7 +164,7 @@ const Container = styled.div`
 
   @media (max-width: 850px) {
     & {
-      
+
     }
   }
 
@@ -219,6 +224,11 @@ const Header = styled.div`
     & {
       height: 20%;
       width: 60.9%;
+    }
+  }
+  @media (max-width: 850px) {
+    & {
+      margin:0px;
     }
   }
 `
@@ -376,9 +386,11 @@ ${(props) =>
 
     &:nth-child(3), &:nth-child(4) {
         margin-top: 40px;
-    }
+    }  
     `
-      : ``}
+      : `  
+    
+      `}
 }
 
 @media (max-width: 845px) {
@@ -388,13 +400,13 @@ ${(props) =>
     width: auto;
     height: 150px;
     .item-header {
-      height: auto;
+      height: 20%;
     }
-
+ 
     `
       : `
     width: auto;
-    height: auto;
+    height: 450px;
     .item-header {
        height: 50px;
     }
@@ -433,8 +445,9 @@ const ItemImg = styled.div`
         @media (max-width: 844px) {
             & {
 		           width: 99%;
-                height:150px;
+                height: 90%;
                 margin-left: 10px;
+                margin-right: 10px;
 	        }
         }
           margin-left: 0px;
@@ -481,6 +494,9 @@ const ItemContent = styled.div`
     width: 85%;
     overflow: scroll;
   }
+
+
+  
 `
 
 
@@ -684,18 +700,6 @@ const handlePostClick = async (postId) => {
 
     const [search,setSearch] = useState('');
 
-    //const filteredItems = items.filter(item => item.place.includes(search));
-
-    // 디바운스 작업 필요 ?? 필터링 
-//   const debounce = (func, delay) => {
-//     let debounceTimer;
-//     return function() {
-//         const context = this;
-//         const args = arguments;
-//         clearTimeout(debounceTimer);
-//         debounceTimer = setTimeout(() => func.apply(context, args), delay);
-//     }
-// }
 
 
   const obsRef = useRef(null); // observer Element
@@ -758,11 +762,17 @@ const handlePostClick = async (postId) => {
     }
 
     const [locationValue, setLocationValue] = useState('');
+
+    const activeEnter = (e) => {
+      if(e.key === "Enter") {
+        handleSearch();
+      }
+    }
   
   return (
     <>
 
-      <HeaderBar />
+      {/* <HeaderBar /> */}
       
       {isCreate &&
           <MyFlowWrapper>
@@ -817,7 +827,7 @@ const handlePostClick = async (postId) => {
                 <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
               </div>
               <div style={{width: "70%", position: "relative"}}>
-            <input type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
+            <input onKeyDown={(e)=> {activeEnter(e)}} type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
             /> <AiOutlineSearch onClick={handleSearch} style={{position: "absolute", left: "30px", bottom: "7px"}}/>
 
           </div>
@@ -877,16 +887,21 @@ const handlePostClick = async (postId) => {
                         setIsClicked(...isClicked, e.id)
                       }} className="editBtn"></CreateBtn>
                       : <></>}
-                      <div className="item-header">
+                    <div className="item-header">
                       <img className="profile" style={
                               isSort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"25px" }
-                              : { margin: "10px", width: "55px", height:"55px", borderRadius:"25px" }
+                              : { margin: "10px", width: "55px", height:"35px", borderRadius:"25px" }
                           }
                       src={ e.ct_profile_pic || default_avatar} alt="" />
-                          <div style={{margin:"10px",height:"75%", display:"flex", flexDirection:"column",alignItems:"center"}}>
-                              <div>{e.nickName}</div>
-                            <p style={{fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
+                          <div style={
+                             isSort
+                             ?
+                            {position:"relative" ,margin:"0px",height:"100%", display:"flex", flexDirection:"column",alignItems:"center"}
+                            : {position:"relative" ,margin:"10px",marginTop:"20px",height:"65%", display:"flex", flexDirection:"column",alignItems:"center"}
+                          }>
+                              <div className="item-header-user" style={{fontSize:"12px"}}>{e.nickName}</div>
+                            <p style={{position:"absolute", right: "0px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
                             
                           </div>
                           <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
