@@ -140,7 +140,9 @@ const Container = styled.div`
     top:0;
     left:20%;
     color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
-    font-size: 3em;
+    font-family: var(--efont);
+    font-size: 35px;
+    font-weight: bolder;
     span {
       color: #00C2FA;
     }

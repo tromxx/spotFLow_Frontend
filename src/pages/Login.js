@@ -55,12 +55,13 @@ const LogInDiv = styled.div`
       background-color: white;
       border: 2px solid var(--grey);
       cursor: pointer;
+      background-color: var(--lightblue);
    }
    li:nth-last-child(2) {
-      background-color: yellow;
+      background-color: transparent;
    }
 	li:nth-last-child(1){
-		background-color: var(--lightblue);
+		background-color: yellow;
 	}
     .container{
       display: flex;
@@ -132,9 +133,9 @@ const Login = () => {
                <p onClick={()=>navigate("/signup")}>회원가입</p>
                <p onClick={()=>navigate("/findpwemail")}>아이디/비번찾기</p>
             </div>
+            <li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
             <li><img src={GoogleLogo} alt="" /></li>
             <li><img src={KakaoLogo} alt="" /></li>
-				<li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
          </ul>
 			<LoginSignUpModal 
 				children={message} 
