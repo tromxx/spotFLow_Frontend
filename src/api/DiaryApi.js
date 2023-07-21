@@ -29,9 +29,10 @@ const DiaryApi = {
   sendComment : async (props) => {
     const comment = {
       diary : props.diary,
-      content : props.content,
+      content : props.comment,
       email : props.email
     }
+    console.log(comment)
     return await axios.post(DOMAIN + "/diary/comment", comment);
   }
 }

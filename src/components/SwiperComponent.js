@@ -1,10 +1,11 @@
 import {styled} from "styled-components";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {BsChatDots, BsSend} from "react-icons/bs";
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useContext, useEffect, useMemo, useState} from "react";
 import moment from 'moment';
 import 'moment/locale/ko';
 import diaryApi from "../api/DiaryApi";
+import UserStore, {UserContext} from "../context/UserStore";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -265,15 +266,19 @@ const CommentDetail = styled.div`
 `;
 export const Comment = (props) => {
   const [text, setText] = useState("");
+
   const onChangeComment = (e) => {
     setText(e.target.value);
   }
-  const Send = () => {
-    // const props = {
-    //   diary :
-    // }
-    diaryApi.sendComment();
-    setText("");
+  const Send = async () => {
+    const request = {
+      diary : props.diary,
+      comment : text,
+      email : UserStore.email
+    }
+    await diaryApi.sendComment(request);
+    await setText("");
+    await props.setCount(props.count+1);
   }
 
   const BlockBubbling = (e) => {
@@ -284,10 +289,12 @@ export const Comment = (props) => {
     moment.locale('ko');
     return moment(timeString).format('YYYY년 MM월 DD일 A h시 mm분');
   };
-  const [array, setArray] = useState([]);
+  const [array, setArray] = useState(null);
+
   useEffect(() => {
-    setArray(props.commentList);
-  }, [props, text]);
+    setArray(props.commentList)
+    console.log(props.count)
+  }, [props.count]);
   return (
     <CommentBox onClick={(event) => BlockBubbling(event)}>
 
@@ -296,7 +303,7 @@ export const Comment = (props) => {
         <div className="profile">
           <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
         </div>
-        <input type="text" id="comment" onChange={onChangeComment}/>
+        <input type="text" id="comment" value={text} onChange={onChangeComment}/>
         <button className="btn-send">
           <BsSend className="send" onClick={()=>Send()}/>
         </button>
@@ -305,12 +312,12 @@ export const Comment = (props) => {
       <hr/>
       {/* 구분선 */}
 
-      <p className="caption">댓글 {array.length}</p>
+      <p className="caption">댓글 {array != null ? array.length : 0}</p>
 
       {/* 댓글 목록 */}
       <div className="content">
         {/* 댓글 낱개 디자인 */}
-        {array.map(e => (<CommentDetail>
+        {array && array.map(e => (<CommentDetail>
             <div className="profile">
               <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
             </div>
