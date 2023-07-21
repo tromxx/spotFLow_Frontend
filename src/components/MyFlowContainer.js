@@ -43,6 +43,7 @@ const Image = styled.img`
   height: 80px;
   align-self: flex-end;
   position: absolute;
+  object-fit: contain;
   right: 10px;
 `;
 

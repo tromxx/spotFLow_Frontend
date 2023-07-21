@@ -138,7 +138,7 @@ const MyFlowMenuName = styled.p`
 	margin-top: -25%;
 	.title {
 		font-size: 35px;
-		margin-left: 10%;
+		margin-left: -30%;
 	}
 `;
 

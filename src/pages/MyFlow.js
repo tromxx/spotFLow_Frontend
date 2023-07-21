@@ -82,7 +82,7 @@ const FileBox = styled.div`
 		margin-left: 10px;
     width: 15%;
     height: 15%;
-    object-fit: cover;
+    object-fit: contain;
 	}
 	.filebox {
 		margin-top: 5px;
