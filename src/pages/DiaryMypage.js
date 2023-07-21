@@ -154,6 +154,8 @@ const DiaryMypagediv = styled.div`
 
 
     const DiaryMypage = () => {
+    
+    const [trigger, setTrigger] = useState(false);
 
     const navi = useNavigate();
 
@@ -163,7 +165,9 @@ const DiaryMypagediv = styled.div`
 
     const [checkid, setCheckId] = useState([]) ; 
 
-
+    const forceUpdate = () => {
+        setTrigger(prev => !prev);
+    };
 
     const convertCheckBox = () => {
         if(isCheckBox === false) setIsCheckBox(true)
@@ -171,32 +175,23 @@ const DiaryMypagediv = styled.div`
         console.log(isCheckBox);
     };
     
-        const [item, setItem] = useState({
-          id: 1,
-          title: "삭제된 게시글입니다.",
-          content:"삭제된 게시글입니다.",
-          timeLineList: [
-            { id: 2 },
-            { id: 3 }
-          ]
-        });
-
-
         const handleDeleteItem = async () => {
                 try {
                 const res = await DiaryApi.deleteDiary(checkid);
                 console.log(res.data);
+                alert(`${checkid.length}개의 다이어리가 삭제되었습니다.`)
+                if(res.status == 200) {
+                   setTimeout(forceUpdate(),1500);
+                }
                 } catch(error) {
                     console.log("삭제실패",error);
                 }
+                
           };
-
-        
-        
           useEffect(() => {
             console.log(data);
-        }, [data]);
-      
+        }, [trigger]);
+        
     return(
         
         <Container>
@@ -239,7 +234,7 @@ const DiaryMypagediv = styled.div`
             </header>
             <body>
         <DiaryMypagediv>
-            <MyDiary stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
+            <MyDiary trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
         </DiaryMypagediv>
         </body>
         </Container>
