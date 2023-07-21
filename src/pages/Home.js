@@ -41,7 +41,6 @@ const Home = () => {
   return (
     <>
       <MenuButton onClick={()=>setActivate(true)} />
-      <button onClick={()=>{navigate("/myflow")}}>마이플로우마이플로우</button>
       <SlideDiv show={active}>
         {renderPage()}
       </SlideDiv>

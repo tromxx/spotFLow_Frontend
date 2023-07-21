@@ -14,17 +14,17 @@ const LogInDiv = styled.div`
 	display: flex;
    justify-content: center;
    align-items: center;
-   margin-top: 5%;
+   margin-top: 3%;
 	ul{
 		width: 400px;
 		display: flex;
 		flex-direction: column;
-		gap: 20px;
+		gap: 15px;
 		justify-content: center;
 		align-items: center;
-		border: 2px solid var(--grey);
+		/* border: 2px solid var(--grey); */
 		border-radius: 20px;
-		padding: 100px;
+		padding: 20px;
 		list-style: none;
 		font-family: var(--kfont);
 	}
@@ -127,7 +127,7 @@ const Login = () => {
       <LogInDiv>
          <ul>
             <li><img src={Logo} onClick={()=>navigate("/")} alt="logo" className="logo" /></li>
-            <li><input onChange={(e)=>setInputEmail(e.target.value)} type="text" placeholder="email@gmail.com"/></li>
+            <li><input onChange={(e)=>setInputEmail(e.target.value)} type="text" placeholder="email@sample.com"/></li>
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">
                <p onClick={()=>navigate("/signup")}>회원가입</p>

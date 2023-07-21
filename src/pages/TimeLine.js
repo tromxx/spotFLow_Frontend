@@ -843,7 +843,7 @@ const handlePostClick = async (postId) => {
           <HeaderList>
             <HeaderItemLeft>
               <CreateBtn onClick={() => {
-                Navi(-1)
+                Navi("/")
               }} style={{borderRadius: "8px"}}>
                 <TfiArrowLeft style={{fontSize: "20px"}}></TfiArrowLeft>
               </CreateBtn>

@@ -42,7 +42,7 @@ function App() {
                 <Home/>
               </>} />
             <Route path="/login" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+             
               <Login />
             </>} />
             <Route path="/signup" element={<>

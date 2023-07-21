@@ -22,6 +22,7 @@ const LogInDiv = styled.div`
   color: ${props=>props.theme.textColor};
   border: ${props=>props.theme.borderColor};
   font-family: var(--efont);
+  transition: 0.6s ease;
   .controlDiv{
     margin-top: 15px;
     display: flex;

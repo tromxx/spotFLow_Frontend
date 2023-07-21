@@ -82,7 +82,7 @@ const Container = styled.div`
         width: 100%;
         height: 100%;
     }
-    .cancle{
+    .cancel{
         border: solid 1px #00b4d8; 
         background-color: white;
         color: black;
@@ -219,12 +219,12 @@ const DiaryMypagediv = styled.div`
                                 {isCheckBox ? (
                                     <>
                                         <button 
-                                            className="cancle" 
+                                            className="cancel" 
                                             style={{marginRight: "10px"}}
-                                            onClick={convertCheckBox}>Cancle</button>
+                                            onClick={convertCheckBox}>Cancel</button>
                                         <button 
                                             onClick={handleDeleteItem}                                      
-                                            className="cancle"
+                                            className="cancel"
                                             style={{border:"solid 1px #f24e1e", color:"#f24e1e"}}
                                             >Delete</button>
                                     </>)

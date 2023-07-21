@@ -25,13 +25,15 @@ const MyFlowWrapper = styled.div`
   align-items: center;
 	text-align: center;
 	background-color: ${props=>props.theme.bgColor};
+	
 `;
 
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
-  border: ${props=>props.theme.borderColor};	
+  /* border: ${props=>props.theme.borderColor};	 */
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
 	margin-top: 40px;
   height: 93vh;
@@ -317,7 +319,8 @@ const CreateBtn2 = styled.div`
   color: black;
   background-color: ${(props) => props.theme.timeLineBgColor};
   background-color: white;
-  margin: 5px;
+  margin: 10px;
+	margin-left: 15px;
 
   &:hover {
     background-color: white;
