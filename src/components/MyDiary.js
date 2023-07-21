@@ -123,7 +123,7 @@ const MyDiarydiv = styled.div`
     }
 `;
 
-      const MyDiary = ({stat,checkid, setCheckId }) => {
+      const MyDiary = ({trigger,stat,checkid, setCheckId }) => {
         const [items, setItems] = useState(new Set());
         const [data, setData] = useState([]);
       
@@ -160,7 +160,7 @@ const MyDiarydiv = styled.div`
         fetchData();
        
         console.log(checkid);
-      },[checkid])
+      },[checkid,trigger])
 
     return(
         <MyDiarydiv>

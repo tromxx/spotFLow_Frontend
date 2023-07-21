@@ -132,13 +132,11 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
-  background-color: ${(props) => props.theme.bgColor === "#171010" ? "black" : "#C3F8FF"};
+  background-color: ${(props) => props.theme.bgColor === "#171010" ? "black" : "white"};
   position:relative;
   .Name {
     margin-top:0px;
-    position:absolute;
-    top:0;
-    left:20%;
+    
     color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
     font-family: var(--efont);
     font-size: 35px;
@@ -224,6 +222,7 @@ const Header = styled.div`
   }
 `
 const HeaderList = styled.div`
+  margin-top : 20px;
   display: flex;
   width: 100%;
 `
@@ -762,7 +761,6 @@ const handlePostClick = async (postId) => {
       <HeaderBar />
       
       <Container   >
-      <p className="Name"><span>F</span>low</p>
         {isCreate &&
         //     <FlowModal
         //     open={()=>setIsCreate(true)}
@@ -842,15 +840,18 @@ const handlePostClick = async (postId) => {
         <Header>
           <HeaderList>
             <HeaderItemLeft>
-              <CreateBtn onClick={() => {
-                Navi("/")
-              }} style={{borderRadius: "8px"}}>
-                <TfiArrowLeft style={{fontSize: "20px"}}></TfiArrowLeft>
-              </CreateBtn>
+              <div style={{display:"flex",flexDirection:"row"}}>
+                <CreateBtn onClick={() => {
+                  Navi("/")
+                }} style={{borderRadius: "8px"}}>
+                  <TfiArrowLeft style={{fontSize: "20px" , marginTop:"7px"}}></TfiArrowLeft>
+                </CreateBtn>
+                <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
+              </div>
               <div style={{width: "70%", position: "relative"}}>
             <input type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
             /> <AiOutlineSearch onClick={handleSearch} style={{position: "absolute", left: "30px", bottom: "7px"}}/>
-            
+
           </div>
             </HeaderItemLeft>
             
