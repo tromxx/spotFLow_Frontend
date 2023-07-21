@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
+import NoficationContainer from "../components/NoficationContainer";
 
 const NoficationWrapper = styled.div`
  	display: flex;
@@ -11,7 +12,7 @@ const NoficationWrapper = styled.div`
 `;
 
 const NoficationDiv = styled.div`
-  background-color: ${props=>props.theme.divColor};
+  background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
@@ -30,7 +31,9 @@ const Nofication = () => {
   return (
     <NoficationWrapper>
       <NoficationDiv>
-        
+        <NoficationContainer>
+
+        </NoficationContainer>
       </NoficationDiv>
     </NoficationWrapper>
   );
