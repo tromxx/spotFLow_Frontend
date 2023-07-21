@@ -18,7 +18,8 @@ import FlowModal from "../utils/FlowModal";
 import { type } from "@testing-library/user-event/dist/type";
 import userTimelineApi from "../api/UserTimelineApi";
 import { useCallback } from "react";
-
+import { SlLocationPin } from "react-icons/sl"
+import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
 
 const ItemGrid = styled.div`
   min-height: 80vh;
@@ -533,7 +534,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     // 뒤로가기
     const Navi = useNavigate();
     // const input = useRef();
-    // const content = useRef();
+     const contents = useRef();
 
 
     const [title,setTitle] = useState("");
@@ -662,8 +663,7 @@ const handlePostClick = async (postId) => {
     console.error(error);
   }
 }
-
-
+    
 
 
 
@@ -753,90 +753,58 @@ const handlePostClick = async (postId) => {
         setItems(res.data);
     }
   
+    const handleLocationModal = () => {
+      return
+    }
 
+    const [locationValue, setLocationValue] = useState('');
   
   return (
     <>
 
       <HeaderBar />
       
-      <Container   >
-        {isCreate &&
-        //     <FlowModal
-        //     open={()=>setIsCreate(true)}
-        //     close={()=>setIsCreate(false)}
-        //     header={<div className="title">
-        //     <span style={{ color: '#00B4D8' }}>F</span>low
-        //     </div>}
-        //     type="y"
-        //     confirm={handleUploadImage}
-        //     >
-        //     <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
-        //       value={content}
-        //       onChange={textLimit}
-        //     />
-        //     <p className="textLength">{flowModalText.length}/90</p>
-        //     <div className="wrapper">
-        //       <FileBox className="filebox">
-        //         <div className="filebox">
-        //             <label htmlFor="file"><AiOutlineCamera style={
-        //               { width: "25px",
-        //                 height: "25px",
-        //                 color: theme.textColor}} />
-        //             </label> 
-        //             <input type="file" onChange={handleOpenImageRef} className="fileSelect" id="file"/>
-        //             {thumbnailSrc !== "" && (
-        //                 <img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
-        //             )}	
-        //         </div>
-        //       </FileBox>
-        //       <div className="locationDiv">
-        //         <label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
-        //         <input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
-        //       </div>
-        //     </div>
-        // </FlowModal>
-          <CreatePost >
-            <input ref={titleRef} style={{
-              textAlign: "center",
-              borderBottom: "1px solid silver",
-              borderRadius: "0px",
-              backgroundColor: "none"
-            }} placeholder="Typing the Title" onChange={e => {
-              setTitle(e.target.value)
-            }} type="text"/>
-            <textarea ref={contentRef} onChange={e => {
-              setContent(e.target.value)
-            }} name="" id="" cols="50" rows="30"></textarea>
-            <div className="create-btns">
-              {/* <CreateBtn className="create-btn">확인</CreateBtn>
-                        <CreateBtn className="create-btn">취소</CreateBtn> */}
-              <div style={{display: "flex", flexDirection: "row", width: "80%"}}>
-                <div className="button-box" style={{width: "20%"}} onClick={handleOpenImageRef}>
-                  <CreateBtn className="button-box-btn">
-                    <AiOutlineCamera/>
-                  </CreateBtn>
-                  <input type="file" accept="image/jpeg, image/png" style={{display: "none"}} ref={fileInput}
-                         onChange={handleUploadImage}/>
+      {isCreate &&
+          <MyFlowWrapper>
+            <MyFlowDiv>
+            <FlowModal
+            open={()=>setIsCreate(true)}
+            close={()=>setIsCreate(false)}
+            header={<div className="title">
+            <span style={{ color: '#00B4D8' }}>F</span>low
+            </div>}
+            type="y"
+            confirm={handleUploadImage}
+            >
+            <textarea maxLength="90" ref={contents} className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
+              value={content}
+              onChange={(e)=> setContent(e.target.value)}
+            />
+            <p className="textLength">{content.length}/90</p>
+            <div className="wrapper">
+              <FileBox className="filebox">
+                <div  className="filebox">
+                    <label htmlFor="file"><AiOutlineCamera style={
+                      { width: "25px",
+                        height: "25px",
+                        color: "black"}} />
+                    </label> 
+                    <input  type="file" ref={fileInput} onClick={handleOpenImageRef}  className="fileSelect" id="file"/>
+                    {selectedImage !== null && (
+                        <img style={{width: "50px" , height: "50px"}} id="thumbnail" src={selectedImage} alt="" className="thumbnail" />
+                    )}	
                 </div>
-                <div style={{width: "80%"}}>
-                  <ul style={{display: "flex", flexDirection: "row", justifyContent: "start"}}>
-                    <img src={selectedImage} alt="" style={{width: "50%", height: "50%;"}}/>
-                  </ul>
-                </div>
-              </div>
-             <div style={{width:"100%" ,flexDirection:"row"}}> 
-                  <button style={{width:"50%"}} onClick={() => {
-                    CreatePostConfirm();
-                    
-                  }}>확인
-                  </button>
-                  <button style={{width:"30%"}} onClick={() => CreatePostCancle()}>취소</button>
+              </FileBox>
+              <div className="locationDiv">
+                <label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
+                <input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
               </div>
             </div>
-
-          </CreatePost>
-        }
+        </FlowModal>
+        </MyFlowDiv>
+        </MyFlowWrapper>
+      }
+      <Container   >  
         <Header>
           <HeaderList>
             <HeaderItemLeft>

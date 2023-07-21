@@ -19,7 +19,7 @@ import LocationModal from "../utils/LocationModal";
 import { useTheme } from "styled-components";
 import { TfiArrowLeft } from "react-icons/tfi";
 
-const MyFlowWrapper = styled.div`
+export const MyFlowWrapper = styled.div`
  	display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +29,7 @@ const MyFlowWrapper = styled.div`
 `;
 
 
-const MyFlowDiv = styled.div`
+export const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
   /* border: ${props=>props.theme.borderColor};	 */
@@ -72,7 +72,7 @@ const MyFlowDiv = styled.div`
 `;
 
 
-const FileBox = styled.div`  
+export const FileBox = styled.div`  
 	float: left;
 
 	.fileSelect {
