@@ -1,16 +1,18 @@
 import {styled} from 'styled-components';
-import {useTheme} from "../context/themeProvider";
+import {useTheme} from "../../context/themeProvider";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose, AiOutlineLogin } from 'react-icons/ai'
 import { useRef, useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
 import { useContext } from 'react';
-import { UserContext } from '../context/UserStore';
-import { storage } from '../api/FirebaseApi'
-import CustomerApi from '../api/CustomerApi';
+import { UserContext } from '../../context/UserStore';
+import { storage } from '../../api/FirebaseApi'
+import CustomerApi from '../../api/CustomerApi';
+import Error from '../Common/Error'
 
 const LogInDiv = styled.div`
+  margin-top: 7vh;
   width: 390px;
   height: 93vh;
   display: flex;
@@ -32,7 +34,6 @@ const LogInDiv = styled.div`
     width: 130px;
     height: 130px;
     margin-top: 15px;
-    z-index: 5;
     text-align: center;
   }
   .profileDiv{
@@ -43,11 +44,15 @@ const LogInDiv = styled.div`
   .followingfollowerDiv{
     display: flex;
     gap: 50px;
-    margin: 0px;
+  }
+  @media (max-width : 844px){
+    height: 100vh;
+    margin-top: 0px;
   }
 `;
 
 const LogOutDiv=styled.div`
+  margin-top: 7vh;
   width: 390px;
   height: 93vh;
   display: flex;
@@ -57,18 +62,15 @@ const LogOutDiv=styled.div`
   border-right: 1px solid var(--grey);
   background-color: white;
   font-family: var(--efont);
-  .controlDiv{
+  .closeDiv{
     margin-top: 15px;
     display: flex;
-    gap: 250px;
+    justify-content: right;
+    margin-left: 290px;
   }
-  .logoutdivService{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-weight: bolder;
-    margin-top: 200px;
+  @media (max-width : 844px){
+    height: 100vh;
+    margin-top: 0px;
   }
 `;
 
@@ -121,7 +123,7 @@ const Button = styled.button`
 
 const Paragrph = styled.p`
   margin: 15px;
-  transform: ${props  => `translateX(${props.$isactive === "true" ? 0 : -500}%)`};
+  transform: ${props  => `translateX(${props.$isactive === "true" ? 0 : -600}%)`};
   &.NickName{
     transition: transform 1.8s ease;
     font-size: 20px;
@@ -216,37 +218,35 @@ const CameraButton = styled(BsCamera)`
   }
 `;
 
-const MyPage = ({ onClose, goToMyFlow }) => {
+const MyPage = ({ onClose }) => {
   const [ThemeMode, setTheme] = useTheme(); 
   const [isactive, setIsActive] = useState(true);
   const [prevImgFile, setPrevImgFile] = useState("");
   const [imgFile, setImgFile] = useState(null);
-  const [url, setUrl] = useState("");
-  const imgRef = useRef(); //요기
+  const [data, setData] = useState(null);
+  const [url, setUrl] = useState(null);
+  const imgRef = useRef(null); 
   const navigate = useNavigate();
-  const{nickname, profilePic, setProfilePic,statMsg,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{nickname, setNickname, profilePic, setProfilePic, statMsg, setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
   const handleClick = () => {
     setIsActive(!isactive);
     setPrevImgFile("");
-    setStatMsg("");
   };
   
-   const handleCameraClick = () => {
-    if (imgRef.current) {
-        imgRef.current.click();
-      }
-    };
+  const handleCameraClick = () => {
+      imgRef.current.click();
+  };
     
-    //미리보기
-    const savePrevImgFile = (e) => {
+  //이미지 미리보기
+  const savePrevImgFile = (e) => {
     setImgFile(e.target.files[0]);
-    // const file = imgRef.current.files[0];
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file);
-    // reader.onloadend = () => {
-    //  setPrevImgFile(reader.result);
-    // };
+    const file = imgRef.current.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+     setPrevImgFile(reader.result);
+    };
   };
   
   // firebase 로 보내기 
@@ -257,46 +257,35 @@ const MyPage = ({ onClose, goToMyFlow }) => {
     console.log("firebaseUpload ready");
     fileRef.put(imgFile).then(() => {
       fileRef.getDownloadURL().then((url) => {
-      console.log("firebaseUpload finish"); //1
+      console.log("firebaseUpload finish");
       setUrl(url);
     });
   })};
 
   //여기다 로직 수정 필요 UseEffect 가능한지
   const updateProfiles = async() => {
-
     const token = localStorage.getItem('authToken');
-    if(imgFile === null){
-   
-      // 데이타 준비
-      const updateData = {
-        statMsg : statMsg
+
+    if(data !=null){
+
+      console.log("Status Message Updated");
+      const customerData ={
+        statMsg : data
       };
-      // 데이터 전송
-      const response = await CustomerApi.updateProfile(token,updateData);
+
+      const response = await CustomerApi.updateStatMsg(token, customerData);
+      setNickname(response.data.nickName);
       setStatMsg(response.data.statMsg);
-      setIsLoggedIn(true);
-      setIsActive(!isactive);
-      setPrevImgFile("");
-    
-    }else if(statMsg === ""){
-   
-      // 데이타 준비      
-      saveImgFile();
-      console.log(url); //2
-      const updateData = {
-        profilePic : url
-      }
-      console.log(updateData); //3
-      
-      // 데이터 전송
-      const response = await CustomerApi.updateProfile(token, updateData);
       setProfilePic(response.data.profilePic);
       setIsLoggedIn(true);
       setIsActive(!isactive);
-      setPrevImgFile("");
-      console.log("finish"); //4
-    };
+      setData(null);
+    }
+    if(data === null){
+      console.log("Profile Picture Updated");
+      await saveImgFile();
+      console.log(url);
+    }
   };
   
   return (
@@ -334,24 +323,20 @@ const MyPage = ({ onClose, goToMyFlow }) => {
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
         <Button $isactive={isactive.toString() } onClick={updateProfiles}>저장하기</Button>
         <TextArea
-          cols="20"
+          cols="10"
           rows="2"
           spellCheck="false"
           placeholder="상태 메시지를 입력하세요"
-          value={statMsg}
-          onChange={(e)=> setStatMsg(e.target.value)}
+          onChange={(e)=> setData(e.target.value)}
           $isactive={isactive.toString() }
         ></TextArea>
       </LogInDiv>
       :
       <LogOutDiv>
-        <div className="controlDiv">
-          <LoginButton onClick={()=>navigate("/login")}/>
+        <div className="closeDiv">
           <CloseButton onClick={onClose} />
         </div>
-        <div className="logoutdivService">
-          <p>로그인이 필요한 서비스입니다.</p>
-        </div>
+        <Error/>
       </LogOutDiv>
     }
     </>

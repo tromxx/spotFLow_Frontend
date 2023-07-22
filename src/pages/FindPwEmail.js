@@ -10,9 +10,9 @@ const FindPwEmailDiv = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 5%;
     text-align: center;
     ul{
+      margin-top: 10%;
 		width: 400px;
 		display: flex;
 		flex-direction: column;

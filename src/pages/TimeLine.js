@@ -1,7 +1,7 @@
 import styled, {css} from "styled-components";
 import {TfiArrowLeft} from "react-icons/tfi";
 import {useState, useRef, useEffect} from "react";
-import HeaderBar from "../components/HeaderBarNavi";
+import HeaderBar from "../components/Common/HeaderBarNavi";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
 import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDelete} from "react-icons/ai";

@@ -6,7 +6,7 @@ import SpotLogo from "../images/SpotFlowLogin.png"
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
 import LoginSignUpModal from "../utils/LoginSignUpModal"
-import axios from "axios";
+import AuthApi from "../api/AuthApi"
 import { UserContext } from "../context/UserStore";
 import { useEffect } from 'react'
 
@@ -14,8 +14,8 @@ const LogInDiv = styled.div`
 	display: flex;
    justify-content: center;
    align-items: center;
-   margin-top: 5%;
 	ul{
+      margin-top: 10%;
 		width: 400px;
 		display: flex;
 		flex-direction: column;
@@ -96,10 +96,9 @@ const Login = () => {
    const [inputPwd , setInputPwd] = useState();
 	const [open, setOpen] = useState(false);
 	const [message, setMessage] = useState("");
-   const { setEmail, setIsLoggedIn} = useContext(UserContext);
+   const { setIsLoggedIn} = useContext(UserContext);
 
    useEffect(()=>{
-      console.log("Login useEffect acitivated");
       localStorage.clear();
    },[])
 
@@ -109,15 +108,15 @@ const Login = () => {
 			password : inputPwd
 		};
 		try{
-			const response = await axios.post("http://localhost:8111/auth/login", customerData);
+			const response = await AuthApi.customerToken(customerData);
 			const  {accessToken} = response.data;
 			localStorage.setItem('authToken', accessToken);
 			navigate("/")
          setIsLoggedIn(true);
-         setEmail(inputEmail);
 		}catch(error){
 			setOpen(true);
 			setMessage("잘못된 아이디 혹은 비밀번호입니다.");
+         setIsLoggedIn(false);
 		}
 	};
 
