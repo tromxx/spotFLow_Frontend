@@ -138,6 +138,11 @@ const FindPwEmail = () =>{
 						<li className="activeLi" onClick={sendTempPwd} style={{background:'var(--lightblue)'}}>로그인 링크 보내기</li>:	//true			 
 						<li className="notactiveLi" onClick={errorModal} style={{background:'var(--grey)'}}>로그인 링크 보내기</li>	//false			 
 					}
+               <div className="routeDiv">
+                  <p>로그인 하러가기</p>
+                  <p>|</p>
+                  <p>회원가입 하러가기</p>
+               </div>
             </ul>
             <LoginSignUpModal
                open = {modal}

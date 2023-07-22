@@ -84,7 +84,7 @@ const HeaderBar = () => {
         :
         <LoggedOutDiv>
           <p onClick={()=>navigate("/login")}>Login</p>
-          <p>/</p>
+          <p>|</p>
           <p onClick={()=>navigate("/signup")}>Sign up</p>
         </LoggedOutDiv>
       }

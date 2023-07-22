@@ -11,21 +11,21 @@ import { UserContext } from "../context/UserStore";
 import { useEffect } from 'react'
 
 const LogInDiv = styled.div`
-	display: flex;
-   justify-content: center;
-   align-items: center;
-   margin-top: 3%;
-	ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    ul{
       margin-top: 10%;
 		width: 400px;
 		display: flex;
 		flex-direction: column;
-		gap: 15px;
+		gap: 25px;
 		justify-content: center;
 		align-items: center;
-		/* border: 2px solid var(--grey); */
+		border: 2px solid var(--grey);
 		border-radius: 20px;
-		padding: 20px;
+		padding: 100px;
 		list-style: none;
 		font-family: var(--kfont);
 	}
@@ -131,7 +131,8 @@ const Login = () => {
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">
                <p onClick={()=>navigate("/signup")}>회원가입</p>
-               <p onClick={()=>navigate("/findpwemail")}>아이디/비번찾기</p>
+               <p>|</p>
+               <p onClick={()=>navigate("/findpwemail")}>비밀번호 찾기</p>
             </div>
             <li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
             <li><img src={GoogleLogo} alt="" /></li>
