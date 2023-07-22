@@ -4,12 +4,11 @@ import {useEffect, useState} from "react";
 import * as SC from "./SwiperComponent"
 import {BsChatDots} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
-import dummy from "../dataSet/TimeLineData";
 import {useParams} from "react-router-dom";
 import diaryApi from "../api/DiaryApi";
 
 export const DiarySwiper = () => {
-  const { id } = useParams();
+  const {id} = useParams();
   // 오버레이 표시 여부
   const [overlay, setOverlay] = useState(0);
   // 댓글 표시 여부
@@ -20,12 +19,13 @@ export const DiarySwiper = () => {
   const [diary, setDiary] = useState({})
   const [timeline, setTimeLine] = useState([]);
   const [comment, setComment] = useState([]);
+  const [count, setCount] = useState(0);
 
   const DiaryInit = async () => {
-    let res =  await diaryApi.findDiary(id);
-    setDiary(res.data);
-    setTimeLine(res.data.timeLineList);
-    setComment(res.data.commentList);
+    let res = await diaryApi.findDiary(id);
+    await setDiary(res.data);
+    await setTimeLine(res.data.timeLineList);
+    await setComment(res.data.commentList);
     console.log(res.data.commentList);
     console.log(res.data.timeLineList);
     console.log(res.data);
@@ -45,14 +45,14 @@ export const DiarySwiper = () => {
 
   function OverlayMode(e) {
     e.stopPropagation();
-    if(chatBox === 1) setChatBox(0);
+    if (chatBox === 1) setChatBox(0);
     if (overlay === 0) setOverlay(1);
     else setOverlay(0);
   }
 
-  useEffect( () => {
-    DiaryInit();
-  }, []);
+  useEffect(() => {
+    DiaryInit().then(r => console.log(r));
+  }, [count]);
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>
       <SC.DiarySwipe
@@ -67,33 +67,33 @@ export const DiarySwiper = () => {
         onSlideChange={() => console.log('slide change')}
       >
         {timeline.map(e => (
-          <SC.TimeLine>
-          {overlay === 1 &&
-            <>
-              <SC.Overlay>
-                <SC.DiaryBox>
-                  <span>{diary.title}</span>
-                  <p>{diary.content}</p>
-                </SC.DiaryBox>
-                <SC.TimeLineBox>
-                  <span>TimeLine</span>
-                  <p>{e.content}</p>
-                </SC.TimeLineBox>
-              </SC.Overlay>
-            </>
-          }
-            <img src={e.image}/>
-        </SC.TimeLine>
+            <SC.TimeLine>
+              {overlay === 1 &&
+                <>
+                  <SC.Overlay>
+                    <SC.DiaryBox>
+                      <span>{diary.title}</span>
+                      <p>{diary.content}</p>
+                    </SC.DiaryBox>
+                    <SC.TimeLineBox>
+                      <span>TimeLine</span>
+                      <p>{e.content}</p>
+                    </SC.TimeLineBox>
+                  </SC.Overlay>
+                </>
+              }
+              <img src={e.image}/>
+            </SC.TimeLine>
           )
         )
         }
       </SC.DiarySwipe>
-      {chatBox === 1 &&  <SC.Comment commentList={comment}/>}
+      {chatBox === 1 && <SC.Comment diary={id} commentList={comment} count={count} setCount={setCount}/>}
 
       <SC.Btn onClick={(event) => OpenChat(event)}>
         <BsChatDots className="comment"/>
       </SC.Btn>
-      <SC.Thumbs onClick={(event)=>ThumbsUp(event)}>
+      <SC.Thumbs onClick={(event) => ThumbsUp(event)}>
         {thumbs === 0 ? <FaRegThumbsUp className="thumbs-up"/> : <FaThumbsUp className="thumbs-up"/>}
       </SC.Thumbs>
 

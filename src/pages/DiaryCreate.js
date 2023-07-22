@@ -228,7 +228,7 @@ const Container = styled.div`
   ${centerAlign}
   flex-direction: column;
   position: relative;
-  top: 51px;
+ // top: 51px;
   // border : solid 1px black;
   width: 100vw;
   height: 92vh;
@@ -277,7 +277,7 @@ function DiaryCreate() {
     setDiaryPost(newDiaryPost);
     console.log(timeline);
    const sss = DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
-    console.log(sss);
+    console.log(sss.data);
     alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
     navi("/diaryMypage");
     

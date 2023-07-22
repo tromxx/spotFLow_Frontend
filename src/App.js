@@ -13,9 +13,14 @@ import {DiarySwiper} from "./components/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
+import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
 import { useLayoutEffect, useState } from 'react';
+<<<<<<< HEAD
 import ChangeInfo from './pages/ChangeInfo';
+=======
+import Nofication from './pages/Nofication';
+>>>>>>> 60a074748d058bf979ae74321787d5152f0bd0af
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -42,7 +47,7 @@ function App() {
                 <Home/>
               </>} />
             <Route path="/login" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+             
               <Login />
             </>} />
             <Route path="/signup" element={<>
@@ -73,20 +78,33 @@ function App() {
               <HeaderBarNavi />
               <DiaryCreate />
             </>} />
-            <Route path="/timeline" element={<TimeLine />} />
+            <Route path="/flow" element={
+              <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <TimeLine />
+              </>
+            }/>
             <Route path="/diary/detail/:id" element={
               <>
-                <HeaderBarNavi/>
+                <HeaderBarNavi />
                 <DiarySwiper/>
               </>
             }/>
 
             <Route path='/myflow' element={
             <>
-            <HeaderBarNavi/>
-             <MyFlow />
+            {windowWidth <= 840 ? null : <HeaderBarNavi />}
+            {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
+             
             </>
            }/>
+           <Route path='/nofication' element={
+            <>
+            {windowWidth <= 840 ? null : <HeaderBarNavi />}
+            <Nofication />
+            </>
+           }
+           />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

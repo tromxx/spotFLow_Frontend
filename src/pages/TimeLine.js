@@ -10,15 +10,16 @@ import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
 import {useTheme} from "../context/themeProvider";
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroll-component";
+
 import TimeLineModal from "../utils/TimeLineModal";
-import dummy2 from "../dataSet/TimeLineData";
+
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
 import { type } from "@testing-library/user-event/dist/type";
 import userTimelineApi from "../api/UserTimelineApi";
 import { useCallback } from "react";
-
+import { SlLocationPin } from "react-icons/sl"
+import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
 
 const ItemGrid = styled.div`
   min-height: 80vh;
@@ -31,19 +32,24 @@ const ItemGrid = styled.div`
 
   @media (max-width: 850px) {
     ${(props) => props.isSort ? `
+   
     grid-template-columns: 1fr 1fr;
-` : `      
+` : `  
+
 `}
   }
   // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
   ${(props) => props.isSort ? `
+
         grid-template-columns: 1fr 1fr 1fr 1fr;
 }   
 
     ` : `
+
         grid-template-columns: 1fr ;
         grid-template-rows: 1fr 1fr  ;
     `}
+
 `;
 
 
@@ -132,9 +138,22 @@ const CreatePost = styled.div`
 
 
 const Container = styled.div`
+  background-color: ${(props) => props.theme.bgColor === "#171010" ? "black" : "white"};
+  position:relative;
+  .Name {
+    margin-top:0px;
+    
+    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
+    font-family: var(--efont);
+    font-size: 35px;
+    font-weight: bolder;
+    span {
+      color: #00C2FA;
+    }
+  }
 
-  background-color: ${(props) => props.theme.timeLineBgColor};
-  background-color:white;
+ 
+
   textarea {
     appearance: none; /* 기본 브라우저 스타일 제거 */
     outline: none; /* 아웃라인 제거 */
@@ -143,12 +162,9 @@ const Container = styled.div`
     /* 이외 원하는 스타일을 적용 */
   }
 
-    position: relative;
-    top:40px;
-
   @media (max-width: 850px) {
     & {
-      
+
     }
   }
 
@@ -167,6 +183,8 @@ const Container = styled.div`
     width: 100vw;
     min-height: 100vh;
     height:  auto;
+
+
     
  `   
 const Header = styled.div`
@@ -174,9 +192,11 @@ const Header = styled.div`
   justify-content: start;
   flex-wrap: wrap;
   
-  background-color: white;
+ 
+  margin-top : 80px;
+
   
-  background-color: ${(props) => props.theme.divColor};
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
  // background-color: #A4EBF3;
   height: 20%;
   width: 100%;
@@ -195,7 +215,7 @@ const Header = styled.div`
     border:none;
     
   //  border:1px solid ${(props) => props.theme.timeLineBgColor};
-    background-color: white;
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "#F8F6F4"};
 
     border-radius:15px;
 
@@ -206,8 +226,14 @@ const Header = styled.div`
       width: 60.9%;
     }
   }
+  @media (max-width: 850px) {
+    & {
+      margin:0px;
+    }
+  }
 `
 const HeaderList = styled.div`
+  margin-top : 20px;
   display: flex;
   width: 100%;
 `
@@ -227,18 +253,19 @@ const CreateBtn = styled.div`
   justify-content:center;
   align-items:center; */
   ${centerAlign}
-  border: 1px solid white;
+ // border: 1px solid white;
   border-radius: 5px;
   width: 35px;
   height: 35px;
-  color: black;
-  background-color: ${(props) => props.theme.timeLineBgColor};
-  background-color: white;
+  color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "#817D88" : "white"};
+  
   margin: 5px;
 
   &:hover {
-    background-color: white;
-    border: 1px solid silver;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "#2C2636"};
+    color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "white"};
+
   }
 
   ${(props) => props.isClicked &&
@@ -246,10 +273,9 @@ const CreateBtn = styled.div`
   }
 `
 const Main = styled.div`
-
     width: 100%;
     height: auto;
-
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
    // overflow-y: scroll;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
@@ -360,9 +386,11 @@ ${(props) =>
 
     &:nth-child(3), &:nth-child(4) {
         margin-top: 40px;
-    }
+    }  
     `
-      : ``}
+      : `  
+    
+      `}
 }
 
 @media (max-width: 845px) {
@@ -372,13 +400,13 @@ ${(props) =>
     width: auto;
     height: 150px;
     .item-header {
-      height: auto;
+      height: 20%;
     }
-
+ 
     `
       : `
     width: auto;
-    height: auto;
+    height: 450px;
     .item-header {
        height: 50px;
     }
@@ -417,8 +445,9 @@ const ItemImg = styled.div`
         @media (max-width: 844px) {
             & {
 		           width: 99%;
-                height:150px;
+                height: 90%;
                 margin-left: 10px;
+                margin-right: 10px;
 	        }
         }
           margin-left: 0px;
@@ -465,6 +494,9 @@ const ItemContent = styled.div`
     width: 85%;
     overflow: scroll;
   }
+
+
+  
 `
 
 
@@ -518,7 +550,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     // 뒤로가기
     const Navi = useNavigate();
     // const input = useRef();
-    // const content = useRef();
+     const contents = useRef();
 
 
     const [title,setTitle] = useState("");
@@ -623,7 +655,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
       lng : null , 
       date : "" 
     })
-
+    
     const CreatePostConfirm = async () => {
       if (contentRef.current.value.length < 5) {
         contentRef.current.focus();
@@ -647,8 +679,7 @@ const handlePostClick = async (postId) => {
     console.error(error);
   }
 }
-
-
+    
 
 
 
@@ -669,25 +700,7 @@ const handlePostClick = async (postId) => {
 
     const [search,setSearch] = useState('');
 
-    const filteredItems = items.filter(item => item.place.includes(search));
 
-    // 디바운스 작업 필요 ?? 필터링 
-//   const debounce = (func, delay) => {
-//     let debounceTimer;
-//     return function() {
-//         const context = this;
-//         const args = arguments;
-//         clearTimeout(debounceTimer);
-//         debounceTimer = setTimeout(() => func.apply(context, args), delay);
-//     }
-// }
-
-
-    // const fetchMoreData = async (lastId) => { // 마지막 ID를 매개변수로 받습니다.
-    //   const res = await userTimelineApi.getUserTimelineList(lastId);
-    //   setItems(prevItems => [...prevItems, ...res.data]);
-    // };
-    
 
   const obsRef = useRef(null); // observer Element
   const [page, setPage] = useState(1); //현재 페이지
@@ -699,7 +712,7 @@ const handlePostClick = async (postId) => {
 
 
   useEffect(()=> { // Observer creation
-    const observer = new IntersectionObserver(obsHandler, { threshold : 1 });
+    const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
     if(obsRef.current) observer.observe(obsRef.current);
     return () => observer.disconnect();
   }, [])
@@ -738,74 +751,92 @@ const handlePostClick = async (postId) => {
     const target = useRef(null);
    
     
-   
+    const handleSearch = async () => {
+        const res = await userTimelineApi.getTimePlace(search);
+        console.log(res.data);
+        setItems(res.data);
+    }
+  
+    const handleLocationModal = () => {
+      return
+    }
 
+    const [locationValue, setLocationValue] = useState('');
 
+    const activeEnter = (e) => {
+      if(e.key === "Enter") {
+        handleSearch();
+      }
+    }
   
   return (
     <>
 
-      <HeaderBar />
-
-      <Container   theme={theme}>
-        {isCreate &&
-          <CreatePost >
-            <input ref={titleRef} style={{
-              textAlign: "center",
-              borderBottom: "1px solid silver",
-              borderRadius: "0px",
-              backgroundColor: "none"
-            }} placeholder="Typing the Title" onChange={e => {
-              setTitle(e.target.value)
-            }} type="text"/>
-            <textarea ref={contentRef} onChange={e => {
-              setContent(e.target.value)
-            }} name="" id="" cols="50" rows="30"></textarea>
-            <div className="create-btns">
-              {/* <CreateBtn className="create-btn">확인</CreateBtn>
-                        <CreateBtn className="create-btn">취소</CreateBtn> */}
-              <div style={{display: "flex", flexDirection: "row", width: "80%"}}>
-                <div className="button-box" style={{width: "20%"}} onClick={handleOpenImageRef}>
-                  <CreateBtn className="button-box-btn">
-                    <AiOutlineCamera/>
-                  </CreateBtn>
-                  <input type="file" accept="image/jpeg, image/png" style={{display: "none"}} ref={fileInput}
-                         onChange={handleUploadImage}/>
+      {/* <HeaderBar /> */}
+      
+      {isCreate &&
+          <MyFlowWrapper>
+            <MyFlowDiv>
+            <FlowModal
+            open={()=>setIsCreate(true)}
+            close={()=>setIsCreate(false)}
+            header={<div className="title">
+            <span style={{ color: '#00B4D8' }}>F</span>low
+            </div>}
+            type="y"
+            confirm={handleUploadImage}
+            >
+            <textarea maxLength="90" ref={contents} className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
+              value={content}
+              onChange={(e)=> setContent(e.target.value)}
+            />
+            <p className="textLength">{content.length}/90</p>
+            <div className="wrapper">
+              <FileBox className="filebox">
+                <div  className="filebox">
+                    <label htmlFor="file"><AiOutlineCamera style={
+                      { width: "25px",
+                        height: "25px",
+                        color: "black"}} />
+                    </label> 
+                    <input  type="file" ref={fileInput} onClick={handleOpenImageRef}  className="fileSelect" id="file"/>
+                    {selectedImage !== null && (
+                        <img style={{width: "50px" , height: "50px"}} id="thumbnail" src={selectedImage} alt="" className="thumbnail" />
+                    )}	
                 </div>
-                <div style={{width: "80%"}}>
-                  <ul style={{display: "flex", flexDirection: "row", justifyContent: "start"}}>
-                    <img src={selectedImage} alt="" style={{width: "50%", height: "50%;"}}/>
-                  </ul>
-                </div>
-              </div>
-             <div style={{width:"100%" ,flexDirection:"row"}}> 
-                  <button style={{width:"50%"}} onClick={() => {
-                    CreatePostConfirm();
-                    
-                  }}>확인
-                  </button>
-                  <button style={{width:"30%"}} onClick={() => CreatePostCancle()}>취소</button>
+              </FileBox>
+              <div className="locationDiv">
+                <label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
+                <input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
               </div>
             </div>
-
-          </CreatePost>
-        }
+        </FlowModal>
+        </MyFlowDiv>
+        </MyFlowWrapper>
+      }
+      <Container   >  
         <Header>
           <HeaderList>
             <HeaderItemLeft>
-              <CreateBtn onClick={() => {
-                Navi(-1)
-              }} style={{borderRadius: "15px"}}>
-                <TfiArrowLeft style={{fontSize: "20px"}}></TfiArrowLeft>
-              </CreateBtn>
+              <div style={{display:"flex",flexDirection:"row"}}>
+                <CreateBtn onClick={() => {
+                  Navi("/")
+                }} style={{borderRadius: "8px"}}>
+                  <TfiArrowLeft style={{fontSize: "20px" , marginTop:"7px"}}></TfiArrowLeft>
+                </CreateBtn>
+                <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
+              </div>
               <div style={{width: "70%", position: "relative"}}>
-            <input type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
-            /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
-            
+            <input onKeyDown={(e)=> {activeEnter(e)}} type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
+            /> <AiOutlineSearch onClick={handleSearch} style={{position: "absolute", left: "30px", bottom: "7px"}}/>
+
           </div>
             </HeaderItemLeft>
             
             <HeaderItemRight>
+                <CreateBtn onClick={()=>{Navi('/myflow')}} style={{fontSize:"8px"}}>
+                    MyFlow
+                </CreateBtn>
               {isSort ?
                 <CreateBtn>
                   <FiColumns style={{fontSize: "25px"}} onClick={toggleSwitch}/>
@@ -836,22 +867,12 @@ const handlePostClick = async (postId) => {
             <Main isSort={isSort}>
                         
             <div
-            // 인피니티 스크롤 제거할 예정 
-            // dataLength={items.length}
-            // next={fetchMoreData}
-            // hasMore={hasMore}
-            // // 잠시제거 loader={isLoading ? <LoadingSpinner/> : null}
-            // endMessage={
-            //   <p style={{textAlign: "center"}}>
-            //     {/* <b>끝페이지</b> */}
-            //   </p>
-            // }
+           
             
           >
             <ItemGrid isSort={isSort}>
-              {
-                filteredItems.map((e , index) =>
-                  
+              { 
+                items.map((e , index) =>
                     <Item isSort={isSort} key={e.id} onClick={()=>{
                       if(!isCreate){
                         handlePostClick(e.id);
@@ -866,16 +887,21 @@ const handlePostClick = async (postId) => {
                         setIsClicked(...isClicked, e.id)
                       }} className="editBtn"></CreateBtn>
                       : <></>}
-                      <div className="item-header">
+                    <div className="item-header">
                       <img className="profile" style={
                               isSort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"25px" }
-                              : { margin: "10px", width: "55px", height:"55px", borderRadius:"25px" }
+                              : { margin: "10px", width: "55px", height:"35px", borderRadius:"25px" }
                           }
                       src={ e.ct_profile_pic || default_avatar} alt="" />
-                          <div style={{margin:"10px",height:"75%", display:"flex", flexDirection:"column",alignItems:"center"}}>
-                              <div>{e.nickName}</div>
-                            <p style={{fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
+                          <div style={
+                             isSort
+                             ?
+                            {position:"relative" ,margin:"0px",height:"100%", display:"flex", flexDirection:"column",alignItems:"center"}
+                            : {position:"relative" ,margin:"10px",marginTop:"20px",height:"65%", display:"flex", flexDirection:"column",alignItems:"center"}
+                          }>
+                              <div className="item-header-user" style={{fontSize:"12px"}}>{e.nickName}</div>
+                            <p style={{position:"absolute", right: "0px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
                             
                           </div>
                           <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>

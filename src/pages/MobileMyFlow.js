@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { styled } from 'styled-components';
 import { BiArrowBack, BiCurrentLocation } from 'react-icons/bi';
-import { AiOutlineSearch, AiOutlinePlus , AiFillDelete} from "react-icons/ai";
+import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera} from "react-icons/ai";
 import { BiSelectMultiple } from "react-icons/bi";
 import MyFlowContainer from "../components/MyFlowContainer"
 import { useState } from "react";
@@ -15,15 +15,14 @@ import { BsCheckCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
 import { storage } from "../api/FirebaseApi";
-import MyFlowDetailModal from "../utils/MyFlowDetailModal";
 import MyFlowApi from "../api/MyFlowApi";
-import { useContext } from "react";
-import { UserContext } from "../context/UserStore";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "styled-components";
 import useCurrentLocation from "../utils/Location";
 import { Map } from "react-kakao-maps-sdk";
 import { SlLocationPin } from "react-icons/sl";
 import LocationModal from "../utils/LocationModal";
-
+import { TfiArrowLeft } from "react-icons/tfi";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -139,7 +138,7 @@ const MyFlowMenuName = styled.p`
 	margin-top: -25%;
 	.title {
 		font-size: 35px;
-		margin-left: 10%;
+		margin-left: -30%;
 	}
 `;
 
@@ -374,13 +373,34 @@ const MenuButtonWrapper = styled.div`
 
 `;
 
+const CreateBtn2 = styled.div`
 
-const MyFlow = ({ onClose, goToMyPage }) =>{
+  display: flex;
+  justify-content:center;
+  align-items:center; 
+  border: 1px solid white;
+  border-radius: 8px;
+  width: 35px;
+  height: 35px;
+  color: black;
+  background-color: ${(props) => props.theme.timeLineBgColor};
+  background-color: white;
+  margin: 5px;
 
-	// context에서 유저 데이터 받아오기
-	const context = useContext(UserContext);
-	const {email, nickname} = context;
+  &:hover {
+    background-color: white;
+    border: 1px solid silver;
+  }
 
+  ${(props) => props.isClicked &&
+          `background-color: black; `
+  }
+`
+
+
+const MobileMyFlow = ({ onClose, goToMyPage }) =>{
+	const navigate = useNavigate();
+	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
 
@@ -391,11 +411,8 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		console.log("useEffect 실행");
     const fetchData = async () => {
         const response = await MyFlowApi.getmyFlow(token);
-				console.log("데이터 받음");
         setData(response.data);
 				setSortedFlow(response.data);
-				console.log(response);
-				console.log(response.data);
     };
 			fetchData(); // fetchData 함수 호출
   	}, []);
@@ -443,7 +460,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	const [flowModalText, setFlowModalText] = useState("");
 	const [place, setPlace] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
-	const [modalText, setModalText] = useState(
+	const [modalText] = useState(
 		<>
 			작성된 내용은 저장되지 않습니다. <br />
 			정말 닫으시겠습니까?
@@ -452,11 +469,11 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 
 	// 유저 위치 찾기
 	const [locationModalOpen, setLocationModalOpen] = useState(false);
-	const { location, error, getCurrentLocation } = useCurrentLocation();
+	const { location, getCurrentLocation } = useCurrentLocation();
 	const [locationValue, setLocationValue] = useState("");
 	const [state, setState] = useState({
 		// 지도의 초기 위치
-		center: { lat: location?.latitude, lng: location?.longitude },
+		center: { lat: 37.497931, lng: 127.027838 },
 		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
 		isPanto: false,
 	  })
@@ -469,8 +486,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		setLocationValue(place);
 		setLocationModalOpen(false);
 	}
-
-
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -519,11 +534,13 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		};
 
 		// 글 DB에 올리는 부분 구현
-		const continueToDB = () => {
-			MyFlowApi.newFlow(email, location.latitude, location.longitude, flowModalText, url, place, function() {
-				const response = MyFlowApi.getmyFlow(email);
-				const jsonData = response.data;
-				setData(jsonData);
+		const continueToDB = async () => {
+			MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, url, place, async function() {
+				const response = await MyFlowApi.getmyFlow();
+				setSortedFlow("");
+				setData(response.data);
+				setSortedFlow(response.data);
+				handleSort();
 			});
 		
 			setFlowModalOpen(false);
@@ -549,65 +566,29 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 	  }
 	};
 
-	
-	
-	const [isVisible, setIsVisible] = useState(false);
-	const handleCheck = () => {
-		setIsVisible(!isVisible);
+	const textLimit = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 90) {
+      setFlowModalText(inputText);
+    }
+  };
 
+	const goToFlow =()=> {
+		navigate("/flow");
 	}
-  
-	// 컨테이너를 클릭했을 때 모달창에 상세정보를 띄워주도록
-	// 플로우디테일모달에 들어갈 데이터를 세팅하는
-	const [responseDate, setResponseDate] = useState("");
-	const [responseTime, setResponseTime] = useState("");
-	const [responseLocation, setResponseLoaction] = useState("");
-	const [responseContent, setResponseContent] = useState("");
-	const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-
-	const [clicked, setClicked] = useState("");
-
-	const handleContainerClick = async (event, id) => {
-		setIsDetailModalOpen(true);
-		const clickedId = id;
-		setClicked(clickedId);
-		const response = await MyFlowApi.getClickedFlow(clickedId);
-		setResponseDate(response.data.date);
-		setResponseTime(response.data.time);
-		setResponseLoaction(response.data.location);
-		setResponseContent(response.data.content);
-		
-	};
-
-	const handleDetailClose = () => {
-		setClicked("");
-		setResponseDate("");
-		setResponseTime("");
-		setResponseLoaction("");
-		setResponseContent("");
-		setIsDetailModalOpen(false);
-	}
-
-	const containers = document.getElementsByClassName("myFlowContainer");
-
-// 각 컨테이너에 클릭 이벤트 리스너를 추가합니다.
-	for (const container of containers) {
-  	container.addEventListener('click', handleContainerClick);
-	}
-
-
-
 
     return(
+			
 			<MyFlowDiv>
-				     <div className="controlDiv">
-						 <BiArrowBacks onClick={goToMyPage}/>
-        				<CloseButton onClick={onClose}/>
-      				</div>
 				<MyFlowMenuName>
-					<p className="title">
-						my<span style={{ color: '#00B4D8' }}>F</span>low
-					</p>
+				<CreateBtn2 onClick={goToFlow}>
+					<TfiArrowLeft style={{fontSize: "20px"}}/>
+				</CreateBtn2>
+				
+				<div className="title">
+  				my<span style={{ color: '#00B4D8' }}>F</span>low
+				</div>
+
 					<CreateBtn onClick={openFlowModal}>
 					<AiOutlinePlus style={{ color: 'grey' }}></AiOutlinePlus>
 				</CreateBtn>
@@ -617,21 +598,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange}  />
 					<MenuButtonWrapper>
 						<SearchImg />
-						<div>
-							<CSSTransition in={isVisible} timeout={200} classNames="fade" unmountOnExit>
-								<div>
-									<DiaryButton>
-										<DiaryImgSet />
-									</DiaryButton>
-									<DeleteButton>
-										<DeleteImg />
-									</DeleteButton>
-								</div>
-							</CSSTransition>
-						</div>
-						<CheckButton onClick={handleCheck}>
-							<CheckImg />
-						</CheckButton>
 						<SortButton onClick={handleSort}>
 							{sort === "az" ? <SortAz /> : <SortZa />}
 						</SortButton>
@@ -652,8 +618,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									month: '2-digit',
 									day: '2-digit',
 								})}
-								isVisible={isVisible}
-								onClick={(e) => handleContainerClick(e, sortedFlow.id)}
+								
               />
             ))}
           </FlowDiv>
@@ -671,7 +636,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 							left:"30px",
 							zIndex:"9999999"
 									}}>
-						<label for="location" className="locationPin"><SlLocationPin /></label>
+						<label htmlFor="location" className="locationPin"><SlLocationPin /></label>
 						<input type="text" value={place} onChange={(e) => setPlace(e.target.value)} id="location" placeholder="장소를 입력해주세요" 
 						style={{
 							backgroundColor: "transparent",
@@ -681,7 +646,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 						}}
 						/>
 					</div>
-					{/* <Map className="map" // 지도를 표시할 Container 
+					<Map className="map" // 지도를 표시할 Container 
 									center={state.center}
 									isPanto={state.isPanto}
 									style={{
@@ -691,7 +656,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									position:"absolute",
         					alignSelf: "center",
         					justifyContent: "center",
-									
 									}}
 									level={3} // 지도의 확대 레벨
 								>
@@ -702,7 +666,6 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									}}
 									>
 									<button className="locationButton" style={{
-										
 										width: "35px",
 										height: "35px",
 										alignItems: "center",
@@ -722,9 +685,9 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 												center: { lat: location.latitude, lng: location.longitude },
 												isPanto: true,
 											},
+											
 										);
 									}}
-									
 									>
 										<BiCurrentLocation style={{
 											position:"absolute",
@@ -740,7 +703,7 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 									}} />
 									</button>
 									</div>
-								</Map> */}
+								</Map>
 								    <>
     </>
 		
@@ -748,18 +711,25 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 		<FlowModal
         open={flowModalOpen}
         close={closeFlowModal}
-        header="Flow"
+        header={<div className="title">
+				<span style={{ color: '#00B4D8' }}>F</span>low
+				</div>}
         type="y"
 				confirm={handleUpload}
       	>
-        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요"
+        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
           value={flowModalText}
-          onChange={(e) => setFlowModalText(e.target.value)}
+          onChange={textLimit}
         />
+				<p className="textLength">{flowModalText.length}/90</p>
 				<div className="wrapper">
 					<FileBox className="filebox">
 						<div className="filebox">
-								<label for="file"><PictureImg /></label> 
+								<label htmlFor="file"><AiOutlineCamera style={
+									{ width: "25px",
+										height: "25px",
+										color: theme.textColor}} />
+								</label> 
 								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
 								{thumbnailSrc !== "" && (
 										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />
@@ -767,16 +737,14 @@ const MyFlow = ({ onClose, goToMyPage }) =>{
 						</div>
 					</FileBox>
 					<div className="locationDiv">
-						<label for="locationBtn" className="locationPin"><SlLocationPin /></label>
+						<label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
 						<input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
 					</div>
 				</div>
     </FlowModal>
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
-		<MyFlowDetailModal open={isDetailModalOpen} close={handleDetailClose} ></MyFlowDetailModal>
 	</MyFlowDiv>
     );
 };
-
-export default MyFlow;
+export default MobileMyFlow;

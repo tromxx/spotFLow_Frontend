@@ -96,7 +96,7 @@ const MyDiarydiv = styled.div`
       width: 30px;
       height: 30px;
       top:0%;
-      left:0%;
+      left:90%;
       align-items: center;
       justify-content: center;
       display: flex;
@@ -123,22 +123,20 @@ const MyDiarydiv = styled.div`
     }
 `;
 
-
-    const MyDiary = (props) => {
-      const [items, setItems] = useState(new Set());
-      const [data,setData] = useState([]);
-
-      const itemHandler = (id, isChecked) => {
-        if(isChecked) {
-          items.add(id);
-          setItems(items);
-        } else if (!isChecked) {
-          items.delete(id);
-          setItems(items);
+      const MyDiary = ({trigger,stat,checkid, setCheckId }) => {
+        const [items, setItems] = useState(new Set());
+        const [data, setData] = useState([]);
+      
+    
+        const itemHandler = (id, isChecked) => {
+          if(isChecked) {
+            setCheckId([...checkid , id]);
+          } else if (!isChecked) {
+            setCheckId(checkid.filter(e=> e !== id));
+          }
         }
-        console.log(items)
-      }
 
+    
      
 
     
@@ -152,7 +150,7 @@ const MyDiarydiv = styled.div`
             alert("다이어리가 삭제되었습니다.");
         }
       }
- 
+
       useEffect(()=>{
         const fetchData = async()=>{
         const res =  await DiaryApi.findMyDiary("test@example.com");
@@ -161,58 +159,23 @@ const MyDiarydiv = styled.div`
         }
         fetchData();
        
-      },[])
+        console.log(checkid);
+      },[checkid,trigger])
 
     return(
         <MyDiarydiv>
             <div className="container">
-                  {/* <div class="box">
-                    {!stat ?
-                    <div className="check">
-                      <input type="checkbox" id="check1" className="checkboxes"/>
-                      <label for="check1"></label>
-                    </div>
-                    : null}
-                   
-                    
-                  </div> */}
-                  
-                    {/* <div class="box"> 
-                    <div className="check">
-                        <input type="checkbox" id="check1" className="checkboxes"/>
-                            <label for="check1"></label>
-                            </div>
-                        </div> */}
-                       {/* {
-                  props.data.map((data, index) => (
-                    <div class="box" key={index}>
-                      {props.stat && (
-                        <Checkbox
-                          key = {index}
-                          id = {data.id}
-                          itemHandler = {itemHandler}
-                        />
-                      )}
-
-
-                            <div className="img-box">
-                            <img  className="image" src={data.timeLineList[0].image} alt="" />
-                            </div>
-                      
-                    </div>
-                    
-                  ))
-                } */}
+                
                {data.map((data, index) => data.delete || (
               <div class="box" key={data.id}>
-                { props.stat && (
+                { stat && (
                   <Checkbox
                     key = {index}
                     id = {data.id}
                     itemHandler = {itemHandler}
                   />
                 )}
-                <button style={{position:"absolute", top:"0" , right: "0" }} onClick={()=>diaryDelete(data.id)}>삭제하기</button>
+                <button style={{position:"absolute", top:"0" , right: "0" }} onClick={()=>itemHandler(data.id)}>삭제하기</button>
                 <div className="img-box">
                   <img className="image" src={data.timeLineList[0]?.image} alt="" />
                 </div>

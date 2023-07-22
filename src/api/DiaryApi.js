@@ -20,16 +20,25 @@ const DiaryApi = {
     return axios.get(DOMAIN + "/diary/all?email=" + email);
   },
   deleteDiary: async (id) => {
-    return axios.delete(`${DOMAIN}/diary/delete?id=${id}`);
-  },
+    const requestData = {
+      id : id
+    }
+    return axios.delete(`${DOMAIN}/diary/check`, { data: requestData });
+  }
+  ,
   sendComment : async (props) => {
     const comment = {
       diary : props.diary,
-      content : props.content,
+      content : props.comment,
       email : props.email
     }
+    console.log(comment)
     return await axios.post(DOMAIN + "/diary/comment", comment);
   }
+  ,
+  // diaryMyPage : async () => {
+  //   return await axios.post(DOMAIN + "diary/mypage", )
+  // }
 }
 
 export default DiaryApi;

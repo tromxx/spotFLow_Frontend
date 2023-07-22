@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { styled } from 'styled-components';
+import { useNavigate } from "react-router-dom";
 import { BiArrowBack, BiCurrentLocation, BiSelectMultiple } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera} from "react-icons/ai";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
@@ -15,23 +16,28 @@ import { UserContext } from "../context/UserStore";
 import MyFlowApi from "../api/MyFlowApi";
 import MyFlowContainer from "../components/MyFlowContainer"
 import LocationModal from "../utils/LocationModal";
+import { useTheme } from "styled-components";
+import { TfiArrowLeft } from "react-icons/tfi";
 
-const MyFlowWrapper = styled.div`
+export const MyFlowWrapper = styled.div`
  	display: flex;
   justify-content: center;
   align-items: center;
 	text-align: center;
 	background-color: ${props=>props.theme.bgColor};
+	
 `;
 
 
-const MyFlowDiv = styled.div`
+export const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
-  border: ${props=>props.theme.borderColor};	
+  /* border: ${props=>props.theme.borderColor};	 */
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
-	margin-top: 80px;
+	margin-top: 40px;
   height: 93vh;
+	min-height: 93vh;
   display: flex;
   align-items: center;
 	text-align: center;
@@ -66,7 +72,7 @@ const MyFlowDiv = styled.div`
 `;
 
 
-const FileBox = styled.div`  
+export const FileBox = styled.div`  
 	float: left;
 
 	.fileSelect {
@@ -78,7 +84,7 @@ const FileBox = styled.div`
 		margin-left: 10px;
     width: 15%;
     height: 15%;
-    object-fit: cover;
+    object-fit: contain;
 	}
 	.filebox {
 		margin-top: 5px;
@@ -118,13 +124,17 @@ const FileBox = styled.div`
 
 const MyFlowMenuName = styled.div`
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	font-family: var(--efont);
 	width: 100%;
 	font-size: 30px;
 	font-weight: bolder;
 	margin-top: 5%;
+	position: relative;
+	
 	.title {
+		position: absolute;
+		left: 0px;
 		font-size: 35px;
 		margin-left: 10%;
 	}
@@ -134,13 +144,15 @@ const MyFlowMenuName = styled.div`
 
 const CreateBtn = styled.div`
     border-radius: 8px;
-		border: 1px solid #d9d9d9;
+		/* border: 1px solid #d9d9d9; */
     width: 35px;
     height: 35px;
     color: white;
     margin-right: 10%;
 		align-self: flex-end;
 		margin-top: -10%;
+		position: absolute;
+		right: 0px;
     &:hover{
         background-color: white;
         border: 1px solid silver;
@@ -295,13 +307,35 @@ const MenuButtonWrapper = styled.div`
 
 `;
 
+const CreateBtn2 = styled.div`
+
+  display: flex;
+  justify-content:center;
+  align-items:center; 
+  border: 1px solid white;
+  border-radius: 8px;
+  width: 35px;
+  height: 35px;
+  color: black;
+  background-color: ${(props) => props.theme.timeLineBgColor};
+  background-color: white;
+  margin: 10px;
+	margin-left: 15px;
+
+  &:hover {
+    background-color: white;
+    border: 1px solid silver;
+  }
+
+  ${(props) => props.isClicked &&
+          `background-color: black; `
+  }
+`
+
 
 const MyFlow = () =>{
-
-	// context에서 유저 데이터 받아오기
-	const context = useContext(UserContext);
-	const {email, nickname} = context;
-
+	const navigate = useNavigate();
+	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
 
@@ -312,11 +346,8 @@ const MyFlow = () =>{
 		console.log("useEffect 실행");
     const fetchData = async () => {
         const response = await MyFlowApi.getmyFlow(token);
-				console.log("데이터 받음");
         setData(response.data);
 				setSortedFlow(response.data);
-				console.log(response);
-				console.log(response.data);
     };
 			fetchData(); // fetchData 함수 호출
   	}, []);
@@ -364,7 +395,7 @@ const MyFlow = () =>{
 	const [flowModalText, setFlowModalText] = useState("");
 	const [place, setPlace] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
-	const [modalText, setModalText] = useState(
+	const [modalText] = useState(
 		<>
 			작성된 내용은 저장되지 않습니다. <br />
 			정말 닫으시겠습니까?
@@ -373,11 +404,11 @@ const MyFlow = () =>{
 
 	// 유저 위치 찾기
 	const [locationModalOpen, setLocationModalOpen] = useState(false);
-	const { location, error, getCurrentLocation } = useCurrentLocation();
+	const { location, getCurrentLocation } = useCurrentLocation();
 	const [locationValue, setLocationValue] = useState("");
 	const [state, setState] = useState({
 		// 지도의 초기 위치
-		center: { lat: location?.latitude, lng: location?.longitude },
+		center: { lat: 37.497931, lng: 127.027838 },
 		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
 		isPanto: false,
 	  })
@@ -390,8 +421,6 @@ const MyFlow = () =>{
 		setLocationValue(place);
 		setLocationModalOpen(false);
 	}
-
-
 
 	const openFlowModal = () => {
 		setFlowModalOpen(true);
@@ -443,7 +472,10 @@ const MyFlow = () =>{
 		const continueToDB = async () => {
 			MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, url, place, async function() {
 				const response = await MyFlowApi.getmyFlow();
+				setSortedFlow("");
 				setData(response.data);
+				setSortedFlow(response.data);
+				handleSort();
 			});
 		
 			setFlowModalOpen(false);
@@ -469,16 +501,25 @@ const MyFlow = () =>{
 	  }
 	};
 
-	
-	
+	const textLimit = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 90) {
+      setFlowModalText(inputText);
+    }
+  };
 
-	
-
+	const goToFlow =()=> {
+		navigate("/flow");
+	}
 
     return(
 			<MyFlowWrapper>
 			<MyFlowDiv>
 				<MyFlowMenuName>
+				<CreateBtn2 onClick={goToFlow}>
+					<TfiArrowLeft style={{fontSize: "20px"}}/>
+				</CreateBtn2>
+				
 				<div className="title">
   				my<span style={{ color: '#00B4D8' }}>F</span>low
 				</div>
@@ -550,7 +591,6 @@ const MyFlow = () =>{
 									position:"absolute",
         					alignSelf: "center",
         					justifyContent: "center",
-									
 									}}
 									level={3} // 지도의 확대 레벨
 								>
@@ -561,7 +601,6 @@ const MyFlow = () =>{
 									}}
 									>
 									<button className="locationButton" style={{
-										
 										width: "35px",
 										height: "35px",
 										alignItems: "center",
@@ -581,9 +620,9 @@ const MyFlow = () =>{
 												center: { lat: location.latitude, lng: location.longitude },
 												isPanto: true,
 											},
+											
 										);
 									}}
-									
 									>
 										<BiCurrentLocation style={{
 											position:"absolute",
@@ -613,16 +652,19 @@ const MyFlow = () =>{
         type="y"
 				confirm={handleUpload}
       	>
-        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(50자 이내)"
+        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
           value={flowModalText}
-          onChange={(e) => setFlowModalText(e.target.value)}
+          onChange={textLimit}
         />
+				<p className="textLength">{flowModalText.length}/90</p>
 				<div className="wrapper">
 					<FileBox className="filebox">
 						<div className="filebox">
 								<label htmlFor="file"><AiOutlineCamera style={
 									{ width: "25px",
-										height: "25px",}} /></label> 
+										height: "25px",
+										color: theme.textColor}} />
+								</label> 
 								<input type="file" onChange={handleFileInputChange} className="fileSelect" id="file"/>
 								{thumbnailSrc !== "" && (
 										<img id="thumbnail" src={thumbnailSrc} alt="" className="thumbnail" />

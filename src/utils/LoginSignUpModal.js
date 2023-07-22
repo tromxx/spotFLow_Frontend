@@ -32,7 +32,7 @@ const ModalStyle = styled.div`
     position: relative;
     padding: 20px 20px 20px;
     border-radius: 20px 20px 0 0 ;
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -46,25 +46,26 @@ const ModalStyle = styled.div`
   .modal > section > main {
     padding: 60px;
     font-size: 15px;
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
   }
   .modal > section > footer {
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px 15px 15px;
     border-radius: 0 0 25px 25px;
-    border-top: background-color: ${props=>props.theme.borderColor};
+    background-color: ${props=>props.theme.borderColor};
   }
   .modal > section > footer > button {
     border: none;
     outline: none;
     font-size: 15px;
     font-weight: bold;
-    color: black;
+    font-family: var(--kfont);
+    color: ${props=>props.theme.textColor};
     background-color: transparent;
     cursor: pointer;
   }

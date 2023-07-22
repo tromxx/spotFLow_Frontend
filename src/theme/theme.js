@@ -4,7 +4,8 @@ export const lightTheme = {
     bgColor: 'white',
     textColor: 'black',
     borderColor: '1px solid #d9d9d9',
-    divColor: '#d9d9d9'
+    divColor: '#d9d9d9',
+    modalColor: 'white'
 };
 
 export const darkTheme = {
@@ -13,7 +14,8 @@ export const darkTheme = {
     bgColor: '#171010',
     textColor: 'white',
     borderColor: '1px solid #424242',
-    divColor: '#423F3E'
+    divColor: '#423F3E',
+    modalColor: '#423F3E'
 };
 
 export const theme = {

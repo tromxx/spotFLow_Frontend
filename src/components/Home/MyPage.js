@@ -24,6 +24,7 @@ const LogInDiv = styled.div`
   color: ${props=>props.theme.textColor};
   border: ${props=>props.theme.borderColor};
   font-family: var(--efont);
+  transition: 0.6s ease;
   .controlDiv{
     margin-top: 15px;
     display: flex;
@@ -160,6 +161,18 @@ const Paragrph = styled.p`
       margin-left : 10px;
     }
   } 
+  &.Flow {
+    transition: transform 2.6s ease;
+    font-size : 30px;
+    font-weight : bolder;
+    &:hover {
+      color: var(--lightblue);
+      cursor: pointer;
+    }
+    span {
+      color: #00C2FA;
+    }
+  }
   &.Theme {
     transition: transform 2.8s ease;
     font-size : 30px;
@@ -320,6 +333,7 @@ const MyPage = ({ onClose }) => {
         </div>
         {/* <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph> */}
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
+        <Paragrph onClick={()=>navigate("/flow")} $isactive={isactive.toString()} className='Flow'><span>F</span>low</Paragrph>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
         <Button $isactive={isactive.toString() } onClick={updateProfiles}>저장하기</Button>
         <TextArea

@@ -82,7 +82,7 @@ const Container = styled.div`
         width: 100%;
         height: 100%;
     }
-    .cancle{
+    .cancel{
         border: solid 1px #00b4d8; 
         background-color: white;
         color: black;
@@ -152,7 +152,10 @@ const DiaryMypagediv = styled.div`
 
 `;
 
+
     const DiaryMypage = () => {
+    
+    const [trigger, setTrigger] = useState(false);
 
     const navi = useNavigate();
 
@@ -160,49 +163,35 @@ const DiaryMypagediv = styled.div`
 
     const [data,setData] = useState([]);
 
+    const [checkid, setCheckId] = useState([]) ; 
+
+    const forceUpdate = () => {
+        setTrigger(prev => !prev);
+    };
+
     const convertCheckBox = () => {
         if(isCheckBox === false) setIsCheckBox(true)
         else setIsCheckBox(false);
         console.log(isCheckBox);
     };
     
-        const [item, setItem] = useState({
-          id: 1,
-          title: "삭제된 게시글입니다.",
-          content:"삭제된 게시글입니다.",
-          timeLineList: [
-            { id: 2 },
-            { id: 3 }
-          ]
-        });
         const handleDeleteItem = async () => {
-            try {
-              const response = await DiaryApi.delete('/api/items/' + item.id); // 백엔드 API 엔드포인트를 적절하게 수정하세요
-              console.log('아이템 삭제 성공:', response.data);
-              // 삭제 성공 후 필요한 동작 수행
-            } catch (error) {
-              console.error('아이템 삭제 실패:', error);
-              // 삭제 실패 시 처리할 로직
-            }
+                try {
+                const res = await DiaryApi.deleteDiary(checkid);
+                console.log(res.data);
+                alert(`${checkid.length}개의 다이어리가 삭제되었습니다.`)
+                if(res.status == 200) {
+                   setTimeout(forceUpdate(),1500);
+                }
+                } catch(error) {
+                    console.log("삭제실패",error);
+                }
+                
           };
-
-        //   useEffect(() => {
-        //     const fetchData = async () => {
-        //         const email = "test@example.com";
-        //         const res = await DiaryApi.findMyDiary(email);
-                
-        //         setData(res.data);
-                
-        //     };
-        //     fetchData();
-            
-        //   }, []);  
-        
           useEffect(() => {
             console.log(data);
-        }, [data]);
-      
-
+        }, [trigger]);
+        
     return(
         
         <Container>
@@ -216,19 +205,7 @@ const DiaryMypagediv = styled.div`
                 
                  </div>
                  <div className="namebarright">
-                         {/* <div className="menu">
-                                {isCheckBox ? (
-                                    <>
-                                        <button onClick={convertCheckBox}>취소</button>
-                                        <button>삭제</button>
-                                    </>)
-                                : (
-                                    <>
-                                        <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                        <BsTrash className="trash" onClick={convertCheckBox}/>
-                                    </>)
-                                }
-                        </div> */}
+                       
                     </div>
                 </div> 
                 <div className="searchBarline">
@@ -237,12 +214,12 @@ const DiaryMypagediv = styled.div`
                                 {isCheckBox ? (
                                     <>
                                         <button 
-                                            className="cancle" 
+                                            className="cancel" 
                                             style={{marginRight: "10px"}}
-                                            onClick={convertCheckBox}>Cancle</button>
+                                            onClick={convertCheckBox}>Cancel</button>
                                         <button 
                                             onClick={handleDeleteItem}                                      
-                                            className="cancle"
+                                            className="cancel"
                                             style={{border:"solid 1px #f24e1e", color:"#f24e1e"}}
                                             >Delete</button>
                                     </>)
@@ -257,7 +234,7 @@ const DiaryMypagediv = styled.div`
             </header>
             <body>
         <DiaryMypagediv>
-            <MyDiary stat={isCheckBox} data={data}/>
+            <MyDiary trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
         </DiaryMypagediv>
         </body>
         </Container>

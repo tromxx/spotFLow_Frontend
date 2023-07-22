@@ -14,17 +14,21 @@ const LogInDiv = styled.div`
 	display: flex;
    justify-content: center;
    align-items: center;
+<<<<<<< HEAD
+=======
+   margin-top: 3%;
+>>>>>>> 60a074748d058bf979ae74321787d5152f0bd0af
 	ul{
       margin-top: 10%;
 		width: 400px;
 		display: flex;
 		flex-direction: column;
-		gap: 20px;
+		gap: 15px;
 		justify-content: center;
 		align-items: center;
-		border: 2px solid var(--grey);
+		/* border: 2px solid var(--grey); */
 		border-radius: 20px;
-		padding: 100px;
+		padding: 20px;
 		list-style: none;
 		font-family: var(--kfont);
 	}
@@ -55,12 +59,13 @@ const LogInDiv = styled.div`
       background-color: white;
       border: 2px solid var(--grey);
       cursor: pointer;
+      background-color: var(--lightblue);
    }
    li:nth-last-child(2) {
-      background-color: yellow;
+      background-color: transparent;
    }
 	li:nth-last-child(1){
-		background-color: var(--lightblue);
+		background-color: yellow;
 	}
     .container{
       display: flex;
@@ -125,15 +130,15 @@ const Login = () => {
       <LogInDiv>
          <ul>
             <li><img src={Logo} onClick={()=>navigate("/")} alt="logo" className="logo" /></li>
-            <li><input onChange={(e)=>setInputEmail(e.target.value)} type="text" placeholder="email@gmail.com"/></li>
+            <li><input onChange={(e)=>setInputEmail(e.target.value)} type="text" placeholder="email@sample.com"/></li>
             <li><input onChange={(e)=>setInputPwd(e.target.value)} type="password" placeholder="password"/></li>
             <div className="container">
                <p onClick={()=>navigate("/signup")}>회원가입</p>
                <p onClick={()=>navigate("/findpwemail")}>아이디/비번찾기</p>
             </div>
+            <li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
             <li><img src={GoogleLogo} alt="" /></li>
             <li><img src={KakaoLogo} alt="" /></li>
-				<li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
          </ul>
 			<LoginSignUpModal 
 				children={message} 

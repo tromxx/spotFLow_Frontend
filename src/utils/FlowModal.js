@@ -35,11 +35,12 @@ const ModalStyle = styled.div`
     text-align: center;
     margin: 0 auto;
     border-radius: 15px;
-    background-color: ${props=>props.theme.divColor};
+    background-color: ${props=>props.theme.modalColor};
     color: ${props=>props.theme.textColor};
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-show 0.3s;
     overflow: visible;
+    font-family: var(--kfont);
 
     @media(max-width: 768px) {
       width: 80%;
@@ -73,6 +74,16 @@ const ModalStyle = styled.div`
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+    .textLength {
+
+        position: absolute;
+        bottom: 100px;
+        right: 25px;
+        font-family: var(--kfont);
+        font-size: 13px;
+        color: ${props=>props.theme.textColor}
+        
+      }
     
     @media(max-width:768px) {
       
@@ -90,6 +101,7 @@ const ModalStyle = styled.div`
     background-color: transparent;
     border-radius: 5px;
     font-size: 13px;
+    font-family: var(--kfont);
 
     &:first-child {
       position: absolute;
@@ -161,7 +173,7 @@ const ModalStyle = styled.div`
         right: 180px;
         position: absolute;
       }
-
+      
       
     }
 `;
