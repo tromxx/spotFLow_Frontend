@@ -1,11 +1,12 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
 import MyFlow from './MyFlow'
-import SlideDiv from '../components/SlideDiv'
-import MyPage from '../components/MyPage'
-import Following from '../components/Following'
+import SlideDiv from '../components/Home/SlideDiv'
+import MyPage from '../components/Home/MyPage'
+import CustomerApi from '../api/CustomerApi';
+import { UserContext } from '../context/UserStore';
 
 const MenuButton = styled(AiOutlineMenu)`
   z-index: 2;
@@ -26,6 +27,30 @@ const MenuButton = styled(AiOutlineMenu)`
 const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
+
+  const{setEmail, setNickname,setProfilePic,setStatMsg,setIsLoggedIn} = useContext(UserContext);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    console.log(token);
+    const getCustomerInfo = async () => {
+      if (token != null) {
+        try {
+          const response = await CustomerApi.getCustomerInfo(token);
+          setEmail(response.data.email);
+          setNickname(response.data.nickName);
+          setProfilePic(response.data.profilePic);
+          setStatMsg(response.data.statMsg);
+          setIsLoggedIn(true);
+        } catch (error) {
+          throw error;
+        }
+      }else{
+        return null;
+      }
+    };
+    getCustomerInfo();
+  }, []);
 
   const renderPage = () => {
     switch (currentPage) {

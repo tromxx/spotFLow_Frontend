@@ -1,13 +1,11 @@
 import { styled } from 'styled-components';
-import Logo from '../images/logo.png';
+import Logo from '../../images/logo.png';
 import { useNavigate } from "react-router";
-import DarkLogo from "../images/DarkLogo.png"
-import { useTheme } from "../context/themeProvider";
+import DarkLogo from "../../images/DarkLogo.png"
+import { useTheme } from "../../context/themeProvider";
 import { useContext } from "react";
-import { UserContext } from "../context/UserStore";
+import { UserContext } from "../../context/UserStore";
 import {BiExit} from 'react-icons/bi'
-import { useEffect } from "react";
-import CustomerApi from '../api/CustomerApi'; 
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -63,29 +61,8 @@ const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const{setEmail, nickname, setNickname,setProfilePic,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    console.log(token);
-    const getCustomerInfo = async () => {
-      if (token != null) {
-        try {
-          const response = await CustomerApi.getCustomerInfo(token);
-          setEmail(response.data.email);
-          setNickname(response.data.nickName);
-          setProfilePic(response.data.profilePic);
-          setStatMsg(response.data.statMsg);
-          setIsLoggedIn(true);
-        } catch (error) {
-          throw error;
-        }
-      }else{
-        return null;
-      }
-    };
-    getCustomerInfo();
-  }, []);
 
   const logOut = () =>{
     localStorage.clear();

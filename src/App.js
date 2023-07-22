@@ -16,11 +16,8 @@ import MyFlow from './pages/MyFlow';
 import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
 import { useLayoutEffect, useState } from 'react';
-<<<<<<< HEAD
 import ChangeInfo from './pages/ChangeInfo';
-=======
 import Nofication from './pages/Nofication';
->>>>>>> 60a074748d058bf979ae74321787d5152f0bd0af
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
