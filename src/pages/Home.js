@@ -43,7 +43,7 @@ const Home = () => {
           setStatMsg(response.data.statMsg);
           setIsLoggedIn(true);
         } catch (error) {
-          throw error;
+          localStorage.clear();
         }
       }else{
         return null;

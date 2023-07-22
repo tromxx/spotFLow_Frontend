@@ -14,10 +14,7 @@ const LogInDiv = styled.div`
 	display: flex;
    justify-content: center;
    align-items: center;
-<<<<<<< HEAD
-=======
    margin-top: 3%;
->>>>>>> 60a074748d058bf979ae74321787d5152f0bd0af
 	ul{
       margin-top: 10%;
 		width: 400px;
