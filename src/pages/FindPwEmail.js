@@ -37,10 +37,10 @@ const FindPwEmailDiv = styled.div`
       font-family: var(--efont);
       font-size: 20px;
    }
-	li:nth-last-child(2) {
+	li:nth-last-child(3) {
 		color: grey;
 	}
-	li:nth-last-child(1){
+	li:nth-last-child(2){
 		display: flex;
    	justify-content: center;
    	align-items: center;
@@ -53,6 +53,14 @@ const FindPwEmailDiv = styled.div`
    	border: 2px solid var(--grey);
    	cursor: pointer;
 	}
+   .routeDiv{
+      display: flex;
+      gap: 30px;
+      p:nth-child(1):hover, p:nth-child(3):hover{
+         cursor: pointer;
+         color: var(--lightblue);
+      }
+   }
    @media (max-width : 844px){
       ul{
          padding: 0;
@@ -139,9 +147,9 @@ const FindPwEmail = () =>{
 						<li className="notactiveLi" onClick={errorModal} style={{background:'var(--grey)'}}>로그인 링크 보내기</li>	//false			 
 					}
                <div className="routeDiv">
-                  <p>로그인 하러가기</p>
+                  <p onClick={()=>navigate("/login")}>로그인</p>
                   <p>|</p>
-                  <p>회원가입 하러가기</p>
+                  <p onClick={()=>navigate("/signup")}>회원가입</p>
                </div>
             </ul>
             <LoginSignUpModal

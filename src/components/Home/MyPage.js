@@ -1,7 +1,7 @@
 import {styled} from 'styled-components';
 import {useTheme} from "../../context/themeProvider";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineClose, AiOutlineLogin } from 'react-icons/ai'
+import { AiOutlineClose } from 'react-icons/ai'
 import { useRef, useState } from 'react';
 import {RxGear} from 'react-icons/rx'
 import {BsCamera} from 'react-icons/bs'
@@ -124,7 +124,7 @@ const Button = styled.button`
 
 const Paragrph = styled.p`
   margin: 15px;
-  transform: ${props  => `translateX(${props.$isactive === "true" ? 0 : -600}%)`};
+  transform: ${props  => `translateX(${props.$isactive === "true" ? 0 : -800}%)`};
   &.NickName{
     transition: transform 1.8s ease;
     font-size: 20px;
@@ -139,6 +139,9 @@ const Paragrph = styled.p`
   }
   &.StatMsg{
     transition: transform 2.2s ease;
+    overflow-wrap: break-word;
+    word-wrap: break-word; 
+    word-break: break-all;
   }
   &.MyFlow {
     transition: transform 2.4s ease;
@@ -205,17 +208,6 @@ const CloseButton = styled(AiOutlineClose)`
     cursor: pointer;
     color: var(--lightblue);
   }
-  `;
-
-//login 버튼 css
-const LoginButton = styled(AiOutlineLogin)`
-  width: 35px;
-  height: 35px;
-  color: var(--grey);
-  &:hover{
-    cursor: pointer;
-    color: var(--lightblue);
-  }
 `;
 
 //프로파일 이미지 업로드 수정
@@ -234,17 +226,19 @@ const CameraButton = styled(BsCamera)`
 const MyPage = ({ onClose }) => {
   const [ThemeMode, setTheme] = useTheme(); 
   const [isactive, setIsActive] = useState(true);
-  const [prevImgFile, setPrevImgFile] = useState("");
+  const [prevImgFile, setPrevImgFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const [data, setData] = useState(null);
   const [url, setUrl] = useState(null);
-  const imgRef = useRef(null); 
+  const imgRef = useRef(); 
+  const textareaRef = useRef();
   const navigate = useNavigate();
   const{nickname, setNickname, profilePic, setProfilePic, statMsg, setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
-  
+
   const handleClick = () => {
     setIsActive(!isactive);
     setPrevImgFile("");
+    textareaRef.current.value = '';
   };
   
   const handleCameraClick = () => {
@@ -267,10 +261,8 @@ const MyPage = ({ onClose }) => {
     console.log(imgFile);
     const storageRef = storage.ref();
     const fileRef = storageRef.child(imgFile.name);
-    console.log("firebaseUpload ready");
     fileRef.put(imgFile).then(() => {
       fileRef.getDownloadURL().then((url) => {
-      console.log("firebaseUpload finish");
       setUrl(url);
     });
   })};
@@ -296,7 +288,7 @@ const MyPage = ({ onClose }) => {
     }
     if(data === null){
       console.log("Profile Picture Updated");
-      await saveImgFile();
+      saveImgFile();
       console.log(url);
     }
   };
@@ -331,18 +323,16 @@ const MyPage = ({ onClose }) => {
          </div>
           <Paragrph $isactive={isactive.toString()} className='StatMsg'>{statMsg}</Paragrph>
         </div>
-        {/* <Paragrph onClick={goToMyFlow} $isactive={isactive.toString()} className='MyFlow'>my<span style={{color : "#00B4D8"}}>F</span>low</Paragrph> */}
         <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>Diary</Paragrph>
         <Paragrph onClick={()=>navigate("/flow")} $isactive={isactive.toString()} className='Flow'><span>F</span>low</Paragrph>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
         <Button $isactive={isactive.toString() } onClick={updateProfiles}>저장하기</Button>
         <TextArea
-          cols="10"
-          rows="2"
           spellCheck="false"
           placeholder="상태 메시지를 입력하세요"
           onChange={(e)=> setData(e.target.value)}
           $isactive={isactive.toString() }
+          ref={textareaRef}
         ></TextArea>
       </LogInDiv>
       :
