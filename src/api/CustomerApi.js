@@ -39,6 +39,19 @@ const CustomerApi = {
     } catch (error) {
       throw error;
     }
+  },
+
+  updateStatMsgProfilePic: async (token, data) => {
+    try {
+      return await axios.put(DOMAIN + "/customer/updateprofile", data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 };
 
