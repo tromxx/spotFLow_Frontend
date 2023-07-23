@@ -1,8 +1,12 @@
-import React from "react";
 import { styled } from "styled-components";
 import FollowCounter from "./FollowCounter";
 import { AiOutlineClose } from 'react-icons/ai'
 import {MdOutlineArrowBack} from 'react-icons/md'
+import { useState } from "react";
+import Follower from "./Follower";
+import Following from "./Following";
+import { useCallback } from "react";
+
 
 const FollowDiv = styled.div`
   	margin-top: 7vh;
@@ -49,16 +53,31 @@ const GobackButton = styled(MdOutlineArrowBack)`
   	}
 `;
 
-const Follow = ({setCurrentPage, onClose}) => {
-   return(
-      <FollowDiv>
-            <div className="controlDiv">
-					<GobackButton onClick={setCurrentPage}/>
-            	<CloseButton onClick={onClose}/>
-            </div>
-         <FollowCounter/>
-      </FollowDiv>
-   );
+const Follow = ({ setCurrentPage, onClose }) => {
+	const [selectedCounter, setSelectedCounter] = useState('follower');
+
+	const handleCounterChange = useCallback(counter => {
+		 setSelectedCounter(counter);
+	}, []);
+
+	const renderContent = useCallback(() => {
+		 if (selectedCounter === 'follower') {
+			  return <Follower/>;
+		 } else if (selectedCounter === 'following') {
+			  return <Following/>;
+		 }
+	}, [selectedCounter]);
+
+	return (
+		 <FollowDiv>
+			  <div className="controlDiv">
+					<GobackButton onClick={setCurrentPage} />
+					<CloseButton onClick={onClose} />
+			  </div>
+			  <FollowCounter selected={selectedCounter} onSelectCounter={handleCounterChange} />
+			  {renderContent()}
+		 </FollowDiv>
+	);
 };
 
 export default Follow;

@@ -10,6 +10,7 @@ import { UserContext } from '../../context/UserStore';
 import { storage } from '../../api/FirebaseApi'
 import CustomerApi from '../../api/CustomerApi';
 import Error from '../Common/Error'
+import FollowCounter from './FollowCounter';
 
 const LogInDiv = styled.div`
   margin-top: 7vh;
@@ -356,7 +357,7 @@ const MyPage = ({ onClose, setCurrentPage }) => {
           <Paragrph $isactive={isactive.toString()} className='NickName'>{nickname}</Paragrph>
           <div className='followingfollowerDiv'>
             <Paragrph $isactive={isactive.toString()} className='Following' onClick={setCurrentPage}>Follower : {follower}</Paragrph>
-            <Paragrph $isactive={isactive.toString()} className='Following'>Following : {following}</Paragrph>
+            <Paragrph $isactive={isactive.toString()} className='Following' onClick={setCurrentPage}>Following : {following}</Paragrph>
          </div>
           <Paragrph $isactive={isactive.toString()} className='StatMsg'>{statMsg}</Paragrph>
         </div>

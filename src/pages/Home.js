@@ -62,7 +62,6 @@ const Home = () => {
           />;
           case 'Follow' :
             return <Follow
-            onClose={()=>setActivate(false) }
             setCurrentPage={()=>setCurrentPage('MyPage')}
         />;
       default:
