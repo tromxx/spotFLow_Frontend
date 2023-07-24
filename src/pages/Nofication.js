@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import NoficationContainer from "../components/NoficationContainer";
+import nofiDataSet from "../dataSet/nofiData";
 
 const NoficationWrapper = styled.div`
  	display: flex;
@@ -8,7 +9,7 @@ const NoficationWrapper = styled.div`
   align-items: center;
 	text-align: center;
 	background-color: ${props=>props.theme.bgColor};
-	
+	height: 100vh;
 `;
 
 const NoficationDiv = styled.div`
@@ -16,7 +17,7 @@ const NoficationDiv = styled.div`
   color: ${props=>props.theme.textColor};
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
-	margin-top: 40px;
+  
   height: 93vh;
 	min-height: 93vh;
   display: flex;
@@ -24,17 +25,54 @@ const NoficationDiv = styled.div`
 	text-align: center;
 	flex-direction: column;
 	position: relative;
+  overflow-y: scroll;
+  margin: 0 auto; /* 가로 가운데 정렬을 위해 추가 */
+`;
+
+const ScrollBar = styled.div`
+	width: 100%;
+	height: 50vh;
+	margin-top: -20px;
+	::-webkit-scrollbar {
+    width: 8px;  /* 스크롤바의 너비 */
+		
+	}
+
+	::-webkit-scrollbar-thumb {
+    height: 10%; /* 스크롤바의 길이 */
+    background: #d9d9d9; /* 스크롤바의 색상 */
+    border-radius: 10px;
+		transition: 0.2s ease;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+    background-color: grey;
+  }
+	padding-right: 5px;
 `;
 
 const Nofication = () => {
-
+  const [isNewNofi, setIsNewNofi] = useState(true);
+  const [nofiData, setNofiData] = useState(nofiDataSet);
   return (
     <NoficationWrapper>
-      <NoficationDiv>
-        <NoficationContainer>
-
-        </NoficationContainer>
-      </NoficationDiv>
+       
+       <ScrollBar>
+        <NoficationDiv>
+          
+              {isNewNofi && nofiData.map((nofiData) => (
+                    <NoficationContainer
+                      className="nofiContainer"
+                      noficationId={nofiData.id}
+                      diaryTitle={nofiData.title}
+                      name={nofiData.userName}
+                      comment={nofiData.comment}
+                    
+                    />
+                  ))}
+          
+        </NoficationDiv>
+      </ScrollBar>
     </NoficationWrapper>
   );
 }
