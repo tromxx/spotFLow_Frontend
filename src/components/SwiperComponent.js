@@ -43,7 +43,7 @@ export const TimeLine = styled(SwiperSlide)`
 `;
 export const Container = styled.div`
   width: 100vw;
-  height: 93vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   /* background-color: gray; */
@@ -86,7 +86,7 @@ export const Btn = styled.button`
 export const Overlay = styled.div`
   width: 100%;
   height: 100%;
-  top: 0;
+  top: 7vh;
   right: 0;
   background-color: rgb(0, 0, 0, 30%);
   position: absolute;
