@@ -1,32 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import { CustomOverlayMap, Map, MapMarker, MarkerClusterer, useMap } from "react-kakao-maps-sdk";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ToSpotData from "../dataSet/ToSpotData";
 import * as ToSpot from "../components/ToSpotComponent";
 import { LuCircleDot } from "react-icons/lu";
+import MyFlowApi from "../api/MyFlowApi";
 
 const MapView = React.memo((props) => {
   const navigate = useNavigate();
   const [loc, setLoc] = useState("");
   const [lat, setLat] = useState(37.4923615);
   const [lng, setLng] = useState(127.0292881);
+  const [flow, setFlow] = useState([]);
 
-  const userData = ToSpotData.getClusterSample().positions;
-
-  const user = userData.map(i => ({
-    name: "a",
-    img: `${process.env.PUBLIC_URL}/public_assets/default_avatar.png`,
-    lat: i.lat,
-    lng: i.lng,
-    loc: loc
-  }));
-
-  const data = user.map(i => ({
-    content: ToSpotData.setOverlay(i),
-    lat: i.lat,
-    lng: i.lng
-  }));
+  const dataInit = async () => {
+    let res = await MyFlowApi.allFlow();
+    if (res.status===200) {
+      console.log(res.status);
+      let user = await res.data.map(i => ({
+        name: i.customer.nickName,
+        img: i.image,
+        lat: i.lat,
+        lng: i.lng,
+        loc: i.place,
+        time: i.joinDate,
+        content: i.content,
+        view: i.view
+      }));
+      let userData =  await user.map(i => ({
+        content: ToSpotData.setOverlay(i),
+        lat: i.lat,
+        lng: i.lng
+      }));
+      await setFlow(userData);
+      console.log(userData);
+    }
+  };
 
   const place = ToSpotData.getPlace();
   const [isToSpotBtnState, setIsToSpotBtnState] = useState(0);
@@ -86,10 +96,9 @@ const MapView = React.memo((props) => {
   });
 
   useEffect(() => {
-    // console.log(mapData.lat);
-    // console.log(mapData.lng);
-    // console.log(mapData());
-  }, [props]);
+    dataInit();
+    console.log(flow);
+  }, [props, viewSet]);
 
   return (
     <ToSpot.Container>
@@ -111,7 +120,7 @@ const MapView = React.memo((props) => {
             minLevel={1}
             disableClickZoom={true}
           >
-            {data.map((pos) => (
+            {flow.map((pos) => (
               <MapMarker
                 key={`${pos.lat}-${pos.lng}`}
                 position={{
@@ -122,7 +131,7 @@ const MapView = React.memo((props) => {
             ))}
           </MarkerClusterer>
         ) : (
-            data.map((value) => (
+            flow.map((value) => (
               <EventMarkerContainer
                 key={`EventMarkerContainer-${value.lat}-${value.lng}`}
                 lat={value.lat}
@@ -132,25 +141,25 @@ const MapView = React.memo((props) => {
             ))
           )}
 
-        {place.map(p => (
-          <ToSpot.Btn translateY={(p.num * 6 * isToSpotBtnState)}>
-            <div className={"hot-spot"}>
-              <div className="to-spot item" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>
-                <FaMapMarkerAlt className="marker" size={25} />
-              </div>
-              <div className="btn-sub to-timeline" onClick={() => ToTimeLine(p.location)}>{p.name}</div>
-            </div>
-          </ToSpot.Btn>
-        ))}
+        {/*{place.map(p => (*/}
+        {/*  <ToSpot.Btn translateY={(p.num * 6 * isToSpotBtnState)}>*/}
+        {/*    <div className={"hot-spot"}>*/}
+        {/*      <div className="to-spot item" onClick={() => toSpotFocus(p.lat, p.lng, p.location)}>*/}
+        {/*        <FaMapMarkerAlt className="marker" size={25} />*/}
+        {/*      </div>*/}
+        {/*      <div className="btn-sub to-timeline" onClick={() => ToTimeLine(p.location)}>{p.name}</div>*/}
+        {/*    </div>*/}
+        {/*  </ToSpot.Btn>*/}
+        {/*))}*/}
 
-        <ToSpot.Btn>
-          <div className="hot-spot">
-            <div className="to-spot main" onClick={() => btnToSpotMoreView()} style={{ marginRight: "3px" }}>
-              <FaMapMarkerAlt className="marker" size={25} />
-            </div>
-            <div className="btn-main to-timeline more" onClick={() => ToTimeLine('')}>TimeLine</div>
-          </div>
-        </ToSpot.Btn>
+        {/*<ToSpot.Btn>*/}
+        {/*  <div className="hot-spot">*/}
+        {/*    <div className="to-spot main" onClick={() => btnToSpotMoreView()} style={{ marginRight: "3px" }}>*/}
+        {/*      <FaMapMarkerAlt className="marker" size={25} />*/}
+        {/*    </div>*/}
+        {/*    <div className="btn-main to-timeline more" onClick={() => ToTimeLine('')}>TimeLine</div>*/}
+        {/*  </div>*/}
+        {/*</ToSpot.Btn>*/}
 
         <ToSpot.Converter onClick={() => convertViewSet()}>
           {viewSet === 0 ?

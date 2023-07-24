@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from 'styled-components';
 import { useNavigate } from "react-router-dom";
-import { BiArrowBack, BiCurrentLocation, BiSelectMultiple } from 'react-icons/bi';
+import { BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera} from "react-icons/ai";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture, SlLocationPin } from "react-icons/sl"
@@ -12,7 +12,6 @@ import FlowModal from "../utils/FlowModal";
 import Modal from '../utils/Modal';
 import useCurrentLocation from "../utils/Location";
 import { storage } from "../api/FirebaseApi";
-import { UserContext } from "../context/UserStore";
 import MyFlowApi from "../api/MyFlowApi";
 import MyFlowContainer from "../components/MyFlowContainer"
 import LocationModal from "../utils/LocationModal";

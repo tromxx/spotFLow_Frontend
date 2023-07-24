@@ -41,10 +41,9 @@ const userTimelineApi = {
       lat : props.lat,
       lng : props.lng,
       tl_profile_pic : props.image,
-      title : props.title,
       content : props.content,
       updateTime : props.date,
-      category : props.category,
+      place : props.place,
     }
     return await axios.post(DOMAIN + "/timeline/post" , data);
   },

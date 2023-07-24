@@ -619,8 +619,7 @@ const ToSpotData = {
               {data.name}
             </div>
             <div className="jibun ellipsis">
-              {/*{data.lng}*/}
-              {/*{data.lat}*/}
+              {data.content}
             </div>
           </div>
         </div>

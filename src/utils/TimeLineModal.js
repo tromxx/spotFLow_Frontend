@@ -86,7 +86,7 @@ const Container = styled.div`
         }
     }
 
-    display: ${props => props.isOpen ? "block" : "none"}
+    display: ${props => props.isopen === "true" ? "block" : "none"}
     
    
   
@@ -102,7 +102,7 @@ const Container = styled.div`
 
 
 
-const TimeLineModal =  forwardRef(({isOpen, closeModal, setIsModalOpen, modalData,diffHours },node)=> {
+const TimeLineModal =  forwardRef(({isopen, closeModal, setIsModalOpen, modalData,diffHours },node)=> {
    
 
     
@@ -111,7 +111,7 @@ const TimeLineModal =  forwardRef(({isOpen, closeModal, setIsModalOpen, modalDat
   return (
 
     
-    <Container ref={node} isOpen={isOpen} closeModal={closeModal}>
+    <Container ref={node} isopen={isopen} closeModal={closeModal}>
     
         <div  className='profile'>
             

@@ -1,13 +1,14 @@
 import styled, {css} from "styled-components";
 import {TfiArrowLeft} from "react-icons/tfi";
 import {useState, useRef, useEffect} from "react";
-import HeaderBar from "../components/Common/HeaderBarNavi";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
-import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDelete} from "react-icons/ai";
-
+import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus} from "react-icons/ai";
+import {  SlLocationPin } from "react-icons/sl"
 import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
-import {useTheme} from "../context/themeProvider";
+
+import {  BiCurrentLocation } from 'react-icons/bi';
+
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
 
@@ -15,11 +16,20 @@ import TimeLineModal from "../utils/TimeLineModal";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
-import { type } from "@testing-library/user-event/dist/type";
+
 import userTimelineApi from "../api/UserTimelineApi";
 import { useCallback } from "react";
-import { SlLocationPin } from "react-icons/sl"
 import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
+import  { UserContext } from "../context/UserStore";
+import { useContext } from "react";
+
+import { storage } from '../api/FirebaseApi';  
+import ToTheTop from "../utils/ToTheTop";
+
+
+import { Map } from "react-kakao-maps-sdk";
+import LocationModal from "../utils/LocationModal";
+import useCurrentLocation from "../utils/Location";
 
 const ItemGrid = styled.div`
   min-height: 80vh;
@@ -27,19 +37,19 @@ const ItemGrid = styled.div`
   height: 80%;
   width: 100%;
   grid-template-rows: 1fr 1fr;
-  //background-color: white;
+  
 
 
   @media (max-width: 850px) {
-    ${(props) => props.isSort ? `
+    ${(props) => props.issort ==="true" ? `
    
     grid-template-columns: 1fr 1fr;
 ` : `  
 
 `}
   }
-  // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
-  ${(props) => props.isSort ? `
+ 
+  ${(props) => props.issort ==="true" ? `
 
         grid-template-columns: 1fr 1fr 1fr 1fr;
 }   
@@ -59,82 +69,7 @@ const centerAlign = css`
   align-items: center;
 `;
 
-const CreatePost = styled.div`
-  position : fixed;
-  top : 15%;
-  background-color: white;
-  ${centerAlign}
-  flex-direction: column;
-  width: 35%;
-  height: 500px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 15px;
-  z-index: 100;
 
-  @media (max-width: 1000px) {
-    & {
-      width: 300px;
-      height: 450px;
-    }
-
-    textarea {
-      width: 82%;
-    }
-  }
-
-  .create-btns {
-    ${centerAlign}
-    flex-direction: column;
-    flex: 2;
-    width: 100%;
-  }
-
-  button {
-    margin: 10px;
-    width: 48%;
-    background-color: white;
-    border: none;
-    border-radius: 15px;
-    height: 45px;
-  }
-
-  textarea {
-    width: 85%;
-    margin-left: 20px;
-    margin-right: 20px;
-    padding: 10px;
-    flex: 6;
-    border: none;
-    background-color: white;
-    border-radius: 15px;
-  }
-
-  input {
-
-    padding: 10px;
-    margin: 20px;
-    flex: 0.3;
-    border: none;
-    border-radius: 15px;
-    background-color: white;
-    width: 83%;
-    z-index: 50;
-
-  }
-
-  .button-box {
-
-    position: relative;
-    width: 100%;
-    flex: 3;
-    background-color: none;
-  }
-
-  .button-box-btn {
-    border-radius: 25px;
-  }
-
-`;
 
 
 const Container = styled.div`
@@ -197,7 +132,7 @@ const Header = styled.div`
 
   
   background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
- // background-color: #A4EBF3;
+ /* // background-color: #A4EBF3; */
   height: 20%;
   width: 100%;
   padding-bottom:20px;
@@ -214,7 +149,7 @@ const Header = styled.div`
     margin-left: 20px;
     border:none;
     
-  //  border:1px solid ${(props) => props.theme.timeLineBgColor};
+  /* //  border:1px solid ${(props) => props.theme.timeLineBgColor}; */
   background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "#F8F6F4"};
 
     border-radius:15px;
@@ -253,7 +188,7 @@ const CreateBtn = styled.div`
   justify-content:center;
   align-items:center; */
   ${centerAlign}
- // border: 1px solid white;
+
   border-radius: 5px;
   width: 35px;
   height: 35px;
@@ -294,7 +229,7 @@ const Main = styled.div`
     & {
       height: 70%;
       width: 60.9%;
-      //border: 1px solid silver;
+
     }
   }
          
@@ -308,7 +243,15 @@ transition: all 0.5s ease;
   justify-content: flex-start;
   height: 15%;
   width: 100%;
-  background-color: #FCF9F9;
+  border : solid 0.1px #EAEAEA;
+  border-radius: 1px;
+  background-color: white;
+}
+
+.item-header-user {
+  position:relative;
+  top:  8px;
+  font-size:12px;
 }
 
 position: relative;
@@ -324,7 +267,7 @@ margin-bottom: 20px;
 }
 
 ${(props) =>
-  props.isSort
+  props.issort ==="true"
     ? `
   ${centerAlign}
   flex-direction: column;
@@ -372,7 +315,7 @@ ${(props) =>
 
 @media (min-width: 1300px) {
   ${(props) =>
-    props.isSort
+    props.issort === "true"
       ? `
     height: 250px;
 
@@ -395,21 +338,32 @@ ${(props) =>
 
 @media (max-width: 845px) {
   ${(props) =>
-    props.isSort
+    props.issort ==="true"
       ? `
-    width: auto;
-    height: 150px;
+    width: auto%;
+    height: 230px;
     .item-header {
-      height: 20%;
+     
+      height: 15%;
     }
  
     `
       : `
-    width: auto;
+    width: auto%;
     height: 450px;
     .item-header {
-       height: 50px;
+       height: 60px;
+
+       .item-header-user {
+          font-size: 12px;
+          top : 0px;
+       }
+       .item-header-time {
+          position : relative;
+          bottom : 15px;
+       }
     }
+ 
     `}
 }
 ;
@@ -436,15 +390,15 @@ const ItemImg = styled.div`
   border-radius: 0px;
   background-position: center;
   background-color: silver;
-  ${(props) => props.isSort ? `
+  ${(props) => props.issort === "true"  ? `
         
-        height : 80%;
-        width: 90%;
+        height : 85%;
+        width: 100%;
     ` : `
 
         @media (max-width: 844px) {
             & {
-		           width: 99%;
+		           width: 100%;
                 height: 90%;
                 margin-left: 10px;
                 margin-right: 10px;
@@ -454,54 +408,16 @@ const ItemImg = styled.div`
            margin-bottom: 10px;
          //    margin-top: 10px;
             height : 90%;
-            width: 99%;
+            width: 100%;
 
             
     `}
 `
-const ItemContent = styled.div`
-  
-  ${centerAlign}
-  width: 100%;
-  flex-direction: column;
 
-  ${(props) => props.isSort ? `
-      
-    ` : `
-    ${centerAlign}
-    margin:20px;
-    margin-left : 0;
-    margin-right : 0;
-    width: 100%;
-    flex-direction:column;
-    `}
-  .title {
-    margin: 10px;
-    border-radius: 15px;
-    ${centerAlign} // background-color:  ${(props) => props.theme.timeLineBgColor};
-                    //  color : ${(props) => props.theme.textColor};
-    width: 85%;
-    flex: 1;
-  }
-
-  .content {
-    margin: 10px;
-    border-radius: 15px;
-      //    background-color:  ${(props) => props.theme.timeLineBgColor};
-      //    color : ${(props) => props.theme.textColor};
-    ${centerAlign}
-    flex: 10;
-    width: 85%;
-    overflow: scroll;
-  }
-
-
-  
-`
 
 
 const TimeLine = () => {
-  const [dummy, setDummy] = useState([]);
+
 
 
   // []를 추가함으로써 이펙트는 한 번만 실행되며, 컴포넌트가 마운트 될 때만 실행됩니다.
@@ -509,6 +425,7 @@ const TimeLine = () => {
   const [items, setItems] = useState([]);
 
 
+  const user = useContext(UserContext);
 
 
 
@@ -517,16 +434,18 @@ const TimeLine = () => {
 const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:'' , profile: ''});      
       
 
+const closeModal = () => setIsModalOpen(false);
+
 
     // 모달 함수 
     const [isModalOpen, setIsModalOpen] = useState(false);
   
     //모달제어
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
 
   const  node = useRef(null); // 타임라인 모달에 전달해줄 ref
-  const create = useRef(null); // 포스트생성 모달 ref
+
 
 
   // useEffect 와 ref를 이용하여 모달영역 밖 클릭시 닫을수 있도록 
@@ -556,8 +475,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
 
-    // 색상모드 
-    const theme = useTheme();
+    
 
 
   // 파일선택하는 핸들링
@@ -568,28 +486,54 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleUploadImage = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+  // const handleUploadImage = () => {
+  //   const file = fileInput.current.files[0];
+  //   const reader = new FileReader();
+    
+  //   reader.onloadend = () => {
+  //     setSelectedImage(reader.result);
+  //   };
 
-    reader.onloadend = () => {
-      setSelectedImage(reader.result);
-    };
+  //   if (file) {
+  //     reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
+  //   } else {
+  //     setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
+  //   }
+  // }
 
-    if (file) {
-      reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
-    } else {
-      setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
-    }
+
+const handleUploadImage = async () => {
+  const file = fileInput.current.files[0];
+  if (!file) {
+    setSelectedImage(null);  
+    return;
   }
 
-  const deleteTimeLine = () => {
-    if ((dummy.filter(i => !isClicked.includes(i.id)))) {
-      setDummy(dummy.filter(i => !isClicked.includes(i.id)));
-    }
+  const uploadTask = storage.ref(`images/${file.name}`).put(file);
 
-    // setDummy(dummy.filter(e => e.id !== data.id ))
-  }
+  uploadTask.on(
+    "state_changed",
+    snapshot => {
+      // progress function ...
+    },
+    error => {
+      // error function ...
+      console.log(error);
+    },
+    () => {
+      // complete function ...
+      storage
+        .ref("images")
+        .child(file.name)
+        .getDownloadURL()
+        .then(url => {
+          setSelectedImage(url);
+        });
+    }
+  );
+};
+
+
 
 
   const [isClicked, setIsClicked] = useState([]);
@@ -597,14 +541,14 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
   const [isCreate, setIsCreate] = useState(false);
 
   // 타임라인 리스트 정렬하기위한 변수
-  const [isSort, setIsSort] = useState(false);
+  const [issort, setIsSort] = useState(false);
 
   // 편집모드를 위한 변수
   const [isEdit, setIsEdit] = useState(false);
 
   // 정렬하기위한 메서드
   const toggleSwitch = () => {
-    setIsSort(!isSort);
+    setIsSort(!issort);
   }
  
 // 시간 계산 함수
@@ -647,28 +591,31 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     const titleRef = useRef();
     const contentRef = useRef();
     const [data,setData] = useState({
-      title : "",
       image : "",
-      email : "test@example.com",
+      email : "whddus426@gmail.com",
       content : "" ,
       lat : null ,
       lng : null , 
-      date : "" 
+      date : "" ,
+      place : "판교역"
     })
     
     const CreatePostConfirm = async () => {
-      if (contentRef.current.value.length < 5) {
-        contentRef.current.focus();
+      if (content.length < 5) {
+        contents.current.focus();
         return;  
-    }
-    setData(prevState => ({
-        ...prevState, 
-        title: title, 
+      }
+    
+      const updatedData = {
+        ...data,
         content: content,
-        image:  selectedImage
-    }));
-    userTimelineApi.setUserTimeline(data);
-}
+        image: selectedImage
+      };
+    
+      setData(updatedData);
+      await userTimelineApi.setUserTimeline(updatedData);
+      setIsCreate(false);
+    }
 
 
 const handlePostClick = async (postId) => {
@@ -693,9 +640,10 @@ const handlePostClick = async (postId) => {
 
       const CreatePostCancle = () => {
   
-        if (titleRef.current.value.length >= 1 || contentRef.current.value.length >=1) {
-            setIsCancle(!isCancel);
+        if (content.length >=1 || selectedImage !== null) {
+            setIsCancle(true);
         }  else setIsCreate(!isCreate);
+        ;
     }
 
     const [search,setSearch] = useState('');
@@ -721,26 +669,26 @@ const handlePostClick = async (postId) => {
     fetchMoreData(items[items.length-1]?.id);
   }, [page])
 
-  const obsHandler = ((entries) => { // Observer callback function
+  const obsHandler = ((entries) => { // 옵저버 콜백함수 최하단 스크롤 확인하는 용도
     const target = entries[0];
-    if(!endRef.current && target.isIntersecting && preventRef.current){ // Observer repeat execution prevention
-      preventRef.current = false; // Observer repeat execution prevention
+    if(!endRef.current && target.isIntersecting && preventRef.current){ 
+      preventRef.current = false; 
       setPage(prev => prev +1);
     }
   })
 
-  const fetchMoreData = useCallback(async(lastId) => { // Get more posts  
+  const fetchMoreData = useCallback(async(lastId) => { // 포스트 불러오는 함수  
     setIsLoading(true);
   try {
     const res = await userTimelineApi.getUserTimelineList(lastId);
-    if(res.data.length === 0){ // If there is no more posts
+    if(res.data.length === 0){ // 포스트가 더이상 없을시 
       endRef.current = true;
     }
     setTimeout(() => {
-      setItems(prevItems => [...prevItems, ...res.data]); // Add new items to the list
-      setIsLoading(false); // Stop loading after 1.5 seconds
-      preventRef.current = true; // Allow observer to fetch more data again
-    }, 1500);
+      setItems(prevItems => [...prevItems, ...res.data]); // 가져온 데이터를 기존데이터에 추가
+      setIsLoading(false); // 로딩 0.2초 지연 
+      preventRef.current = true; // 옵저버에게 데이터를 더가져오도록 허용시킴
+    }, 200);
   } catch (e) {
     setIsLoading(false);
     console.error(e);
@@ -757,34 +705,95 @@ const handlePostClick = async (postId) => {
         setItems(res.data);
     }
   
-    const handleLocationModal = () => {
-      return
-    }
+   
 
-    const [locationValue, setLocationValue] = useState('');
 
+
+    // 검색 엔터키 입력하면 검색한결과를 호출  
     const activeEnter = (e) => {
       if(e.key === "Enter") {
         handleSearch();
       }
     }
+
+
+    // 마이플로우 이동버튼
+    const moveMyFlow = () => {
+      if(!user.isLoggedIn) {
+          alert("로그인이 필요한 서비스입니다.")
+         return 
+      } Navi('/myflow');
+    }
+
+
+
+  
+    
+  // 토글 여부를 결정하는 state 선언
+  const [toggleBtn, setToggleBtn] = useState(true);
+
+  // window 객체에서 scrollY 값을 받아옴
+  // 어느정도 스크롤이 된건지 판단 후, 토글 여부 결정
+  const handleScroll = () => {
+    const { scrollY } = window;
+
+    scrollY > 200 ? setToggleBtn(true) : setToggleBtn(false);
+  };
+
+  // scroll 이벤트 발생 시 이를 감지하고 handleScroll 함수를 실행
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // 버튼 클릭 시 스크롤을 맨 위로 올려주는 함수
+  const goToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+
+
+
+  // 유저 위치 찾기
+  const [place, setPlace] = useState("");
+	const [locationModalOpen, setLocationModalOpen] = useState(false);
+	const { location, getCurrentLocation } = useCurrentLocation();
+	const [locationValue, setLocationValue] = useState("");
+	const [state, setState] = useState({
+		// 지도의 초기 위치
+		center: { lat: 37.497931, lng: 127.027838 },
+		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
+		isPanto: false,
+	  })
+		
+	const handleLocationModal = () => {
+		setLocationModalOpen(!locationModalOpen);
+	}
+
+	const locationConfirm = () => {
+		setLocationValue(place);
+		setLocationModalOpen(false);
+	}
+
+	
+
   
   return (
-    <>
-
-      {/* <HeaderBar /> */}
-      
+    <>      
       {isCreate &&
           <MyFlowWrapper>
             <MyFlowDiv>
             <FlowModal
             open={()=>setIsCreate(true)}
-            close={()=>setIsCreate(false)}
+            close={CreatePostCancle}
             header={<div className="title">
             <span style={{ color: '#00B4D8' }}>F</span>low
             </div>}
             type="y"
-            confirm={handleUploadImage}
+            confirm={CreatePostConfirm}
             >
             <textarea maxLength="90" ref={contents} className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
               value={content}
@@ -794,19 +803,20 @@ const handlePostClick = async (postId) => {
             <div className="wrapper">
               <FileBox className="filebox">
                 <div  className="filebox">
-                    <label htmlFor="file"><AiOutlineCamera style={
+                    <label htmlFor="file"><AiOutlineCamera 
+                    style={
                       { width: "25px",
                         height: "25px",
                         color: "black"}} />
                     </label> 
-                    <input  type="file" ref={fileInput} onClick={handleOpenImageRef}  className="fileSelect" id="file"/>
+                    <input  type="file" ref={fileInput} onChange={handleUploadImage}  className="fileSelect" id="file"/>
                     {selectedImage !== null && (
                         <img style={{width: "50px" , height: "50px"}} id="thumbnail" src={selectedImage} alt="" className="thumbnail" />
                     )}	
                 </div>
               </FileBox>
               <div className="locationDiv">
-                <label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
+                <label htmlFor="locationBtn" className="locationPin"><SlLocationPin/></label>
                 <input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
               </div>
             </div>
@@ -815,14 +825,15 @@ const handlePostClick = async (postId) => {
         </MyFlowWrapper>
       }
       <Container   >  
+        
         <Header>
           <HeaderList>
             <HeaderItemLeft>
               <div style={{display:"flex",flexDirection:"row"}}>
                 <CreateBtn onClick={() => {
                   Navi("/")
-                }} style={{borderRadius: "8px"}}>
-                  <TfiArrowLeft style={{fontSize: "20px" , marginTop:"7px"}}></TfiArrowLeft>
+                }} style={{borderRadius: "8px", marginTop:"7px"}}>
+                  <TfiArrowLeft style={{fontSize: "20px" }}></TfiArrowLeft>
                 </CreateBtn>
                 <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
               </div>
@@ -834,10 +845,14 @@ const handlePostClick = async (postId) => {
             </HeaderItemLeft>
             
             <HeaderItemRight>
-                <CreateBtn onClick={()=>{Navi('/myflow')}} style={{fontSize:"8px"}}>
-                    MyFlow
-                </CreateBtn>
-              {isSort ?
+                
+                <CreateBtn onClick={moveMyFlow} style={{fontSize:"8px"}}>
+                     MyFlow
+                </CreateBtn>                     
+                
+              
+              {issort ?
+              
                 <CreateBtn>
                   <FiColumns style={{fontSize: "25px"}} onClick={toggleSwitch}/>
                 </CreateBtn>
@@ -846,9 +861,13 @@ const handlePostClick = async (postId) => {
                 <CreateBtn>
                   <RiLayoutRowLine style={{fontSize: "25px"}} onClick={toggleSwitch}/>
                 </CreateBtn>
-
+                
               }
-              <CreateBtn onClick={() => {
+              
+              <CreateBtn onClick={() => {if(!user.isLoggedIn) {
+          alert("로그인이 필요한 서비스입니다.")
+         return 
+      }
                 setIsCreate(!isCreate)
               }}>
                 <AiOutlinePlus></AiOutlinePlus>
@@ -864,16 +883,16 @@ const handlePostClick = async (postId) => {
             </Header>
 
 
-            <Main isSort={isSort}>
-                        
+            <Main issort={issort.toString()}>
+                 
             <div
            
             
           >
-            <ItemGrid isSort={isSort}>
+            <ItemGrid issort={issort.toString()}>
               { 
                 items.map((e , index) =>
-                    <Item isSort={isSort} key={e.id} onClick={()=>{
+                    <Item issort={issort.toString()} key={index} onClick={()=>{
                       if(!isCreate){
                         handlePostClick(e.id);
                         setDiffHours(calculateTime(e.updateTime));
@@ -881,47 +900,132 @@ const handlePostClick = async (postId) => {
                         openModal()
                       }
                       }} >
-                        {isEdit ?  
+                        {/* {isEdit ?  
 
                       <CreateBtn isClicked={isClicked.includes(e.id)} onClick={() => {
                         setIsClicked(...isClicked, e.id)
                       }} className="editBtn"></CreateBtn>
-                      : <></>}
+                      : <></>} */}
                     <div className="item-header">
                       <img className="profile" style={
-                              isSort
-                              ? { margin: "10px", width: "30px", height:"30px", borderRadius:"25px" }
-                              : { margin: "10px", width: "55px", height:"35px", borderRadius:"25px" }
+                              issort
+                              ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
+                              : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }
                           }
                       src={ e.ct_profile_pic || default_avatar} alt="" />
                           <div style={
-                             isSort
+                             issort
                              ?
                             {position:"relative" ,margin:"0px",height:"100%", display:"flex", flexDirection:"column",alignItems:"center"}
                             : {position:"relative" ,margin:"10px",marginTop:"20px",height:"65%", display:"flex", flexDirection:"column",alignItems:"center"}
                           }>
-                              <div className="item-header-user" style={{fontSize:"12px"}}>{e.nickName}</div>
-                            <p style={{position:"absolute", right: "0px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
+                              <div className="item-header-user" >{e.nickName}</div>
+                             {issort || <h5 className="item-header-time" style={{ width:"45px" , position:"absolute", right: "-14px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</h5>}
                             
                           </div>
                           <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
                       </div>
-                    <ItemImg  isSort={isSort} url={e.tl_profile_pic}></ItemImg>
-                    {/* <ItemContent isSort={isSort}>
-                      <div className="title">{e.title}</div>
-                      {isSort ? <></> : <div className="content">{e.content}</div>}
-
-                    </ItemContent> */}
+                    <ItemImg  issort={issort.toString()} url={e.tl_profile_pic}></ItemImg>
+              
                   </Item>
                 )
                 }
                 </ItemGrid>   
                   </div>
                   <div ref={obsRef} style={{ width: '100%', height: 30, }}>{isLoading && <LoadingSpinner></LoadingSpinner>}</div>
+                       
                   </Main>
                     {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
-                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
-                    <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate)}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
+                    <TimeLineModal isopen={`${isModalOpen}`}  setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
+                    <ToTheTop/> 
+                    <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate); setContent(""); setSelectedImage(null);}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
+                    <LocationModal 
+					open={locationModalOpen}
+					close={handleLocationModal}
+					type="y"
+					confirm={locationConfirm}
+				 	header="Flow">
+			
+					<div className="placeDiv" style={{
+							position:"absolute",
+							top:"45px",
+							left:"30px",
+							zIndex:"9999999"
+									}}>
+						<label htmlFor="location" className="locationPin"><SlLocationPin /></label>
+						<input type="text" value={place} onChange={(e) => setPlace(e.target.value)} id="location" placeholder="장소를 입력해주세요" 
+						style={{
+							backgroundColor: "transparent",
+        			outline: "none",
+        			color: `${props=>props.theme.textColor}`,
+        			border: "none"
+						}}
+						/>
+					</div>
+					<Map className="map" // 지도를 표시할 Container 
+									center={state.center}
+									isPanto={state.isPanto}
+									style={{
+									// 지도의 크기
+									width: "90%",
+									height: "75%",
+									position:"absolute",
+        					alignSelf: "center",
+        					justifyContent: "center",
+									}}
+									level={3} // 지도의 확대 레벨
+								>
+									<div
+									style={{
+										display: "flex",
+										gap: "10px",
+									}}
+									>
+									<button className="locationButton" style={{
+										width: "35px",
+										height: "35px",
+										alignItems: "center",
+										justifyContent: "center",
+										border: "none",
+										borderRadius: "100px",
+										backgroundColor: "#d9d9d9",
+										position:"absolute",
+										right:"40px",
+										bottom:"70px",
+										zIndex:"9999"
+									}}
+									onClick={() => { 
+										getCurrentLocation();
+										setState(
+											{
+												center: { lat: location.latitude, lng: location.longitude },
+												isPanto: true,
+											},
+											
+										);
+									}}
+									>
+										<BiCurrentLocation style={{
+											position:"absolute",
+											top:"0",
+											left:"0",
+											color: "black",
+											width: "35px",
+											height: "35px",
+											alignSelf: "center",
+											justifyContent: "center",
+											border: "none",
+											backgroundColor: "transparent"
+									}} />
+									</button>
+									</div>
+								</Map>
+								    <>
+    </>
+		
+		</LocationModal>
+
+                    
         </Container>
 
 
@@ -931,5 +1035,4 @@ const handlePostClick = async (postId) => {
             }
 
 export default TimeLine;
-
 

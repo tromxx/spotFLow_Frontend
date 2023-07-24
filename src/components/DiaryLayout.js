@@ -5,8 +5,8 @@ import Slider from "../components/Slider";
 const DiaryLayoutdiv = styled.div`
   /* border: solid 1px red; */
   width: 100%;
-  height: 33.3%;
-
+  height: 50%;
+  
   .bar1{
     /* border: solid 1px violet; */
     width: 100%;
@@ -48,17 +48,7 @@ const DiaryLayout = (props) => {
     return(
         <DiaryLayoutdiv>
           <Slider/>
-            {/* <div className="bar1">
-                <h4>{props.name}</h4>
-                <h6>See All</h6>
-            </div>
-            <div className="flex-Container">
-                    <div className="flex-item">item 1</div>      
-                    <div className="flex-item">item 2</div>
-                    <div className="flex-item">item 3</div>
-                    <div className="flex-item">item 4</div>
-                    <div className="flex-item">item 5</div>
-                </div> */}
+           
         </DiaryLayoutdiv>
     );
 };
