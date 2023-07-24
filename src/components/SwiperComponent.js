@@ -210,7 +210,7 @@ const CommentBox = styled.div`
 
   .content {
     width: 100%;
-    height: 530px;
+    height: 80%;
     background-color: #d9d9d9;
     overflow: auto;
     border: .2px solid rgb(120, 120, 120);

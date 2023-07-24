@@ -56,33 +56,33 @@ export const DiarySwiper = () => {
   const [profilePic, setProfilePic] = useState("");
   const [statMsg, setStatMsg] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const token = localStorage.getItem('authToken');
+  console.log(token);
   useEffect(() => {
     DiaryInit();
     // 이부분 localStorage 에서 토큰 뺴오기
-    const token = localStorage.getItem('authToken');
-    console.log(token);
-    const getCustomerInfo = async () => {
-      if (token != null) {
-        try {
-          const response = await CustomerApi.getCustomerInfo(token);
-          setEmail(response.data.email);
-          setNickname(response.data.nickName);
-          setProfilePic(response.data.profilePic);
-          setStatMsg(response.data.statMsg);
-          setIsLoggedIn(true);
-        } catch (error) {
-          throw error;
-        }
-      }else{
-        return null;
-      }
-      console.log(email)
-      console.log(nickName)
-      console.log(profilePic)
-      console.log(statMsg)
-      console.log(isLoggedIn)
-    };
-    getCustomerInfo();
+    // const getCustomerInfo = async () => {
+    //   if (token != null) {
+    //     try {
+    //       const response = await CustomerApi.getCustomerInfo(token);
+    //       setEmail(response.data.email);
+    //       setNickname(response.data.nickName);
+    //       setProfilePic(response.data.profilePic);
+    //       setStatMsg(response.data.statMsg);
+    //       setIsLoggedIn(true);
+    //     } catch (error) {
+    //       throw error;
+    //     }
+    //   }else{
+    //     return null;
+    //   }
+    //   console.log(email)
+    //   console.log(nickName)
+    //   console.log(profilePic)
+    //   console.log(statMsg)
+    //   console.log(isLoggedIn)
+    // };
+    // getCustomerInfo();
   }, [count]);
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>

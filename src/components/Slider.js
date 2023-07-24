@@ -322,9 +322,9 @@ const MainSlider = ({setName,names,setIsAll,setIsType}) => {
       useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await DiaryApi.findMyDiary("test@example.com");
+                const res = await DiaryApi.findMyDiary("user@example.com");
                 if(res) {
-                    
+                    console.log(res.data)
                     setData(res.data.filter(e=> e.delete === false ));
                 }
             } catch (error) {
