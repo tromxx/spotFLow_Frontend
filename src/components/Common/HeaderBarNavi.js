@@ -5,9 +5,13 @@ import DarkLogo from "../../images/DarkLogo.png"
 import { useTheme } from "../../context/themeProvider";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
-import {BiExit} from 'react-icons/bi'
+import { BiExit } from 'react-icons/bi'
 import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
+import { useEffect } from 'react';
+import axios from 'axios';
+import CustomerApi from '../../api/CustomerApi';
+
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -90,12 +94,27 @@ const HeaderBar = () => {
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
   const [isNewNofi, setIsNewNofi] = useState("");
-  const{nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const [nofiData, setNofiData] = useState("");
+  const{ email, nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  
+  useEffect(() => {
+    
+    const notification = async (email) => {
+      return await CustomerApi.notification(email);
+    }
 
+    notification();
+  
+  }, []);
 
   const logOut = () =>{
     localStorage.clear();
     setIsLoggedIn(false);
+  }
+
+  const notificationFunc = () => {
+    navigate("/nofication");
+    setIsNewNofi(false);
   }
 
   return (
@@ -106,8 +125,8 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
-              {isNewNofi !== "" ? <NofiOn /> : <NofiNone />}
+          <button className="nofi" onClick={()=>{}}>
+              {isNewNofi ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>

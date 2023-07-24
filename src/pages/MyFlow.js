@@ -17,6 +17,9 @@ import MyFlowContainer from "../components/MyFlowContainer"
 import LocationModal from "../utils/LocationModal";
 import { useTheme } from "styled-components";
 import { TfiArrowLeft } from "react-icons/tfi";
+import { UserContext } from "../context/UserStore";
+import { useContext } from "react";
+import ErrorPage from "../components/Common/Error";
 
 export const MyFlowWrapper = styled.div`
  	display: flex;
@@ -337,6 +340,7 @@ const MyFlow = () =>{
 	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
+	const { isLoggedIn } = useContext(UserContext);
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
 	useEffect(() => {
@@ -512,7 +516,9 @@ const MyFlow = () =>{
 	}
 
     return(
+		
 			<MyFlowWrapper>
+				{isLoggedIn ?
 			<MyFlowDiv>
 				<MyFlowMenuName>
 				<CreateBtn2 onClick={goToFlow}>
@@ -679,8 +685,12 @@ const MyFlow = () =>{
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
 	</MyFlowDiv>
+	:
+	<ErrorPage />}
 	</MyFlowWrapper>
+	
     );
+		
 };
 
 export default MyFlow;

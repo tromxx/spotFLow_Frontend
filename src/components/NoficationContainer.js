@@ -7,7 +7,7 @@ import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
 const NoficationDiv = styled.div`
   width: 95%;
   height: 100px;
-  margin-bottom: 10px;
+  margin-top: 10px;
   text-align: left;
   border-bottom: ${props=>props.theme.borderColor};
   background-color: transparent;
