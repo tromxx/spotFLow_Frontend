@@ -115,6 +115,7 @@ const Diary = () =>{
             console.log("로그인이 안되었어요");
         }
     })
+    console.log(localStorage.getItem('authToken'));
 
     return(
         <Container>

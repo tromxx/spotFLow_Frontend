@@ -32,6 +32,7 @@ const Home = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
+    console.log(token);
     const getCustomerInfo = async () => {
       if (token != null) {
         try {
