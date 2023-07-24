@@ -112,15 +112,15 @@ const DiaryCategoryDiv = styled.div`
 `;
 
 
-const DiaryCategory = (props) =>{
+const DiaryCategory = ({name,stat,setIsAll}) =>{
 
     const navi = useNavigate();
     let checkbox = 0;
 
 
     useEffect(() => {
-        checkbox = props.stat;
-    }, [props]);
+        checkbox = stat;
+    }, [stat]);
 
     return(
         <Container>
@@ -128,11 +128,11 @@ const DiaryCategory = (props) =>{
                 <div className="namebar">
                     <div className="left">
                         <div className="titlebar">
-                            <h1>Popular</h1>
+                            <h1>{name}</h1>
                         </div>
                     </div>
                     < div className="right">
-                        <BsListUl onClick={()=>{navi("/diary")}} className="list1"/>
+                        <BsListUl onClick={()=>{setIsAll(true)}} className="list1"/>
                     </div>
                 </div>
                 <DiaryCategoryDiv>
