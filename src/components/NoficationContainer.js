@@ -19,8 +19,19 @@ const NoficationDiv = styled.div`
 
   @media(max-width: 768px) {
     width: 100%;
-    height: 60px;
+    height: 100px;
   }
+`;
+
+const HeartImg = styled(AiFillHeart)`
+  width: 25px;
+  height: 25px;
+`;
+
+const CommentImg = styled(AiOutlineComment)`
+  width: 25px;
+  height: 25px;
+  
 `;
 
 
@@ -42,11 +53,11 @@ const NoficationContainer = ({ diaryTitle, name, comment }) => {
     <NoficationDiv>
         {comment !== "" ? 
           <p> 
-            {diaryTitle} <br /> {name}님이 댓글을 남겼습니다. <br /> {commentMaxLength(comment, 50)} 
+            <CommentImg /> <br /> {name}님이 {diaryTitle} 에 댓글을 남겼습니다. <br /> {commentMaxLength(comment,25)} 
           </p> 
             : 
           <p>
-            {diaryTitle} <br />  {name}님이 좋아요를 남겼습니다.
+            <HeartImg /> <br />  {name}님이 {diaryTitle} 에 좋아요를 남겼습니다.
           </p> 
         }
 

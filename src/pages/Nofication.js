@@ -17,7 +17,6 @@ const NoficationDiv = styled.div`
   color: ${props=>props.theme.textColor};
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
-  
   height: 93vh;
 	min-height: 93vh;
   display: flex;
@@ -26,13 +25,13 @@ const NoficationDiv = styled.div`
 	flex-direction: column;
 	position: relative;
   overflow-y: scroll;
-  margin: 0 auto; /* 가로 가운데 정렬을 위해 추가 */
+  margin: 50px auto; 
 `;
 
 const ScrollBar = styled.div`
 	width: 100%;
-	height: 50vh;
-	margin-top: -20px;
+	height: 100vh;
+
 	::-webkit-scrollbar {
     width: 8px;  /* 스크롤바의 너비 */
 		
