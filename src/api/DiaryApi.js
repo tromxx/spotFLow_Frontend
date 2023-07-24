@@ -34,8 +34,11 @@ const DiaryApi = {
     }
     console.log(comment)
     return await axios.post(DOMAIN + "/diary/comment", comment);
-  }
-  ,
+  },
+  deleteComment : async (comment) => {
+    console.log(comment)
+    return await axios.delete(DOMAIN + "/diary/comment/" + comment);
+  },
   // diaryMyPage : async () => {
   //   return await axios.post(DOMAIN + "diary/mypage", )
   // }

@@ -76,7 +76,7 @@ export const DiarySwiper = () => {
                       <p>{diary.content}</p>
                     </SC.DiaryBox>
                     <SC.TimeLineBox>
-                      <span>TimeLine</span>
+                      <span>Flow</span>
                       <p>{e.content}</p>
                     </SC.TimeLineBox>
                   </SC.Overlay>
