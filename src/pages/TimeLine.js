@@ -592,7 +592,7 @@ const handleUploadImage = async () => {
     const contentRef = useRef();
     const [data,setData] = useState({
       image : "",
-      email : "sungkeno3o@gmail.com",
+      email : "whddus426@gmail.com",
       content : "" ,
       lat : null ,
       lng : null , 

@@ -5,10 +5,7 @@ import avatar from "../images/default_avatar.png"
 import { BsPeople } from "react-icons/bs";
 import Slider from "../components/Slider";
 import { Navigate, useNavigate } from 'react-router-dom';
-
-
 import { UserContext} from '../context/UserStore';
-
 import { useEffect ,  useContext } from "react";
 
 

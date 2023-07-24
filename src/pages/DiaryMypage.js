@@ -8,8 +8,9 @@ import { BsTrash } from "react-icons/bs";
 import { BsListUl } from "react-icons/bs";
 import { Navigate, useNavigate } from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
-import { useEffect } from "react";
 import axios from "axios";
+import { UserContext} from '../context/UserStore';
+import { useEffect , useContext } from "react";
 
 
 
@@ -86,9 +87,9 @@ const Container = styled.div`
         border: solid 1px #00b4d8; 
         background-color: white;
         color: black;
-        width: 70px;
+        width: 50px;
         height: 40px;
-        font-size: 1rem;
+        font-size: 0.8rem;
         border-radius: 10px;
         text-align: center;
         font-family: 'Black Han Sans', sans-serif;
@@ -154,6 +155,8 @@ const DiaryMypagediv = styled.div`
 
 
     const DiaryMypage = () => {
+
+    const user = useContext(UserContext);
     
     const [trigger, setTrigger] = useState(false);
 
@@ -200,7 +203,7 @@ const DiaryMypagediv = styled.div`
                     <div className="namebarleft">
                     <div className="id">
                         <img className="img" src={avatar} alt="" />
-                        <h6>whddus425</h6>
+                        <h6>{user.nickname}</h6>
                      </div>
                 
                  </div>

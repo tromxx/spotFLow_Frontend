@@ -12,6 +12,9 @@ const DiaryCatediv = styled.div`
         grid-template-columns: 1fr 1fr ;
     } */
     
+  .container::-webkit-scrollbar {
+      display: none;
+  }
     
 
   .container{
