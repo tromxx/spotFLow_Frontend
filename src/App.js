@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Diary from './pages/Diary';
 import TimeLine from './pages/TimeLine';
-import HeaderBarNavi from './components/HeaderBarNavi';
+import HeaderBarNavi from './components/Common/HeaderBarNavi';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
@@ -16,6 +16,7 @@ import MyFlow from './pages/MyFlow';
 import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
 import { useLayoutEffect, useState } from 'react';
+import ChangeInfo from './pages/ChangeInfo';
 import Nofication from './pages/Nofication';
 
 function App() {
@@ -39,11 +40,11 @@ function App() {
         <ThemeProvider>
           <Routes>
             <Route path="/" element={<>
-                <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <Home/>
               </>} />
             <Route path="/login" element={<>
-             
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Login />
             </>} />
             <Route path="/signup" element={<>
@@ -53,6 +54,10 @@ function App() {
             <Route path="/findpwemail" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <FindPwEmail />
+            </>} />
+            <Route path="/changeinfo" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <ChangeInfo />
             </>} />
             <Route path="/diary" element={<>
               <HeaderBarNavi />
@@ -70,10 +75,15 @@ function App() {
               <HeaderBarNavi />
               <DiaryCreate />
             </>} />
-            <Route path="/flow" element={<TimeLine />} />
+            <Route path="/flow" element={
+              <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <TimeLine />
+              </>
+            }/>
             <Route path="/diary/detail/:id" element={
               <>
-                <HeaderBarNavi/>
+                <HeaderBarNavi />
                 <DiarySwiper/>
               </>
             }/>

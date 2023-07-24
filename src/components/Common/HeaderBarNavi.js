@@ -1,16 +1,11 @@
 import { styled } from 'styled-components';
-import Logo from '../images/logo.png';
+import Logo from '../../images/logo.png';
 import { useNavigate } from "react-router";
-import DarkLogo from "../images/DarkLogo.png"
-import { useTheme } from "../context/themeProvider";
+import DarkLogo from "../../images/DarkLogo.png"
+import { useTheme } from "../../context/themeProvider";
 import { useContext } from "react";
-import { UserContext } from "../context/UserStore";
+import { UserContext } from "../../context/UserStore";
 import {BiExit} from 'react-icons/bi'
-import { useEffect } from "react";
-import CustomerApi from '../api/CustomerApi'; 
-import { VscBellDot, VscBell } from 'react-icons/vsc'
-import { useState } from 'react';
-import {AiFillBell} from 'react-icons/ai'
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -24,6 +19,7 @@ const HeaderBarDiv = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   transition: background-color 0.5s ease;
+  position: absolute;
   z-index: 5;
 `;
 
@@ -51,13 +47,6 @@ const LoggedInDiv = styled.div`
   align-items: center;
   padding-right: 65px;
   gap: 15px;
-
-  .nofi {
-    margin-right: 50px;
-    background-color: transparent;
-    border: none;
-    margin-top: 10px;
-  }
 `;
 
 const Exit = styled(BiExit)`
@@ -68,53 +57,13 @@ const Exit = styled(BiExit)`
   }
 `;
 
-const NofiOn = styled(VscBellDot)`
-  width: 30px;
-  height: 30px;
-  color : ${props=>props.theme.textColor};
-  &:hover{
-    color: var(--lightblue);
-  }
-`;
-
-const NofiNone = styled(VscBell)`
-  width: 30px;
-  height: 30px;
-  color : ${props=>props.theme.textColor};
-  &:hover{
-    color: var(--lightblue);
-  }
-`;
-
 
 const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const [isNewNofi, setIsNewNofi] = useState("");
-  const{setEmail, nickname, setNickname,setProfilePic,setStatMsg, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    console.log(token);
-    const getCustomerInfo = async () => {
-      if (token != null) {
-        try {
-          const response = await CustomerApi.getCustomerInfo(token);
-          setEmail(response.data.email);
-          setNickname(response.data.nickName);
-          setProfilePic(response.data.profilePic);
-          setStatMsg(response.data.statMsg);
-          setIsLoggedIn(true);
-        } catch (error) {
-          throw error;
-        }
-      }else{
-        return null;
-      }
-    };
-    getCustomerInfo();
-  }, []);
 
   const logOut = () =>{
     localStorage.clear();
@@ -129,16 +78,13 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
-              {isNewNofi !== "" ? <NofiOn /> : <NofiNone />}
-          </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>
         </LoggedInDiv>
         :
         <LoggedOutDiv>
           <p onClick={()=>navigate("/login")}>Login</p>
-          <p>/</p>
+          <p>|</p>
           <p onClick={()=>navigate("/signup")}>Sign up</p>
         </LoggedOutDiv>
       }

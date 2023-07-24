@@ -167,7 +167,6 @@ const Container = styled.div`
     font-size: 12px;
   }
   @media(max-width : 844px){
-    
     .readContainer{
       width: 310px;
     } 

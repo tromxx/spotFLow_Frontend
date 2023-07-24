@@ -1,38 +1,69 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
-import MyFlow from './MyFlow'
-import SlideDiv from '../components/SlideDiv'
-import MyPage from '../components/MyPage'
-import Following from '../components/Following'
-import { useNavigate } from 'react-router-dom';
+import SlideDiv from '../components/Home/SlideDiv'
+import MyPage from '../components/Home/MyPage'
+import CustomerApi from '../api/CustomerApi';
+import { UserContext } from '../context/UserStore';
+import Follow from '../components/Home/Follow';
+
 const MenuButton = styled(AiOutlineMenu)`
   z-index: 2;
   position: absolute;
-  top: 8vh;
-  left: 30px;
+  top: 8.5%;
+  left: 5%;
   width: 40px;
   height: 40px;
+  @media (max-width : 844px) {
+    width: 30px;
+    height: 30px;
+    top: 8%;
+    left: 10%;
+  }
 `;
 
 
 const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
-  const navigate = useNavigate();
+
+  const{setEmail, setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,setIsLoggedIn} = useContext(UserContext);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const getCustomerInfo = async () => {
+      if (token != null) {
+        try {
+          const response = await CustomerApi.getCustomerInfo(token);
+          setEmail(response.data.customer.email);
+          setNickname(response.data.customer.nickName);
+          setProfilePic(response.data.customer.profilePic);
+          setStatMsg(response.data.customer.statMsg);
+          setFollower(response.data.follower.follower);
+          setFollowing(response.data.follower.following);
+          setIsLoggedIn(true);
+        } catch (error) {
+          localStorage.clear();
+        }
+      }else{
+        return null;
+      }
+    };
+    getCustomerInfo();
+  }, [setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
+
   const renderPage = () => {
     switch (currentPage) {
       case 'MyPage':
         return <MyPage  
-          goToMyFlow={()=>setCurrentPage('MyFlow')} 
-          onClose={()=>setActivate(false)}/>;
-        case 'MyFlow':
-          return <MyFlow 
-            goToMyPage={()=>setCurrentPage('MyPage')} 
-            onClose={()=>setActivate(false)} />;
-      case 'Following' :
-        return <Following/>;
+          onClose={()=>setActivate(false) }
+          setCurrentPage={()=>setCurrentPage('Follow')}
+          />;
+          case 'Follow' :
+            return <Follow
+            setCurrentPage={()=>setCurrentPage('MyPage')}
+        />;
       default:
         return null;
     }

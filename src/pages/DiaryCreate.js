@@ -80,7 +80,6 @@ const Main = styled.div`
 
 
   .Container {
-
     //  border : 1px solid ;
     height: 90%;
     margin: 30px;
@@ -224,10 +223,12 @@ const Main = styled.div`
 `
 
 const Container = styled.div`
+
   background-color: #F9F6F7;
   ${centerAlign}
   flex-direction: column;
   position: relative;
+    top: 50px;
  // top: 51px;
   // border : solid 1px black;
   width: 100vw;

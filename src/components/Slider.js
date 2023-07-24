@@ -1,8 +1,11 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
+
+import { RiHeart3Fill } from "react-icons/ri";
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
+import DiaryApi from '../api/DiaryApi';
 // import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const Sliderheader = styled.div`
@@ -35,6 +38,10 @@ const Sliderheader = styled.div`
 `;
 
 const Wrap = styled.div`
+    * {
+        font-family: 'Prompt', sans-serif;
+        font-style: var(--kfont);
+    }
     border-top:5px solid lightblue;
     position: relative;
     padding-bottom: 30px;
@@ -77,20 +84,110 @@ const Wrap = styled.div`
 
 // 슬라이딩 개별 아이템 스타일링
 const SlickItems = styled.div`
-    margin-top:20px;
+      position: relative; 
+    width: 50%;  // Change this line
+    height: 100%;
+    text-align: center;
+
+    .item {
+        width: 95%;
+        height:100%;
+        position: relative;
+    }
+
+    
+
+    .item-header {
+        display:flex;
+        justify-content:start;
+        flex-direction: row;
+        width: 100%;
+        height: 20px;
+        position: absolute;
+        top:0px;
+        right: -10px;
+        z-index:1000;
+         img {
+            position:relative;
+            top:5px;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+         }
+         .timeline {
+            display:flex;
+            justify-content:center;
+            position: absolute;
+            top:15px;
+            right: 20px;
+            z-index: 10000;
+            width: 30px;
+            height:20px;
+
+            .timeline img {
+                background-color: white;
+                border-radius:15px;
+            }
+
+            button {
+                width:10px;
+                height:10px;
+                margin:2px;
+                border-radius:100%;
+                border:none;
+                background-color: rgb(255,255,255,0.8)
+            }
+            button:hover {
+                background-color: black;
+            }
+         }
+    }
+
+   // margin-top:10px;
     color: ${props=>props.theme.textColor};
     
-    position: relative; // 추가
-    width: 200%;    
-    height: 150%;
-    text-align: center;
+   
 
     img {
         /* max-width: 250px */
-        width: 190px;
-        height: 120px;
+        margin: 10px;
+        margin-bottom:0px;
+        width: 100%;
+        height: 100%;
         vertical-align: top;
+
     }
+
+    .item-bottom {
+        position: absolute;
+        bottom:0;
+        display:flex;
+        justify-content:start;
+        align-items:center;
+        margin:0px;
+        margin-left:10px;
+        width: 99%;
+        height: 40px;
+     //   border:1px solid;
+
+            .like {
+                display:flex;
+                margin:10px;   
+                flex-direction:row;
+                justify-content: center;
+                align-items:center;
+                background-color: white;
+                color: #FF6F91;
+                 /* background-color: rgb(117 190 218 / 0.2);
+                color:white; */
+                font-size:12px;
+                border-radius: 15px;
+                width: 45px;
+                height:20px;
+                
+            }
+    }
+    
 `;
 //     width: 100%;    
 //     height: 200px;
@@ -181,47 +278,13 @@ const Paging = styled.span`
     filter: grayscale(1);
 `;
 
-// 4. 샘플이미지
-const images = [
-    {
-        src: "https://i.pinimg.com/474x/6d/23/89/6d2389ac0bbd5afe74a2633b872d14fc.jpg",
-        title: "역삼동"
-    },
-    {
-        src: "https://i.pinimg.com/474x/b3/91/3e/b3913eb2cfef207381eb28d8033229ba.jpg",
-        title: "강남역"
-    },
-    {
-        src: "https://i.pinimg.com/474x/39/03/d4/3903d4a7dfd82def0c1a825416a69853.jpg",
-        title: "삼전동"
-    },
-    {
-        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212724_pacwfbiz.jpg",
-        title: "롯데월드"
-    },
-    {
-        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212614_fawslbwd.jpg",
-        title: "청계산"
-    },
-    {
-        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212649_esiekzxf.jpg",
-        title: "우주"
-    },
-    {
-        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212707_zcrkccgp.jpg",
-        title: "용인"
-    },
-    {
-        src: "https://www.artinsight.co.kr/data/tmp/1910/20191029212724_pacwfbiz.jpg",
-        title: "구리시"
-    },
-];
 
 
 
 const MainSlider = (props) => {
 
-    const [isMobile, setIsMobile] = useState(5);
+    const [isMobile, setIsMobile] = useState(3);
+    const [data,setData] = useState([]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -236,7 +299,7 @@ const MainSlider = (props) => {
             setIsMobile(2);
           } 
           else  if (window.innerWidth > 1308) {
-            setIsMobile(5);
+            setIsMobile(3);
           } 
 
           
@@ -252,6 +315,22 @@ const MainSlider = (props) => {
         };
       }, []);
 
+
+      useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await DiaryApi.findMyDiary("test@example.com");
+                if(res) {
+                    
+                    setData(res.data.filter(e=> e.delete === false ));
+                }
+            } catch (error) {
+                console.error("데이터 불러오기실패 : ", error);
+            }
+        };
+        fetchData();
+        console.log(data);
+    }, []); 
 
     
     const navi = useNavigate();
@@ -275,10 +354,10 @@ const MainSlider = (props) => {
         // 2. custom pagination을 만듭니다.
         // i(index)를 통해 샘플이미지에서 동일한 이미지를 가져옵니다.
         customPaging: function(i) {
-            const imgSrc = images[i].src;
+           // const imgSrc = images[i].src;
             return (
                 <PagingAnchor>
-                    <Paging src={imgSrc} />
+                    <Paging src={data.timeLineList[0].image} />
                 </PagingAnchor>
             );
         },
@@ -287,6 +366,8 @@ const MainSlider = (props) => {
 	// 5. custom arrows 동작 함수를 만듭니다.
     const previous = useCallback(() => slickRef.current.slickPrev(), []);
     const next = useCallback(() => slickRef.current.slickNext(), []);
+
+    const [selectedImageKey, setSelectedImageKey] = useState(0);
 
     return (
         <>
@@ -302,12 +383,34 @@ const MainSlider = (props) => {
                 <Slick ref={slickRef} {...settings}>
                     
                 
-                    {images.map((v, i) => {
+                    {data.map((v, i) => {
                         return (
 
-                            <SlickItems key={`${v.title}_${i}`}>     
-                                <img src={v.src}  />
-                                <h2 style={{fontSize:"15px", color:"black", zIndex:"2"}}>{v.title}</h2>      
+                            <SlickItems key={`${v.title}_${i}`}> 
+                                <div className='item'> 
+                                       <div className='item-header'>
+                                            <img src={v.customer.profilePic} alt="" />
+                                             <p>
+                                                {v.customer.nickName}
+                                            </p>   
+
+                                                <div className='timeline'>
+                                                { v.timeLineList.map((e,index)=> 
+                                                    {   
+                                                        return(
+                                                        // <img className='timeline-img' style={{position:"relative",right:"0", width:"30px",height:"30px"}} src={e.image}></img>
+                                                            <button onClick={()=> setSelectedImageKey(index) }></button>
+                                                    )}
+                                                )    
+                                                }
+                                                </div>
+                                        </div>
+                                        <img  src={ v.timeLineList[selectedImageKey].image }/>
+                                        <div className='item-bottom' style={{fontSize:"15px", color:"black", zIndex:"2"}}>
+                                            <div className='like'><RiHeart3Fill style={{marginRight:"3px"}}/>{v.like}</div>
+                                            {v.title}
+                                        </div>      
+                                </div>
                             </SlickItems>
 
                         )

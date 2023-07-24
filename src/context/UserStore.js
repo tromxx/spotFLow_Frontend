@@ -6,11 +6,13 @@ const UserStore = (props) => {
   const [nickname, setNickname] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [statMsg , setStatMsg] = useState("");
+  const [follower, setFollower] = useState();
+  const [following, setFollowing] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
   return (
-    <UserContext.Provider value={{ email,setEmail, nickname, setNickname, profilePic,setProfilePic, statMsg, setStatMsg, isLoggedIn, setIsLoggedIn}}>
+    <UserContext.Provider value={{ email,setEmail, nickname, setNickname, profilePic,setProfilePic, statMsg, setStatMsg, isLoggedIn,follower, setFollower, following, setFollowing, setIsLoggedIn}}>
       {props.children}
     </UserContext.Provider>
   );
