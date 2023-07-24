@@ -15,7 +15,8 @@ const Sliderheader = styled.div`
     width: 100%;
     height: 30px;
     /* border: 1px solid; */
-    border-top: 10px solid #00b4d8;
+    background-color: white;
+    border-top: 5px solid #2DCDDF ;
 
 
      .left {
@@ -42,7 +43,7 @@ const Wrap = styled.div`
         font-family: 'Prompt', sans-serif;
         font-style: var(--kfont);
     }
-    border-top:5px solid lightblue;
+    border-top:1px solid #2DCDDF;
     position: relative;
     padding-bottom: 30px;
     overflow: hidden;
@@ -281,7 +282,7 @@ const Paging = styled.span`
 
 
 
-const MainSlider = ({setName,name,setIsAll,setIsType}) => {
+const MainSlider = ({setName,names,setIsAll,setIsType}) => {
 
     const [isMobile, setIsMobile] = useState(3);
     const [data,setData] = useState([]);
@@ -375,7 +376,7 @@ const MainSlider = ({setName,name,setIsAll,setIsType}) => {
         <>
             <Sliderheader>
                 <div className='left'>
-                    <div>{name}</div>           
+                    <div>{names}</div>           
                 </div>
                 <div className='right'>
                     <div onClick={()=>{
