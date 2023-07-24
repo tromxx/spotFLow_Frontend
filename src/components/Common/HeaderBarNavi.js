@@ -6,6 +6,8 @@ import { useTheme } from "../../context/themeProvider";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
 import {BiExit} from 'react-icons/bi'
+import { useState } from 'react';
+import { VscBellDot, VscBell } from 'react-icons/vsc'
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -47,6 +49,13 @@ const LoggedInDiv = styled.div`
   align-items: center;
   padding-right: 65px;
   gap: 15px;
+
+  .nofi {
+    margin-right: 50px;
+    background-color: transparent;
+    border: none;
+    margin-top: 10px;
+  }
 `;
 
 const Exit = styled(BiExit)`
@@ -57,11 +66,30 @@ const Exit = styled(BiExit)`
   }
 `;
 
+const NofiOn = styled(VscBellDot)`
+  width: 30px;
+  height: 30px;
+  color : ${props=>props.theme.textColor};
+  &:hover{
+    color: var(--lightblue);
+  }
+`;
+
+const NofiNone = styled(VscBell)`
+  width: 30px;
+  height: 30px;
+  color : ${props=>props.theme.textColor};
+  &:hover{
+    color: var(--lightblue);
+  }
+`;
+
 
 const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
+  const [isNewNofi, setIsNewNofi] = useState("");
   const{nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
 
 
@@ -78,6 +106,9 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
+          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
+              {isNewNofi !== "" ? <NofiOn /> : <NofiNone />}
+          </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>
         </LoggedInDiv>
