@@ -6,7 +6,9 @@ import { BsPeople } from "react-icons/bs";
 import Slider from "../components/Slider";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { UserContext} from '../context/UserStore';
-import { useEffect ,  useContext } from "react";
+
+import { useEffect ,useState  ,useContext } from "react";
+import DiaryCategory from "./DiaryCategory";
 
 
 
@@ -101,7 +103,10 @@ const DiaryDiv = styled.div`
 `;
 
 
+
 const Diary = () =>{
+
+    const [isAll , setIsAll] = useState(true);
 
     const user = useContext(UserContext);
     
@@ -112,8 +117,14 @@ const Diary = () =>{
             console.log("로그인이 안되었어요");
         }
     })
+          const [name,setName] = useState("");
+          const [isType, setIsType] = useState(true);
+        
 
     return(
+        <>
+        {
+        isAll ? 
         <Container>
             <header>
                 <div className="namebar">
@@ -142,12 +153,20 @@ const Diary = () =>{
                 {/* <DiaryLayout name={"Popular"}/>
                 <DiaryLayout name={"Friend"}/>
                 <DiaryLayout name={"Local live"}/>  */}
-                <Slider name={"Popular"}/>
-                <Slider name={"Friend"}/>
+                <Slider names={"Popular"} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll}/>
+                <Slider names={"Friend"} setName={setName} setIsType={()=>setIsType(false)} setIsAll={setIsAll}/>
                 {/* <Slider name={"Local live"}/> */}
             </DiaryDiv>
             </body>
         </Container>
+        : 
+        <>
+        { isType ? <DiaryCategory name={"Popular"} setIsAll={setIsAll}/> :  
+                    <DiaryCategory name={"Friend"} setIsAll={setIsAll}/>
+        }
+        </>
+        }
+        </>
         
     );
 };

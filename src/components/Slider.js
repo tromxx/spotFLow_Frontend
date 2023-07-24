@@ -47,8 +47,8 @@ const Wrap = styled.div`
     padding-bottom: 30px;
     overflow: hidden;
     width: 100%;
-    height: 33.3%;
-    margin:0px;
+    height: 45%;
+    margin:10px;
     margin-top: 0px;
     
 	
@@ -86,7 +86,7 @@ const Wrap = styled.div`
 const SlickItems = styled.div`
       position: relative; 
     width: 50%;  // Change this line
-    height: 100%;
+    height: 250px;
     text-align: center;
 
     .item {
@@ -281,10 +281,12 @@ const Paging = styled.span`
 
 
 
-const MainSlider = (props) => {
+const MainSlider = ({setName,name,setIsAll,setIsType}) => {
 
     const [isMobile, setIsMobile] = useState(3);
     const [data,setData] = useState([]);
+
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -373,10 +375,13 @@ const MainSlider = (props) => {
         <>
             <Sliderheader>
                 <div className='left'>
-                    <div> {props.name}</div>           
+                    <div>{name}</div>           
                 </div>
                 <div className='right'>
-                    <div onClick={()=>{navi("/diaryCategory")}}>See All</div>
+                    <div onClick={()=>{
+                            setIsAll(false);
+                            setIsType();
+                         }}>See All</div>
                 </div>
             </Sliderheader>
             <Wrap>
@@ -386,7 +391,7 @@ const MainSlider = (props) => {
                     {data.map((v, i) => {
                         return (
 
-                            <SlickItems key={`${v.title}_${i}`}> 
+                            <SlickItems onClick={()=>{ navi(`/diary/detail/${v.id}`)}} key={`${v.title}_${i}`}> 
                                 <div className='item'> 
                                        <div className='item-header'>
                                             <img src={v.customer.profilePic} alt="" />
@@ -416,7 +421,7 @@ const MainSlider = (props) => {
                         )
                     })}
                 </Slick>
-                <>
+                {/* <>
                     <PrevButton onClick={previous}>
                         <GrFormPreviousLink style={{fontSize:"30px" }}/>
                             <span className="hidden"></span>
@@ -426,7 +431,7 @@ const MainSlider = (props) => {
                         <GrFormNextLink  style={{fontSize:"30px"}}/>
                         <span className="hidden"></span>
                     </NextButton>
-                </>
+                </> */}
             </Wrap>
         </>
     );

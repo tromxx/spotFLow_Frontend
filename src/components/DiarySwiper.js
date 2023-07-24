@@ -6,6 +6,7 @@ import {BsChatDots} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import {useParams} from "react-router-dom";
 import diaryApi from "../api/DiaryApi";
+import CustomerApi from "../api/CustomerApi";
 
 export const DiarySwiper = () => {
   const {id} = useParams();
@@ -50,8 +51,38 @@ export const DiarySwiper = () => {
     else setOverlay(0);
   }
 
+  const [email, setEmail] = useState("");
+  const [nickName, setNickname] = useState("");
+  const [profilePic, setProfilePic] = useState("");
+  const [statMsg, setStatMsg] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    DiaryInit().then(r => console.log(r));
+    DiaryInit();
+    // 이부분 localStorage 에서 토큰 뺴오기
+    const token = localStorage.getItem('authToken');
+    console.log(token);
+    const getCustomerInfo = async () => {
+      if (token != null) {
+        try {
+          const response = await CustomerApi.getCustomerInfo(token);
+          setEmail(response.data.email);
+          setNickname(response.data.nickName);
+          setProfilePic(response.data.profilePic);
+          setStatMsg(response.data.statMsg);
+          setIsLoggedIn(true);
+        } catch (error) {
+          throw error;
+        }
+      }else{
+        return null;
+      }
+      console.log(email)
+      console.log(nickName)
+      console.log(profilePic)
+      console.log(statMsg)
+      console.log(isLoggedIn)
+    };
+    getCustomerInfo();
   }, [count]);
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>
@@ -76,7 +107,7 @@ export const DiarySwiper = () => {
                       <p>{diary.content}</p>
                     </SC.DiaryBox>
                     <SC.TimeLineBox>
-                      <span>TimeLine</span>
+                      <span>Flow</span>
                       <p>{e.content}</p>
                     </SC.TimeLineBox>
                   </SC.Overlay>

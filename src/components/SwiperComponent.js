@@ -43,7 +43,7 @@ export const TimeLine = styled(SwiperSlide)`
 `;
 export const Container = styled.div`
   width: 100vw;
-  height: 93vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   /* background-color: gray; */
@@ -86,7 +86,7 @@ export const Btn = styled.button`
 export const Overlay = styled.div`
   width: 100%;
   height: 100%;
-  top: 0;
+  top: 7vh;
   right: 0;
   background-color: rgb(0, 0, 0, 30%);
   position: absolute;
@@ -233,6 +233,7 @@ const CommentDetail = styled.div`
   border: .2px solid rgb(20, 20, 20, 30%);
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 
   .comment-info {
     display: flex;
@@ -251,7 +252,6 @@ const CommentDetail = styled.div`
   .time {
     font-size: .4rem;
     color: rgb(0, 0, 0, 30%);
-    margin-left: auto;
     margin-right: 15px;
   }
 
@@ -263,22 +263,33 @@ const CommentDetail = styled.div`
       width: 220px;
     }
   }
+
+  .delete {
+    margin-left: auto;
+    font-size: .5rem;
+    cursor: pointer;
+  }
+
+  .delete .update:hover {
+    color: #00b4d8;
+  }
 `;
 export const Comment = (props) => {
   const [text, setText] = useState("");
+  const [token, setToken] = useState("");
 
   const onChangeComment = (e) => {
     setText(e.target.value);
   }
   const Send = async () => {
     const request = {
-      diary : props.diary,
-      comment : text,
-      email : UserStore.email
+      diary: props.diary,
+      comment: text,
+      email: "user3@example.com"
     }
     await diaryApi.sendComment(request);
     await setText("");
-    await props.setCount(props.count+1);
+    await props.setCount(props.count + 1);
   }
 
   const BlockBubbling = (e) => {
@@ -289,12 +300,46 @@ export const Comment = (props) => {
     moment.locale('ko');
     return moment(timeString).format('YYYY년 MM월 DD일 A h시 mm분');
   };
+
+
+  function deleteComment(e) {
+    diaryApi.deleteComment(e.id);
+    window.location.replace("/diary/detail/" + props.diary);
+  }
+
+  // => 댓글 수정하는 법인데 할게 너무 많아서 일단 킵
+  //
+  // const [upComm, setUpComm] = useState(0);
+  //
+  // function updateComment() {
+  //   if (upComm === 0) setUpComm(1);
+  //   else setUpComm(0);
+  // }
+  //
+  // const [updateText, setUpText] = useState("");
+  // function onChangeUpText (e) {
+  //   setUpText(e.target.value);
+  // }
+  // function done(e) {
+  //   const comment = {
+  //     comment: e.id,
+  //     content: updateText
+  //   }
+  //   diaryApi.updateComment(comment);
+  //   setUpComm(0);
+  // }
+
   const [array, setArray] = useState(null);
 
   useEffect(() => {
+    // setToken(localStorage.getItem('authToken'));
+    // console.log(token);
     setArray(props.commentList)
-    console.log(props.count)
-  }, [props.count]);
+    console.log(props.commentList)
+    // console.log("upComm" + upComm)
+  }, [props.count, token]);
+
+
   return (
     <CommentBox onClick={(event) => BlockBubbling(event)}>
 
@@ -305,7 +350,7 @@ export const Comment = (props) => {
         </div>
         <input type="text" id="comment" value={text} onChange={onChangeComment}/>
         <button className="btn-send">
-          <BsSend className="send" onClick={()=>Send()}/>
+          <BsSend className="send" onClick={() => Send()}/>
         </button>
       </div>
 
@@ -317,20 +362,42 @@ export const Comment = (props) => {
       {/* 댓글 목록 */}
       <div className="content">
         {/* 댓글 낱개 디자인 */}
-        {array && array.map(e => (<CommentDetail>
-            <div className="profile">
-              <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
-            </div>
-            <div className="comment-info">
-              <div className="subtitle">
-                <span className="name">{e.customer.nickName}</span>
+        {array && array.map(e => (
+          !e.delete && <CommentDetail>
+          <div className="profile">
+            <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
+          </div>
+          <div className="comment-info">
+            <div className="subtitle">
+              <span className="name">{e.customer.nickName}</span>
+              <div className="delete">
                 <span className="time">{timeData(e.joinDate)}</span>
+
+                {/*{upComm === 0 ?*/}
+                {/*  <>*/}
+                    {/*<span className="update" onClick={updateComment}>수정</span>*/}
+                    {/*/*/}
+                    <span className="update" onClick={()=>deleteComment(e)}>삭제</span>
+                {/*  </>*/}
+                {/*  :*/}
+                {/*  <span className="update" onClick={()=>done(e)}>완료</span>*/}
+                {/*}*/}
               </div>
-              <span className="comment">
-                {e.content}
-              </span>
             </div>
-          </CommentDetail>))}
+            {/*{upComm === 0 ?*/}
+              <>
+                <span className="comment">
+                {e.content}
+                </span>
+              </>
+            {/*  :*/}
+            {/*  <>*/}
+            {/*    <textarea value={updateText} onChange={onChangeUpText}></textarea>*/}
+            {/*  </>*/}
+            {/*}*/}
+          </div>
+
+        </CommentDetail>))}
       </div>
 
     </CommentBox>)
