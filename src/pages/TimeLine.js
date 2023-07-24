@@ -7,6 +7,8 @@ import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus} from "react-icons/ai";
 import {  SlLocationPin } from "react-icons/sl"
 import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
 
+import {  BiCurrentLocation } from 'react-icons/bi';
+
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
 
@@ -22,7 +24,12 @@ import  { UserContext } from "../context/UserStore";
 import { useContext } from "react";
 
 import { storage } from '../api/FirebaseApi';  
+import ToTheTop from "../utils/ToTheTop";
 
+
+import { Map } from "react-kakao-maps-sdk";
+import LocationModal from "../utils/LocationModal";
+import useCurrentLocation from "../utils/Location";
 
 const ItemGrid = styled.div`
   min-height: 80vh;
@@ -239,7 +246,12 @@ transition: all 0.5s ease;
   border : solid 0.1px #EAEAEA;
   border-radius: 1px;
   background-color: white;
+}
 
+.item-header-user {
+  position:relative;
+  top:  8px;
+  font-size:12px;
 }
 
 position: relative;
@@ -329,10 +341,10 @@ ${(props) =>
     props.issort ==="true"
       ? `
     width: auto%;
-    height: 150px;
+    height: 230px;
     .item-header {
      
-      height: 20%;
+      height: 15%;
     }
  
     `
@@ -340,9 +352,18 @@ ${(props) =>
     width: auto%;
     height: 450px;
     .item-header {
+       height: 60px;
 
-       height: 50px;
+       .item-header-user {
+          font-size: 12px;
+          top : 0px;
+       }
+       .item-header-time {
+          position : relative;
+          bottom : 15px;
+       }
     }
+ 
     `}
 }
 ;
@@ -413,13 +434,15 @@ const TimeLine = () => {
 const [modalData, setModalData] = useState({ title: '', content: '' , name : '' , date:'' , profile: ''});      
       
 
+const closeModal = () => setIsModalOpen(false);
+
 
     // 모달 함수 
     const [isModalOpen, setIsModalOpen] = useState(false);
   
     //모달제어
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
 
   const  node = useRef(null); // 타임라인 모달에 전달해줄 ref
 
@@ -646,26 +669,26 @@ const handlePostClick = async (postId) => {
     fetchMoreData(items[items.length-1]?.id);
   }, [page])
 
-  const obsHandler = ((entries) => { // Observer callback function
+  const obsHandler = ((entries) => { // 옵저버 콜백함수 최하단 스크롤 확인하는 용도
     const target = entries[0];
-    if(!endRef.current && target.isIntersecting && preventRef.current){ // Observer repeat execution prevention
-      preventRef.current = false; // Observer repeat execution prevention
+    if(!endRef.current && target.isIntersecting && preventRef.current){ 
+      preventRef.current = false; 
       setPage(prev => prev +1);
     }
   })
 
-  const fetchMoreData = useCallback(async(lastId) => { // Get more posts  
+  const fetchMoreData = useCallback(async(lastId) => { // 포스트 불러오는 함수  
     setIsLoading(true);
   try {
     const res = await userTimelineApi.getUserTimelineList(lastId);
-    if(res.data.length === 0){ // If there is no more posts
+    if(res.data.length === 0){ // 포스트가 더이상 없을시 
       endRef.current = true;
     }
     setTimeout(() => {
-      setItems(prevItems => [...prevItems, ...res.data]); // Add new items to the list
-      setIsLoading(false); // Stop loading after 1.5 seconds
-      preventRef.current = true; // Allow observer to fetch more data again
-    }, 1500);
+      setItems(prevItems => [...prevItems, ...res.data]); // 가져온 데이터를 기존데이터에 추가
+      setIsLoading(false); // 로딩 0.2초 지연 
+      preventRef.current = true; // 옵저버에게 데이터를 더가져오도록 허용시킴
+    }, 200);
   } catch (e) {
     setIsLoading(false);
     console.error(e);
@@ -682,11 +705,9 @@ const handlePostClick = async (postId) => {
         setItems(res.data);
     }
   
-    const handleLocationModal = () => {
-      return
-    }
+   
 
-    const [locationValue, setLocationValue] = useState('');
+
 
     // 검색 엔터키 입력하면 검색한결과를 호출  
     const activeEnter = (e) => {
@@ -695,12 +716,70 @@ const handlePostClick = async (postId) => {
       }
     }
 
+
+    // 마이플로우 이동버튼
     const moveMyFlow = () => {
       if(!user.isLoggedIn) {
           alert("로그인이 필요한 서비스입니다.")
          return 
       } Navi('/myflow');
     }
+
+
+
+  
+    
+  // 토글 여부를 결정하는 state 선언
+  const [toggleBtn, setToggleBtn] = useState(true);
+
+  // window 객체에서 scrollY 값을 받아옴
+  // 어느정도 스크롤이 된건지 판단 후, 토글 여부 결정
+  const handleScroll = () => {
+    const { scrollY } = window;
+
+    scrollY > 200 ? setToggleBtn(true) : setToggleBtn(false);
+  };
+
+  // scroll 이벤트 발생 시 이를 감지하고 handleScroll 함수를 실행
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // 버튼 클릭 시 스크롤을 맨 위로 올려주는 함수
+  const goToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+
+
+
+  // 유저 위치 찾기
+  const [place, setPlace] = useState("");
+	const [locationModalOpen, setLocationModalOpen] = useState(false);
+	const { location, getCurrentLocation } = useCurrentLocation();
+	const [locationValue, setLocationValue] = useState("");
+	const [state, setState] = useState({
+		// 지도의 초기 위치
+		center: { lat: 37.497931, lng: 127.027838 },
+		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
+		isPanto: false,
+	  })
+		
+	const handleLocationModal = () => {
+		setLocationModalOpen(!locationModalOpen);
+	}
+
+	const locationConfirm = () => {
+		setLocationValue(place);
+		setLocationModalOpen(false);
+	}
+
+	
+
   
   return (
     <>      
@@ -746,6 +825,7 @@ const handlePostClick = async (postId) => {
         </MyFlowWrapper>
       }
       <Container   >  
+        
         <Header>
           <HeaderList>
             <HeaderItemLeft>
@@ -812,7 +892,7 @@ const handlePostClick = async (postId) => {
             <ItemGrid issort={issort.toString()}>
               { 
                 items.map((e , index) =>
-                    <Item issort={issort.toString()} key={e.id} onClick={()=>{
+                    <Item issort={issort.toString()} key={index} onClick={()=>{
                       if(!isCreate){
                         handlePostClick(e.id);
                         setDiffHours(calculateTime(e.updateTime));
@@ -839,8 +919,8 @@ const handlePostClick = async (postId) => {
                             {position:"relative" ,margin:"0px",height:"100%", display:"flex", flexDirection:"column",alignItems:"center"}
                             : {position:"relative" ,margin:"10px",marginTop:"20px",height:"65%", display:"flex", flexDirection:"column",alignItems:"center"}
                           }>
-                              <div className="item-header-user" style={{ fontSize:"12px"}}>{e.nickName}</div>
-                            <h5 style={{ width:"45px" , position:"absolute", right: "-14px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</h5>
+                              <div className="item-header-user" >{e.nickName}</div>
+                             {issort || <h5 className="item-header-time" style={{ width:"45px" , position:"absolute", right: "-14px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</h5>}
                             
                           </div>
                           <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
@@ -853,11 +933,99 @@ const handlePostClick = async (postId) => {
                 </ItemGrid>   
                   </div>
                   <div ref={obsRef} style={{ width: '100%', height: 30, }}>{isLoading && <LoadingSpinner></LoadingSpinner>}</div>
-                        
+                       
                   </Main>
                     {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
                     <TimeLineModal isopen={`${isModalOpen}`}  setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
+                    <ToTheTop/> 
                     <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate); setContent(""); setSelectedImage(null);}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
+                    <LocationModal 
+					open={locationModalOpen}
+					close={handleLocationModal}
+					type="y"
+					confirm={locationConfirm}
+				 	header="Flow">
+			
+					<div className="placeDiv" style={{
+							position:"absolute",
+							top:"45px",
+							left:"30px",
+							zIndex:"9999999"
+									}}>
+						<label htmlFor="location" className="locationPin"><SlLocationPin /></label>
+						<input type="text" value={place} onChange={(e) => setPlace(e.target.value)} id="location" placeholder="장소를 입력해주세요" 
+						style={{
+							backgroundColor: "transparent",
+        			outline: "none",
+        			color: `${props=>props.theme.textColor}`,
+        			border: "none"
+						}}
+						/>
+					</div>
+					<Map className="map" // 지도를 표시할 Container 
+									center={state.center}
+									isPanto={state.isPanto}
+									style={{
+									// 지도의 크기
+									width: "90%",
+									height: "75%",
+									position:"absolute",
+        					alignSelf: "center",
+        					justifyContent: "center",
+									}}
+									level={3} // 지도의 확대 레벨
+								>
+									<div
+									style={{
+										display: "flex",
+										gap: "10px",
+									}}
+									>
+									<button className="locationButton" style={{
+										width: "35px",
+										height: "35px",
+										alignItems: "center",
+										justifyContent: "center",
+										border: "none",
+										borderRadius: "100px",
+										backgroundColor: "#d9d9d9",
+										position:"absolute",
+										right:"40px",
+										bottom:"70px",
+										zIndex:"9999"
+									}}
+									onClick={() => { 
+										getCurrentLocation();
+										setState(
+											{
+												center: { lat: location.latitude, lng: location.longitude },
+												isPanto: true,
+											},
+											
+										);
+									}}
+									>
+										<BiCurrentLocation style={{
+											position:"absolute",
+											top:"0",
+											left:"0",
+											color: "black",
+											width: "35px",
+											height: "35px",
+											alignSelf: "center",
+											justifyContent: "center",
+											border: "none",
+											backgroundColor: "transparent"
+									}} />
+									</button>
+									</div>
+								</Map>
+								    <>
+    </>
+		
+		</LocationModal>
+
+                    
         </Container>
 
 

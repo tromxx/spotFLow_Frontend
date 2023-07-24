@@ -5,7 +5,7 @@ import Slider from "../components/Slider";
 const DiaryLayoutdiv = styled.div`
   /* border: solid 1px red; */
   width: 100%;
-  height: 33.3%;
+  height: 50%;
 
   .bar1{
     /* border: solid 1px violet; */

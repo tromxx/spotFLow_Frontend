@@ -147,7 +147,7 @@ const Diary = () =>{
                 <DiaryLayout name={"Local live"}/>  */}
                 <Slider name={"Popular"}/>
                 <Slider name={"Friend"}/>
-                <Slider name={"Local live"}/>
+                {/* <Slider name={"Local live"}/> */}
             </DiaryDiv>
             </body>
         </Container>
