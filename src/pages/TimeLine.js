@@ -1,13 +1,12 @@
 import styled, {css} from "styled-components";
 import {TfiArrowLeft} from "react-icons/tfi";
 import {useState, useRef, useEffect} from "react";
-import HeaderBar from "../components/Common/HeaderBarNavi";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
-import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus, AiOutlineEdit, AiFillDelete} from "react-icons/ai";
-
+import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus} from "react-icons/ai";
+import {  SlLocationPin } from "react-icons/sl"
 import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
-import {useTheme} from "../context/themeProvider";
+
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
 
@@ -15,11 +14,15 @@ import TimeLineModal from "../utils/TimeLineModal";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
-import { type } from "@testing-library/user-event/dist/type";
+
 import userTimelineApi from "../api/UserTimelineApi";
 import { useCallback } from "react";
-import { SlLocationPin } from "react-icons/sl"
 import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
+import  { UserContext } from "../context/UserStore";
+import { useContext } from "react";
+
+import { storage } from '../api/FirebaseApi';  
+
 
 const ItemGrid = styled.div`
   min-height: 80vh;
@@ -27,19 +30,19 @@ const ItemGrid = styled.div`
   height: 80%;
   width: 100%;
   grid-template-rows: 1fr 1fr;
-  //background-color: white;
+  
 
 
   @media (max-width: 850px) {
-    ${(props) => props.isSort ? `
+    ${(props) => props.issort ==="true" ? `
    
     grid-template-columns: 1fr 1fr;
 ` : `  
 
 `}
   }
-  // 삼항연산자안에서 미디어 쿼리 적용이 두가지 다되서 따로 분리함 !!
-  ${(props) => props.isSort ? `
+ 
+  ${(props) => props.issort ==="true" ? `
 
         grid-template-columns: 1fr 1fr 1fr 1fr;
 }   
@@ -59,82 +62,7 @@ const centerAlign = css`
   align-items: center;
 `;
 
-const CreatePost = styled.div`
-  position : fixed;
-  top : 15%;
-  background-color: white;
-  ${centerAlign}
-  flex-direction: column;
-  width: 35%;
-  height: 500px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 15px;
-  z-index: 100;
 
-  @media (max-width: 1000px) {
-    & {
-      width: 300px;
-      height: 450px;
-    }
-
-    textarea {
-      width: 82%;
-    }
-  }
-
-  .create-btns {
-    ${centerAlign}
-    flex-direction: column;
-    flex: 2;
-    width: 100%;
-  }
-
-  button {
-    margin: 10px;
-    width: 48%;
-    background-color: white;
-    border: none;
-    border-radius: 15px;
-    height: 45px;
-  }
-
-  textarea {
-    width: 85%;
-    margin-left: 20px;
-    margin-right: 20px;
-    padding: 10px;
-    flex: 6;
-    border: none;
-    background-color: white;
-    border-radius: 15px;
-  }
-
-  input {
-
-    padding: 10px;
-    margin: 20px;
-    flex: 0.3;
-    border: none;
-    border-radius: 15px;
-    background-color: white;
-    width: 83%;
-    z-index: 50;
-
-  }
-
-  .button-box {
-
-    position: relative;
-    width: 100%;
-    flex: 3;
-    background-color: none;
-  }
-
-  .button-box-btn {
-    border-radius: 25px;
-  }
-
-`;
 
 
 const Container = styled.div`
@@ -197,7 +125,7 @@ const Header = styled.div`
 
   
   background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
- // background-color: #A4EBF3;
+ /* // background-color: #A4EBF3; */
   height: 20%;
   width: 100%;
   padding-bottom:20px;
@@ -214,7 +142,7 @@ const Header = styled.div`
     margin-left: 20px;
     border:none;
     
-  //  border:1px solid ${(props) => props.theme.timeLineBgColor};
+  /* //  border:1px solid ${(props) => props.theme.timeLineBgColor}; */
   background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "#F8F6F4"};
 
     border-radius:15px;
@@ -253,7 +181,7 @@ const CreateBtn = styled.div`
   justify-content:center;
   align-items:center; */
   ${centerAlign}
- // border: 1px solid white;
+
   border-radius: 5px;
   width: 35px;
   height: 35px;
@@ -294,7 +222,7 @@ const Main = styled.div`
     & {
       height: 70%;
       width: 60.9%;
-      //border: 1px solid silver;
+
     }
   }
          
@@ -308,7 +236,10 @@ transition: all 0.5s ease;
   justify-content: flex-start;
   height: 15%;
   width: 100%;
-  background-color: #FCF9F9;
+  border : solid 0.1px #EAEAEA;
+  border-radius: 1px;
+  background-color: white;
+
 }
 
 position: relative;
@@ -324,7 +255,7 @@ margin-bottom: 20px;
 }
 
 ${(props) =>
-  props.isSort
+  props.issort ==="true"
     ? `
   ${centerAlign}
   flex-direction: column;
@@ -372,7 +303,7 @@ ${(props) =>
 
 @media (min-width: 1300px) {
   ${(props) =>
-    props.isSort
+    props.issort === "true"
       ? `
     height: 250px;
 
@@ -395,19 +326,21 @@ ${(props) =>
 
 @media (max-width: 845px) {
   ${(props) =>
-    props.isSort
+    props.issort ==="true"
       ? `
-    width: auto;
+    width: auto%;
     height: 150px;
     .item-header {
+     
       height: 20%;
     }
  
     `
       : `
-    width: auto;
+    width: auto%;
     height: 450px;
     .item-header {
+
        height: 50px;
     }
     `}
@@ -436,15 +369,15 @@ const ItemImg = styled.div`
   border-radius: 0px;
   background-position: center;
   background-color: silver;
-  ${(props) => props.isSort ? `
+  ${(props) => props.issort === "true"  ? `
         
-        height : 80%;
-        width: 90%;
+        height : 85%;
+        width: 100%;
     ` : `
 
         @media (max-width: 844px) {
             & {
-		           width: 99%;
+		           width: 100%;
                 height: 90%;
                 margin-left: 10px;
                 margin-right: 10px;
@@ -454,54 +387,16 @@ const ItemImg = styled.div`
            margin-bottom: 10px;
          //    margin-top: 10px;
             height : 90%;
-            width: 99%;
+            width: 100%;
 
             
     `}
 `
-const ItemContent = styled.div`
-  
-  ${centerAlign}
-  width: 100%;
-  flex-direction: column;
 
-  ${(props) => props.isSort ? `
-      
-    ` : `
-    ${centerAlign}
-    margin:20px;
-    margin-left : 0;
-    margin-right : 0;
-    width: 100%;
-    flex-direction:column;
-    `}
-  .title {
-    margin: 10px;
-    border-radius: 15px;
-    ${centerAlign} // background-color:  ${(props) => props.theme.timeLineBgColor};
-                    //  color : ${(props) => props.theme.textColor};
-    width: 85%;
-    flex: 1;
-  }
-
-  .content {
-    margin: 10px;
-    border-radius: 15px;
-      //    background-color:  ${(props) => props.theme.timeLineBgColor};
-      //    color : ${(props) => props.theme.textColor};
-    ${centerAlign}
-    flex: 10;
-    width: 85%;
-    overflow: scroll;
-  }
-
-
-  
-`
 
 
 const TimeLine = () => {
-  const [dummy, setDummy] = useState([]);
+
 
 
   // []를 추가함으로써 이펙트는 한 번만 실행되며, 컴포넌트가 마운트 될 때만 실행됩니다.
@@ -509,6 +404,7 @@ const TimeLine = () => {
   const [items, setItems] = useState([]);
 
 
+  const user = useContext(UserContext);
 
 
 
@@ -526,7 +422,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
   const closeModal = () => setIsModalOpen(false);
 
   const  node = useRef(null); // 타임라인 모달에 전달해줄 ref
-  const create = useRef(null); // 포스트생성 모달 ref
+
 
 
   // useEffect 와 ref를 이용하여 모달영역 밖 클릭시 닫을수 있도록 
@@ -556,8 +452,7 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
 
-    // 색상모드 
-    const theme = useTheme();
+    
 
 
   // 파일선택하는 핸들링
@@ -568,28 +463,54 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleUploadImage = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+  // const handleUploadImage = () => {
+  //   const file = fileInput.current.files[0];
+  //   const reader = new FileReader();
+    
+  //   reader.onloadend = () => {
+  //     setSelectedImage(reader.result);
+  //   };
 
-    reader.onloadend = () => {
-      setSelectedImage(reader.result);
-    };
+  //   if (file) {
+  //     reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
+  //   } else {
+  //     setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
+  //   }
+  // }
 
-    if (file) {
-      reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
-    } else {
-      setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
-    }
+
+const handleUploadImage = async () => {
+  const file = fileInput.current.files[0];
+  if (!file) {
+    setSelectedImage(null);  
+    return;
   }
 
-  const deleteTimeLine = () => {
-    if ((dummy.filter(i => !isClicked.includes(i.id)))) {
-      setDummy(dummy.filter(i => !isClicked.includes(i.id)));
-    }
+  const uploadTask = storage.ref(`images/${file.name}`).put(file);
 
-    // setDummy(dummy.filter(e => e.id !== data.id ))
-  }
+  uploadTask.on(
+    "state_changed",
+    snapshot => {
+      // progress function ...
+    },
+    error => {
+      // error function ...
+      console.log(error);
+    },
+    () => {
+      // complete function ...
+      storage
+        .ref("images")
+        .child(file.name)
+        .getDownloadURL()
+        .then(url => {
+          setSelectedImage(url);
+        });
+    }
+  );
+};
+
+
 
 
   const [isClicked, setIsClicked] = useState([]);
@@ -597,14 +518,14 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
   const [isCreate, setIsCreate] = useState(false);
 
   // 타임라인 리스트 정렬하기위한 변수
-  const [isSort, setIsSort] = useState(false);
+  const [issort, setIsSort] = useState(false);
 
   // 편집모드를 위한 변수
   const [isEdit, setIsEdit] = useState(false);
 
   // 정렬하기위한 메서드
   const toggleSwitch = () => {
-    setIsSort(!isSort);
+    setIsSort(!issort);
   }
  
 // 시간 계산 함수
@@ -647,28 +568,31 @@ const [modalData, setModalData] = useState({ title: '', content: '' , name : '' 
     const titleRef = useRef();
     const contentRef = useRef();
     const [data,setData] = useState({
-      title : "",
       image : "",
-      email : "test@example.com",
+      email : "sungkeno3o@gmail.com",
       content : "" ,
       lat : null ,
       lng : null , 
-      date : "" 
+      date : "" ,
+      place : "판교역"
     })
     
     const CreatePostConfirm = async () => {
-      if (contentRef.current.value.length < 5) {
-        contentRef.current.focus();
+      if (content.length < 5) {
+        contents.current.focus();
         return;  
-    }
-    setData(prevState => ({
-        ...prevState, 
-        title: title, 
+      }
+    
+      const updatedData = {
+        ...data,
         content: content,
-        image:  selectedImage
-    }));
-    userTimelineApi.setUserTimeline(data);
-}
+        image: selectedImage
+      };
+    
+      setData(updatedData);
+      await userTimelineApi.setUserTimeline(updatedData);
+      setIsCreate(false);
+    }
 
 
 const handlePostClick = async (postId) => {
@@ -693,9 +617,10 @@ const handlePostClick = async (postId) => {
 
       const CreatePostCancle = () => {
   
-        if (titleRef.current.value.length >= 1 || contentRef.current.value.length >=1) {
-            setIsCancle(!isCancel);
+        if (content.length >=1 || selectedImage !== null) {
+            setIsCancle(true);
         }  else setIsCreate(!isCreate);
+        ;
     }
 
     const [search,setSearch] = useState('');
@@ -763,28 +688,33 @@ const handlePostClick = async (postId) => {
 
     const [locationValue, setLocationValue] = useState('');
 
+    // 검색 엔터키 입력하면 검색한결과를 호출  
     const activeEnter = (e) => {
       if(e.key === "Enter") {
         handleSearch();
       }
     }
+
+    const moveMyFlow = () => {
+      if(!user.isLoggedIn) {
+          alert("로그인이 필요한 서비스입니다.")
+         return 
+      } Navi('/myflow');
+    }
   
   return (
-    <>
-
-      {/* <HeaderBar /> */}
-      
+    <>      
       {isCreate &&
           <MyFlowWrapper>
             <MyFlowDiv>
             <FlowModal
             open={()=>setIsCreate(true)}
-            close={()=>setIsCreate(false)}
+            close={CreatePostCancle}
             header={<div className="title">
             <span style={{ color: '#00B4D8' }}>F</span>low
             </div>}
             type="y"
-            confirm={handleUploadImage}
+            confirm={CreatePostConfirm}
             >
             <textarea maxLength="90" ref={contents} className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
               value={content}
@@ -794,19 +724,20 @@ const handlePostClick = async (postId) => {
             <div className="wrapper">
               <FileBox className="filebox">
                 <div  className="filebox">
-                    <label htmlFor="file"><AiOutlineCamera style={
+                    <label htmlFor="file"><AiOutlineCamera 
+                    style={
                       { width: "25px",
                         height: "25px",
                         color: "black"}} />
                     </label> 
-                    <input  type="file" ref={fileInput} onClick={handleOpenImageRef}  className="fileSelect" id="file"/>
+                    <input  type="file" ref={fileInput} onChange={handleUploadImage}  className="fileSelect" id="file"/>
                     {selectedImage !== null && (
                         <img style={{width: "50px" , height: "50px"}} id="thumbnail" src={selectedImage} alt="" className="thumbnail" />
                     )}	
                 </div>
               </FileBox>
               <div className="locationDiv">
-                <label htmlFor="locationBtn" className="locationPin"><SlLocationPin /></label>
+                <label htmlFor="locationBtn" className="locationPin"><SlLocationPin/></label>
                 <input type="text" value={locationValue} readOnly onClick={handleLocationModal} placeholder="위치 설정하기" className="locationInputBtn" id="locationBtn" />
               </div>
             </div>
@@ -821,8 +752,8 @@ const handlePostClick = async (postId) => {
               <div style={{display:"flex",flexDirection:"row"}}>
                 <CreateBtn onClick={() => {
                   Navi("/")
-                }} style={{borderRadius: "8px"}}>
-                  <TfiArrowLeft style={{fontSize: "20px" , marginTop:"7px"}}></TfiArrowLeft>
+                }} style={{borderRadius: "8px", marginTop:"7px"}}>
+                  <TfiArrowLeft style={{fontSize: "20px" }}></TfiArrowLeft>
                 </CreateBtn>
                 <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
               </div>
@@ -834,10 +765,14 @@ const handlePostClick = async (postId) => {
             </HeaderItemLeft>
             
             <HeaderItemRight>
-                <CreateBtn onClick={()=>{Navi('/myflow')}} style={{fontSize:"8px"}}>
-                    MyFlow
-                </CreateBtn>
-              {isSort ?
+                
+                <CreateBtn onClick={moveMyFlow} style={{fontSize:"8px"}}>
+                     MyFlow
+                </CreateBtn>                     
+                
+              
+              {issort ?
+              
                 <CreateBtn>
                   <FiColumns style={{fontSize: "25px"}} onClick={toggleSwitch}/>
                 </CreateBtn>
@@ -846,9 +781,13 @@ const handlePostClick = async (postId) => {
                 <CreateBtn>
                   <RiLayoutRowLine style={{fontSize: "25px"}} onClick={toggleSwitch}/>
                 </CreateBtn>
-
+                
               }
-              <CreateBtn onClick={() => {
+              
+              <CreateBtn onClick={() => {if(!user.isLoggedIn) {
+          alert("로그인이 필요한 서비스입니다.")
+         return 
+      }
                 setIsCreate(!isCreate)
               }}>
                 <AiOutlinePlus></AiOutlinePlus>
@@ -864,16 +803,16 @@ const handlePostClick = async (postId) => {
             </Header>
 
 
-            <Main isSort={isSort}>
-                        
+            <Main issort={issort.toString()}>
+                 
             <div
            
             
           >
-            <ItemGrid isSort={isSort}>
+            <ItemGrid issort={issort.toString()}>
               { 
                 items.map((e , index) =>
-                    <Item isSort={isSort} key={e.id} onClick={()=>{
+                    <Item issort={issort.toString()} key={e.id} onClick={()=>{
                       if(!isCreate){
                         handlePostClick(e.id);
                         setDiffHours(calculateTime(e.updateTime));
@@ -881,47 +820,44 @@ const handlePostClick = async (postId) => {
                         openModal()
                       }
                       }} >
-                        {isEdit ?  
+                        {/* {isEdit ?  
 
                       <CreateBtn isClicked={isClicked.includes(e.id)} onClick={() => {
                         setIsClicked(...isClicked, e.id)
                       }} className="editBtn"></CreateBtn>
-                      : <></>}
+                      : <></>} */}
                     <div className="item-header">
                       <img className="profile" style={
-                              isSort
-                              ? { margin: "10px", width: "30px", height:"30px", borderRadius:"25px" }
-                              : { margin: "10px", width: "55px", height:"35px", borderRadius:"25px" }
+                              issort
+                              ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
+                              : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }
                           }
                       src={ e.ct_profile_pic || default_avatar} alt="" />
                           <div style={
-                             isSort
+                             issort
                              ?
                             {position:"relative" ,margin:"0px",height:"100%", display:"flex", flexDirection:"column",alignItems:"center"}
                             : {position:"relative" ,margin:"10px",marginTop:"20px",height:"65%", display:"flex", flexDirection:"column",alignItems:"center"}
                           }>
-                              <div className="item-header-user" style={{fontSize:"12px"}}>{e.nickName}</div>
-                            <p style={{position:"absolute", right: "0px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</p>
+                              <div className="item-header-user" style={{ fontSize:"12px"}}>{e.nickName}</div>
+                            <h5 style={{ width:"45px" , position:"absolute", right: "-14px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</h5>
                             
                           </div>
                           <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
                       </div>
-                    <ItemImg  isSort={isSort} url={e.tl_profile_pic}></ItemImg>
-                    {/* <ItemContent isSort={isSort}>
-                      <div className="title">{e.title}</div>
-                      {isSort ? <></> : <div className="content">{e.content}</div>}
-
-                    </ItemContent> */}
+                    <ItemImg  issort={issort.toString()} url={e.tl_profile_pic}></ItemImg>
+              
                   </Item>
                 )
                 }
                 </ItemGrid>   
                   </div>
                   <div ref={obsRef} style={{ width: '100%', height: 30, }}>{isLoading && <LoadingSpinner></LoadingSpinner>}</div>
+                        
                   </Main>
                     {/* <CreateBtn style={{width:"100px", backgroundColor:"silver"}} onClick={fetchMoreData}>더보기</CreateBtn> */}
-                    <TimeLineModal isOpen={isModalOpen} closeModal={closeModal} setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
-                    <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate)}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
+                    <TimeLineModal isopen={`${isModalOpen}`}  setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
+                    <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate); setContent(""); setSelectedImage(null);}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
         </Container>
 
 
@@ -931,5 +867,4 @@ const handlePostClick = async (postId) => {
             }
 
 export default TimeLine;
-
 
