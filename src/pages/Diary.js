@@ -9,6 +9,7 @@ import { UserContext} from '../context/UserStore';
 
 import { useEffect ,useState  ,useContext } from "react";
 import DiaryCategory from "./DiaryCategory";
+import DiaryApi from "../api/DiaryApi";
 
 
 
@@ -112,6 +113,15 @@ const Diary = () =>{
     
     const navi = useNavigate();
 
+
+    const activeEnter = (e) => {
+        if(e.key === "Enter") {
+          handleSearch();
+        }
+      }
+
+   
+
     useEffect(()=> {
         if(!user.isLoggedIn) {
             console.log("로그인이 안되었어요");
@@ -119,6 +129,20 @@ const Diary = () =>{
     })
           const [name,setName] = useState("");
           const [isType, setIsType] = useState(true);
+
+
+
+        const [search,setSearch] = useState([]);  
+
+        const [place,setPlace] = useState("");
+
+        const handleSearch = async () => {
+            const res = await DiaryApi.searchPlace(place);
+            console.log(res.data);
+            setSearch(res.data);
+        }
+
+
     
     if(!user.isLoggedIn) {
         return (
@@ -140,7 +164,7 @@ const Diary = () =>{
                     <div className="namebarleft">
                     <div className="id">
                         <img className="img" src={avatar} alt="" />
-                        <h6>{user.nickname}</h6>
+                        <h6>{user.email}</h6>
                      </div>
                        
                  </div>
@@ -155,7 +179,7 @@ const Diary = () =>{
                 </div>
             </header>
             <div className="searchBar1">
-                <SearchBar/>
+                    <SearchBar setPlace={setPlace} activeEnter={activeEnter} setSearch={setSearch} />
                  </div>
             <body>
             <DiaryDiv>
