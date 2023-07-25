@@ -113,6 +113,7 @@ const Login = () => {
 			const response = await AuthApi.customerToken(customerData);
 			const  {accessToken} = response.data;
 			localStorage.setItem('authToken', accessToken);
+         console.log(localStorage.getItem('authToken'));
 			navigate("/")
          setIsLoggedIn(true);
 		}catch(error){
