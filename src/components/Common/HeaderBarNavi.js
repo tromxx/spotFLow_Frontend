@@ -52,12 +52,6 @@ const LoggedInDiv = styled.div`
   padding-right: 65px;
   gap: 15px;
 
-  .nofi {
-    margin-right: 50px;
-    background-color: transparent;
-    border: none;
-    margin-top: 10px;
-  }
 `;
 
 const Exit = styled(BiExit)`
@@ -132,9 +126,7 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
-              {isNewNofi !== "" ? <NofiOn /> : <NofiNone />}
-          </button>
+              {isNewNofi !== "" ? <NofiOn onClick={()=>{navigate("/nofication")}}/> : <NofiNone onClick={()=>{navigate("/nofication")}}/>}
           <p>{nickname}</p>
           <Exit onClick={logOut}/>
         </LoggedInDiv>

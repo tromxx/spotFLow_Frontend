@@ -202,7 +202,7 @@ const DiaryMypagediv = styled.div`
                 <div className="namebar">
                     <div className="namebarleft">
                     <div className="id">
-                        <img className="img" src={avatar} alt="" />
+                        <img className="img" src={user.profilePic} alt="" />
                         <h6>{user.nickname}</h6>
                      </div>
                 

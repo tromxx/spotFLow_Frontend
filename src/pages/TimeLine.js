@@ -590,15 +590,7 @@ const handleUploadImage = async () => {
   // 게시물 작성하기 조건 로직 ref  
     const titleRef = useRef();
     const contentRef = useRef();
-    const [data,setData] = useState({
-      image : "",
-      email : "whddus426@gmail.com",
-      content : "" ,
-      lat : null ,
-      lng : null , 
-      date : "" ,
-      place : "판교역"
-    })
+
     
     const CreatePostConfirm = async () => {
       if (content.length < 5) {
@@ -607,7 +599,6 @@ const handleUploadImage = async () => {
       }
     
       const updatedData = {
-        ...data,
         content: content,
         image: selectedImage
       };
