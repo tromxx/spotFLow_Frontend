@@ -5,9 +5,10 @@ import {TfiArrowLeft} from "react-icons/tfi";
 import profile from '../images/default_avatar.png'
 import {AiOutlinePlus} from "react-icons/ai";
 import {MdCancel, MdPostAdd} from "react-icons/md";
-import {useState, useRef} from 'react';
+import {useState, useRef , useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import DiaryApi from "../api/DiaryApi";
+import { UserContext} from '../context/UserStore';
 
 
 
@@ -255,6 +256,7 @@ function DiaryCreate() {
   const minutes = now.getMinutes();
   const seconds = now.getSeconds();
 
+  const user = useContext(UserContext);
 
   const handlePost = (title, text) => {
     if (title.current.value.length < 1) {
@@ -277,7 +279,7 @@ function DiaryCreate() {
     };
     setDiaryPost(newDiaryPost);
     console.log(timeline);
-   const sss = DiaryApi.saveDiary("test@example.com", title.current.value, text.current.value, timeline);
+   const sss = DiaryApi.saveDiary(user.email, title.current.value, text.current.value, timeline);
     console.log(sss.data);
     alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
     navi("/diaryMypage");
