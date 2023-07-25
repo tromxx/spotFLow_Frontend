@@ -80,15 +80,15 @@ const Container = styled.div`
     @media(max-width: 1000px) {
         & {
         width: 300px;
-        height: 70%;
-        top:20%;
-    left:10%;
+        height: 50%;
+        top:25%;
+        left:10%;
         }
     }
 
     display: ${props => props.isopen === "true" ? "block" : "none"}
     
-   
+    
   
     ;
     .profile {
@@ -104,8 +104,8 @@ const Container = styled.div`
 
 const TimeLineModal =  forwardRef(({isopen, closeModal, setIsModalOpen, modalData,diffHours },node)=> {
    
-
-    
+   
+  
     
 
   return (

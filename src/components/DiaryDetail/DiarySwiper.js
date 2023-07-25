@@ -5,8 +5,8 @@ import * as SC from "./SwiperComponent"
 import {BsChatDots} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import {useParams} from "react-router-dom";
-import diaryApi from "../api/DiaryApi";
-import CustomerApi from "../api/CustomerApi";
+import diaryApi from "../../api/DiaryApi";
+import CustomerApi from "../../api/CustomerApi";
 
 export const DiarySwiper = () => {
   const {id} = useParams();

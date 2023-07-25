@@ -9,7 +9,7 @@ import SignUp from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
-import {DiarySwiper} from "./components/DiarySwiper";
+import {DiarySwiper} from "./components/DiaryDetail/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';

@@ -117,7 +117,18 @@ const Diary = () =>{
             console.log("로그인이 안되었어요");
         }
     })
-    console.log(localStorage.getItem('authToken'));
+          const [name,setName] = useState("");
+          const [isType, setIsType] = useState(true);
+    
+    if(!user.isLoggedIn) {
+        return (
+            <>
+                <h2 style={{position:"absolute",top:"50%",left:"40%"}}>로그인이 필요한 서비스 입니다.</h2>
+            </>
+        )
+    }
+
+    else 
 
     return(
         <>

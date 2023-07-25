@@ -282,7 +282,7 @@ const Paging = styled.span`
 
 
 
-const MainSlider = ({setName,names,setIsAll,setIsType}) => {
+const MainSlider = ({names,setIsAll,setIsType}) => {
 
     const [isMobile, setIsMobile] = useState(3);
     const [data,setData] = useState([]);
