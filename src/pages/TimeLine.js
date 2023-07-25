@@ -611,9 +611,8 @@ const handleUploadImage = async () => {
         content: content,
         image: selectedImage
       };
-
       const token = localStorage.getItem('authToken');
-    
+      
       setData(updatedData);
       await userTimelineApi.setUserTimeline(updatedData,token);
       setIsCreate(false);

@@ -28,31 +28,6 @@ const Home = () => {
   const [active, setActivate] = useState(false);
   const [currentPage, setCurrentPage] = useState('MyPage');
 
-  const{setEmail, setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,setIsLoggedIn} = useContext(UserContext);
-
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    console.log(localStorage.getItem('authToken'));
-    const getCustomerInfo = async () => {
-      if (token != null) {
-        try {
-          const response = await CustomerApi.getCustomerInfo(token);
-          setEmail(response.data.customer.email);
-          setNickname(response.data.customer.nickName);
-          setProfilePic(response.data.customer.profilePic);
-          setStatMsg(response.data.customer.statMsg);
-          setFollower(response.data.follower.follower);
-          setFollowing(response.data.follower.following);
-          setIsLoggedIn(true);
-        } catch (error) {
-          localStorage.clear();
-        }
-      }else{
-        return null;
-      }
-    };
-    getCustomerInfo();
-  }, [setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
 
   const renderPage = () => {
     switch (currentPage) {
