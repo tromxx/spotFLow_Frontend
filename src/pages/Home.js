@@ -37,6 +37,7 @@ const Home = () => {
       if (token != null) {
         try {
           const response = await CustomerApi.getCustomerInfo(token);
+          console.log(response.data);
           setEmail(response.data.customer.email);
           setNickname(response.data.customer.nickName);
           setProfilePic(response.data.customer.profilePic);
