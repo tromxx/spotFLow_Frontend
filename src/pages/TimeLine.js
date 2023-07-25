@@ -599,7 +599,7 @@ const handleUploadImage = async () => {
       lat : null ,
       lng : null , 
       date : "" ,
-      place : "판교역"
+      place : ""
     })
     
     const [lat,setLat] = useState();
@@ -615,7 +615,6 @@ const handleUploadImage = async () => {
         return;
       }
       
-    
       const updatedData = {
         ...data,
         content: content,
