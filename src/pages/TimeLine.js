@@ -590,14 +590,28 @@ const handleUploadImage = async () => {
   // 게시물 작성하기 조건 로직 ref  
     const titleRef = useRef();
     const contentRef = useRef();
-
+    const [data,setData] = useState({
+      image : "",
+      email : user.email,
+      content : "" ,
+      lat : null ,
+      lng : null , 
+      date : "" ,
+      place : ""
+    })
+    
+    const [lat,setLat] = useState();
+    const [lng,setLng] = useState();
     
     const CreatePostConfirm = async () => {
       if (content.length < 5) {
         contents.current.focus();
         return;  
       }
-    
+      if (selectedImage == null) {
+        return;
+      }
+      
       const updatedData = {
         content: content,
         image: selectedImage
