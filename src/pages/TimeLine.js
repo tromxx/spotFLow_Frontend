@@ -1,11 +1,11 @@
 import styled, {css} from "styled-components";
 import {TfiArrowLeft} from "react-icons/tfi";
-import {useState, useRef, useEffect} from "react";
+import {useState, useReducer ,useRef, useEffect} from "react";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
 import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus} from "react-icons/ai";
 import {  SlLocationPin } from "react-icons/sl"
-import {MdOutlineEditOff, MdSecurityUpdateGood} from "react-icons/md";
+import {MdOutlineEditOff, MdSecurityUpdateGood, MdSettingsBackupRestore} from "react-icons/md";
 
 import {  BiCurrentLocation } from 'react-icons/bi';
 
@@ -388,10 +388,14 @@ const ItemImg = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 0px;
-  background-position: center;
+  background-position: center center;
   background-color: silver;
+  
+  
+
   ${(props) => props.issort === "true"  ? `
         
+    
         height : 85%;
         width: 100%;
     ` : `
@@ -409,7 +413,12 @@ const ItemImg = styled.div`
          //    margin-top: 10px;
             height : 90%;
             width: 100%;
-
+            @media (min-width: 1300px) {
+    background-size: contain;
+    background-color:white;
+    border : solid 0.1px #EAEAEA;
+    border-radius: 1px;
+  }
             
     `}
 `
@@ -486,20 +495,6 @@ const closeModal = () => setIsModalOpen(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // const handleUploadImage = () => {
-  //   const file = fileInput.current.files[0];
-  //   const reader = new FileReader();
-    
-  //   reader.onloadend = () => {
-  //     setSelectedImage(reader.result);
-  //   };
-
-  //   if (file) {
-  //     reader.readAsDataURL(file); // 파일 내용을 읽어옵니다.
-  //   } else {
-  //     setSelectedImage(null);  // 파일을 선택하지 않았을 경우 처리
-  //   }
-  // }
 
 
 const handleUploadImage = async () => {
@@ -602,12 +597,11 @@ const handleUploadImage = async () => {
       place : ""
     })
     
-    const [lat,setLat] = useState();
-    const [lng,setLng] = useState();
+    
     
     const CreatePostConfirm = async () => {
       
-      if (content.length < 5 || place == null || location.latitude == null || location.longitude == null ) {
+      if (content.length < 5 || place === "" || location.latitude == null || location.longitude == null ) {
         contents.current.focus();
         return;  
       }
@@ -619,8 +613,8 @@ const handleUploadImage = async () => {
         ...data,
         content: content,
         image: selectedImage , 
-        lat: location.latitude,
-        lng: location.longitude ,
+        lat: state.center.lat,
+        lng: state.center.lng ,
         place : place,
       };
       const token = localStorage.getItem('authToken');
@@ -629,11 +623,13 @@ const handleUploadImage = async () => {
     
       const res = await userTimelineApi.setUserTimeline(updatedData,token);
 
-      if(res.status === 200) {
-          // 게시물이 성공적으로 작성되면, 새 게시물을 items에 추가
+      if(res) {
+
           console.log(res.data);
-          setItems(prevItems => [res.data, ...prevItems]);
-          
+         setItems(prevItems => [res.data, ...prevItems]);
+          setContent("");
+          setSelectedImage(null);
+          setPlace("");  
       }
       setIsCreate(false);
     }
@@ -677,7 +673,7 @@ const handlePostClick = async (postId) => {
   const endRef = useRef(false); // All posts loaded check
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
-    const [triger,setTrigger] = useState(false);
+
     
 
   useEffect(()=> { // Observer creation
@@ -714,7 +710,8 @@ const handlePostClick = async (postId) => {
     setIsLoading(false);
     console.error(e);
   } 
-  }, [triger]);
+  }, []);
+
 
     // 무한스크롤 하단 감시 변수 
     const target = useRef(null);
@@ -741,7 +738,7 @@ const handlePostClick = async (postId) => {
     // 마이플로우 이동버튼
     const moveMyFlow = () => {
       if(!user.isLoggedIn) {
-          alert("로그인이 필요한 서비스입니다.")
+          setIsUser(true);
          return 
       } Navi('/myflow');
     }
@@ -775,9 +772,7 @@ const handlePostClick = async (postId) => {
 
 
 
-  const forceUpdate = () => {
-    setTrigger(prev => !prev);
-  };
+  
 
 
 
@@ -793,25 +788,38 @@ const handlePostClick = async (postId) => {
 		// 지도 위치 변경시 panto를 이용할지에 대해서 정의
 		isPanto: false,
 	  })
+
+    // location 상태가 변할 때마다 실행되는 useEffect 훅
+useEffect(() => {
+  if (location) { // 위치 정보가 있을 때만 실행
+    setState({center: { lat: location.latitude, lng: location.longitude }, isPanto: true});
+  }
+}, [location]); // location 상태를 의존성 배열에 추가
 		
-	const handleLocationModal = () => {
-		setLocationModalOpen(!locationModalOpen);
-	}
+const handleLocationModal =  () => {
+  setLocationModalOpen(!locationModalOpen);
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      console.log(position.coords.latitude, position.coords.longitude);
+      setState({center: { lat: position.coords.latitude, lng: position.coords.longitude }, isPanto: true});
+    },
+    (error) => console.log(error),
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+  );
+}
+
 
 	const locationConfirm = () => {
 		setLocationValue(place);
 		setLocationModalOpen(false);
 	}
 
-	const test = () => {
-    const token = localStorage.getItem('authToken');
-  console.log(token);
-  }
+  const [isUser , setIsUser] = useState(false);
 
   
   return (
     <>     
-      <div style={{position:"absolute",top:"0px",zIndex:"332434"}} onClick={test}>dfdfsfdfsfdfdsfdsf</div> 
+
       {isCreate &&
           <MyFlowWrapper>
             <MyFlowDiv>
@@ -894,7 +902,7 @@ const handlePostClick = async (postId) => {
               }
               
               <CreateBtn onClick={() => {if(!user.isLoggedIn) {
-          alert("로그인이 필요한 서비스입니다.")
+          setIsUser(true);
          return 
       }
                 setIsCreate(!isCreate)
@@ -923,38 +931,34 @@ const handlePostClick = async (postId) => {
                 items.map((e , index) =>
                     <Item issort={issort.toString()} key={index} onClick={()=>{
                       if(!isCreate){
+                        const time = e.updateTime || e.joinDate;
                         handlePostClick(e.id);
                         setDiffHours(calculateTime(e.updateTime));
-                        setModalData({ title: e.title, content: e.content , name : e.nickName , date: timeParse(e.updateTime) , profile: e.ct_profile_pic});
+                        setModalData({ title: e.title, content: e.content , name : e.nickName , date:  timeParse(time)  , profile: e.ct_profile_pic});
                         openModal()
                       }
                       }} >
-                        {/* {isEdit ?  
-
-                      <CreateBtn isClicked={isClicked.includes(e.id)} onClick={() => {
-                        setIsClicked(...isClicked, e.id)
-                      }} className="editBtn"></CreateBtn>
-                      : <></>} */}
+   
                     <div className="item-header">
                       <img className="profile" style={
                               issort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
                               : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }
                           }
-                      src={ e.ct_profile_pic || default_avatar} alt="" />
+                      src={ e.ct_profile_pic || e.customer.profilePic || default_avatar} alt="" />
                           <div style={
                              issort
                              ?
                             {position:"relative" ,margin:"0px",height:"100%", display:"flex", flexDirection:"column",alignItems:"center"}
                             : {position:"relative" ,margin:"10px",marginTop:"20px",height:"65%", display:"flex", flexDirection:"column",alignItems:"center"}
                           }>
-                              <div className="item-header-user" >{e.nickName}</div>
+                              <div className="item-header-user" >{e.nickName || e.customer.nickName}</div>
                              {issort || <h5 className="item-header-time" style={{ width:"45px" , position:"absolute", right: "-14px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</h5>}
                             
                           </div>
                           <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
                       </div>
-                    <ItemImg  issort={issort.toString()} url={e.tl_profile_pic}></ItemImg>
+                    <ItemImg  issort={issort.toString()} url={  e.tl_profile_pic || e.image}></ItemImg>
               
                   </Item>
                 )
@@ -968,6 +972,7 @@ const handlePostClick = async (postId) => {
                     <TimeLineModal isopen={`${isModalOpen}`}  setIsModalOpen={setIsModalOpen} ref={node} modalData={modalData} diffHours={diffHours} />
                     <ToTheTop/> 
                     <FlowModal type={true} open={isCancel} confirm={()=>{setIsCancle(!isCancel); setIsCreate(!isCreate); setContent(""); setSelectedImage(null);}} close={()=>{setIsCancle(!isCancel)} }>작성중인 내용을 취소하겠습니까?</FlowModal>
+                      <FlowModal type={true} close={()=>{setIsUser(false)}} open={isUser} confirm={()=>{setIsUser(false)}}>로그인이 필요한 서비스 입니다.</FlowModal>
                     <LocationModal 
 					open={locationModalOpen}
 					close={handleLocationModal}
