@@ -373,6 +373,9 @@ const MainSlider = ({email, names,setIsAll,setIsType}) => {
 
     const [selectedImageKey, setSelectedImageKey] = useState(0);
 
+
+    
+
     return (
         <>
             <Sliderheader>

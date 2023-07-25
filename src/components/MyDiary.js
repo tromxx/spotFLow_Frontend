@@ -127,6 +127,7 @@ const MyDiarydiv = styled.div`
       const MyDiary = ({email, trigger,stat,checkid, setCheckId }) => {
         const [items, setItems] = useState(new Set());
         const [data, setData] = useState([]);
+        const user = useContext(UserContext);
     
         const itemHandler = (id, isChecked) => {
           if(isChecked) {

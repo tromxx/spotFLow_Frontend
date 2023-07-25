@@ -587,34 +587,54 @@ const handleUploadImage = async () => {
     }  
 
 
+
+
   // 게시물 작성하기 조건 로직 ref  
     const titleRef = useRef();
     const contentRef = useRef();
     const [data,setData] = useState({
       image : "",
-      email : "whddus426@gmail.com",
+      email : user.email,
       content : "" ,
       lat : null ,
       lng : null , 
       date : "" ,
-      place : "판교역"
+      place : ""
     })
     
+    const [lat,setLat] = useState();
+    const [lng,setLng] = useState();
+    
     const CreatePostConfirm = async () => {
-      if (content.length < 5) {
+      
+      if (content.length < 5 || place == null || location.latitude == null || location.longitude == null ) {
         contents.current.focus();
         return;  
       }
-    
+      if (selectedImage == null) {
+        return;
+      }
+      
       const updatedData = {
         ...data,
         content: content,
-        image: selectedImage
+        image: selectedImage , 
+        lat: location.latitude,
+        lng: location.longitude ,
+        place : place,
       };
       const token = localStorage.getItem('authToken');
       
       setData(updatedData);
-      await userTimelineApi.setUserTimeline(updatedData,token);
+    
+      const res = await userTimelineApi.setUserTimeline(updatedData,token);
+
+      if(res.status === 200) {
+          // 게시물이 성공적으로 작성되면, 새 게시물을 items에 추가
+          console.log(res.data);
+          setItems(prevItems => [res.data, ...prevItems]);
+          
+      }
       setIsCreate(false);
     }
 
@@ -657,8 +677,8 @@ const handlePostClick = async (postId) => {
   const endRef = useRef(false); // All posts loaded check
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
-
-
+    const [triger,setTrigger] = useState(false);
+    
 
   useEffect(()=> { // Observer creation
     const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
@@ -694,7 +714,7 @@ const handlePostClick = async (postId) => {
     setIsLoading(false);
     console.error(e);
   } 
-  }, []);
+  }, [triger]);
 
     // 무한스크롤 하단 감시 변수 
     const target = useRef(null);
@@ -728,8 +748,8 @@ const handlePostClick = async (postId) => {
 
 
 
-  
     
+
   // 토글 여부를 결정하는 state 선언
   const [toggleBtn, setToggleBtn] = useState(true);
 
@@ -750,9 +770,13 @@ const handlePostClick = async (postId) => {
     };
   }, []);
 
-  // 버튼 클릭 시 스크롤을 맨 위로 올려주는 함수
-  const goToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  
+
+
+
+
+  const forceUpdate = () => {
+    setTrigger(prev => !prev);
   };
 
 
