@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { AiOutlineSearch} from "react-icons/ai";
+import DiaryApi from '../../api/DiaryApi';
 
 const Container = styled.div`
 .Search-bar {
@@ -24,11 +25,19 @@ const Container = styled.div`
   `
 
 
-function DiarySearchBar() {
+function DiarySearchBar({activeEnter,setSearch,setPlace}) {
+
+  const handleSearch = async (place) => {
+    const res = await DiaryApi.searchPlace(place);
+    console.log(res.data);
+    setSearch(res.data);
+}
+
+
   return (
     <Container>
         <div style={{width: "70%", position: "relative"}}>
-            <input type="text" className="Search-bar"
+            <input onChange={(e)=> setPlace(e.target.value)} onKeyDown={(e)=>{activeEnter(e)}} type="text" className="Search-bar"
             /> <AiOutlineSearch style={{position: "absolute", left: "30px", bottom: "7px"}}/>
           </div>
           </Container>

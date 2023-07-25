@@ -10,7 +10,7 @@ const api = axios.create({
 const userTimelineApi = {
   // 모든 타임라인 정보를 가져옴
   getUserTimelineList: async (lastId) => {
-    return await axios.get(DOMAIN + "/timeline/testing", {
+    return await axios.get(DOMAIN + "/timeline/getall", {
       params: {
         lastTimeLineId: lastId
     }
@@ -34,10 +34,9 @@ const userTimelineApi = {
   });
   }, 
 
-  // 타임라인 정보를 저장함 (이성근 수정중)
-  setUserTimeline: async (props) => {
+  // 타임라인 정보를 저장함
+  setUserTimeline: async (props, token) => {
     const data = {
-      email : props.email,
       lat : props.lat,
       lng : props.lng,
       tl_profile_pic : props.image,
@@ -45,7 +44,12 @@ const userTimelineApi = {
       updateTime : props.date,
       place : props.place,
     }
-    return await axios.post(DOMAIN + "/timeline/post" , data);
+    return await axios.post(DOMAIN + "/timeline/post", data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
   // 타임라인 정보를 수정함
   reWrite: async (timeline) => {

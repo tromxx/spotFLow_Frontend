@@ -10,7 +10,6 @@ import { UserContext } from '../../context/UserStore';
 import { storage } from '../../api/FirebaseApi'
 import CustomerApi from '../../api/CustomerApi';
 import Error from '../Common/Error'
-import FollowCounter from './FollowCounter';
 
 const LogInDiv = styled.div`
   margin-top: 7vh;

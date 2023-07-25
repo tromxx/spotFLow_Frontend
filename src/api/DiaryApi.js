@@ -42,6 +42,15 @@ const DiaryApi = {
   // diaryMyPage : async () => {
   //   return await axios.post(DOMAIN + "diary/mypage", )
   // }
+
+
+  // 장소명으로 다이어리 검색 
+  searchPlace : async (place) => {
+      const body = {
+        place : place 
+      }
+      return await axios.post(DOMAIN + "/diary/search" , body);
+  },
 }
 
 export default DiaryApi;

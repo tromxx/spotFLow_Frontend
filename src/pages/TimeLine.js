@@ -611,9 +611,11 @@ const handleUploadImage = async () => {
         content: content,
         image: selectedImage
       };
+
+      const token = localStorage.getItem('authToken');
     
       setData(updatedData);
-      await userTimelineApi.setUserTimeline(updatedData);
+      await userTimelineApi.setUserTimeline(updatedData,token);
       setIsCreate(false);
     }
 
@@ -778,11 +780,15 @@ const handlePostClick = async (postId) => {
 		setLocationModalOpen(false);
 	}
 
-	
+	const test = () => {
+    const token = localStorage.getItem('authToken');
+  console.log(token);
+  }
 
   
   return (
-    <>      
+    <>     
+      <div style={{position:"absolute",top:"0px",zIndex:"332434"}} onClick={test}>dfdfsfdfsfdfdsfdsf</div> 
       {isCreate &&
           <MyFlowWrapper>
             <MyFlowDiv>
