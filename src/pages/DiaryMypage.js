@@ -237,7 +237,7 @@ const DiaryMypagediv = styled.div`
             </header>
             <body>
         <DiaryMypagediv>
-            <MyDiary trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
+            <MyDiary email={user.email}trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
         </DiaryMypagediv>
         </body>
         </Container>

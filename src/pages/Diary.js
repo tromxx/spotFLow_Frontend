@@ -186,8 +186,8 @@ const Diary = () =>{
                 {/* <DiaryLayout name={"Popular"}/>
                 <DiaryLayout name={"Friend"}/>
                 <DiaryLayout name={"Local live"}/>  */}
-                <Slider names={"Popular"} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll}/>
-                <Slider names={"Friend"} setName={setName} setIsType={()=>setIsType(false)} setIsAll={setIsAll}/>
+                <Slider email={user.email} names={"Popular"} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll}/>
+                <Slider email={user.email} names={"Friend"} setName={setName} setIsType={()=>setIsType(false)} setIsAll={setIsAll}/>
                 {/* <Slider name={"Local live"}/> */}
             </DiaryDiv>
             </body>

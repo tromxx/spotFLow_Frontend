@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useRef, useState, useEffect, useContext } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 
@@ -6,6 +6,7 @@ import { RiHeart3Fill } from "react-icons/ri";
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import DiaryApi from '../api/DiaryApi';
+import UserStore from '../context/UserStore';
 // import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const Sliderheader = styled.div`
@@ -282,7 +283,7 @@ const Paging = styled.span`
 
 
 
-const MainSlider = ({names,setIsAll,setIsType}) => {
+const MainSlider = ({email, names,setIsAll,setIsType}) => {
 
     const [isMobile, setIsMobile] = useState(3);
     const [data,setData] = useState([]);
@@ -322,7 +323,7 @@ const MainSlider = ({names,setIsAll,setIsType}) => {
       useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await DiaryApi.findMyDiary("user@example.com");
+                const res = await DiaryApi.findMyDiary(email);
                 if(res) {
                     console.log(res.data)
                     setData(res.data.filter(e=> e.delete === false ));

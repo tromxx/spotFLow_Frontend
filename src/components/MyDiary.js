@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 import dummy from "../dataSet/TimeLineData";
 import Checkbox from "./CheckBox";
 import { useNavigate } from "react-router-dom";
 import DiaryApi from "../api/DiaryApi";
+import UserStore from "../context/UserStore";
 
 
 const MyDiarydiv = styled.div`
@@ -123,10 +124,9 @@ const MyDiarydiv = styled.div`
     }
 `;
 
-      const MyDiary = ({trigger,stat,checkid, setCheckId }) => {
+      const MyDiary = ({email, trigger,stat,checkid, setCheckId }) => {
         const [items, setItems] = useState(new Set());
         const [data, setData] = useState([]);
-      
     
         const itemHandler = (id, isChecked) => {
           if(isChecked) {
@@ -153,7 +153,7 @@ const MyDiarydiv = styled.div`
 
       useEffect(()=>{
         const fetchData = async()=>{
-        const res =  await DiaryApi.findMyDiary("test@example.com");
+        const res =  await DiaryApi.findMyDiary(email);
         setData(res.data);
         console.log(res.data);
         }
