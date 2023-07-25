@@ -164,7 +164,7 @@ const Diary = () =>{
                     <div className="namebarleft">
                     <div className="id">
                         <img className="img" src={avatar} alt="" />
-                        <h6>{user.email}</h6>
+                        <h6>{user.nickname}</h6>
                      </div>
                        
                  </div>

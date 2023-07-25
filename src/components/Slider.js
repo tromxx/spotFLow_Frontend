@@ -322,7 +322,7 @@ const MainSlider = ({names,setIsAll,setIsType}) => {
       useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await DiaryApi.findMyDiary("user@example.com");
+                const res = await DiaryApi.findMyDiary("test@example.com");
                 if(res) {
                     console.log(res.data)
                     setData(res.data.filter(e=> e.delete === false ));
@@ -371,6 +371,9 @@ const MainSlider = ({names,setIsAll,setIsType}) => {
     const next = useCallback(() => slickRef.current.slickNext(), []);
 
     const [selectedImageKey, setSelectedImageKey] = useState(0);
+
+
+    
 
     return (
         <>
