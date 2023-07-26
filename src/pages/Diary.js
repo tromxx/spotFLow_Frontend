@@ -102,7 +102,7 @@ const Container = styled.div`
 
 const DiaryDiv = styled.div`
     width: 80vw;
-    height: 90vh;
+    height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
