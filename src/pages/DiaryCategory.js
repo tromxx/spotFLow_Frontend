@@ -66,7 +66,6 @@ const DiaryCatediv = styled.div`
     width: 100%;
     height: 100%;
     background-color: gray;
-    
     /* border: solid 1px red; */
   }
 
