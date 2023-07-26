@@ -150,6 +150,8 @@ const CommentBox = styled.div`
     height: 45px;
     margin-top: 2px;
     margin-left: 5px;
+    overflow: hidden;
+    border: .5px solid rgb(30,30,30,30%);
     @media (max-width: 768px) {
       width: 37px;
       height: 37px;
@@ -285,7 +287,7 @@ export const Comment = (props) => {
     const request = {
       diary: props.diary,
       comment: text,
-      email: "user3@example.com"
+      email: props.customer.email
     }
     await diaryApi.sendComment(request);
     await setText("");
@@ -332,12 +334,9 @@ export const Comment = (props) => {
   const [array, setArray] = useState(null);
 
   useEffect(() => {
-    // setToken(localStorage.getItem('authToken'));
-    // console.log(token);
-    setArray(props.commentList)
+    setArray(props.commentList.filter(e => e.customer !== null))
     console.log(props.commentList)
-    // console.log("upComm" + upComm)
-  }, [props.count, token]);
+  }, [props]);
 
 
   return (
@@ -346,7 +345,7 @@ export const Comment = (props) => {
       {/* 유저 댓글 작성 칸*/}
       <div className="input">
         <div className="profile">
-          <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
+          <img src={props.customer.profilePic}/>
         </div>
         <input type="text" id="comment" value={text} onChange={onChangeComment}/>
         <button className="btn-send">
@@ -365,7 +364,8 @@ export const Comment = (props) => {
         {array && array.map(e => (
           !e.delete && <CommentDetail>
           <div className="profile">
-            <img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>
+            {/*<img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>*/}
+            <img src={e.customer.profilePic}/>
           </div>
           <div className="comment-info">
             <div className="subtitle">
