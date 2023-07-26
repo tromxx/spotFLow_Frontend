@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import NoficationContainer from "../components/NoficationContainer";
-import nofiDataSet from "../dataSet/nofiData";
+import { useEffect } from "react";
+import NotificationApi from "../api/NotificationApi";
 
 const NoficationWrapper = styled.div`
  	display: flex;
@@ -53,22 +54,44 @@ const ScrollBar = styled.div`
 `;
 
 const Nofication = () => {
-  const [isNewNofi, setIsNewNofi] = useState(true);
-  const [nofiData, setNofiData] = useState(nofiDataSet);
+  const [nofiData, setNofiData] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+  
+    const fetchNoti = async () => {
+      try {
+        const response = await NotificationApi.getAllNoti(token);
+        setNofiData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+    const updateNoti = async () => {
+      try {
+        const updated = await NotificationApi.updateFetchNoti(token, nofiData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+    fetchNoti();
+    updateNoti();
+  }, []);
+
   return (
     <NoficationWrapper>
        
        <ScrollBar>
         <NoficationDiv>
           
-              {isNewNofi && nofiData.map((nofiData) => (
+              {nofiData !== "" && nofiData.map((nofiData) => (
                     <NoficationContainer
                       className="nofiContainer"
-                      noficationId={nofiData.id}
-                      diaryTitle={nofiData.title}
-                      name={nofiData.userName}
+                      id={nofiData.id}
+                      diaryTitle={nofiData.diary}
+                      name={nofiData.commentWriter}
                       comment={nofiData.comment}
-                    
                     />
                   ))}
           

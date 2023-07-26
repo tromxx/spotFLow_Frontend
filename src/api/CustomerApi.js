@@ -52,12 +52,6 @@ const CustomerApi = {
     } catch (error) {
       throw error;
     }
-  },
-  notification: async (email) => {
-    const notisession = {
-      "email": email
-    }
-    return await axios.post(DOMAIN + "/ws/notification", notisession);
   }
 };
 

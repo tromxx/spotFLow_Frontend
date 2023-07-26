@@ -11,6 +11,7 @@ import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
 import axios from 'axios';
 import CustomerApi from '../../api/CustomerApi';
+import NotificationApi from '../../api/NotificationApi';
 
 
 const HeaderBarDiv = styled.div`
@@ -93,18 +94,29 @@ const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const [isNewNofi, setIsNewNofi] = useState("");
+  const [oldNofi, setOldNofi] = useState("");
+  const [isNewNofi, setIsNewNofi] = useState(false);
   const [nofiData, setNofiData] = useState("");
   const{ email, nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
   useEffect(() => {
-    
-    const notification = async (email) => {
-      return await CustomerApi.notification(email);
+    if(isLoggedIn) {
+      const token = localStorage.getItem("authToken");
+
+    const fetchNoti = async () => {
+      const response = await NotificationApi.getAllNoti(token);
+      if(response.data !== oldNofi) {
+        setIsNewNofi(true);
+        setOldNofi(response.data);
+      } else {
+        console.log("새로운 알림이 없습니다.");
+      }
     }
 
-    notification();
-  
+    fetchNoti();
+
+    }
+    
   }, []);
 
   const logOut = () =>{
@@ -125,7 +137,7 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <button className="nofi" onClick={()=>{}}>
+          <button className="nofi" onClick={notificationFunc}>
               {isNewNofi ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>

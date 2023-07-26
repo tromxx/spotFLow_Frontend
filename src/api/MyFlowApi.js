@@ -17,7 +17,7 @@ const MyFlowApi = {
 					place : place
 				};
 
-				return await axios.post(Backend +'/myflow/myflownew', flowData, {
+				return await axios.post(Backend +'/timeline/post', flowData, {
 					headers: {
 						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`

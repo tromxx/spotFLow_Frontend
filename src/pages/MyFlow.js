@@ -343,18 +343,24 @@ const MyFlow = () =>{
 	const { isLoggedIn } = useContext(UserContext);
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
-	useEffect(() => {
+	 useEffect(() => {
 		const token = localStorage.getItem('authToken');
 		console.log(token);
 		console.log("useEffect 실행");
-    const fetchData = async () => {
-        const response = await MyFlowApi.getmyFlow(token);
-        setData(response.data);
+	
+		const fetchData = async () => {
+			try {
+				const response = await MyFlowApi.getmyFlow(token);
+				setData(response.data);
 				setSortedFlow(response.data);
-    };
-			fetchData(); // fetchData 함수 호출
-  	}, []);
-
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		
+		fetchData(); // fetchData 함수 호출
+	}, []);
+	
 		// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
     setSort((prevSort) => (prevSort === "az" ? "za" : "az"));

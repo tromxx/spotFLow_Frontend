@@ -35,11 +35,11 @@ const CommentImg = styled(AiOutlineComment)`
 `;
 
 
-const NoficationContainer = ({ diaryTitle, name, comment }) => {
+const NoficationContainer = ({ diary, name, comment }) => {
 
-  // useEffect로 마운트 되었을 때 현재 있는 알림들의 isView를 true 값으로 바꾸는 함수 필요
+  
  
-  const commentMaxLength = (str, maxLength) => {
+  const maxLength = (str, maxLength) => {
     if (str.length <= maxLength) {
       return str;
     } else {
@@ -53,11 +53,11 @@ const NoficationContainer = ({ diaryTitle, name, comment }) => {
     <NoficationDiv>
         {comment !== "" ? 
           <p> 
-            <CommentImg /> <br /> {name}님이 {diaryTitle} 에 댓글을 남겼습니다. <br /> {commentMaxLength(comment,25)} 
+            <CommentImg /> <br /> {maxLength(name,25)}님이 {maxLength(diary,25)} 에 댓글을 남겼습니다. <br /> {maxLength(comment,25)} 
           </p> 
             : 
           <p>
-            <HeartImg /> <br />  {name}님이 {diaryTitle} 에 좋아요를 남겼습니다.
+            <HeartImg /> <br />  {maxLength(diary,25)} 에 좋아요를 받았습니다.
           </p> 
         }
 
