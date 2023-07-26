@@ -54,8 +54,13 @@ const MyFlowApi = {
     });
   },
 
-	allFlow: async () => {
-    return await axios.get(Backend + "/timeline/find");
+	allFlow: async (token) => {
+    return await axios.get(Backend + "/timeline/find", {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
 	}
 
 }

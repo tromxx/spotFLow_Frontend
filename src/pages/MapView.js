@@ -14,8 +14,8 @@ const MapView = React.memo((props) => {
   const [lng, setLng] = useState(127.0292881);
   const [flow, setFlow] = useState([]);
 
-  const dataInit = async () => {
-    let res = await MyFlowApi.allFlow();
+  const dataInit = async (token) => {
+    let res = await MyFlowApi.allFlow(token);
     if (res.status===200) {
       console.log(res.status);
       let user = await res.data.map(i => ({
@@ -96,7 +96,8 @@ const MapView = React.memo((props) => {
   });
 
   useEffect(() => {
-    dataInit();
+    const token = localStorage.getItem('authToken');
+    dataInit(token);
     console.log(flow);
   }, [props, viewSet]);
 

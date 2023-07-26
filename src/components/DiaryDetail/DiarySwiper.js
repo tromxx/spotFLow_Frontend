@@ -14,6 +14,7 @@ export const DiarySwiper = () => {
   const [overlay, setOverlay] = useState(0);
   // 댓글 표시 여부
   const [chatBox, setChatBox] = useState(0);
+  const [token, setToken] = useState("");
 
 
   const [diary, setDiary] = useState({})
@@ -65,6 +66,7 @@ export const DiarySwiper = () => {
     DiaryInit();
     const token = localStorage.getItem('authToken');
     console.log(token);
+    setToken(token);
     // 이부분 localStorage 에서 토큰 뺴오기
     const getCustomerInfo = async () => {
       if (token != null) {
@@ -96,7 +98,7 @@ export const DiarySwiper = () => {
         onSlideChange={() => console.log('slide change')}
       >
         {timeline.map(e => (
-            <SC.TimeLine>
+            <SC.TimeLine key={e.id}>
               {overlay === 1 &&
                 <>
                   <SC.Overlay>
@@ -122,7 +124,7 @@ export const DiarySwiper = () => {
       <SC.Btn onClick={(event) => OpenChat(event)}>
         <BsChatDots className="comment"/>
       </SC.Btn>
-      <SC.Thumbs onClick={(event) => ThumbsUp(event,customer.email)}>
+      <SC.Thumbs onClick={(event) => ThumbsUp(event,token)}>
         {thumbs === 0 ? <FaRegThumbsUp className="thumbs-up"/> : <FaThumbsUp className="thumbs-up"/>}
       </SC.Thumbs>
 

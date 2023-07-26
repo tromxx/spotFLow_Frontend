@@ -278,7 +278,6 @@ const CommentDetail = styled.div`
 `;
 export const Comment = (props) => {
   const [text, setText] = useState("");
-  const [token, setToken] = useState("");
 
   const onChangeComment = (e) => {
     setText(e.target.value);
@@ -362,7 +361,7 @@ export const Comment = (props) => {
       <div className="content">
         {/* 댓글 낱개 디자인 */}
         {array && array.map(e => (
-          !e.delete && <CommentDetail>
+          !e.delete && <CommentDetail key={e.id}>
           <div className="profile">
             {/*<img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>*/}
             <img src={e.customer.profilePic}/>
