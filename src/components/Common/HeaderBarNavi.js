@@ -9,9 +9,9 @@ import { BiExit } from 'react-icons/bi'
 import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
-import axios from 'axios';
 import CustomerApi from '../../api/CustomerApi';
 import NotificationApi from '../../api/NotificationApi';
+
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -54,12 +54,6 @@ const LoggedInDiv = styled.div`
   padding-right: 65px;
   gap: 15px;
 
-  .nofi {
-    margin-right: 50px;
-    background-color: transparent;
-    border: none;
-    margin-top: 10px;
-  }
 `;
 
 const Exit = styled(BiExit)`
@@ -96,7 +90,7 @@ const HeaderBar = () => {
   const [oldNofi, setOldNofi] = useState("");
   const [isNewNofi, setIsNewNofi] = useState(false);
   const [nofiData, setNofiData] = useState("");
-  const{setEmail,  email, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
     useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -160,8 +154,8 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <button className="nofi" onClick={notificationFunc}>
-              {isNewNofi ? <NofiOn /> : <NofiNone />}
+          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
+              {isNewNofi !== "" ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>

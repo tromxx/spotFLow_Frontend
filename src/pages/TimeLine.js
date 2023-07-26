@@ -582,8 +582,6 @@ const handleUploadImage = async () => {
     }  
 
 
-
-
   // 게시물 작성하기 조건 로직 ref  
     const titleRef = useRef();
     const contentRef = useRef();
@@ -600,8 +598,10 @@ const handleUploadImage = async () => {
     
     
     const CreatePostConfirm = async () => {
+
       
       if (content.length < 5 || place === "" || location.latitude == null || location.longitude == null ) {
+
         contents.current.focus();
         return;  
       }
@@ -610,8 +610,8 @@ const handleUploadImage = async () => {
       }
       
       const updatedData = {
-        ...data,
         content: content,
+
         image: selectedImage , 
         lat: state.center.lat,
         lng: state.center.lng ,
@@ -632,6 +632,7 @@ const handleUploadImage = async () => {
           setPlace("");  
           setLocationValue("");
       }
+
       setIsCreate(false);
     }
 
@@ -675,7 +676,6 @@ const handlePostClick = async (postId) => {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
 
-    
 
   useEffect(()=> { // Observer creation
     const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
@@ -713,7 +713,6 @@ const handlePostClick = async (postId) => {
   } 
   }, []);
 
-
     // 무한스크롤 하단 감시 변수 
     const target = useRef(null);
    
@@ -746,12 +745,8 @@ const handlePostClick = async (postId) => {
 
 
 
+  
     
-
-
-
-
-
   // 토글 여부를 결정하는 state 선언
   const [toggleBtn, setToggleBtn] = useState(true);
 
@@ -772,12 +767,10 @@ const handlePostClick = async (postId) => {
     };
   }, []);
 
-  
-
-
-
-
-  
+  // 버튼 클릭 시 스크롤을 맨 위로 올려주는 함수
+  const goToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
 
 

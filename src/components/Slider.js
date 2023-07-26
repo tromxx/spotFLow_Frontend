@@ -159,10 +159,11 @@ const SlickItems = styled.div`
     img {
         /* max-width: 250px */
         margin: 10px;
-        margin-bottom:0px;
+        margin-bottom:30px;
         width: 100%;
         height: 100%;
         vertical-align: top;
+        padding: 0%;
 
     }
 
