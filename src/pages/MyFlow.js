@@ -468,7 +468,7 @@ const MyFlow = () =>{
 					fileRef.getDownloadURL().then((url) => {
 						console.log("저장경로 확인 : " + url);
 						setUploadedUrl(url);
-						
+						setSortedFlow("");
 					});
 				});
 			} else {
@@ -485,19 +485,22 @@ const MyFlow = () =>{
 
 		// 글 DB에 올리는 부분 구현
 		const continueToDB = async () => {
-				const response = MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, uploadedUrl, place)
-				setSortedFlow("");
+				const response = await MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, uploadedUrl, place)
 				console.log("데이터 확인" + response.data);
 				setData(response.data);
 				setSortedFlow(response.data);
-				handleSort();
-			
 			setPlace("");
 			setFlowModalText("");
 			setThumbnailSrc("");
 			setFlowModalOpen(false);
 			setLocationValue("");
 		};
+
+		useEffect(()=> {
+			if(sortedFlow !== "") {
+				console.log(sortedFlow)
+			}
+		}, [sortedFlow]);
 
 	// 플로우 작성 시 이미지 추가 및 추가시 썸네일
 
