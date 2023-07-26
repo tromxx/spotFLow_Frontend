@@ -1,11 +1,9 @@
 import {styled} from 'styled-components';
 import MapView from "./MapView";
-import {useContext, useEffect, useState} from "react";
+import { useState} from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
 import SlideDiv from '../components/Home/SlideDiv'
 import MyPage from '../components/Home/MyPage'
-import CustomerApi from '../api/CustomerApi';
-import { UserContext } from '../context/UserStore';
 import Follow from '../components/Home/Follow';
 
 const MenuButton = styled(AiOutlineMenu)`

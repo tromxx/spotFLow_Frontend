@@ -582,8 +582,6 @@ const handleUploadImage = async () => {
     }  
 
 
-
-
   // 게시물 작성하기 조건 로직 ref  
     const titleRef = useRef();
     const contentRef = useRef();
@@ -600,8 +598,12 @@ const handleUploadImage = async () => {
     
     
     const CreatePostConfirm = async () => {
+<<<<<<< HEAD
+      if (content.length < 5) {
+=======
       
       if (content.length < 5 || place === "" || location.latitude == null || location.longitude == null ) {
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
         contents.current.focus();
         return;  
       }
@@ -610,16 +612,22 @@ const handleUploadImage = async () => {
       }
       
       const updatedData = {
-        ...data,
         content: content,
+<<<<<<< HEAD
+        image: selectedImage
+=======
         image: selectedImage , 
         lat: state.center.lat,
         lng: state.center.lng ,
         place : place,
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
       };
       const token = localStorage.getItem('authToken');
       
       setData(updatedData);
+<<<<<<< HEAD
+      await userTimelineApi.setUserTimeline(updatedData,token);
+=======
     
       const res = await userTimelineApi.setUserTimeline(updatedData,token);
 
@@ -632,6 +640,7 @@ const handleUploadImage = async () => {
           setPlace("");  
           setLocationValue("");
       }
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
       setIsCreate(false);
     }
 
@@ -675,7 +684,11 @@ const handlePostClick = async (postId) => {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
 
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
 
   useEffect(()=> { // Observer creation
     const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
@@ -712,7 +725,10 @@ const handlePostClick = async (postId) => {
     console.error(e);
   } 
   }, []);
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
 
     // 무한스크롤 하단 감시 변수 
     const target = useRef(null);
@@ -746,12 +762,16 @@ const handlePostClick = async (postId) => {
 
 
 
+  
     
+<<<<<<< HEAD
+=======
 
 
 
 
 
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
   // 토글 여부를 결정하는 state 선언
   const [toggleBtn, setToggleBtn] = useState(true);
 
@@ -772,12 +792,19 @@ const handlePostClick = async (postId) => {
     };
   }, []);
 
+<<<<<<< HEAD
+  // 버튼 클릭 시 스크롤을 맨 위로 올려주는 함수
+  const goToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+=======
   
 
 
 
 
   
+>>>>>>> e7a42447c3f6e770770b4fa4088cd3572d25f2c2
 
 
 

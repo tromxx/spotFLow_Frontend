@@ -5,9 +5,14 @@ import DarkLogo from "../../images/DarkLogo.png"
 import { useTheme } from "../../context/themeProvider";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
-import {BiExit} from 'react-icons/bi'
+import { BiExit } from 'react-icons/bi'
 import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
+import { useEffect } from 'react';
+import axios from 'axios';
+import CustomerApi from '../../api/CustomerApi';
+import NotificationApi from '../../api/NotificationApi';
+
 import CustomerApi from '../../api/CustomerApi'
 import { useEffect } from 'react';
 
@@ -52,12 +57,6 @@ const LoggedInDiv = styled.div`
   padding-right: 65px;
   gap: 15px;
 
-  .nofi {
-    margin-right: 50px;
-    background-color: transparent;
-    border: none;
-    margin-top: 10px;
-  }
 `;
 
 const Exit = styled(BiExit)`
@@ -91,8 +90,10 @@ const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const [isNewNofi, setIsNewNofi] = useState("");
-  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const [oldNofi, setOldNofi] = useState("");
+  const [isNewNofi, setIsNewNofi] = useState(false);
+  const [nofiData, setNofiData] = useState("");
+  const{setEmail,  email, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
     useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -117,11 +118,35 @@ const HeaderBar = () => {
     };
     getCustomerInfo();
   }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
+  
+  useEffect(() => {
+    if(isLoggedIn) {
+      const token = localStorage.getItem("authToken");
 
+    const fetchNoti = async () => {
+      const response = await NotificationApi.getAllNoti(token);
+      if(response.data !== oldNofi) {
+        setIsNewNofi(true);
+        setOldNofi(response.data);
+      } else {
+        console.log("새로운 알림이 없습니다.");
+      }
+    }
+
+    fetchNoti();
+
+    }
+    
+  }, []);
 
   const logOut = () =>{
     localStorage.clear();
     setIsLoggedIn(false);
+  }
+
+  const notificationFunc = () => {
+    navigate("/nofication");
+    setIsNewNofi(false);
   }
 
   return (
