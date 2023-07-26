@@ -21,9 +21,16 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     /* background-color: gray; */
+  
     position: relative;
-    top:70px;
-
+    top:50px;
+    @media (max-width: 850px) {
+      & {
+        top:0;
+      }
+    }
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "white"};
+    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
     .namebar{
         display: flex;
         width: 70vw;
@@ -149,6 +156,7 @@ const DiaryMypagediv = styled.div`
         width: 90vw;
         border: solid 1px black;
     }
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "white"};
 
 
 `;
@@ -237,7 +245,7 @@ const DiaryMypagediv = styled.div`
             </header>
             <body>
         <DiaryMypagediv>
-            <MyDiary trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
+            <MyDiary email={user.email}trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
         </DiaryMypagediv>
         </body>
         </Container>

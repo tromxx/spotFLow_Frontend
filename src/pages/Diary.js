@@ -22,7 +22,14 @@ const Container = styled.div`
     /* background-color: gray; */
     position: relative;
     top:40px;
-
+    @media (max-width: 850px) {
+      & {
+        top:0;
+      }
+    }
+   
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "white"};
+    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
     .namebar{
         display: flex;
         width: 80vw;
@@ -101,8 +108,27 @@ const DiaryDiv = styled.div`
     justify-content: center;
     align-items: center;
     /* background-color: beige; */
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#504C56" : "white"};
 `;
 
+const Search = styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 80vw;
+    height: 40vh;
+    position: absolute;
+    top:30%;
+    border: 1px solid ;
+    left: 10%;
+    background-color: white;
+
+    .items {
+        width: 20%;
+        height: 95%;
+        border: 1px solid;
+    }
+`
 
 
 const Diary = () =>{
@@ -114,19 +140,51 @@ const Diary = () =>{
     const navi = useNavigate();
 
 
+    const [friendData, setFriendData] = useState([]);
+    const [hotData,setHotData] = useState([]);
+
     const activeEnter = (e) => {
         if(e.key === "Enter") {
           handleSearch();
+          setIsSearch(true);
         }
       }
 
-   
+    
+    const [isSearch,setIsSearch] = useState(false);
 
-    useEffect(()=> {
-        if(!user.isLoggedIn) {
-            console.log("로그인이 안되었어요");
-        }
-    })
+
+
+      const fetchHotData = async () => {
+         const res = await DiaryApi.findMyDiary(user.email);    
+        let filteredAndSortedData = (res.data.filter(e=> e.delete !== true));
+         
+         filteredAndSortedData.sort((a, b) => {
+            if (a.like > b.like) {
+                return -1;
+            }
+            if (a.like < b.like) {
+                return 1;
+            }
+            return 0;
+        });
+
+         setHotData(filteredAndSortedData);    
+        console.log(res.data);
+      };
+      
+      const fetchFriendData = async () => {
+        const res = await DiaryApi.searchFreind(user.email);    
+        setFriendData(res.data);
+      };
+      
+      useEffect(() => {
+        fetchHotData();
+        fetchFriendData();
+      }, []);
+    
+
+
           const [name,setName] = useState("");
           const [isType, setIsType] = useState(true);
 
@@ -142,6 +200,8 @@ const Diary = () =>{
             setSearch(res.data);
         }
 
+
+        const [type, setType] = useState('popular');
 
     
     if(!user.isLoggedIn) {
@@ -186,19 +246,35 @@ const Diary = () =>{
                 {/* <DiaryLayout name={"Popular"}/>
                 <DiaryLayout name={"Friend"}/>
                 <DiaryLayout name={"Local live"}/>  */}
-                <Slider names={"Popular"} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll}/>
-                <Slider names={"Friend"} setName={setName} setIsType={()=>setIsType(false)} setIsAll={setIsAll}/>
+              { isSearch &&  <Slider setIsSearch={setIsSearch} isSearch={isSearch}  email={user.email} names={`${search.length} 개의 검색결과`} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll} data={search}/> }
+                <Slider email={user.email} names={"Popular"} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll} data={hotData}/>
+                <Slider email={user.email} names={"Friend"} setName={setName} setIsType={()=>setIsType(false)} setIsAll={setIsAll} data={friendData}/>
                 {/* <Slider name={"Local live"}/> */}
             </DiaryDiv>
             </body>
         </Container>
         : 
         <>
-        { isType ? <DiaryCategory name={"Popular"} setIsAll={setIsAll}/> :  
-                    <DiaryCategory name={"Friend"} setIsAll={setIsAll}/>
-        }
+        { isType ? 
+                    <DiaryCategory isType={isType} fetchData={fetchHotData} name={"Popular"} setIsAll={setIsAll} data={hotData}/> :  
+                    <DiaryCategory isType={isType} fetchData={fetchFriendData} name={"Friend"} setIsAll={setIsAll} data={friendData}/>
+            }
         </>
         }
+            {/* <>
+        {
+           
+            isSearch && 
+            <Search >
+              
+                <DiaryDiv>
+                <Slider email={user.email} names={"Popular"} setName={setName}  setIsType={()=>setIsType(true)} setIsAll={setIsAll} data={hotData}/>
+                </DiaryDiv>
+               <button onClick={()=> {setIsSearch(false)}}></button>
+            </Search>
+        }
+            </> */}
+
         </>
         
     );

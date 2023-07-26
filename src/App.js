@@ -60,19 +60,19 @@ function App() {
               <ChangeInfo />
             </>} />
             <Route path="/diary" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
             <Route path="/diaryCategory" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCategory />
             </>} />
             <Route path="/diaryMypage" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryMypage />
             </>} />
             <Route path="/diaryCreate" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
             </>} />
             <Route path="/flow" element={
@@ -83,7 +83,7 @@ function App() {
             }/>
             <Route path="/diary/detail/:id" element={
               <>
-                <HeaderBarNavi />
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <DiarySwiper/>
               </>
             }/>

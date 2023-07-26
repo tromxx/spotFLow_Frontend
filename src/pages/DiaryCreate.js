@@ -70,8 +70,8 @@ const TopMenu = styled.div`
 const Main = styled.div`
   @media (max-width: 850px) {
     & {
-      width: 100%;
-
+      width: 99%;
+      height: 100%;
     }
   }
   background-color: white;
@@ -214,6 +214,7 @@ const Main = styled.div`
       appearance: none;
       cursor: pointer;
       transition: ease 0.2s;
+      
     }
 
     button:hover {
@@ -281,7 +282,7 @@ function DiaryCreate() {
     console.log(timeline);
    const sss = DiaryApi.saveDiary(user.email, title.current.value, text.current.value, timeline);
     console.log(sss.data);
-    alert("제목:" + newDiaryPost.title + "내용:" + newDiaryPost.content + "아이디:" + timeline);
+
     navi("/diaryMypage");
     
   }
@@ -314,7 +315,7 @@ function DiaryCreate() {
           <div className='user'>
             <img src={profile} style={{width: "50px", marginRight: "10px", marginLeft: "10px"}}></img>
             <div className='user-info'>
-              <div style={{width: "90%"}}>닉네임</div>
+              <div style={{width: "90%"}}>{user.nickname}</div>
               <div style={{width: "90%"}}>{`${year}년 ${month}월 ${date}일 ${hours}시 ${minutes}분`}</div>
             </div>
           </div>

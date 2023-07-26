@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import dummy from "../dataSet/TimeLineData";
 
-const DiaryCatediv = styled.div`
+ const DiaryCatediv = styled.div`
     /* border: solid 1px red; */
     width: 100%;
     height: 75vh;
@@ -66,47 +66,19 @@ const DiaryCatediv = styled.div`
     /* border: solid 1px red; */
   }
   `;
-const DiaryCate = () => {
+const DiaryCate = ({friendData}) => {
     return(
             <DiaryCatediv>
               <div className="container">
-                  {/* <div class="box">
-                    <div className="image"></div>
-                  </div>
-                    <div class="box">
-                    <div className="image"></div>
-                      </div>
-                    <div class="box"> 
-                    <div className="image"></div>
-                        </div>
-                    <div class="box"> 
-                    <div className="image"></div>
-                        </div>
-                    <div class="box"> 
-                    <div className="image"></div>
-                        </div>
-                    <div class="box"> 
-                    <div className="image"></div>
-                        </div>
-                    <div class="box"> 
-                    <div className="image"></div>
-                        </div>
-                    <div class="box"> 
-                    <div className="image"></div>
-                        </div>
-                    <div class="box"> 
-                      <div className="image"></div>
-                        </div>  */}
+                
                         {
-                          dummy.map((e)=> 
+                          friendData.map((e)=> 
                             <div class="box">
                               <img className="image" src={e.image}/>
                             </div>
                           )
                         }
-                        {/* <div class="box">
-                              <idiv className="image"> ++++++</idiv>
-                            </div> */}
+                       
                   </div>
             </DiaryCatediv>
     );
