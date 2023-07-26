@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useEffect, useContext } from 'react';
+import React, { useCallback, useRef, useContext,useState, useEffect } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 
@@ -6,7 +6,8 @@ import { RiHeart3Fill } from "react-icons/ri";
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import DiaryApi from '../api/DiaryApi';
-import UserStore from '../context/UserStore';
+import { UserContext } from '../context/UserStore';
+
 // import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const Sliderheader = styled.div`
@@ -18,7 +19,8 @@ const Sliderheader = styled.div`
     /* border: 1px solid; */
     background-color: white;
     border-top: 5px solid #2DCDDF ;
-
+    border-top: ${(props) => props.theme.bgColor === '#171010' ? "5px solid white" : "5px solid #2DCDDF"};
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "grey" : "white"};
 
      .left {
         margin: 30px;
@@ -40,11 +42,13 @@ const Sliderheader = styled.div`
 `;
 
 const Wrap = styled.div`
+
     * {
         font-family: 'Prompt', sans-serif;
         font-style: var(--kfont);
     }
     border-top:1px solid #2DCDDF;
+    border-top: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "1px solid #2DCDDF"};
     position: relative;
     padding-bottom: 30px;
     overflow: hidden;
@@ -91,6 +95,7 @@ const SlickItems = styled.div`
     height: 250px;
     text-align: center;
 
+
     .item {
         width: 95%;
         height:100%;
@@ -100,6 +105,7 @@ const SlickItems = styled.div`
     
 
     .item-header {
+
         display:flex;
         justify-content:start;
         flex-direction: row;
@@ -283,10 +289,10 @@ const Paging = styled.span`
 
 
 
-const MainSlider = ({email, names,setIsAll,setIsType}) => {
+const MainSlider = ({setIsSearch,isSearch,data,fetchFriendData,email, names,setIsAll,setIsType}) => {
 
     const [isMobile, setIsMobile] = useState(3);
-    const [data,setData] = useState([]);
+   // const [data,setData] = useState([]);
 
 
 
@@ -319,22 +325,23 @@ const MainSlider = ({email, names,setIsAll,setIsType}) => {
         };
       }, []);
 
+      const user = useContext(UserContext);
 
-      useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await DiaryApi.findMyDiary(email);
-                if(res) {
-                    console.log(res.data)
-                    setData(res.data.filter(e=> e.delete === false ));
-                }
-            } catch (error) {
-                console.error("데이터 불러오기실패 : ", error);
-            }
-        };
-        fetchData();
-        console.log(data);
-    }, []); 
+    //   useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const res = await DiaryApi.findMyDiary(user.email);
+    //             if(res) {
+    //                 console.log(res.data)
+    //                 setData(res.data.filter(e=> e.delete === false ));
+    //             }
+    //         } catch (error) {
+    //             console.error("데이터 불러오기실패 : ", error);
+    //         }
+    //     };
+    //     fetchData();
+    //     console.log(data);
+    // }, []); 
 
     
     const navi = useNavigate();
@@ -383,11 +390,12 @@ const MainSlider = ({email, names,setIsAll,setIsType}) => {
                     <div>{names}</div>           
                 </div>
                 <div className='right'>
-                    <div onClick={()=>{
+                    {isSearch && <div onClick={()=> setIsSearch(false)}></div>}
+                   { !isSearch && <div onClick={()=>{
                             setIsAll(false);
                             setIsType();
-                         }}>See All</div>
-                </div>
+                         }}>See All</div> }
+                         </div>
             </Sliderheader>
             <Wrap>
                 <Slick ref={slickRef} {...settings}>
@@ -426,17 +434,7 @@ const MainSlider = ({email, names,setIsAll,setIsType}) => {
                         )
                     })}
                 </Slick>
-                {/* <>
-                    <PrevButton onClick={previous}>
-                        <GrFormPreviousLink style={{fontSize:"30px" }}/>
-                            <span className="hidden"></span>
-                    </PrevButton>
-
-                    <NextButton onClick={next}>
-                        <GrFormNextLink  style={{fontSize:"30px"}}/>
-                        <span className="hidden"></span>
-                    </NextButton>
-                </> */}
+               
             </Wrap>
         </>
     );

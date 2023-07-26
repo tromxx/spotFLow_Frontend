@@ -1,9 +1,81 @@
 import React, { useEffect, useState } from "react";
 import { styled } from 'styled-components';
-import DiaryCate from "../components/DiaryCate";
+
 import { BsPeople } from "react-icons/bs";
 import { BsListUl } from "react-icons/bs";
 import { Navigate, useNavigate } from 'react-router-dom';
+
+
+const DiaryCatediv = styled.div`
+
+    /* border: solid 1px red; */
+    width: 100%;
+    height: 75vh;
+    flex-grow: 1;
+    align-items: center;
+    /* @media (max-width:900px) {
+        grid-template-columns: 1fr 1fr ;
+    } */
+    
+  .container::-webkit-scrollbar {
+      display: none;
+  }
+    
+
+  .container{
+    /* border-radius: 20px; */
+    border: 3px solid black;
+    width: 100%;
+    height: 73vh;
+    display: grid;
+    /* grid-template-columns: repeat(3, 1fr); */
+    gap: 0px;
+    grid-auto-rows: minmax(260px, auto);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    grid-gap: 5px;
+    overflow-y: scroll;
+    overflow-x: none;
+    margin-right: 10px;
+
+
+
+
+    
+  
+    /* @media (min-width:1000px) {
+        grid-template-columns: 1fr 1fr ;
+    }
+     */
+    
+    
+  }
+  .box{
+    /* border: solid 1px violet; */
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    /* margin: 30px; */
+    border: solid 5px black;
+    /* border-radius: 5px; */
+    margin-left: 0px;
+    overflow-x :auto;
+    
+    
+
+    
+
+  }
+  .image{
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    /* border: solid 1px red; */
+  }
+
+
+  `;
 
 
 
@@ -12,7 +84,7 @@ const Container = styled.div`
     padding: 0;
     width: 100vw;
     height: 100vh;
- 
+   
     /* background-color: gray; */
     position: relative;
     /* @media (max-width:900px) {
@@ -30,6 +102,8 @@ const Container = styled.div`
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+
         /* @media (max-width:850px) {
         grid-template-columns: 1fr 1fr ;
     }
@@ -104,6 +178,7 @@ const DiaryCategoryDiv = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     /* background-color: beige; */
     /* border-radius: 10px; */
     /* @media (max-width:900px) {
@@ -112,15 +187,20 @@ const DiaryCategoryDiv = styled.div`
 `;
 
 
-const DiaryCategory = ({name,stat,setIsAll}) =>{
+const DiaryCategory = ({fetchData,isType,data,name,stat,setIsAll}) =>{
 
     const navi = useNavigate();
     let checkbox = 0;
 
 
     useEffect(() => {
-        checkbox = stat;
-    }, [stat]);
+        const fetchDataAndSet = async () => {
+          checkbox = stat;
+          await fetchData();
+        };
+      
+        fetchDataAndSet();
+      }, [stat]);
 
     return(
         <Container>
@@ -136,7 +216,19 @@ const DiaryCategory = ({name,stat,setIsAll}) =>{
                     </div>
                 </div>
                 <DiaryCategoryDiv>
-                        <DiaryCate/>
+                        <DiaryCatediv>
+                    <div className="container">
+                        
+                                {
+                                data.map((e)=> 
+                                    <div class="box">
+                                        <img onClick={()=>{ navi(`/diary/detail/${e.id}`)}} src={e.timeLineList[0].image} alt="" />
+                                    </div>
+                                )
+                                }
+                            
+                        </div>
+                    </DiaryCatediv>
                 </DiaryCategoryDiv>
             </div>
         </Container>

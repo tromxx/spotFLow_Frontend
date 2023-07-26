@@ -51,6 +51,12 @@ const DiaryApi = {
       }
       return await axios.post(DOMAIN + "/diary/search" , body);
   },
+
+   // 팔로우관계의 다이어리 검색 
+   searchFreind : async (email) => {
+    return await axios.get(DOMAIN + "/diary/following?email=" + email);
+},
+
 }
 
 export default DiaryApi;
