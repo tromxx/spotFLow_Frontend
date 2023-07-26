@@ -315,7 +315,7 @@ function DiaryCreate() {
           <div className='user'>
             <img src={profile} style={{width: "50px", marginRight: "10px", marginLeft: "10px"}}></img>
             <div className='user-info'>
-              <div style={{width: "90%"}}>닉네임</div>
+              <div style={{width: "90%"}}>{user.nickname}</div>
               <div style={{width: "90%"}}>{`${year}년 ${month}월 ${date}일 ${hours}시 ${minutes}분`}</div>
             </div>
           </div>
