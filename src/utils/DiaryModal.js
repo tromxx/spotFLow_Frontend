@@ -13,12 +13,20 @@ const centerAlign = css`
 
 const ListContainer = styled.div`
     ${centerAlign}
+    text-align : center;
     position: fixed;
     background-color: white;
     width: 61vw;
     height: 92vh;
     border: 1px solid;
+    border: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "white"};
     border-radius: 10px;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "silver" : "white"};
+    @media (max-width: 850px) {
+      & {
+        width: 98vw;
+      }
+    }
 `
 const List = styled.div`
     ${centerAlign}
@@ -26,10 +34,13 @@ const List = styled.div`
     width: 90%;
     height: 90%;
     flex-direction: column;
+    border: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "1px solid black"};
+
 
     .header {
         height: 10%;
         border:1px solid;
+        border: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "1px solid blakc"};
         width: 100%;
         ${centerAlign}
         flex-direction: row;
@@ -80,19 +91,26 @@ const List = styled.div`
         border:1px solid;
         width: 100%;
         overflow: scroll ;
-
+        border: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "1px solid black"};
         .item{
             ${centerAlign}
             justify-content: start;
             width: 100%;
 
             border: 1px solid;
+            border: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "1px solid black"};
             height: 20%;
 
             img{
                 margin:10px;
                 width: 10%;
                 height: 80%;
+
+                @media (max-width: 850px) {
+                        & {
+                            width: 30%;
+                        }
+                        }
             }
 
             input[type="checkbox"] {

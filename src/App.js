@@ -9,7 +9,7 @@ import SignUp from './pages/Signup';
 import { ThemeProvider } from './context/themeProvider';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
-import {DiarySwiper} from "./components/DiarySwiper";
+import {DiarySwiper} from "./components/DiaryDetail/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
@@ -60,19 +60,19 @@ function App() {
               <ChangeInfo />
             </>} />
             <Route path="/diary" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
             <Route path="/diaryCategory" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCategory />
             </>} />
             <Route path="/diaryMypage" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryMypage />
             </>} />
             <Route path="/diaryCreate" element={<>
-              <HeaderBarNavi />
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
             </>} />
             <Route path="/flow" element={
@@ -83,7 +83,7 @@ function App() {
             }/>
             <Route path="/diary/detail/:id" element={
               <>
-                <HeaderBarNavi />
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <DiarySwiper/>
               </>
             }/>

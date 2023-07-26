@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 import dummy from "../dataSet/TimeLineData";
 import Checkbox from "./CheckBox";
 import { useNavigate } from "react-router-dom";
 import DiaryApi from "../api/DiaryApi";
+import UserContext from "../context/UserStore";
+
 
 
 const MyDiarydiv = styled.div`
+
     /* border: solid 1px red; */
     width: 70vw;
     height: auto;
@@ -29,7 +32,7 @@ const MyDiarydiv = styled.div`
       grid-template-columns: repeat(auto-fit, minmax(300px, 2fr)); */
       grid-template-columns: 1fr 1fr 1fr;
       grid-template-rows: auto;
-
+      
       @media (max-width:850px) {
           grid-template-columns: 1fr 1fr ;
       }
@@ -123,10 +126,10 @@ const MyDiarydiv = styled.div`
     }
 `;
 
-      const MyDiary = ({trigger,stat,checkid, setCheckId }) => {
+      const MyDiary = ({email, trigger,stat,checkid, setCheckId }) => {
         const [items, setItems] = useState(new Set());
         const [data, setData] = useState([]);
-      
+        const user = useContext(UserContext);
     
         const itemHandler = (id, isChecked) => {
           if(isChecked) {
@@ -136,7 +139,7 @@ const MyDiarydiv = styled.div`
           }
         }
 
-    
+      
      
 
     
@@ -153,7 +156,7 @@ const MyDiarydiv = styled.div`
 
       useEffect(()=>{
         const fetchData = async()=>{
-        const res =  await DiaryApi.findMyDiary("test@example.com");
+        const res =  await DiaryApi.findMyDiary(email);
         setData(res.data);
         console.log(res.data);
         }
@@ -176,7 +179,7 @@ const MyDiarydiv = styled.div`
                   />
                 )}
                 <button style={{position:"absolute", top:"0" , right: "0" }} onClick={()=>itemHandler(data.id)}>삭제하기</button>
-                <div className="img-box">
+                <div onClick={()=>{ navigate(`/diary/detail/${data.id}`)}} className="img-box">
                   <img className="image" src={data.timeLineList[0]?.image} alt="" />
                 </div>
               </div>

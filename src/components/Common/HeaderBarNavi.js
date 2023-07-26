@@ -13,6 +13,8 @@ import axios from 'axios';
 import CustomerApi from '../../api/CustomerApi';
 import NotificationApi from '../../api/NotificationApi';
 
+import CustomerApi from '../../api/CustomerApi'
+import { useEffect } from 'react';
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -97,7 +99,31 @@ const HeaderBar = () => {
   const [oldNofi, setOldNofi] = useState("");
   const [isNewNofi, setIsNewNofi] = useState(false);
   const [nofiData, setNofiData] = useState("");
-  const{ email, nickname,  isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{setEmail,  email, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  
+    useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const getCustomerInfo = async () => {
+      if (token != null) {
+        try {
+          const response = await CustomerApi.getCustomerInfo(token);
+          setEmail(response.data.customer.email);
+          setNickname(response.data.customer.nickName);
+          setProfilePic(response.data.customer.profilePic);
+          setStatMsg(response.data.customer.statMsg);
+          setFollower(response.data.follower.follower);
+          setFollowing(response.data.follower.following);
+          setIsLoggedIn(true);
+        } catch (error) {
+          localStorage.clear();
+          setIsLoggedIn(false);
+        }
+      }else{
+        return null;
+      }
+    };
+    getCustomerInfo();
+  }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
   
   useEffect(() => {
     if(isLoggedIn) {

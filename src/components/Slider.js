@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useRef, useContext,useState, useEffect } from 'react';
 import Slick from 'react-slick';
 import styled, { css } from 'styled-components';
 
@@ -6,6 +6,8 @@ import { RiHeart3Fill } from "react-icons/ri";
 import { GrFormPreviousLink , GrFormNextLink } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import DiaryApi from '../api/DiaryApi';
+import { UserContext } from '../context/UserStore';
+
 // import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const Sliderheader = styled.div`
@@ -15,8 +17,10 @@ const Sliderheader = styled.div`
     width: 100%;
     height: 30px;
     /* border: 1px solid; */
-    border-top: 10px solid #00b4d8;
-
+    background-color: white;
+    border-top: 5px solid #2DCDDF ;
+    border-top: ${(props) => props.theme.bgColor === '#171010' ? "5px solid white" : "5px solid #2DCDDF"};
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "grey" : "white"};
 
      .left {
         margin: 30px;
@@ -38,17 +42,19 @@ const Sliderheader = styled.div`
 `;
 
 const Wrap = styled.div`
+
     * {
         font-family: 'Prompt', sans-serif;
         font-style: var(--kfont);
     }
-    border-top:5px solid lightblue;
+    border-top:1px solid #2DCDDF;
+    border-top: ${(props) => props.theme.bgColor === '#171010' ? "1px solid white" : "1px solid #2DCDDF"};
     position: relative;
     padding-bottom: 30px;
     overflow: hidden;
     width: 100%;
-    height: 33.3%;
-    margin:0px;
+    height: 45%;
+    margin:10px;
     margin-top: 0px;
     
 	
@@ -86,8 +92,9 @@ const Wrap = styled.div`
 const SlickItems = styled.div`
       position: relative; 
     width: 50%;  // Change this line
-    height: 100%;
+    height: 250px;
     text-align: center;
+
 
     .item {
         width: 95%;
@@ -98,6 +105,7 @@ const SlickItems = styled.div`
     
 
     .item-header {
+
         display:flex;
         justify-content:start;
         flex-direction: row;
@@ -281,10 +289,12 @@ const Paging = styled.span`
 
 
 
-const MainSlider = (props) => {
+const MainSlider = ({setIsSearch,isSearch,data,fetchFriendData,email, names,setIsAll,setIsType}) => {
 
     const [isMobile, setIsMobile] = useState(3);
-    const [data,setData] = useState([]);
+   // const [data,setData] = useState([]);
+
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -315,22 +325,23 @@ const MainSlider = (props) => {
         };
       }, []);
 
+      const user = useContext(UserContext);
 
-      useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await DiaryApi.findMyDiary("test@example.com");
-                if(res) {
-                    
-                    setData(res.data.filter(e=> e.delete === false ));
-                }
-            } catch (error) {
-                console.error("데이터 불러오기실패 : ", error);
-            }
-        };
-        fetchData();
-        console.log(data);
-    }, []); 
+    //   useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const res = await DiaryApi.findMyDiary(user.email);
+    //             if(res) {
+    //                 console.log(res.data)
+    //                 setData(res.data.filter(e=> e.delete === false ));
+    //             }
+    //         } catch (error) {
+    //             console.error("데이터 불러오기실패 : ", error);
+    //         }
+    //     };
+    //     fetchData();
+    //     console.log(data);
+    // }, []); 
 
     
     const navi = useNavigate();
@@ -369,15 +380,22 @@ const MainSlider = (props) => {
 
     const [selectedImageKey, setSelectedImageKey] = useState(0);
 
+
+    
+
     return (
         <>
             <Sliderheader>
                 <div className='left'>
-                    <div> {props.name}</div>           
+                    <div>{names}</div>           
                 </div>
                 <div className='right'>
-                    <div onClick={()=>{navi("/diaryCategory")}}>See All</div>
-                </div>
+                    {isSearch && <div onClick={()=> setIsSearch(false)}></div>}
+                   { !isSearch && <div onClick={()=>{
+                            setIsAll(false);
+                            setIsType();
+                         }}>See All</div> }
+                         </div>
             </Sliderheader>
             <Wrap>
                 <Slick ref={slickRef} {...settings}>
@@ -386,7 +404,7 @@ const MainSlider = (props) => {
                     {data.map((v, i) => {
                         return (
 
-                            <SlickItems key={`${v.title}_${i}`}> 
+                            <SlickItems onClick={()=>{ navi(`/diary/detail/${v.id}`)}} key={`${v.title}_${i}`}> 
                                 <div className='item'> 
                                        <div className='item-header'>
                                             <img src={v.customer.profilePic} alt="" />
@@ -416,17 +434,7 @@ const MainSlider = (props) => {
                         )
                     })}
                 </Slick>
-                <>
-                    <PrevButton onClick={previous}>
-                        <GrFormPreviousLink style={{fontSize:"30px" }}/>
-                            <span className="hidden"></span>
-                    </PrevButton>
-
-                    <NextButton onClick={next}>
-                        <GrFormNextLink  style={{fontSize:"30px"}}/>
-                        <span className="hidden"></span>
-                    </NextButton>
-                </>
+               
             </Wrap>
         </>
     );

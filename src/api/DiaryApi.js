@@ -34,11 +34,29 @@ const DiaryApi = {
     }
     console.log(comment)
     return await axios.post(DOMAIN + "/diary/comment", comment);
-  }
-  ,
+  },
+  deleteComment : async (comment) => {
+    console.log(comment)
+    return await axios.delete(DOMAIN + "/diary/comment/" + comment);
+  },
   // diaryMyPage : async () => {
   //   return await axios.post(DOMAIN + "diary/mypage", )
   // }
+
+
+  // 장소명으로 다이어리 검색 
+  searchPlace : async (place) => {
+      const body = {
+        place : place 
+      }
+      return await axios.post(DOMAIN + "/diary/search" , body);
+  },
+
+   // 팔로우관계의 다이어리 검색 
+   searchFreind : async (email) => {
+    return await axios.get(DOMAIN + "/diary/following?email=" + email);
+},
+
 }
 
 export default DiaryApi;
