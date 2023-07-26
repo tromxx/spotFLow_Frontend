@@ -9,10 +9,11 @@ import { BiExit } from 'react-icons/bi'
 import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
-import axios from 'axios';
 import CustomerApi from '../../api/CustomerApi';
 import NotificationApi from '../../api/NotificationApi';
 
+import CustomerApi from '../../api/CustomerApi'
+import { useEffect } from 'react';
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -91,7 +92,7 @@ const HeaderBar = () => {
   const [oldNofi, setOldNofi] = useState("");
   const [isNewNofi, setIsNewNofi] = useState(false);
   const [nofiData, setNofiData] = useState("");
-  const{setEmail,  email, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
   
     useEffect(() => {
     const token = localStorage.getItem('authToken');

@@ -677,7 +677,6 @@ const handlePostClick = async (postId) => {
 
 
 
-
   useEffect(()=> { // Observer creation
     const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
     if(obsRef.current) observer.observe(obsRef.current);
@@ -714,7 +713,6 @@ const handlePostClick = async (postId) => {
   } 
   }, []);
 
-
     // 무한스크롤 하단 감시 변수 
     const target = useRef(null);
    
@@ -749,7 +747,6 @@ const handlePostClick = async (postId) => {
 
   
     
-
   // 토글 여부를 결정하는 state 선언
   const [toggleBtn, setToggleBtn] = useState(true);
 
@@ -770,18 +767,10 @@ const handlePostClick = async (postId) => {
     };
   }, []);
 
-
   // 버튼 클릭 시 스크롤을 맨 위로 올려주는 함수
   const goToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  
-
-
-
-
-
 
 
 
