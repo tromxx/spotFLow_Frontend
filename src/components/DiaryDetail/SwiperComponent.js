@@ -285,8 +285,7 @@ export const Comment = (props) => {
   const Send = async () => {
     const request = {
       diary: props.diary,
-      comment: text,
-      email: props.customer.email
+      comment: text
     }
     await diaryApi.sendComment(request);
     await setText("");
