@@ -14,7 +14,6 @@ export const DiarySwiper = () => {
   const [overlay, setOverlay] = useState(0);
   // 댓글 표시 여부
   const [chatBox, setChatBox] = useState(0);
-  const [thumbs, setThumbs] = useState(0);
 
 
   const [diary, setDiary] = useState({})
@@ -38,10 +37,19 @@ export const DiarySwiper = () => {
     else setChatBox(0);
   }
 
-  function ThumbsUp(e) {
+  const [thumbs, setThumbs] = useState(0);
+
+  const ThumbsUp = async (e, email) => {
     e.stopPropagation();
-    if (thumbs === 0) setThumbs(1);
-    else setThumbs(0);
+    if (email !== null){
+      const thumbsData = await diaryApi.thumbsUP(id, email);
+      console.log("email : " + email);
+      console.log("status : " + thumbsData.status);
+      if (thumbsData.status === 200) {
+        setThumbs(thumbsData.data);
+        console.log(thumbsData);
+      }
+    }
   }
 
   function OverlayMode(e) {
@@ -51,38 +59,28 @@ export const DiarySwiper = () => {
     else setOverlay(0);
   }
 
-  const [email, setEmail] = useState("");
-  const [nickName, setNickname] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const [statMsg, setStatMsg] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const token = localStorage.getItem('authToken');
-  console.log(token);
+  const [customer, setCustomer] = useState(null);
+
   useEffect(() => {
     DiaryInit();
+    const token = localStorage.getItem('authToken');
+    console.log(token);
     // 이부분 localStorage 에서 토큰 뺴오기
-    // const getCustomerInfo = async () => {
-    //   if (token != null) {
-    //     try {
-    //       const response = await CustomerApi.getCustomerInfo(token);
-    //       setEmail(response.data.email);
-    //       setNickname(response.data.nickName);
-    //       setProfilePic(response.data.profilePic);
-    //       setStatMsg(response.data.statMsg);
-    //       setIsLoggedIn(true);
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    //   }else{
-    //     return null;
-    //   }
-    //   console.log(email)
-    //   console.log(nickName)
-    //   console.log(profilePic)
-    //   console.log(statMsg)
-    //   console.log(isLoggedIn)
-    // };
-    // getCustomerInfo();
+    const getCustomerInfo = async () => {
+      if (token != null) {
+        try {
+          const response = await CustomerApi.getCustomerInfo(token);
+          const customer = response.data.customer;
+          console.log(customer)
+          setCustomer(customer)
+        } catch (error) {
+          throw error;
+        }
+      }else{
+        return null;
+      }
+    };
+    getCustomerInfo();
   }, [count]);
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>
@@ -119,12 +117,12 @@ export const DiarySwiper = () => {
         )
         }
       </SC.DiarySwipe>
-      {chatBox === 1 && <SC.Comment diary={id} commentList={comment} count={count} setCount={setCount}/>}
+      {chatBox === 1 && <SC.Comment diary={id} commentList={comment} count={count} setCount={setCount} customer={customer}/>}
 
       <SC.Btn onClick={(event) => OpenChat(event)}>
         <BsChatDots className="comment"/>
       </SC.Btn>
-      <SC.Thumbs onClick={(event) => ThumbsUp(event)}>
+      <SC.Thumbs onClick={(event) => ThumbsUp(event,customer.email)}>
         {thumbs === 0 ? <FaRegThumbsUp className="thumbs-up"/> : <FaThumbsUp className="thumbs-up"/>}
       </SC.Thumbs>
 

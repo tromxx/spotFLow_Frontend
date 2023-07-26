@@ -598,7 +598,10 @@ const handleUploadImage = async () => {
     
     
     const CreatePostConfirm = async () => {
-      if (content.length < 5) {
+
+      
+      if (content.length < 5 || place === "" || location.latitude == null || location.longitude == null ) {
+
         contents.current.focus();
         return;  
       }
@@ -608,12 +611,28 @@ const handleUploadImage = async () => {
       
       const updatedData = {
         content: content,
-        image: selectedImage
+
+        image: selectedImage , 
+        lat: state.center.lat,
+        lng: state.center.lng ,
+        place : place,
       };
       const token = localStorage.getItem('authToken');
       
       setData(updatedData);
-      await userTimelineApi.setUserTimeline(updatedData,token);
+    
+      const res = await userTimelineApi.setUserTimeline(updatedData,token);
+
+      if(res) {
+
+          console.log(res.data);
+         setItems(prevItems => [res.data, ...prevItems]);
+          setContent("");
+          setSelectedImage(null);
+          setPlace("");  
+          setLocationValue("");
+      }
+
       setIsCreate(false);
     }
 
