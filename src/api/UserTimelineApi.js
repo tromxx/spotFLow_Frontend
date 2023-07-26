@@ -47,7 +47,7 @@ const userTimelineApi = {
 
   // 조회수를 올려줌
   upView: async (postId) => {
-    return await api.put( DOMAIN + `auth/timeline/${postId}/views` );
+    return await api.put( DOMAIN + `/auth/timeline/${postId}/views` );
   },
 }
 
