@@ -405,7 +405,7 @@ const MainSlider = ({setIsSearch,isSearch,data,fetchFriendData,email, names,setI
                     {data.map((v, i) => {
                         return (
 
-                            <SlickItems onClick={()=>{ navi(`/diary/detail/${v.id}`)}} key={`${v.title}_${i}`}> 
+                            <SlickItems key={v.id} onClick={()=>{ navi(`/diary/detail/${v.id}`)}} key={`${v.title}_${i}`}>
                                 <div className='item'> 
                                        <div className='item-header'>
                                             <img src={v.customer.profilePic} alt="" />
@@ -418,7 +418,7 @@ const MainSlider = ({setIsSearch,isSearch,data,fetchFriendData,email, names,setI
                                                     {   
                                                         return(
                                                         // <img className='timeline-img' style={{position:"relative",right:"0", width:"30px",height:"30px"}} src={e.image}></img>
-                                                            <button onClick={()=> setSelectedImageKey(index) }></button>
+                                                            <button key={e.id} onClick={()=> setSelectedImageKey(index) }></button>
                                                     )}
                                                 )    
                                                 }

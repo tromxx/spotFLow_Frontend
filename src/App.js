@@ -92,6 +92,7 @@ function App() {
             <>
             {windowWidth <= 840 ? null : <HeaderBarNavi />}
             {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
+            
              
             </>
            }/>

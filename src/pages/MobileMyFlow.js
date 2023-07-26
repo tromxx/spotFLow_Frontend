@@ -23,6 +23,8 @@ import { Map } from "react-kakao-maps-sdk";
 import { SlLocationPin } from "react-icons/sl";
 import LocationModal from "../utils/LocationModal";
 import { TfiArrowLeft } from "react-icons/tfi";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -403,20 +405,27 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
+	const { isLoggedIn } = useContext(UserContext);
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
-	useEffect(() => {
+	 useEffect(() => {
 		const token = localStorage.getItem('authToken');
 		console.log(token);
 		console.log("useEffect 실행");
-    const fetchData = async () => {
-        const response = await MyFlowApi.getmyFlow(token);
-        setData(response.data);
+	
+		const fetchData = async () => {
+			try {
+				const response = await MyFlowApi.getmyFlow(token);
+				setData(response.data);
 				setSortedFlow(response.data);
-    };
-			fetchData(); // fetchData 함수 호출
-  	}, []);
-
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		
+		fetchData(); // fetchData 함수 호출
+	}, []);
+	
 		// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
     setSort((prevSort) => (prevSort === "az" ? "za" : "az"));
@@ -510,7 +519,7 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 	  // 플로우 작성시 이미지 파일 선택하는 핸들링
 
 		const [file, setFile] = useState(null);
-  	const [url, setUrl] = useState('');
+  	const [uploadedUrl, setUploadedUrl] = useState('');
 	
 		const handleUpload = () => {
 			// 파일이 있는지 확인
@@ -523,28 +532,36 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 					console.log('File uploaded successfully!');
 					fileRef.getDownloadURL().then((url) => {
 						console.log("저장경로 확인 : " + url);
-						setUrl(url);
-						continueToDB();
+						setUploadedUrl(url);
+						setSortedFlow("");
 					});
 				});
 			} else {
 				console.log('파일이 없습니다.');
-				continueToDB();
+				
 			}
 		};
+		
+		useEffect(() => {
+			if (uploadedUrl) {
+				continueToDB();
+			}
+		}, [uploadedUrl]);
 
 		// 글 DB에 올리는 부분 구현
 		const continueToDB = async () => {
-			MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, url, place, async function() {
-				const response = await MyFlowApi.getmyFlow();
-				setSortedFlow("");
+				const response = await MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, uploadedUrl, place)
+				console.log("데이터 확인" + response.data);
 				setData(response.data);
 				setSortedFlow(response.data);
-				handleSort();
-			});
-		
+			setPlace("");
+			setFlowModalText("");
+			setThumbnailSrc("");
 			setFlowModalOpen(false);
+			setLocationValue("");
 		};
+
+		
 
 	// 플로우 작성 시 이미지 추가 및 추가시 썸네일
 

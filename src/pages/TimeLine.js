@@ -883,7 +883,7 @@ const handleLocationModal = () => {
             <HeaderItemRight>
                 
                 <CreateBtn onClick={moveMyFlow} style={{fontSize:"8px"}}>
-                     MyFlow
+                     My
                 </CreateBtn>                     
                 
               

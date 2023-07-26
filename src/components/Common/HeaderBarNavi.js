@@ -116,25 +116,25 @@ const HeaderBar = () => {
     getCustomerInfo();
   }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
   
-  useEffect(() => {
-    if(isLoggedIn) {
-      const token = localStorage.getItem("authToken");
+  // useEffect(() => {
+  //   if(isLoggedIn) {
+  //     const token = localStorage.getItem("authToken");
 
-    const fetchNoti = async () => {
-      const response = await NotificationApi.getAllNoti(token);
-      if(response.data !== oldNofi) {
-        setIsNewNofi(true);
-        setOldNofi(response.data);
-      } else {
-        console.log("새로운 알림이 없습니다.");
-      }
-    }
+  //   const fetchNoti = async () => {
+  //     const response = await NotificationApi.getAllNoti(token);
+  //     if(response.data !== oldNofi) {
+  //       setIsNewNofi(true);
+  //       setOldNofi(response.data);
+  //     } else {
+  //       console.log("새로운 알림이 없습니다.");
+  //     }
+  //   }
 
-    fetchNoti();
+  //   fetchNoti();
 
-    }
+  //   }
     
-  }, []);
+  // }, []);
 
   const logOut = () =>{
     localStorage.clear();
