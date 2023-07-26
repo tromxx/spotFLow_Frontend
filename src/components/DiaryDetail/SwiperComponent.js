@@ -302,8 +302,8 @@ export const Comment = (props) => {
   };
 
 
-  function deleteComment(e) {
-    diaryApi.deleteComment(e.id);
+  const deleteComment = async (e) => {
+    await diaryApi.deleteComment(e.id);
     window.location.replace("/diary/detail/" + props.diary);
   }
 
@@ -426,5 +426,33 @@ export const Thumbs = styled.button`
     border-radius: 40px;
     bottom: 70px;
     right: 10px;
+  }
+`
+
+export const BackBtn = styled.button`
+  position: absolute;
+  top: 8vh;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  background-color: rgb(0, 0, 0, 0);
+  z-index: 3;
+  border: 0;
+
+  .back-btn {
+    color: white;
+    font-size: 30px;
+    @media(max-width: 768px) {
+      
+    }
+  }
+  
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    top: 10px;
+    left: 10px;
   }
 `
