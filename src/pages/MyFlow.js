@@ -22,6 +22,7 @@ import { useContext } from "react";
 import ErrorPage from "../components/Common/Error";
 
 export const MyFlowWrapper = styled.div`
+
  	display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +38,7 @@ export const MyFlowDiv = styled.div`
   /* border: ${props=>props.theme.borderColor};	 */
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
-	margin-top: 40px;
+	margin-top: 100px;
   height: 93vh;
 	min-height: 93vh;
   display: flex;
@@ -206,7 +207,8 @@ const MenuBar = styled.div`
 	height: 30px;
 	margin-top: 20px;
 	border-radius: 8px;
-	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
+	background-color: transparent;
+	/* ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'}; */
 	position: relative;
 `;
 
@@ -496,11 +498,7 @@ const MyFlow = () =>{
 			setLocationValue("");
 		};
 
-		useEffect(()=> {
-			if(sortedFlow !== "") {
-				console.log(sortedFlow)
-			}
-		}, [sortedFlow]);
+		
 
 	// 플로우 작성 시 이미지 추가 및 추가시 썸네일
 
