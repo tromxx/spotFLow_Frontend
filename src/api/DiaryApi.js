@@ -12,13 +12,21 @@ const DiaryApi = {
     }
     return axios.post(DOMAIN + "/diary", requestData);
   },
+
   // id = 다이어리 식별 번호
   findDiary: async (id) => {
     return axios.get(DOMAIN + "/diary?num=" + id);
   },
-  findMyDiary: async (email) => {
-    return axios.get(DOMAIN + "/diary/all?email=" + email);
+
+  findMyDiary: async (token) => {
+    return axios.get(DOMAIN + "/diary/mydiary",{
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
+
   deleteDiary: async (id) => {
     const requestData = {
       id: id
