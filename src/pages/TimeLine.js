@@ -630,6 +630,7 @@ const handleUploadImage = async () => {
           setContent("");
           setSelectedImage(null);
           setPlace("");  
+          setLocationValue("");
       }
       setIsCreate(false);
     }
@@ -657,7 +658,7 @@ const handlePostClick = async (postId) => {
 
       const CreatePostCancle = () => {
   
-        if (content.length >=1 || selectedImage !== null) {
+        if (content.length >=1 || selectedImage !== null || place.length >= 1) {
             setIsCancle(true);
         }  else setIsCreate(!isCreate);
         ;
@@ -747,6 +748,10 @@ const handlePostClick = async (postId) => {
 
     
 
+
+
+
+
   // 토글 여부를 결정하는 state 선언
   const [toggleBtn, setToggleBtn] = useState(true);
 
@@ -796,17 +801,18 @@ useEffect(() => {
   }
 }, [location]); // location 상태를 의존성 배열에 추가
 		
-const handleLocationModal =  () => {
-  setLocationModalOpen(!locationModalOpen);
+const handleLocationModal = () => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       console.log(position.coords.latitude, position.coords.longitude);
       setState({center: { lat: position.coords.latitude, lng: position.coords.longitude }, isPanto: true});
+      setLocationModalOpen(!locationModalOpen);
     },
     (error) => console.log(error),
     { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
   );
 }
+
 
 
 	const locationConfirm = () => {
