@@ -454,7 +454,7 @@ const MyFlow = () =>{
 	  // 플로우 작성시 이미지 파일 선택하는 핸들링
 
 		const [file, setFile] = useState(null);
-  	const [url, setUrl] = useState('');
+  	const [uploadedUrl, setUploadedUrl] = useState('');
 	
 		const handleUpload = () => {
 			// 파일이 있는지 확인
@@ -467,27 +467,36 @@ const MyFlow = () =>{
 					console.log('File uploaded successfully!');
 					fileRef.getDownloadURL().then((url) => {
 						console.log("저장경로 확인 : " + url);
-						setUrl(url);
-						continueToDB();
+						setUploadedUrl(url);
+						
 					});
 				});
 			} else {
 				console.log('파일이 없습니다.');
-				continueToDB();
+				
 			}
 		};
+		
+		useEffect(() => {
+			if (uploadedUrl) {
+				continueToDB();
+			}
+		}, [uploadedUrl]);
 
 		// 글 DB에 올리는 부분 구현
 		const continueToDB = async () => {
-			MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, url, place, async function() {
-				const response = await MyFlowApi.getmyFlow();
+				const response = MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, uploadedUrl, place)
 				setSortedFlow("");
+				console.log("데이터 확인" + response.data);
 				setData(response.data);
 				setSortedFlow(response.data);
 				handleSort();
-			});
-		
+			
+			setPlace("");
+			setFlowModalText("");
+			setThumbnailSrc("");
 			setFlowModalOpen(false);
+			setLocationValue("");
 		};
 
 	// 플로우 작성 시 이미지 추가 및 추가시 썸네일

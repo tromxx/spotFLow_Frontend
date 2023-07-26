@@ -13,9 +13,6 @@ import axios from 'axios';
 import CustomerApi from '../../api/CustomerApi';
 import NotificationApi from '../../api/NotificationApi';
 
-import CustomerApi from '../../api/CustomerApi'
-import { useEffect } from 'react';
-
 const HeaderBarDiv = styled.div`
   width: 100vw;
   height: 7vh;
