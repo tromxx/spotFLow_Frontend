@@ -18,8 +18,9 @@ const DiaryApi = {
     return axios.get(DOMAIN + "/diary?num=" + id);
   },
 
-  findMyDiary: async (token) => {
-    return axios.get(DOMAIN + "/diary/mydiary",{
+  findMyDiary: async () => {
+    const token = localStorage.getItem("authToken");
+    return axios.get(DOMAIN + "/diary/my-diary",{
       headers : {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -70,21 +71,31 @@ const DiaryApi = {
     return await axios.get(DOMAIN + "/diary/following?email=" + email);
   },
 
-  thumbsUP : async(id, email) => {
+  thumbsUP : async(id) => {
+    const token = localStorage.getItem("authToken")
     const request = {
       id : id,
-      email : email
     }
-    return await axios.put(DOMAIN + "/diary/like", request)
+    return await axios.put(DOMAIN + "/diary/like", request, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
   },
 
-  findThumbs : async(id, token) => {
-    return await  axios.get(DOMAIN + "/diary/like?id=" + id,{
+  findThumbs : async(id) => {
+    const token = localStorage.getItem("authToken")
+    return await  axios.get(DOMAIN + "/diary/like/" + id,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }}
     );
+  },
+
+  findAllDiary: async () => {
+    return await axios.get(DOMAIN + "/diary/all");
   }
 
 }
