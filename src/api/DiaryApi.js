@@ -3,14 +3,19 @@ import axios from "axios";
 const DOMAIN = "http://localhost:8111"
 
 const DiaryApi = {
-  saveDiary: async (email, title, content, timeline) => {
+  saveDiary: async (title, content, timeline) => {
+    const token = localStorage.getItem("authToken")
     const requestData = {
-      email: email,
       title: title,
       content: content,
       timeLineList: timeline
     }
-    return axios.post(DOMAIN + "/diary", requestData);
+    return axios.post(DOMAIN + "/diary", requestData, {
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
 
   // id = 다이어리 식별 번호

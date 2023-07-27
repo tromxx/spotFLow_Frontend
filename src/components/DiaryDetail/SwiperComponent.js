@@ -55,19 +55,20 @@ export const Container = styled.div`
     box-sizing: border-box;
   }
 `;
-export const Btn = styled.button`
+export const Btn = styled.div`
   position: absolute;
   bottom: 50px;
   right: 50px;
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  border: 3px solid #d9d9d9;
-  background-color: #61dafb;
+  //border: 3px solid #d9d9d9;
+  //background-color: #61dafb;
   z-index: 3;
+  display: flex;
 
   .comment {
-    font-size: 30px;
+    font-size: 50px;
     color: white;
     @media (max-width: 768px) {
       font-size: 20px;
@@ -185,6 +186,7 @@ const CommentBox = styled.div`
 
   .btn-send {
     position: absolute;
+    display: flex;
     right: 22px;
     top: 7px;
     height: 36px;
@@ -203,8 +205,10 @@ const CommentBox = styled.div`
 
   .send {
     font-size: 20px;
-    margin-top: 5px;
+    //margin-top: 5px;
     color: #00b4d8;
+    align-self: center;
+    justify-self: center;
     @media (max-width: 768px) {
       font-size: 12px;
     }

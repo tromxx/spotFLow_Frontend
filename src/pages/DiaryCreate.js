@@ -280,7 +280,7 @@ function DiaryCreate() {
     };
     setDiaryPost(newDiaryPost);
     console.log(timeline);
-   const sss = DiaryApi.saveDiary(user.email, title.current.value, text.current.value, timeline);
+   const sss = DiaryApi.saveDiary(title.current.value, text.current.value, timeline);
     console.log(sss.data);
 
     navi("/diaryMypage");
