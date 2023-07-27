@@ -97,7 +97,7 @@ function App() {
              
             </>
            }/>
-           <Route path='/nofication' element={
+           <Route path='/notification' element={
             <>
             {windowWidth <= 840 ? null : <HeaderBarNavi />}
             <Notification />

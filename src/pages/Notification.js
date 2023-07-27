@@ -63,6 +63,7 @@ const Notification = () => {
         const response = await NotificationApi.getAllNoti(token);
         if (response !== null) {
           setNofiData(response.data);
+          console.log(response.data)
         }
       } catch (error) {
         console.log(error);
@@ -100,7 +101,7 @@ const Notification = () => {
                     <NotificationContainer
                       className="nofiContainer"
                       id={nofiData.id}
-                      diaryTitle={nofiData.diary}
+                      diary={nofiData.diary}
                       name={nofiData.commentWriter}
                       comment={nofiData.comment}
                     />

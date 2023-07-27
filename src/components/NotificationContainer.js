@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from 'styled-components'
 import { SlLocationPin } from "react-icons/sl";
 import { useState } from "react";
@@ -47,6 +47,10 @@ const NotificationContainer = ({ diary, name, comment }) => {
       return str.slice(0, maxLength) + "...";
     }
   }
+
+  useEffect(()=>{
+    console.log(diary)
+  },[])
   
 
   return (
