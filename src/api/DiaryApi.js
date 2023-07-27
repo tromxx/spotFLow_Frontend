@@ -12,13 +12,22 @@ const DiaryApi = {
     }
     return axios.post(DOMAIN + "/diary", requestData);
   },
+
   // id = 다이어리 식별 번호
   findDiary: async (id) => {
     return axios.get(DOMAIN + "/diary?num=" + id);
   },
-  findMyDiary: async (email) => {
-    return axios.get(DOMAIN + "/diary/all?email=" + email);
+
+  findMyDiary: async () => {
+    const token = localStorage.getItem("authToken");
+    return axios.get(DOMAIN + "/diary/my-diary",{
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
+
   deleteDiary: async (id) => {
     const requestData = {
       id: id
@@ -27,13 +36,18 @@ const DiaryApi = {
   }
   ,
   sendComment: async (props) => {
+    const token = localStorage.getItem("authToken");
     const comment = {
       diary: props.diary,
-      content: props.comment,
-      email: props.email
+      content: props.comment
     }
     console.log(comment)
-    return await axios.post(DOMAIN + "/diary/comment", comment);
+    return await axios.post(DOMAIN + "/diary/comment", comment, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
   deleteComment: async (comment) => {
     console.log(comment)
@@ -57,21 +71,31 @@ const DiaryApi = {
     return await axios.get(DOMAIN + "/diary/following?email=" + email);
   },
 
-  thumbsUP : async(id, email) => {
+  thumbsUP : async(id) => {
+    const token = localStorage.getItem("authToken")
     const request = {
       id : id,
-      email : email
     }
-    return await axios.put(DOMAIN + "/diary/like", request)
+    return await axios.put(DOMAIN + "/diary/like", request, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
   },
 
-  findThumbs : async(id, token) => {
-    return await  axios.get(DOMAIN + "/diary/like?id=" + id,{
+  findThumbs : async(id) => {
+    const token = localStorage.getItem("authToken")
+    return await  axios.get(DOMAIN + "/diary/like/" + id,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }}
     );
+  },
+
+  findAllDiary: async () => {
+    return await axios.get(DOMAIN + "/diary/all");
   }
 
 }

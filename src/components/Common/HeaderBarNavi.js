@@ -26,7 +26,7 @@ const HeaderBarDiv = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   transition: background-color 0.5s ease;
-  position: absolute;
+  position: fixed;
   z-index: 5;
 `;
 

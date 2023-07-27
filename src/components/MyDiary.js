@@ -126,11 +126,11 @@ const MyDiarydiv = styled.div`
     }
 `;
 
-      const MyDiary = ({email, trigger,stat,checkid, setCheckId }) => {
+      const MyDiary = ({email, trigger,stat, checkid, setCheckId }) => {
         const [items, setItems] = useState(new Set());
         const [data, setData] = useState([]);
         const user = useContext(UserContext);
-    
+        
         const itemHandler = (id, isChecked) => {
           if(isChecked) {
             setCheckId([...checkid , id]);
@@ -156,13 +156,12 @@ const MyDiarydiv = styled.div`
 
       useEffect(()=>{
         const fetchData = async()=>{
-        const res =  await DiaryApi.findMyDiary(email);
+        const token = localStorage.getItem('authToken');
+        const res =  await DiaryApi.findMyDiary(token);
         setData(res.data);
-        console.log(res.data);
         }
         fetchData();
        
-        console.log(checkid);
       },[checkid,trigger])
 
     return(
