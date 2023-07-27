@@ -56,16 +56,20 @@ const ScrollBar = styled.div`
 const Nofication = () => {
   const [nofiData, setNofiData] = useState("");
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem('authToken');
   
     const fetchNoti = async () => {
       try {
         const response = await NotificationApi.getAllNoti(token);
-        setNofiData(response.data);
+        if (response !== null) {
+          setNofiData(response.data);
+        }
       } catch (error) {
         console.log(error);
+       
       }
     }
+    
   
     const updateNoti = async () => {
       try {
@@ -75,9 +79,16 @@ const Nofication = () => {
       }
     }
   
-    fetchNoti();
-    updateNoti();
+    const fetchDataAndUpdate = async () => {
+      await fetchNoti();
+      if (nofiData !== null) {
+        await updateNoti();
+      }
+    };
+  
+    fetchDataAndUpdate();
   }, []);
+  
 
   return (
     <NoficationWrapper>
