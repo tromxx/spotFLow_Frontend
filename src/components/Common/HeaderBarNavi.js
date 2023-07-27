@@ -133,7 +133,7 @@ const HeaderBar = () => {
       {isLoggedIn ? 
         <LoggedInDiv>
           <StompWebSocket />
-          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
+          <button className="nofi" onClick={()=>{navigate("/notification")}}>
               {isNewNofi ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>

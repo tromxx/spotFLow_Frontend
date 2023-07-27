@@ -17,7 +17,7 @@ import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
 import { useLayoutEffect, useState } from 'react';
 import ChangeInfo from './pages/ChangeInfo';
-import Nofication from './pages/Nofication';
+import Notification from './pages/Notification';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -96,10 +96,10 @@ function App() {
              
             </>
            }/>
-           <Route path='/nofication' element={
+           <Route path='/notification' element={
             <>
             {windowWidth <= 840 ? null : <HeaderBarNavi />}
-            <Nofication />
+            <Notification />
             </>
            }
            />

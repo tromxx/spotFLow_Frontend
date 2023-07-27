@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import NoficationContainer from "../components/NoficationContainer";
+import NotificationContainer from "../components/NotificationContainer";
 import { useEffect } from "react";
 import NotificationApi from "../api/NotificationApi";
 
-const NoficationWrapper = styled.div`
+const NotificationWrapper = styled.div`
  	display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,7 @@ const NoficationWrapper = styled.div`
   
 `;
 
-const NoficationDiv = styled.div`
+const NotificationDiv = styled.div`
   background-color: ${props=>props.theme.bgColor};
   color: ${props=>props.theme.textColor};
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -53,7 +53,7 @@ const ScrollBar = styled.div`
 	
 `;
 
-const Nofication = () => {
+const Notification = () => {
   const [nofiData, setNofiData] = useState("");
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -71,18 +71,18 @@ const Nofication = () => {
     }
     
   
-    const updateNoti = async () => {
-      try {
-        const updated = await NotificationApi.updateFetchNoti(token, nofiData);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    // const updateNoti = async () => {
+    //   try {
+    //     const updated = await NotificationApi.updateFetchNoti(token, nofiData);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
   
     const fetchDataAndUpdate = async () => {
       await fetchNoti();
       if (nofiData !== null) {
-        await updateNoti();
+        // await updateNoti();
       }
     };
   
@@ -91,13 +91,13 @@ const Nofication = () => {
   
 
   return (
-    <NoficationWrapper>
+    <NotificationWrapper>
        
        <ScrollBar>
-        <NoficationDiv>
+        <NotificationDiv>
           
               {nofiData !== "" && nofiData.map((nofiData) => (
-                    <NoficationContainer
+                    <NotificationContainer
                       className="nofiContainer"
                       id={nofiData.id}
                       diaryTitle={nofiData.diary}
@@ -106,10 +106,10 @@ const Nofication = () => {
                     />
                   ))}
           
-        </NoficationDiv>
+        </NotificationDiv>
       </ScrollBar>
-    </NoficationWrapper>
+    </NotificationWrapper>
   );
 }
 
-export default Nofication;
+export default Notification;

@@ -4,7 +4,7 @@ import { SlLocationPin } from "react-icons/sl";
 import { useState } from "react";
 import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
 
-const NoficationDiv = styled.div`
+const NotificationDiv = styled.div`
   width: 95%;
   height: 100px;
   margin-top: 10px;
@@ -35,7 +35,7 @@ const CommentImg = styled(AiOutlineComment)`
 `;
 
 
-const NoficationContainer = ({ diary, name, comment }) => {
+const NotificationContainer = ({ diary, name, comment }) => {
 
   
  
@@ -50,19 +50,21 @@ const NoficationContainer = ({ diary, name, comment }) => {
   
 
   return (
-    <NoficationDiv>
+    <NotificationDiv>
         {comment !== "" ? 
           <p> 
-            <CommentImg /> <br /> {maxLength(name,25)}님이 {maxLength(diary,25)} 에 댓글을 남겼습니다. <br /> {maxLength(comment,25)} 
+            {/* <CommentImg /> <br /> {maxLength(name,25)}님이 {maxLength(diary,25)} 에 댓글을 남겼습니다. <br /> {maxLength(comment,25)} */}
+            <CommentImg /> <br /> {name}님이 {diary} 에 댓글을 남겼습니다. <br /> {comment}
           </p> 
             : 
           <p>
-            <HeartImg /> <br />  {maxLength(diary,25)} 에 좋아요를 받았습니다.
+            {/* <HeartImg /> <br />  {maxLength(diary,25)} 에 좋아요를 받았습니다. */}
+            <HeartImg /> <br />  {diary} 에 좋아요를 받았습니다.
           </p> 
         }
 
-    </NoficationDiv>
+    </NotificationDiv>
   );
 };
 
-export default NoficationContainer;
+export default NotificationContainer;

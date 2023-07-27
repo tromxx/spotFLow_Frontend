@@ -292,6 +292,7 @@ export const Comment = (props) => {
       comment: text
     }
     await diaryApi.sendComment(request);
+    await diaryApi.sendcommentNoti(request);
     await setText("");
     await props.setCount(props.count + 1);
   }
