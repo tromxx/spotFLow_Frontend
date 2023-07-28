@@ -90,26 +90,27 @@ function App() {
             }/>
 
             <Route path='/myflow' element={
-            <>
-            {windowWidth <= 840 ? null : <HeaderBarNavi />}
-            {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
-            
-             
-            </>
-           }/>
-           <Route path='/notification' element={
-            <>
-            {windowWidth <= 840 ? null : <HeaderBarNavi />}
-            <Notification />
-            </>
-           }
-           />
+              <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+                {windowWidth <= 840 ? <MobileMyFlow/> : <MyFlow/>}
+
+
+              </>
+            }/>
+            <Route path='/notification' element={
+              <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+                <Notification/>
+              </>
+            }
+            />
             <Route path='/ws-test' element={
-            <>
-            <DirectMessenger />
-            </>
-           }
-           />
+              <>
+                <DirectMessenger/>
+              </>
+            }
+            />
+            
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
