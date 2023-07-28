@@ -17,19 +17,21 @@ const NotificationDiv = styled.div`
   align-items: flex-start; /* 수정: 상단 정렬로 변경 */
   font-family: var(--kfont);
 
+  .container {
+  font-weight: bolder;
+  width:70px;
+  padding:0 5px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
   @media(max-width: 768px) {
     width: 100%;
     height: 150px;
     margin-bottom: 20px;
   }
-.name-container,
-.diary-container,
-.comment-container {
-  max-width: 100px; /* 텍스트 최대 너비 설정 */
-  overflow: hidden;
-  white-space: nowrap; /* 텍스트가 한 줄에서만 표시되도록 설정 */
-  text-overflow: ellipsis; /* 텍스트가 너무 길 경우 ...으로 표시 */
-}
+
 `;
 
 const HeartImg = styled(AiFillHeart)`
@@ -44,7 +46,7 @@ const CommentImg = styled(AiOutlineComment)`
 `;
 
 
-const NotificationContainer = ({ diary, name, comment }) => {
+const NotificationContainer = ({ diary, sender, comment }) => {
 
   
  
@@ -59,11 +61,11 @@ const NotificationContainer = ({ diary, name, comment }) => {
     <NotificationDiv>
         {comment !== "" ? 
           <p>
-            <CommentImg /> <br /> <span className="name-container">{name}</span>님이 <span className="diary-container">{diary}</span> 에 댓글을 남겼습니다. <br /> <span className="comment-container">{comment}</span>
+            <CommentImg /> <br /> <span className="container">{sender}</span>님이 <span className="container">{diary}</span> 에 댓글을 남겼습니다. <br /> <span className="container">{comment}</span>
           </p>
             : 
           <p>
-            <HeartImg /> <br />  <span className="diary-container">{diary}</span> 에 좋아요를 받았습니다.
+            <HeartImg /> <br />  <span className="container">{diary}</span> 에 좋아요를 받았습니다.
           </p> 
         }
 

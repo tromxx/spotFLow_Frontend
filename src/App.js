@@ -104,6 +104,12 @@ function App() {
             </>
            }
            />
+            <Route path='/ws-test' element={
+            <>
+            <DirectMessenger />
+            </>
+           }
+           />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -53,7 +53,6 @@ const DirectMessenger = () => {
   function Subscribe() {
     stompClient.subscribe("/notification/message", function (response) {
       const data = JSON.parse(response.body);
-      console.log("아오 웹소켓시치");
       console.log(data);
     });
   }

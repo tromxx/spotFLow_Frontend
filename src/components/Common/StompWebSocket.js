@@ -58,62 +58,62 @@
 
 // export default StompWebSocket;
 
-import { Client } from "@stomp/stompjs";
-import React, { useContext, useEffect, useState } from "react";
-import SockJS from "sockjs-client";
-import { UserContext } from "../../context/UserStore";
+// import { Client } from "@stomp/stompjs";
+// import React, { useContext, useEffect, useState } from "react";
+// import SockJS from "sockjs-client";
+// import { UserContext } from "../../context/UserStore";
 
 
-const WebSocketStomp = () => {
-  const [client, setClient] = useState(null);
-  const { email } = useContext(UserContext);
+// const WebSocketStomp = () => {
+//   const [client, setClient] = useState(null);
+//   const { email } = useContext(UserContext);
   
-  useEffect(() => {
-    const sock = new SockJS("http://localhost:8111/ws", null, {
-      transports: ["websocket"],
-      headers: {
-        Origin: "http://localhost:3000"
-      }
-    });
-    const newClient = new Client({
-      webSocketFactory: () => sock,
-      debug: (str) => {
-        console.log('🎃 : ' + str);
-      }
-    });
-    setClient(newClient);
-  }, []);
+//   useEffect(() => {
+//     const sock = new SockJS("http://localhost:8111/ws", null, {
+//       transports: ["websocket"],
+//       headers: {
+//         Origin: "http://localhost:3000"
+//       }
+//     });
+//     const newClient = new Client({
+//       webSocketFactory: () => sock,
+//       debug: (str) => {
+//         console.log('🎃 : ' + str);
+//       }
+//     });
+//     setClient(newClient);
+//   }, []);
 
-  useEffect(() => {
-    if (client) {
-      const onConnect = () => {
-        console.log("웹소켓 연결!!!");
+//   useEffect(() => {
+//     if (client) {
+//       const onConnect = () => {
+//         console.log("웹소켓 연결!!!");
 
-        client.subscribe(`/region/${email}`, (message) => {
-          console.log("👽 메세지 : " + message.body);
+//         client.subscribe(`/region/${email}`, (message) => {
+//           console.log("👽 메세지 : " + message.body);
           
-        });
-      };
-      const onError = (error) => {
-        console.error("웹소켓 연결 실패" + error);
-      };
+//         });
+//       };
+//       const onError = (error) => {
+//         console.error("웹소켓 연결 실패" + error);
+//       };
 
-      client.onConnect = onConnect;
-      client.onStompError = onError;
+//       client.onConnect = onConnect;
+//       client.onStompError = onError;
 
-      client.activate();
-    }
-    return () => {
-      if (client) {
-        client.deactivate();
-      }
-    };
-  }, [client, email]);
+//       client.activate();
+//     }
+//     return () => {
+//       if (client) {
+//         client.deactivate();
+//       }
+//     };
+//   }, [client, email]);
 
-  return (
-    <>
-    </>
-  );
-}
+//   return (
+//     <>
+//     </>
+//   );
+// }
 
-export default WebSocketStomp;
+// export default WebSocketStomp;
