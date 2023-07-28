@@ -7,7 +7,7 @@ import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
 const NotificationDiv = styled.div`
   width: 95%;
   height: 100px;
-  margin-top: 10px;
+  margin-top: 5px;
   text-align: left;
   border-bottom: ${props=>props.theme.borderColor};
   background-color: transparent;
@@ -19,8 +19,17 @@ const NotificationDiv = styled.div`
 
   @media(max-width: 768px) {
     width: 100%;
-    height: 100px;
+    height: 150px;
+    margin-bottom: 20px;
   }
+.name-container,
+.diary-container,
+.comment-container {
+  max-width: 100px; /* 텍스트 최대 너비 설정 */
+  overflow: hidden;
+  white-space: nowrap; /* 텍스트가 한 줄에서만 표시되도록 설정 */
+  text-overflow: ellipsis; /* 텍스트가 너무 길 경우 ...으로 표시 */
+}
 `;
 
 const HeartImg = styled(AiFillHeart)`
@@ -39,14 +48,7 @@ const NotificationContainer = ({ diary, name, comment }) => {
 
   
  
-  const maxLength = (str, maxLength) => {
-    if (str.length <= maxLength) {
-      return str;
-    } else {
-      // maxLength보다 길면 maxLength 길이로 자르고 말줄임표를 붙여서 반환
-      return str.slice(0, maxLength) + "...";
-    }
-  }
+  
 
   useEffect(()=>{
     console.log(diary)
@@ -56,14 +58,12 @@ const NotificationContainer = ({ diary, name, comment }) => {
   return (
     <NotificationDiv>
         {comment !== "" ? 
-          <p> 
-            {/* <CommentImg /> <br /> {maxLength(name,25)}님이 {maxLength(diary,25)} 에 댓글을 남겼습니다. <br /> {maxLength(comment,25)} */}
-            <CommentImg /> <br /> {name}님이 {diary} 에 댓글을 남겼습니다. <br /> {comment}
-          </p> 
+          <p>
+            <CommentImg /> <br /> <span className="name-container">{name}</span>님이 <span className="diary-container">{diary}</span> 에 댓글을 남겼습니다. <br /> <span className="comment-container">{comment}</span>
+          </p>
             : 
           <p>
-            {/* <HeartImg /> <br />  {maxLength(diary,25)} 에 좋아요를 받았습니다. */}
-            <HeartImg /> <br />  {diary} 에 좋아요를 받았습니다.
+            <HeartImg /> <br />  <span className="diary-container">{diary}</span> 에 좋아요를 받았습니다.
           </p> 
         }
 

@@ -28,7 +28,10 @@ const NotificationDiv = styled.div`
 	position: relative;
   overflow-y: scroll;
   margin: 40px auto; 
-  
+  @media(max-width: 768px) {
+    width: 95%;
+    box-shadow: none;
+  }
 `;
 
 const ScrollBar = styled.div`
