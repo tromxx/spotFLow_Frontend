@@ -5,8 +5,8 @@ import {useCallback, useContext, useEffect, useMemo, useState} from "react";
 import moment from 'moment';
 import 'moment/locale/ko';
 import diaryApi from "../../api/DiaryApi";
-import SockJS from "sockjs-client";
-import {Stomp} from "@stomp/stompjs";
+import UserStore, {UserContext} from "../../context/UserStore";
+import {WebSocket} from "../../App";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -105,7 +105,7 @@ export const TimeLineBox = styled.div`
   width: 100%;
   height: 50%;
 `
-const CommentBox = styled.div`
+export const CommentBox = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -282,6 +282,7 @@ const CommentDetail = styled.div`
   }
 `;
 export const Comment = (props) => {
+  const webSocketService = useContext(WebSocket);
   const [text, setText] = useState("");
 
   const endPoint = "http://localhost:8111/ws";
@@ -303,12 +304,10 @@ export const Comment = (props) => {
       diary: props.diary,
       comment: text
     }
+    webSocketService.send("/app/message", {}, request);
     await diaryApi.sendComment(request);
-    setText("");
-    await diaryApi.sendcommentNoti(request);
-    const stompClient = localStorage.getItem("client");
-  
-    stompClient.send("/app/sendnoti", header, JSON.stringify(request));
+    // await diaryApi.sendcommentNoti(request);
+    await setText("");
     await props.setCount(props.count + 1);
     console.log(request);
   }
