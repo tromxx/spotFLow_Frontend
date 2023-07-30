@@ -5,7 +5,8 @@ import {useCallback, useContext, useEffect, useMemo, useState} from "react";
 import moment from 'moment';
 import 'moment/locale/ko';
 import diaryApi from "../../api/DiaryApi";
-import UserStore, {UserContext} from "../../context/UserStore";
+import SockJS from "sockjs-client";
+import {Stomp} from "@stomp/stompjs";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -283,6 +284,17 @@ const CommentDetail = styled.div`
 export const Comment = (props) => {
   const [text, setText] = useState("");
 
+  const endPoint = "http://localhost:8111/ws";
+  const stompClient = Stomp.over(new SockJS(endPoint));
+  localStorage.setItem("client", stompClient);
+  const token = localStorage.getItem("authToken");
+  console.log(localStorage.getItem("client"));
+  const header = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+  };
+
+
   const onChangeComment = (e) => {
     setText(e.target.value);
   }
@@ -292,9 +304,13 @@ export const Comment = (props) => {
       comment: text
     }
     await diaryApi.sendComment(request);
+    setText("");
     await diaryApi.sendcommentNoti(request);
-    await setText("");
+    const stompClient = localStorage.getItem("client");
+  
+    stompClient.send("/app/sendnoti", header, JSON.stringify(request));
     await props.setCount(props.count + 1);
+    console.log(request);
   }
 
   const BlockBubbling = (e) => {
@@ -311,6 +327,9 @@ export const Comment = (props) => {
     await diaryApi.deleteComment(e.id);
     window.location.replace("/diary/detail/" + props.diary);
   }
+
+  
+
 
   // => 댓글 수정하는 법인데 할게 너무 많아서 일단 킵
   //

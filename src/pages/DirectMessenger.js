@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import SockJS from "sockjs-client";
 import {Stomp} from "@stomp/stompjs";
 import {styled} from "styled-components";
@@ -28,6 +28,8 @@ const Container = styled.div`
 `
 
 const DirectMessenger = () => {
+  const [text, setText] = useState("ㅎㅎ");
+
   const endPoint = "http://localhost:8111/ws";
   const stompClient = Stomp.over(new SockJS(endPoint));
   const header = {
@@ -36,6 +38,7 @@ const DirectMessenger = () => {
 
   stompClient.connect(header, function (frame) {
     console.log("connected: " + frame);
+    console.log("연결 테스트")
   });
 
 
@@ -53,8 +56,8 @@ const DirectMessenger = () => {
   function Subscribe() {
     stompClient.subscribe("/notification/message", function (response) {
       const data = JSON.parse(response.body);
-      console.log("아오 웹소켓시치");
       console.log(data);
+      setText(data.message);
     });
   }
 
@@ -63,6 +66,7 @@ const DirectMessenger = () => {
       <p>웹 소켓 테스트입니다.</p>
       <button className="first" onClick={Subscribe}>subscribe</button>
       <button className="second" onClick={Send}>send</button>
+      <span>{text}</span>
     </Container>
   );
 }

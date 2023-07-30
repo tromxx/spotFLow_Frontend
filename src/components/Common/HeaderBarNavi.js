@@ -10,8 +10,9 @@ import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
 import CustomerApi from '../../api/CustomerApi';
-import NotificationApi from '../../api/NotificationApi';
-import StompWebSocket from './StompWebSocket';
+import NotificationSocket from '../../pages/noti';
+import SockJS from "sockjs-client";
+import {Stomp} from "@stomp/stompjs";
 
 
 const HeaderBarDiv = styled.div`
@@ -55,7 +56,7 @@ const LoggedInDiv = styled.div`
   padding-right: 65px;
   gap: 15px;
 
-  .nofi {
+  .noti {
     border: none;
     background-color: transparent;
   }
@@ -93,7 +94,34 @@ const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, isNewNofi} = useContext(UserContext);
+  const{ email, setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, received, setReceived } = useContext(UserContext);
+
+  const endPoint = "http://localhost:8111/ws";
+  const stompClient = Stomp.over(new SockJS(endPoint));
+  const header = {
+    userId : "testId"
+
+  };
+  useEffect(() => {
+    stompClient.connect(header, function (frame) {
+      console.log("connected: " + frame);
+      if(email !== "") {
+        Subscribe();
+      }
+      
+    });
+    return () => {
+      stompClient.disconnect();
+    };
+  }, []);
+
+  function Subscribe() {
+    stompClient.subscribe(`/notification/${email}`, function (response) {
+      const data = JSON.parse(response.body);
+      console.log(data);
+      setReceived(response.body);
+    });
+  }
   
     useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -124,6 +152,11 @@ const HeaderBar = () => {
     setIsLoggedIn(false);
   }
 
+  const handleNoti = () => {
+    navigate("notification");
+    setReceived("");
+  }
+
   return (
     <HeaderBarDiv>
       <LogoImg
@@ -132,9 +165,8 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          {/* <StompWebSocket /> */}
-          <button className="nofi" onClick={()=>{navigate("/notification")}}>
-              {isNewNofi ? <NofiOn /> : <NofiNone />}
+          <button className="noti" onClick={()=>{handleNoti()}}>
+              {received !== "" ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>

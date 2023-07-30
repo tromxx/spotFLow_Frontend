@@ -57,7 +57,6 @@ const DiaryApi = {
   },
   sendcommentNoti: async (comment) => {
     const token = localStorage.getItem("authToken");
-    
     return await axios.post(DOMAIN + "/notification/comment", comment, {
       headers: {
         'Content-Type': 'application/json',

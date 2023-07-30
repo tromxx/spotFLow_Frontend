@@ -19,6 +19,7 @@ import {useLayoutEffect, useState} from 'react';
 import ChangeInfo from './pages/ChangeInfo';
 import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
+import NotificationSocket from './pages/noti';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -106,7 +107,7 @@ function App() {
             />
             <Route path='/ws-test' element={
               <>
-                <DirectMessenger/>
+                <NotificationSocket/>
               </>
             }
             />
