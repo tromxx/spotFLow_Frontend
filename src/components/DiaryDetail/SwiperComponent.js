@@ -105,7 +105,7 @@ export const TimeLineBox = styled.div`
   width: 100%;
   height: 50%;
 `
-const CommentBox = styled.div`
+export const CommentBox = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;

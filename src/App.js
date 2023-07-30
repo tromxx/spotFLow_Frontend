@@ -31,7 +31,6 @@ function App() {
     const service = new WebSocketProvider();
     service.connect().then(() => {
       setWebSocketService(service);
-      console.log("소켓 연결!?")
       console.log(service);
     });
 
