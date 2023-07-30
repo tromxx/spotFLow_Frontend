@@ -13,6 +13,8 @@ import CustomerApi from '../../api/CustomerApi';
 import NotificationSocket from '../../pages/noti';
 import SockJS from "sockjs-client";
 import {Stomp} from "@stomp/stompjs";
+import WebSocketProvider from '../../context/WebSockeProvider';
+import { WebSocket } from '../../App';
 
 
 const HeaderBarDiv = styled.div`
@@ -90,38 +92,38 @@ const NofiNone = styled(VscBell)`
 `;
 
 
-const HeaderBar = () => {
+const HeaderBar = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const{ email, setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, received, setReceived } = useContext(UserContext);
+  const{ email, setEmail, nickname, setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, received, setReceived } = useContext(UserContext);
+
+  const webSocketService = useContext(WebSocket);
+  const [text, setText] = useState("");
 
   const endPoint = "http://localhost:8111/ws";
   const stompClient = Stomp.over(new SockJS(endPoint));
+  localStorage.setItem("client", stompClient);
+  const token = localStorage.getItem("authToken");
   const header = {
-    userId : "testId"
-
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
   };
   useEffect(() => {
-    stompClient.connect(header, function (frame) {
-      console.log("connected: " + frame);
-      if(email !== "") {
-        Subscribe();
-      }
+    
+    webSocketService.subscribe(`/${email}`, function (response) {
+      const data = JSON.parse(response.body);
+      console.log(data);
+      setText(data.message);
+    
       
-    });
+    }, []);
     return () => {
       stompClient.disconnect();
     };
-  }, []);
+  });
 
-  function Subscribe() {
-    stompClient.subscribe(`/notification/${email}`, function (response) {
-      const data = JSON.parse(response.body);
-      console.log(data);
-      setReceived(response.body);
-    });
-  }
+  
   
     useEffect(() => {
     const token = localStorage.getItem('authToken');
