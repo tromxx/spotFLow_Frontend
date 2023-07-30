@@ -106,6 +106,7 @@ function App() {
             />
             <Route path='/ws-test' element={
               <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                 <DirectMessenger/>
               </>
             }
