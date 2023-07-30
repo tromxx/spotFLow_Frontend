@@ -84,7 +84,13 @@ const DiaryApi = {
 
   // 팔로우관계의 다이어리 검색
   searchFreind: async (email) => {
-    return await axios.get(DOMAIN + "/diary/following?email=" + email);
+    const token = localStorage.getItem("authToken");
+    return await axios.get(DOMAIN + "/diary/following", {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
 
   thumbsUP : async(id) => {

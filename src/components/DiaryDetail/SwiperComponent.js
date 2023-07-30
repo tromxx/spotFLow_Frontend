@@ -6,6 +6,7 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import diaryApi from "../../api/DiaryApi";
 import UserStore, {UserContext} from "../../context/UserStore";
+import {WebSocket} from "../../App";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -281,6 +282,7 @@ const CommentDetail = styled.div`
   }
 `;
 export const Comment = (props) => {
+  const webSocketService = useContext(WebSocket);
   const [text, setText] = useState("");
 
   const onChangeComment = (e) => {
@@ -291,8 +293,9 @@ export const Comment = (props) => {
       diary: props.diary,
       comment: text
     }
+    webSocketService.send("/app/message", {}, request);
     await diaryApi.sendComment(request);
-    await diaryApi.sendcommentNoti(request);
+    // await diaryApi.sendcommentNoti(request);
     await setText("");
     await props.setCount(props.count + 1);
   }

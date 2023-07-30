@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import SockJS from "sockjs-client";
 import {Stomp} from "@stomp/stompjs";
 import {styled} from "styled-components";
+import {WebSocket} from "../App";
 
 const Container = styled.div`
   width: 100vw;
@@ -21,43 +22,51 @@ const Container = styled.div`
 `
 
 const DirectMessenger = () => {
+  const webSocketService = useContext(WebSocket);
   const [text, setText] = useState("ㅎㅎ");
-  const token = localStorage.getItem("authToken");
+  // const token = localStorage.getItem("authToken");
   let chat = {
     type: "ENTER",
     roomId: 1,
     sender: "user01@",
-    message: "test messaage"
+    message: "test Message"
   };
-
-
-  const endPoint = "http://localhost:8111/ws";
-  const stompClient = Stomp.over(new SockJS(endPoint));
-  const header = {
-    headers : {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-
-  stompClient.connect(header, function (frame) {
-    console.log("connected: " + frame);
-    console.log("연결 테스트")
-  });
-
-
 
   function Send() {
-    stompClient.send("/app/message", header, JSON.stringify(chat));
+    webSocketService.send("/message", {}, chat);
   }
 
   function Subscribe() {
-    stompClient.subscribe("/notification/message"+chat.sender, function (response) {
-      const data = JSON.parse(response.body);
-      console.log(data);
+    console.log(webSocketService);
+    webSocketService.subscribe("/message", (data) => {
+      console.log(data.message);
       setText(data.message);
     });
   }
+  // const endPoint = "http://localhost:8111/ws";
+  // const stompClient = Stomp.over(new SockJS(endPoint));
+  // const header = {
+  //   headers : {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${token}`
+  //   }
+  // };
+  //
+  // stompClient.connect(header, function (frame) {
+  //   console.log("connected: " + frame);
+  //   console.log("연결 테스트")
+  // });
+  // function Send() {
+  //   stompClient.send("/app/message", header, JSON.stringify(chat));
+  // }
+  //
+  // function Subscribe() {
+  //   stompClient.subscribe("/notification/message"+chat.sender, function (response) {
+  //     const data = JSON.parse(response.body);
+  //     console.log(data);
+  //     setText(data.message);
+  //   });
+  // }
 
   return (
     <Container>
