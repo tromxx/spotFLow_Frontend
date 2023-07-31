@@ -76,10 +76,16 @@ const DiaryApi = {
 
   // 장소명으로 다이어리 검색 
   searchPlace: async (place) => {
+    const token = localStorage.getItem("authToken");
     const body = {
       place: place
     }
-    return await axios.post(DOMAIN + "/diary/search", body);
+    return await axios.post(DOMAIN + "/diary/search", body, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
 
   // 팔로우관계의 다이어리 검색
@@ -117,7 +123,13 @@ const DiaryApi = {
   },
 
   findAllDiary: async () => {
-    return await axios.get(DOMAIN + "/diary/all");
+    const token = localStorage.getItem("authToken");
+    return await axios.get(DOMAIN + "/diary/all", {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   }
 
 }

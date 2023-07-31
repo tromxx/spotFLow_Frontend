@@ -121,19 +121,21 @@ const DirectMessenger = (props) => {
   const [text, setText] = useState("ㅎㅎ");
   // const token = localStorage.getItem("authToken");
   let chat = {
-    type: "ENTER",
-    roomId: 1,
-    sender: "user01@",
+    roomId: "2023-07-30T23:11:53.56471491",
+    receiver: "hanjy1101@naver.com",
+    sender: "hanjy1101@naver.com",
     message: text
   };
 
   function Send() {
-    webSocketService.send("/message", {}, chat);
+    const token = localStorage.getItem("authToken");
+    webSocketService.send("/message", chat);
   }
 
   function Subscribe() {
     console.log("구독!");
-    webSocketService.subscribe("/message", (data) => {
+    console.log(chat.roomId);
+    webSocketService.subscribe("/message" + chat.roomId, (data) => {
       console.log(data.message);
       setText(data.message);
     });
@@ -142,6 +144,7 @@ const DirectMessenger = (props) => {
   const onChangeComment = (e) => {
     setText(e.target.value);
   }
+
   useEffect(()=>{
     if (webSocketService) {
       Subscribe();

@@ -7,10 +7,8 @@ const token = localStorage.getItem("authToken");
 const endPoint = "http://localhost:8111/ws";
 const stompClient = Stomp.over(new SockJS(endPoint));
 const header = {
-  headers : {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`
-  }
 };
 
 class WebSocketProvider {
@@ -30,10 +28,11 @@ class WebSocketProvider {
     });
   }
 
-  send(path, headers, body) {
+  send(path, body) {
     const url = "/app" + path;
-    this.stompClient.send(url, headers, JSON.stringify(body));
+    this.stompClient.send(url, header, JSON.stringify(body));
     console.log("definition : " + url);
+    console.log("jwt 코드 : " + header.Authorization)
   }
 
   subscribe(path, callback) {
