@@ -174,12 +174,6 @@ const DirectMessenger = () => {
     });
   }
 
-  function callbackF(room, subscribe) {
-    if(room !== "" || room) {
-      subscribe();
-    }
-  }
-
   const onChangeComment = (e) => {
     setText(e.target.value);
   }
