@@ -20,7 +20,6 @@ const Container = styled.div`
   margin-bottom: 100px;
 `;
 
-<<<<<<< HEAD
 const UserContainer = styled.div`
   margin-top: 120px;
   font-family: var(--efont);
@@ -33,56 +32,6 @@ const UserContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 20px;
-=======
-function DiaryCreate() {
-  const navi = useNavigate();
-  const [isCreate, setIsCreate] = useState(false);
-
-  const [timeline, setTimeLine] = useState([]);
-
-  const title = useRef(null);
-  const text = useRef(null);
-
-  const [diaryPost, setDiaryPost] = useState({id: [], title: "", content: ""});
-
-
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1; // getMonth는 0부터 11까지를 반환하므로 1을 더해줍니다.
-  const date = now.getDate();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
-
-  const user = useContext(UserContext);
-
-  const handlePost = (title, text) => {
-    if (title.current.value.length < 1) {
-      title.current.focus();
-      title.current.placeholder = "1글자 이상 입력해주세요"
-      return
-    }
-    if (text.current.value.length < 1) {
-      text.current.focus();
-      text.current.placeholder = "1글자 이상 입력해주세요"
-      return
-    }
-    // const images = timeline.map(item => item.image);
-    const newDiaryPost = {
-      ...diaryPost,
-      title: title.current.value,
-
-      content: text.current.value,
-      timeline : timeline  
-    };
-    setDiaryPost(newDiaryPost);
-    console.log(timeline);
-   const sss = DiaryApi.saveDiary(title.current.value, text.current.value, timeline);
-    console.log(sss.data);
-
-    navi("/diaryMypage");
-    
->>>>>>> 9b4d95112ad5228be55bf677ba1ce092dc4f6c78
   }
   .Controler{
     display: flex;

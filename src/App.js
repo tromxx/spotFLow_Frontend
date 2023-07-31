@@ -7,7 +7,6 @@ import HeaderBarNavi from './components/Common/HeaderBarNavi';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import {ThemeProvider} from './context/themeProvider';
-import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiaryDetail/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
@@ -15,16 +14,16 @@ import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
 import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
-import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import ChangeInfo from './pages/ChangeInfo';
 import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
 import WebSocketProvider from "./context/WebSockeProvider";
-
-export const WebSocket = React.createContext();
-import Nofication from './pages/Nofication';
+import Nofication from './pages/Notification'
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
+
+export const WebSocket = React.createContext();
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -84,10 +83,6 @@ function App() {
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
-            <Route path="/diaryCategory" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <DiaryCategory />
-            </>} />
             <Route path="/diaryMypage" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryMypage />
@@ -127,6 +122,7 @@ function App() {
         </ThemeProvider>
       </BrowserRouter>
     </UserStore> 
+    </WebSocket.Provider>
   );
 }
 

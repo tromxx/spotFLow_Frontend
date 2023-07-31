@@ -9014,12 +9014,6 @@ slash@^4.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
-<<<<<<< HEAD
-slick-carousel@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/slick-carousel/-/slick-carousel-1.8.1.tgz#a4bfb29014887bb66ce528b90bd0cda262cc8f8d"
-  integrity sha512-XB9Ftrf2EEKfzoQXt3Nitrt/IPbT+f1fgqBdoxO3W/+JYvtEOW6EgxnWfr9GH6nmULv7Y2tPmEX3koxThVmebA==
-=======
 socket-client@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/socket-client/-/socket-client-1.0.0.tgz#fdd93638f8029227249f3cd657b85e0237f5ca8e"
@@ -9040,7 +9034,6 @@ sockjs-client@^1.6.1:
     faye-websocket "^0.11.4"
     inherits "^2.0.4"
     url-parse "^1.5.10"
->>>>>>> 9b4d95112ad5228be55bf677ba1ce092dc4f6c78
 
 sockjs@^0.3.24:
   version "0.3.24"
