@@ -128,13 +128,6 @@ function App() {
                 </>
               }
               />
-              <Route path='/sse-test' element={
-                <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                  <SseTest/>
-                </>
-              }
-              />
             </Routes>
           </ThemeProvider>
         </BrowserRouter>
