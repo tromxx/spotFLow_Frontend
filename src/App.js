@@ -18,10 +18,7 @@ import React, {useEffect, useLayoutEffect, useState} from 'react';
 import ChangeInfo from './pages/ChangeInfo';
 import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
-import NotificationSocket from './pages/noti';
 import WebSocketProvider from "./context/WebSockeProvider";
-import SseTest from './pages/SseTest';
-import Nofication from './pages/Notification'
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
 
