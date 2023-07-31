@@ -219,7 +219,6 @@ function Profile() {
     const { id } = useParams(); 
 
     let email = decodeURIComponent(id);
-
     useEffect(()=>{
        async function fetch () {
 
