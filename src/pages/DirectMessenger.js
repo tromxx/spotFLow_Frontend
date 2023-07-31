@@ -5,10 +5,12 @@ import {styled} from "styled-components";
 import {WebSocket} from "../App";
 import {BsSend} from "react-icons/bs";
 import {UserContext} from "../context/UserStore";
+import { useContext } from 'react';
 import {useParams} from "react-router-dom";
 import MyMessenger from "../components/Dm/MyMessenger"
 import OtherMessenger from "../components/Dm/OtherMessenger"
 import ChatApi from "../api/ChatApi";
+import { useEffect } from 'react';
 
 const Container = styled.div`
   position: relative;
@@ -151,12 +153,6 @@ const DirectMessenger = () => {
     sender: email,
     message: text
   };
-
-  stompClient.connect(header, function (frame) {
-    console.log("connected: " + frame);
-    console.log("연결 테스트")
-  });
-
 
 
   function Send() {
