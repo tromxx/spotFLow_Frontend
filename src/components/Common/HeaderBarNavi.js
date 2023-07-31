@@ -10,11 +10,6 @@ import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
 import CustomerApi from '../../api/CustomerApi';
-import NotificationSocket from '../../pages/noti';
-import SockJS from "sockjs-client";
-import {Stomp} from "@stomp/stompjs";
-import WebSocketProvider from '../../context/WebSockeProvider';
-import { WebSocket } from '../../App';
 
 
 const HeaderBarDiv = styled.div`
