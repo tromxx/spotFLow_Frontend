@@ -150,7 +150,6 @@ const DiaryCreate = () => {
     },[]
   )
 
-
   const getTimeLineId = (e) => {
     setTimeLine((prevTimeLine) => {
       const dataIndex = prevTimeLine.indexOf(e);
@@ -173,11 +172,10 @@ const DiaryCreate = () => {
   }
   
   const uploadToDiary = async() =>{
-    const formattedTimeLine = timeLine.map(id => ({ id }));
     const data ={
       title : title,
       content : content,
-      timeLineIds : formattedTimeLine
+      timeLineList : timeLine
     };
     if(title.length < 1 || content.length < 1 || timeLine.length === 0){
       setModalOpen(true);
@@ -210,7 +208,7 @@ const DiaryCreate = () => {
         <div className="ImageConatiner">
           {datas && datas.map(data=>(
             <div className="ImageDiv" key={data.id}> 
-              <input type="checkBox" onChange={()=>{getTimeLineId(data.id);console.log(timeLine)}}/>
+              <input type="checkBox" onChange={()=>{getTimeLineId(data);}}/>
               <img  src={data.img} alt="error" />
               <p>{data.date}</p>
             </div>

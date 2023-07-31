@@ -5,14 +5,10 @@ const DOMAIN = "http://localhost:8111"
 const DiaryApi = {
 
   //다이어리 저장하기
-  saveDiary: async (title, content, timeline) => {
+  saveDiary: async (data) => {
     const token = localStorage.getItem("authToken")
-    const requestData = {
-      title: title,
-      content: content,
-      timeLineList: timeline
-    }
-    return axios.post(DOMAIN + "/diary", requestData, {
+
+    return axios.post(DOMAIN + "/diary", data, {
       headers : {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -74,7 +70,7 @@ const DiaryApi = {
       }
     });
   },
-
+  
   sendcommentNoti: async (comment) => {
     const token = localStorage.getItem("authToken");
     
@@ -143,7 +139,7 @@ const DiaryApi = {
   
   // 다이어리 전체 조회 하기
   findAllDiary : async() =>{
-    return await axios.get(DOMAIN + "/diary/all");
+    return await axios.get(DOMAIN + "/diary/alls");
   }
 }
 

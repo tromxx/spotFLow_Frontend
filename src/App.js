@@ -107,32 +107,12 @@ function App() {
                 <DiarySwiper/>
               </>
             }/>
-<<<<<<< HEAD
-            <Route path="/flow" element={
+                   <Route path="/flow" element={
               <>
-                {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                <TimeLine />
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <TimeLine/>
               </>
             }/>
-            <Route path='/myflow' element={
-            <>
-            {windowWidth <= 840 ? null : <HeaderBarNavi />}
-            {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
-             
-            </>
-           }/>
-           <Route path='/nofication' element={
-            <>
-            {windowWidth <= 840 ? null : <HeaderBarNavi />}
-            <Nofication />
-            </>
-           }
-           />
-          </Routes>
-        </ThemeProvider>
-      </BrowserRouter>
-    </UserStore> 
-=======
 
               <Route path='/myflow' element={
                 <>
@@ -160,7 +140,6 @@ function App() {
           </ThemeProvider>
         </BrowserRouter>
       </UserStore>
->>>>>>> 392c4c2e8b8e3efac7d5c4431e61bdcbba3e8834
     </WebSocket.Provider>
 
   );
