@@ -7,7 +7,6 @@ import HeaderBarNavi from './components/Common/HeaderBarNavi';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import {ThemeProvider} from './context/themeProvider';
-import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiaryDetail/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
@@ -15,13 +14,16 @@ import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
 import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
-import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import ChangeInfo from './pages/ChangeInfo';
 import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
 import NotificationSocket from './pages/noti';
 import WebSocketProvider from "./context/WebSockeProvider";
 import SseTest from './pages/SseTest';
+import Nofication from './pages/Notification'
+import DiaryUser from './pages/DiaryUser';
+import DiaryEdit from './pages/DiaryEdit';
 
 export const WebSocket = React.createContext();
 
@@ -62,51 +64,47 @@ function App() {
               <Route path="/" element={<>
                 {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                 <Home/>
-              </>}/>
-              <Route path="/login" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <Login/>
-              </>}/>
-              <Route path="/signup" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <SignUp/>
-              </>}/>
-              <Route path="/findpwemail" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <FindPwEmail/>
-              </>}/>
-              <Route path="/changeinfo" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <ChangeInfo/>
-              </>}/>
-              <Route path="/diary" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <Diary/>
-              </>}/>
-              <Route path="/diaryCategory" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <DiaryCategory/>
-              </>}/>
-              <Route path="/diaryMypage" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <DiaryMypage/>
-              </>}/>
-              <Route path="/diaryCreate" element={<>
-                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                <DiaryCreate/>
-              </>}/>
-              <Route path="/flow" element={
-                <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                  <TimeLine/>
-                </>
-              }/>
-              <Route path="/diary/detail/:id" element={
-                <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                  <DiarySwiper/>
-                </>
-              }/>
+              </>} />
+            <Route path="/login" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <Login />
+            </>} />
+            <Route path="/signup" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <SignUp />
+            </>} />
+            <Route path="/findpwemail" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <FindPwEmail />
+            </>} />
+            <Route path="/changeinfo" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <ChangeInfo />
+            </>} />
+            <Route path="/diary" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <Diary />
+            </>} />
+            <Route path="/diaryMypage" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <DiaryMypage />
+            </>} />
+            <Route path="/diaryCreate" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <DiaryCreate />
+            </>} />
+            <Route path="/flow" element={
+              <>
+                {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <TimeLine />
+              </>
+            }/>
+            <Route path="/diary/detail/:id" element={
+              <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <DiarySwiper/>
+              </>
+            }/>
 
               <Route path='/myflow' element={
                 <>

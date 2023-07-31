@@ -23,8 +23,6 @@ const MyFlowApi = {
         'Authorization': `Bearer ${token}`
       }
     });
-
-
   },
 
   // getClickedFlow: async (flowId) => {
