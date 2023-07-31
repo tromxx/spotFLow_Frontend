@@ -96,35 +96,10 @@ const HeaderBar = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const{ email, setEmail, nickname, setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, received, setReceived } = useContext(UserContext);
+  const { email, setEmail, nickname, setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, joinDate, setJoinDate } = useContext(UserContext);
+  const [isNew, setIsNew] = useState("");
 
-  const webSocketService = useContext(WebSocket);
-  const [text, setText] = useState("");
-
-  const endPoint = "http://localhost:8111/ws";
-  const stompClient = Stomp.over(new SockJS(endPoint));
-  localStorage.setItem("client", stompClient);
-  const token = localStorage.getItem("authToken");
-  const header = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-  };
-  useEffect(() => {
-    
-    webSocketService.subscribe(`/${email}`, function (response) {
-      const data = JSON.parse(response.body);
-      console.log(data);
-      setText(data.message);
-    
-      
-    }, []);
-    return () => {
-      stompClient.disconnect();
-    };
-  });
-
-  
-  
+  const subscribeUrl = "http://localhost:8111/sub";
     useEffect(() => {
     const token = localStorage.getItem('authToken');
     const getCustomerInfo = async () => {
@@ -137,17 +112,40 @@ const HeaderBar = (props) => {
           setStatMsg(response.data.customer.statMsg);
           setFollower(response.data.follower.follower);
           setFollowing(response.data.follower.following);
+          setJoinDate(response.data.joinDate);
           setIsLoggedIn(true);
+          console.log(isLoggedIn);
+          if (joinDate !== null) {
+            const eventSource = new EventSource(subscribeUrl + "?joinDate=" + joinDate);
+            console.log(eventSource);
+            // addComment 이벤트 리스너 등록
+            eventSource.addEventListener("addComment", function(event) {
+              let message = event.data;
+              setIsNew(event.data);
+              console.log(message);
+              // alert(message);
+            });
+      
+            // error 이벤트 리스너 등록
+            eventSource.addEventListener("error", function(event) {
+              eventSource.close();
+            });
+      
+            // 컴포넌트가 언마운트될 때 EventSource 객체 닫기
+            return () => {
+              eventSource.close();
+            };
+          }
         } catch (error) {
           localStorage.clear();
           setIsLoggedIn(false);
         }
-      }else{
+      } else {
         return null;
       }
     };
     getCustomerInfo();
-  }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
+  }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing, setJoinDate]);
 
   const logOut = () =>{
     localStorage.clear();
@@ -155,8 +153,8 @@ const HeaderBar = (props) => {
   }
 
   const handleNoti = () => {
-    navigate("notification");
-    setReceived("");
+    navigate("/notification");
+    setIsNew("");
   }
 
   return (
@@ -168,7 +166,7 @@ const HeaderBar = (props) => {
       {isLoggedIn ? 
         <LoggedInDiv>
           <button className="noti" onClick={()=>{handleNoti()}}>
-              {received !== "" ? <NofiOn /> : <NofiNone />}
+              {isNew !== "" ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>

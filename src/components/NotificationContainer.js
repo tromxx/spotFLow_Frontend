@@ -6,8 +6,8 @@ import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
 
 const NotificationDiv = styled.div`
   width: 95%;
-  height: 100px;
-  margin-top: 5px;
+  height: 150px;
+  margin-top: 0px;
   text-align: left;
   border-bottom: ${props=>props.theme.borderColor};
   background-color: transparent;
@@ -17,7 +17,7 @@ const NotificationDiv = styled.div`
   align-items: flex-start; /* 수정: 상단 정렬로 변경 */
   font-family: var(--kfont);
 
-  .container {
+  span {
   font-weight: bolder;
   width:70px;
   padding:0 5px;

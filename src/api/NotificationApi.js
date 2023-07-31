@@ -22,6 +22,10 @@ const NotificationApi = {
           'Authorization': `Bearer ${token}`
         }
       });
+    },
+    sseTest: async() => {
+    
+      return await axios.get(Backend + "/notification/ssetest?email=youngtong111")
     }
 }
 

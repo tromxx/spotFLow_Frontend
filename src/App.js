@@ -21,6 +21,7 @@ import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
 import NotificationSocket from './pages/noti';
 import WebSocketProvider from "./context/WebSockeProvider";
+import SseTest from './pages/SseTest';
 
 export const WebSocket = React.createContext();
 
@@ -126,6 +127,13 @@ function App() {
                 <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                   <DirectMessenger/>
+                </>
+              }
+              />
+              <Route path='/sse-test' element={
+                <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+                  <SseTest/>
                 </>
               }
               />

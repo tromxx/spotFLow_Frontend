@@ -7,6 +7,8 @@ import 'moment/locale/ko';
 import diaryApi from "../../api/DiaryApi";
 import UserStore, {UserContext} from "../../context/UserStore";
 import {WebSocket} from "../../App";
+import {Stomp} from "@stomp/stompjs";
+import SockJS from 'sockjs-client';
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -282,31 +284,58 @@ const CommentDetail = styled.div`
   }
 `;
 export const Comment = (props) => {
-  const webSocketService = useContext(WebSocket);
+  // const webSocketService = useContext(WebSocket);
   const [text, setText] = useState("");
 
-  const endPoint = "http://localhost:8111/ws";
-  const stompClient = Stomp.over(new SockJS(endPoint));
-  localStorage.setItem("client", stompClient);
-  const token = localStorage.getItem("authToken");
-  console.log(localStorage.getItem("client"));
-  const header = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-  };
+  // const endPoint = "http://localhost:8111/ws";
+  // const stompClient = Stomp.over(new SockJS(endPoint));
+  // const token = localStorage.getItem("authToken");
+  // const header = {
+  //   headers : {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${token}`
+  //   }
+  // };
+
+  // stompClient.connect(header, function (frame) {
+  //   console.log("connected: " + frame);
+  //   console.log("연결 테스트")
+  // });
+
+  // function Send(request) {
+    
+  //   stompClient.send("/sendnoti", {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${token}`
+  //     }
+  //   }, JSON.stringify(request));
+  // }
 
 
   const onChangeComment = (e) => {
     setText(e.target.value);
   }
-  const Send = async () => {
+  const commentSend = async () => {
     const request = {
       diary: props.diary,
       comment: text
     }
-    webSocketService.send("/app/message", {}, request);
+    
     await diaryApi.sendComment(request);
-    // await diaryApi.sendcommentNoti(request);
+    await diaryApi.sendcommentNoti(request);
+    // async function executeFunctionsSequentially() {
+    //   await diaryApi.sendComment(request);
+    
+    //   // 0.2초(200ms) 지연 실행
+    //   await new Promise((resolve) => setTimeout(resolve, 200));
+    
+    //   await diaryApi.sendcommentNoti(request);
+    // }
+    
+    // // 함수 실행
+    // executeFunctionsSequentially();
+    // Send(request);
     await setText("");
     await props.setCount(props.count + 1);
     console.log(request);
@@ -370,7 +399,7 @@ export const Comment = (props) => {
         </div>
         <input type="text" id="comment" value={text} onChange={onChangeComment}/>
         <button className="btn-send">
-          <BsSend className="send" onClick={() => Send()}/>
+          <BsSend className="send" onClick={() => commentSend()}/>
         </button>
       </div>
 
