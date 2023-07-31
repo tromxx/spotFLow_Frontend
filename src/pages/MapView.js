@@ -136,7 +136,8 @@ const MapView = React.memo((props) => {
     const soonImg = "https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/images%2Ffree-icon-location-10797038.png?alt=media&token=e0965f50-abc4-40b0-a7eb-684052328586";
     return (
       <>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center", color:"white" ,borderRadius:"15px",backgroundColor:"#35B1E8",width:"100px",height:"30px",left:"150px",top:"60px",position:"absolute", zIndex:"100"}}>서울 축제</div>
+        
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center", color:"white" ,borderRadius:"15px",backgroundColor:"#35B1E8",width:"100px",height:"30px",left:"10%",top:"60px",position:"absolute", zIndex:"100"}}>서울 축제</div>
         <MapMarker
           position={{
             lat: lat,
@@ -162,6 +163,7 @@ const MapView = React.memo((props) => {
           }}
         >
         </MapMarker>
+        
         {isVisible &&
           <CustomOverlayMap position={{
             lat: content.LOT,
@@ -175,6 +177,7 @@ const MapView = React.memo((props) => {
           </Maker>
           </CustomOverlayMap>
         }
+
       </>
     );
   });
@@ -219,6 +222,7 @@ const MapView = React.memo((props) => {
           </MarkerClusterer>
         ) : (
             forumData.map((value,idx) => (
+              
               <EventMarkerContainer
                key={`EventMarkerContainer-${value.LAT}-${value.LOT}-${idx}`}
                 lat={parseFloat(value.LOT)}

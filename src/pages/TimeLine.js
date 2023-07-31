@@ -405,7 +405,8 @@ const ItemImg = styled.div`
             height : 90%;
             width: 100%;
             @media (min-width: 1300px) {
-    background-size: contain;
+              background-size: contain;
+            
     background-color:white;
     border : solid 0.1px #EAEAEA;
     border-radius: 1px;
@@ -930,12 +931,12 @@ const handleLocationModal = () => {
                       }} >
    
                     <div className="item-header">
-                      <img className="profile" style={
+                      <img onClick={()=>{Navi(`/profile/${e.email}`)}} className="profile" style={
                               issort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
                               : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }
                           }
-                      src={ e.ct_profile_pic || e.customer.profilePic || default_avatar} alt="" />
+                      src={ e.ct_profile_pic|| e.customer.profilePic || default_avatar } alt="" />
                           <div style={
                              issort
                              ?
@@ -1059,4 +1060,8 @@ const handleLocationModal = () => {
             }
 
 export default TimeLine;
+
+
+
+
 
