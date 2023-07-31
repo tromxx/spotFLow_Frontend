@@ -3,77 +3,108 @@ import axios from "axios";
 const DOMAIN = "http://localhost:8111"
 
 const DiaryApi = {
-  saveDiary: async (email, title, content, timeline) => {
-    const requestData = {
-      email: email,
-      title: title,
-      content: content,
-      timeLineList: timeline
-    }
-    return axios.post(DOMAIN + "/diary", requestData);
+
+  //다이어리 저장하기
+  saveDiary: async (data) => {
+    const token = localStorage.getItem("authToken");
+    return axios.post(DOMAIN + "/diary",data,{
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
-  // id = 다이어리 식별 번호
+
+  //특정 다이어리 디데일 정보 가죠오기 Diary Detail
   findDiary: async (id) => {
     return axios.get(DOMAIN + "/diary?num=" + id);
   },
-  findMyDiary: async (email) => {
-    return axios.get(DOMAIN + "/diary/all?email=" + email);
+
+  //유저 다이어리 정보 가죠오기 
+  findMyDiary: async () => {
+    const token = localStorage.getItem("authToken");
+    return axios.get(DOMAIN + "/diary/my-diary",{
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
-  deleteDiary: async (id) => {
-    const requestData = {
-      id: id
-    }
-    return axios.delete(`${DOMAIN}/diary/check`, {data: requestData});
-  }
-  ,
+  
+  //특정 유저 diary 가죠오기
+  findUserDiary: async (email) => {
+    return axios.get(DOMAIN + "/diary/user?email=" + email);
+  },
+
+  //다이어리 업데이트
+  updateDiary : async (data) => {
+    return axios.post(DOMAIN + "/diary/update",data);
+  },
+
+  // 다이어리 조회수 올리기 
+  increaseView : async (id) =>{
+    const data = {
+      id : id
+    };
+    return axios.put(DOMAIN + "/diary/view", data);
+  }, 
+
+  //다이어리 삭제
+  deleteDiary: async(data) => {
+    return axios.post(DOMAIN + "/diary/del", data);
+  },
+
+  //다이어리 댓글 달기
   sendComment: async (props) => {
+    const token = localStorage.getItem("authToken");
     const comment = {
       diary: props.diary,
       content: props.comment,
-      email: props.email
     }
     console.log(comment)
-    return await axios.post(DOMAIN + "/diary/comment", comment);
+    return await axios.post(DOMAIN + "/diary/comment", comment,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }});
   },
+
+  //다이어리 댓글 삭재 하기
   deleteComment: async (comment) => {
     console.log(comment)
     return await axios.delete(DOMAIN + "/diary/comment/" + comment);
   },
-  // diaryMyPage : async () => {
-  //   return await axios.post(DOMAIN + "diary/mypage", )
-  // }
 
-
-  // 장소명으로 다이어리 검색 
-  searchPlace: async (place) => {
-    const body = {
-      place: place
-    }
-    return await axios.post(DOMAIN + "/diary/search", body);
-  },
-
-  // 팔로우관계의 다이어리 검색
-  searchFreind: async (email) => {
-    return await axios.get(DOMAIN + "/diary/following?email=" + email);
-  },
-
-  thumbsUP : async(id, email) => {
+  // 다이어리 좋아요 눌루기
+  thumbsUP : async(id) => {
+    const token = localStorage.getItem("authToken")
     const request = {
       id : id,
-      email : email
     }
-    return await axios.put(DOMAIN + "/diary/like", request)
+    return await axios.put(DOMAIN + "/diary/like", request,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }})
   },
 
-  findThumbs : async(id, token) => {
-    return await  axios.get(DOMAIN + "/diary/like?id=" + id,{
+  // 다이어리 좋아요 수정하기
+  findThumbs : async(id) => {
+    const token = localStorage.getItem("auth")
+    return await  axios.get(DOMAIN + "/diary/like/" + id,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }}
     );
+  },
+  
+  // 다이어리 전체 조회 하기
+  findAllDiary : async() =>{
+    return await axios.get(DOMAIN + "/diary/all");
   }
 
 }
 
 export default DiaryApi;
+

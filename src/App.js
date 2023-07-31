@@ -18,6 +18,8 @@ import FindPwEmail from './pages/FindPwEmail';
 import { useLayoutEffect, useState } from 'react';
 import ChangeInfo from './pages/ChangeInfo';
 import Nofication from './pages/Nofication';
+import DiaryUser from './pages/DiaryUser';
+import DiaryEdit from './pages/DiaryEdit';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -63,36 +65,38 @@ function App() {
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
+            <Route path="/diary/user/:email" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <DiaryUser />
+            </>} />
             <Route path="/diaryCategory" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCategory />
             </>} />
-            <Route path="/diaryMypage" element={<>
+            <Route path="/diarymypage" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryMypage />
+            </>} />
+            <Route path="/diaryedit/:id" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <DiaryEdit />
             </>} />
             <Route path="/diaryCreate" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
             </>} />
-            <Route path="/flow" element={
-              <>
+            <Route path="/flow" element={<>
                 {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <TimeLine />
-              </>
-            }/>
-            <Route path="/diary/detail/:id" element={
-              <>
+            </>}/>
+            <Route path="/diary/detail/:id" element={<>
                   {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <DiarySwiper/>
-              </>
-            }/>
-
+            </>}/>
             <Route path='/myflow' element={
             <>
             {windowWidth <= 840 ? null : <HeaderBarNavi />}
             {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
-             
             </>
            }/>
            <Route path='/nofication' element={

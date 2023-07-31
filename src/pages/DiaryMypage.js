@@ -1,255 +1,245 @@
-import React, { useState } from "react";
+import React from "react";
 import { styled } from "styled-components";
-import MyDiary from "../components/MyDiary";
-import SearchBar from "../components/SearchBar/DiarySearchBar2";
-import { BsPeople } from "react-icons/bs";
-import avatar from "../images/default_avatar.png"
-import { BsTrash } from "react-icons/bs";
-import { BsListUl } from "react-icons/bs";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useEffect } from "react";
 import DiaryApi from "../api/DiaryApi";
-import axios from "axios";
-import { UserContext} from '../context/UserStore';
-import { useEffect , useContext } from "react";
-
-
-
+import DiaryMyPageContainer from "../components/DiaryMyPage/DiaryMyPageContainer";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
+import { IoAdd} from 'react-icons/io5'
+import {BsGear} from 'react-icons/bs'
+import {AiOutlineEdit} from 'react-icons/ai'
+import {MdContentCopy} from 'react-icons/md'
+import {BsTrash} from 'react-icons/bs'
+import { useNavigate } from "react-router-dom";
+import Modal from '../utils/LoginSignUpModal'
 
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: auto;
+  height: auto;
+  gap: 20px;
+  margin-bottom: 100px;
+  color: ${props=>props.theme.textColor};
+  background-color: ${props=>props.theme.bgColor};
+  .UserContainer{
+    margin-top: 120px;
+    font-family: var(--efont);
+    width: 70%;
+    gap: 10px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    /* background-color: gray; */
-  
-    position: relative;
-    top:50px;
-    @media (max-width: 850px) {
-      & {
-        top:0;
-      }
-    }
-    background-color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "white"};
-    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
-    .namebar{
-        display: flex;
-        width: 70vw;
-        height: 15vh;
-        /* border: solid 5px red; */
-        justify-content: center;
-        align-items: center;
-        justify-content: space-between;
-        @media (max-width: 400px) {
-            width: 90vw;
-        }
-        }
-        .namebarleft{
-            width: 75%;
-            height: 60px;
-            display: flex;
-            justify-content: flex-start;
-            align-items: end;
-        }
-        .namebarright{
-            width: 25%;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            top:60px;
-        }
-        
-        .menu{
-            /* width: 75%; */
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-        }
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--grey);
+    @media (max-width : 850px){
+        margin-top: 20px;
 
-        .id{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            h6{
-                font-size: 13px;
-                margin-left: 15px;
+    }
+    p{
+        margin: 0px;
+    }
+    .Profile{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        img{
+            width: 80px;
+            height: 80px;
+            border-radius: 80px;
+            @media (max-width : 844px){
+                width: 50px;
+                height: 50px;
             }
         }
-
-    .img{
-        width: 70px;
-        height: 70px;
-   //     margin-right: 20px;
     }
-
-    .searchBarline{
+    .Controler{
         display: flex;
-        justify-content: space-between;
-        align-items:center;
-        width: 100%;
-        height: 100%;
-    }
-    .cancel{
-        border: solid 1px #00b4d8; 
-        background-color: white;
-        color: black;
-        width: 50px;
-        height: 40px;
-        font-size: 0.8rem;
-        border-radius: 10px;
-        text-align: center;
-        font-family: 'Black Han Sans', sans-serif;
-
-        
-        /* display: flex;
-        justify-content: center;
-        text-align: center; */
+        align-items: center;
+        gap: 20px;
+        @media (max-width : 844px){
+            gap: 10px;
         }
-
-        
-    .list{
-        /* margin: 80%; */
-        width: 30px;
-        height: 30px;
-        display: flex;
-        justify-content: flex-end;
-        &:hover{
-            color: gray;
-            font-weight: bold;
-        }
-        margin-right: 20px;
     }
-
-    /* .people{
-        width: 30px;
-        height: 30px;
+    .ProfileContainer{
         display: flex;
-        justify-content: flex-end;
-        margin-right: 20px;
-    }  */
-    .trash{
-        width: 30px;
-        height: 30px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .FollowContainer{
         display: flex;
-        justify-content: flex-end;
-        /* margin-right: 20px; */
+        gap: 15px;
+        justify-content: left;
     }
-    /* .Search-bar {
-        padding: 0;
-        margin-left: 0;
-    } */
-    `;
-
-const DiaryMypagediv = styled.div`
-    width: 70vw;
-    height: 70vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* background-color: beige; */
-    margin-top: 20px;
-    border: solid 3px black;
-    border-radius: 20px;
-    @media (max-width: 400px) {
-        width: 90vw;
-        border: solid 1px black;
-    }
-    background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "white"};
-
-
+  }
 `;
 
+const GoToDiary = styled(MdContentCopy)`
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    &:hover{
+        color: var(--lightblue);
+    };
+`;
 
-    const DiaryMypage = () => {
+const Delete = styled(BsTrash)`
+    width: 25px;    
+    height: 25px;
+    display: ${props => (props.$isChecked === "true" ? 'block' : 'none')};
+    cursor: pointer;
+    &:hover{
+        color: var(--lightblue);
+    };
+`;
 
-    const user = useContext(UserContext);
+const GoToAdd = styled(IoAdd)`
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    &:hover{
+        color: var(--lightblue);
+    };
+`;
+
+const Setting = styled(BsGear)`
+    width: 25px;
+    height: 25px;
+    transition: transform 0.7s ease;
+    transform: ${props => (props.$isChecked === "true" ? 'rotate(120deg)' : 'rotate(5deg)')};
+    cursor: pointer;
+    &:hover{
+        color: var(--lightblue);
+    };
+`;
+
+const DiaryContainerDiv = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    margin-top: 20px;
+    .container{
+        padding: 10px;
+    }
+`;
+
+const EditButton = styled(AiOutlineEdit)`
+    width: 25px;    
+    height: 25px;
+    display: ${props => (props.$isChecked === "true" ? 'block' : 'none')};
+    cursor: pointer;
+    &:hover{
+        color: var(--lightblue);
+    };
+`;
+
+const Input = styled.input`
+    display: ${props => (props.$isChecked === "true" ? 'block' : 'none')};
+`;
+
+const DiaryMyPage = () =>{
+    const [datas, setDatas] = useState();
+    const [isChecked, setIsChecked] = useState(false);
+    const [diaryIds, setDiaryIds] = useState([]);
+    const {nickname,profilePic, following, follower} = useContext(UserContext);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalText, setModalText] = useState("")
+    const navigate = useNavigate();
     
-    const [trigger, setTrigger] = useState(false);
+    useEffect(()=>{
+        const fetchData = async() => {
+            const response = await DiaryApi.findMyDiary()
+            setDatas(response.data);
+        };
+        console.log("myPage useEffect activated");
+        fetchData();
+    },[isChecked]);
 
-    const navi = useNavigate();
-
-    const [isCheckBox, setIsCheckBox] = useState(false);
-
-    const [data,setData] = useState([]);
-
-    const [checkid, setCheckId] = useState([]) ; 
-
-    const forceUpdate = () => {
-        setTrigger(prev => !prev);
+    const getTheData = (e) => {
+        setDiaryIds((prevDiaryIds) => {
+          const dataIndex = prevDiaryIds.indexOf(e);
+      
+          if (dataIndex === -1) {
+            return [...prevDiaryIds, e];
+          } else {
+            return prevDiaryIds.filter((id) => id !== e);
+          }
+        });
     };
 
-    const convertCheckBox = () => {
-        if(isCheckBox === false) setIsCheckBox(true)
-        else setIsCheckBox(false);
-        console.log(isCheckBox);
-    };
-    
-        const handleDeleteItem = async () => {
-                try {
-                const res = await DiaryApi.deleteDiary(checkid);
-                console.log(res.data);
-                alert(`${checkid.length}개의 다이어리가 삭제되었습니다.`)
-                if(res.status == 200) {
-                   setTimeout(forceUpdate(),1500);
-                }
-                } catch(error) {
-                    console.log("삭제실패",error);
-                }
-                
-          };
-          useEffect(() => {
-            console.log(data);
-        }, [trigger]);
-        
+    const deleteDiary = async() =>{
+        if(diaryIds.length === 0){
+            setModalOpen(true);
+            setModalText("삭제할 것들을 선택하세요");
+        }else{
+            const data = {
+                diaryId : diaryIds
+            };
+            await DiaryApi.deleteDiary(data);
+            setIsChecked(false);
+        }
+    }
+
+    const editDiary = () =>{
+        if (diaryIds.length === 0) {
+            setModalOpen(true);
+            setModalText("수정할 것을 선택하세요");
+        } else if (diaryIds.length > 1) {
+            setModalOpen(true);
+            setModalText("수정할 것을 하나만 선택하세요");
+        } else {
+            const id = diaryIds;
+            navigate(`/diaryedit/${id}`);
+        }
+    }
+
     return(
-        
         <Container>
-             <header>
-                <div className="namebar">
-                    <div className="namebarleft">
-                    <div className="id">
-                        <img className="img" src={user.profilePic} alt="" />
-                        <h6>{user.nickname}</h6>
-                     </div>
-                
-                 </div>
-                 <div className="namebarright">
-                       
-                    </div>
-                </div> 
-                <div className="searchBarline">
-                    <SearchBar/>
-                    <div className="menu">
-                                {isCheckBox ? (
-                                    <>
-                                        <button 
-                                            className="cancel" 
-                                            style={{marginRight: "10px"}}
-                                            onClick={convertCheckBox}>Cancel</button>
-                                        <button 
-                                            onClick={handleDeleteItem}                                      
-                                            className="cancel"
-                                            style={{border:"solid 1px #f24e1e", color:"#f24e1e"}}
-                                            >Delete</button>
-                                    </>)
-                                : (
-                                    <>
-                                        <BsListUl onClick={()=>{navi("/diary")}} className="list"/>
-                                        <BsTrash className="trash" onClick={convertCheckBox}/>
-                                    </>)
-                                }
+           <div className="UserContainer">
+                <div className="Profile">
+                    <img src={profilePic} alt="error" />
+                    <div className="ProfileContainer">
+                    <p>{nickname}</p>
+                        <div className="FollowContainer">
+                            <p>게시물 : {following}</p>
+                            <p>팔로워 : {follower}</p>
+                            <p>팔로잉 : {following}</p>
                         </div>
-                 </div>   
-            </header>
-            <body>
-        <DiaryMypagediv>
-            <MyDiary email={user.email}trigger={trigger} stat={isCheckBox} checkid={checkid} setCheckId={setCheckId} data={data}/>
-        </DiaryMypagediv>
-        </body>
+                    </div>
+                </div>
+                <div className="Controler">
+                    <EditButton onClick={editDiary} $isChecked={isChecked.toString()}/>
+                    <Delete onClick={deleteDiary} $isChecked={isChecked.toString()}/>
+                    <Setting onClick={()=>setIsChecked(!isChecked)} $isChecked={isChecked.toString()}/>
+                    <GoToDiary onClick={()=>navigate("/diary")}/>
+                    <GoToAdd  onClick={()=>navigate("/diaryCreate")}/>
+                </div>
+            </div>
+   
+            <DiaryContainerDiv> 
+            {datas && datas.map(data=>(
+                <div className="container" key={data.id}>
+                    <Input type="checkbox" 
+                        onChange={()=>getTheData(data.id)} 
+                        $isChecked={isChecked.toString()}
+                    />
+                    <DiaryMyPageContainer
+                        val={{
+                            id : data.id,
+                            img : data.timeLineList[0].image,
+                            like : data.like,
+                            view : data.view,
+                        }}
+                    />
+                </div>
+                ))}
+            </DiaryContainerDiv>
+            <Modal type={true} open={modalOpen} children={modalText} confirm={()=>setModalOpen(false)}/>
         </Container>
     );
 };
 
-export default DiaryMypage;
+export default DiaryMyPage;

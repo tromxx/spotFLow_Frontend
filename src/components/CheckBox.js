@@ -6,7 +6,7 @@ const Container = styled.div`
 `;
 const Checkbox = ({key, id, itemHandler}) => {
   const [checked, setChecked] = useState(false);
-
+  
   const checkHandler = ({target}) => {
     setChecked(!checked);
     itemHandler(id, target.checked);

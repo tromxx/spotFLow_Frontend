@@ -113,7 +113,7 @@ const CloseButton = styled(AiOutlineClose)`
 `;
 
 const Modal = (props) => {
-    const {open, confirm, close, type, header, children} = props;
+    const {open, confirm, close, type, children} = props;
 
     return(
        <ModalStyle>

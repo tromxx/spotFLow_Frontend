@@ -23,8 +23,6 @@ const MyFlowApi = {
         'Authorization': `Bearer ${token}`
       }
     });
-
-
   },
 
   getClickedFlow: async (flowId) => {
@@ -45,7 +43,7 @@ const MyFlowApi = {
 
   getmyFlow: async (token) => {
 
-    return await axios.post(Backend + "/myflow/getmyflow", {}, {
+    return await axios.post(Backend + "/timeline/getmyflow", {}, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
