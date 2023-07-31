@@ -66,7 +66,8 @@ const DiaryApi = {
       diary: props.diary,
       content: props.comment,
     }
-    return await axios.post(DOMAIN + "/diary/comment", comment, {
+    console.log(comment)
+    return await axios.post(DOMAIN + "/diary/comment", comment, { 
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

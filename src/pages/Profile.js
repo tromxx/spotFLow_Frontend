@@ -5,11 +5,13 @@ import {BsGrid3X3} from "react-icons/bs";
 import {RiMapPinTimeLine,RiCheckboxBlankFill} from "react-icons/ri";
 import {MdPersonOff} from "react-icons/md"
 
+import { PiChatCenteredTextLight } from "react-icons/pi";
 import {GiNotebook} from "react-icons/gi";
 import userTimelineApi from '../api/UserTimelineApi';
 import DiaryApi from '../api/DiaryApi';
 import CustomerApi from '../api/CustomerApi';
-import { useParams } from 'react-router-dom';
+import { useParams ,useNavigate} from 'react-router-dom';
+
 
 
 const centerAlign = css`
@@ -174,13 +176,13 @@ const ItemList = styled.div`
 }
 
 const Diary = (props) => {
-   
+    const Navi = useNavigate();
 
     return (
         <>     
         {
             props.data.map((e,idx)=> {
-               return <img key={idx} alt='' style={{width:"100%",height:"100%"}} src={e.itemList[0].timeLine.image}></img>
+               return <img onClick={()=>{Navi(`/diary/detail/${e.id}`)}} key={idx} alt='' style={{width:"100%",height:"100%"}} src={e.itemList[0].timeLine.image}></img>
             })
         }
         </>
@@ -228,6 +230,7 @@ function Profile() {
         setUserData(res.data.customer);
         setFollower(res.data.follower);
         console.log(res.data.customer);
+        console.log(res.data.customer.diaryList);
         }
         fetch();
         
@@ -248,7 +251,11 @@ function Profile() {
                                    <CreateInfo follower={follower.follower} name={"팔로워"}/>
                                    <CreateInfo following={follower.following} name={"팔로잉"}/>                                         
                              </div>
-                                <button>Follow</button>
+                                <div style={{display:"flex",flexDirection:"row"}}>
+                                <button style={{marginRight:"15px"}}>Follow</button>
+                                <button>Message</button>
+                                </div>
+                                
                         </div>
                     </div>
                 </div>

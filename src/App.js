@@ -18,7 +18,9 @@ import React, {useEffect, useLayoutEffect, useState} from 'react';
 import ChangeInfo from './pages/ChangeInfo';
 import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
+import NotificationSocket from './pages/noti';
 import WebSocketProvider from "./context/WebSockeProvider";
+import SseTest from './pages/SseTest';
 import Nofication from './pages/Notification'
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
@@ -108,6 +110,7 @@ function App() {
                 <DiarySwiper/>
               </>
             }/>
+<<<<<<< HEAD
             <Route path="/flow" element={
               <>
                 {windowWidth <= 840 ? null : <HeaderBarNavi />}
@@ -132,6 +135,35 @@ function App() {
         </ThemeProvider>
       </BrowserRouter>
     </UserStore> 
+=======
+
+              <Route path='/myflow' element={
+                <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+                  {windowWidth <= 840 ? <MobileMyFlow/> : <MyFlow/>}
+
+
+                </>
+              }/>
+              <Route path='/notification' element={
+                <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+                  <Notification/>
+                </>
+              }
+              />
+              <Route path='/ws-test' element={
+                <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+                  <DirectMessenger/>
+                </>
+              }
+              />
+            </Routes>
+          </ThemeProvider>
+        </BrowserRouter>
+      </UserStore>
+>>>>>>> 392c4c2e8b8e3efac7d5c4431e61bdcbba3e8834
     </WebSocket.Provider>
 
   );

@@ -105,7 +105,7 @@ const Notification = () => {
                       className="nofiContainer"
                       id={nofiData.id}
                       diary={nofiData.diary}
-                      name={nofiData.commentWriter}
+                      sender={nofiData.sender}
                       comment={nofiData.comment}
                     />
                   ))}

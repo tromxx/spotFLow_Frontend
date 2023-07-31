@@ -1,10 +1,17 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useState} from 'react';
+import SockJS from "sockjs-client";
+import {Stomp} from "@stomp/stompjs";
 import {styled} from "styled-components";
 import {WebSocket} from "../App";
 import {BsSend} from "react-icons/bs";
-import {CommentBox} from "../components/DiaryDetail/SwiperComponent";
+import {UserContext} from "../context/UserStore";
+import {useParams} from "react-router-dom";
+import MyMessenger from "../components/Dm/MyMessenger"
+import OtherMessenger from "../components/Dm/OtherMessenger"
+import ChatApi from "../api/ChatApi";
 
 const Container = styled.div`
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -20,19 +27,22 @@ const Container = styled.div`
     border-radius: 5px;
     position: relative;
     display: flex;
+    //border: 1px solid black;
     @media (max-width: 768px) {
-      height: 37px;
+      height: 40px;
     }
   }
-
-  hr {
-    opacity: 30%;
+  
+  .first {
+    position: absolute;
+    top: 15vh;
+    left: 20px;
   }
 
   img {
     max-width: 45px;
     @media (max-width: 390px) {
-      max-width: 37px;
+      max-width: 40px;
     }
   }
 
@@ -46,9 +56,10 @@ const Container = styled.div`
     overflow: hidden;
     border: .5px solid rgb(30,30,30,30%);
     @media (max-width: 768px) {
-      width: 37px;
-      height: 37px;
-      border-radius: 37px;
+      width: 40px;
+      height: 40px;
+      margin: 0;
+      border-radius: 40px;
     }
   }
 
@@ -56,15 +67,15 @@ const Container = styled.div`
     background-color: #eee;
     height: 40px;
     width: 380px;
-    margin: 5px 20px;
+    margin-left: auto;
     border: 0;
     border-radius: 30px;
     padding-left: 15px;
     padding-right: 45px;
     @media (max-width: 768px) {
-      height: 27px;
+      //height: 27px;
       width: 260px;
-      margin: 4px 6px;
+      align-self: center;
       padding-right: 35px;
     }
   }
@@ -79,19 +90,16 @@ const Container = styled.div`
   .btn-send {
     position: absolute;
     display: flex;
-    right: 22px;
-    top: 7px;
+    right: 3px;
+    top: 2.5px;
     height: 36px;
     width: 36px;
     border-radius: 36px;
-    border: 0;
+    border: .5px solid #61dafb;
     background-color: #caf0f8;
     @media (max-width: 768px) {
-      width: 24px;
-      height: 24px;
       border-radius: 24px;
-      top: 6px;
-      right: 8px;
+      right: 2px;
     }
   }
 
@@ -102,7 +110,7 @@ const Container = styled.div`
     align-self: center;
     justify-self: center;
     @media (max-width: 768px) {
-      font-size: 12px;
+      //font-size: 12px;
     }
   }
 
@@ -112,32 +120,57 @@ const Container = styled.div`
     height: 100%;
     background-color: white;
     padding: 8vh 20px 20px 20px;
+    @media (max-width: 768px) {
+      width: 100%;
+      padding: 20px;
+    }
   }
-
+  .chat-list {
+    height: 96%;
+    overflow-y: scroll;
+  }
+  .chat-list::-webkit-scrollbar {
+    display: none;
+  }
+  
 `
 
-const DirectMessenger = (props) => {
+const DirectMessenger = () => {
   const webSocketService = useContext(WebSocket);
-  const [text, setText] = useState("ㅎㅎ");
-  // const token = localStorage.getItem("authToken");
-  let chat = {
-    roomId: "2023-07-30T23:11:53.56471491",
-    receiver: "hanjy1101@naver.com",
-    sender: "hanjy1101@naver.com",
+  const {email} = useContext(UserContext);
+
+  const {receiver} = useParams();
+
+  const [room, setRoom] = useState("");
+  const [text, setText] = useState("");
+  const [chat, setChat] = useState(null);
+
+  let req = {
+    roomId: room,
+    receiver: "hanjy20129@gmail.com",
+    sender: email,
     message: text
   };
 
+  stompClient.connect(header, function (frame) {
+    console.log("connected: " + frame);
+    console.log("연결 테스트")
+  });
+
+
+
   function Send() {
-    const token = localStorage.getItem("authToken");
-    webSocketService.send("/message", chat);
+    webSocketService.send("/message", req);
+    console.log(req);
+    setText('');
   }
 
   function Subscribe() {
     console.log("구독!");
-    console.log(chat.roomId);
-    webSocketService.subscribe("/message" + chat.roomId, (data) => {
+    console.log(req.roomId);
+    webSocketService.subscribe("/message/" + req.roomId, (data) => {
       console.log(data.message);
-      setText(data.message);
+      setChat(data.message);
     });
   }
 
@@ -145,11 +178,25 @@ const DirectMessenger = (props) => {
     setText(e.target.value);
   }
 
+
   useEffect(()=>{
+    console.log("email = " + email);
+    const getRoom = async () => {
+      const res = await ChatApi.createRoom("hanjy20129@gmail.com");
+      if (res.status === 200) {
+        console.log(res.data);
+        setRoom(res.data);
+        const chat = await ChatApi.findChatLog(res.data);
+        setChat(chat.data);
+      } else {
+        console.log(res)
+      }
+    }
+    getRoom();
     if (webSocketService) {
       Subscribe();
     }
-  },[webSocketService]);
+  },[webSocketService, room]);
   return (
     <Container>
       <div className="box-chat">
@@ -158,14 +205,21 @@ const DirectMessenger = (props) => {
             <img
               src="https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/default_avatar.png?alt=media&token=7ea670df-ff84-4a85-bdb2-41b9a7f6a77a"/>
           </div>
-          <input type="text" id="comment" value={text} onChange={onChangeComment}/>
+          <input type="text" id="comment"  onChange={onChangeComment} value={text}/>
           <button className="btn-send" onClick={Send}>
             <BsSend className="send" />
           </button>
         </div>
-        <div>
-          <p>웹 소켓 테스트입니다.</p>
-          <span>{text}</span>
+        <div className="chat-list">
+          {chat && chat.map(e => (
+            <>
+              {e.sender === email ? (
+                <MyMessenger/>
+              ) : (
+                <OtherMessenger/>
+              )}
+            </>
+          ))}
         </div>
       </div>
     </Container>

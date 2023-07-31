@@ -10,8 +10,11 @@ import { useState } from 'react';
 import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
 import CustomerApi from '../../api/CustomerApi';
-import NotificationApi from '../../api/NotificationApi';
-import StompWebSocket from './StompWebSocket';
+import NotificationSocket from '../../pages/noti';
+import SockJS from "sockjs-client";
+import {Stomp} from "@stomp/stompjs";
+import WebSocketProvider from '../../context/WebSockeProvider';
+import { WebSocket } from '../../App';
 
 
 const HeaderBarDiv = styled.div`
@@ -55,7 +58,7 @@ const LoggedInDiv = styled.div`
   padding-right: 65px;
   gap: 15px;
 
-  .nofi {
+  .noti {
     border: none;
     background-color: transparent;
   }
@@ -89,12 +92,14 @@ const NofiNone = styled(VscBell)`
 `;
 
 
-const HeaderBar = () => {
+const HeaderBar = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, isNewNofi} = useContext(UserContext);
-  
+  const { email, setEmail, nickname, setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, joinDate, setJoinDate } = useContext(UserContext);
+  const [isNew, setIsNew] = useState("");
+
+  const subscribeUrl = "http://localhost:8111/sub";
     useEffect(() => {
     const token = localStorage.getItem('authToken');
     const getCustomerInfo = async () => {
@@ -107,21 +112,49 @@ const HeaderBar = () => {
           setStatMsg(response.data.customer.statMsg);
           setFollower(response.data.follower.follower);
           setFollowing(response.data.follower.following);
+          setJoinDate(response.data.joinDate);
           setIsLoggedIn(true);
+          console.log(isLoggedIn);
+          if (joinDate !== null) {
+            const eventSource = new EventSource(subscribeUrl + "?joinDate=" + joinDate);
+            console.log(eventSource);
+            // addComment 이벤트 리스너 등록
+            eventSource.addEventListener("addComment", function(event) {
+              let message = event.data;
+              setIsNew(event.data);
+              console.log(message);
+              // alert(message);
+            });
+      
+            // error 이벤트 리스너 등록
+            eventSource.addEventListener("error", function(event) {
+              eventSource.close();
+            });
+      
+            // 컴포넌트가 언마운트될 때 EventSource 객체 닫기
+            return () => {
+              eventSource.close();
+            };
+          }
         } catch (error) {
           localStorage.clear();
           setIsLoggedIn(false);
         }
-      }else{
+      } else {
         return null;
       }
     };
     getCustomerInfo();
-  }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
+  }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing, setJoinDate]);
 
   const logOut = () =>{
     localStorage.clear();
     setIsLoggedIn(false);
+  }
+
+  const handleNoti = () => {
+    navigate("/notification");
+    setIsNew("");
   }
 
   return (
@@ -132,9 +165,8 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          {/*<StompWebSocket />*/}
-          <button className="nofi" onClick={()=>{navigate("/notification")}}>
-              {isNewNofi ? <NofiOn /> : <NofiNone />}
+          <button className="noti" onClick={()=>{handleNoti()}}>
+              {isNew !== "" ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>
