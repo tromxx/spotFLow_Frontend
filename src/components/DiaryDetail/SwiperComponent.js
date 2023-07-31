@@ -6,6 +6,7 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import diaryApi from "../../api/DiaryApi";
 import UserStore, {UserContext} from "../../context/UserStore";
+import {WebSocket} from "../../App";
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
@@ -55,19 +56,20 @@ export const Container = styled.div`
     box-sizing: border-box;
   }
 `;
-export const Btn = styled.button`
+export const Btn = styled.div`
   position: absolute;
   bottom: 50px;
   right: 50px;
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  border: 3px solid #d9d9d9;
-  background-color: #61dafb;
+  //border: 3px solid #d9d9d9;
+  //background-color: #61dafb;
   z-index: 3;
+  display: flex;
 
   .comment {
-    font-size: 30px;
+    font-size: 50px;
     color: white;
     @media (max-width: 768px) {
       font-size: 20px;
@@ -103,7 +105,7 @@ export const TimeLineBox = styled.div`
   width: 100%;
   height: 50%;
 `
-const CommentBox = styled.div`
+export const CommentBox = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -185,6 +187,7 @@ const CommentBox = styled.div`
 
   .btn-send {
     position: absolute;
+    display: flex;
     right: 22px;
     top: 7px;
     height: 36px;
@@ -203,8 +206,10 @@ const CommentBox = styled.div`
 
   .send {
     font-size: 20px;
-    margin-top: 5px;
+    //margin-top: 5px;
     color: #00b4d8;
+    align-self: center;
+    justify-self: center;
     @media (max-width: 768px) {
       font-size: 12px;
     }
@@ -277,8 +282,8 @@ const CommentDetail = styled.div`
   }
 `;
 export const Comment = (props) => {
+  const webSocketService = useContext(WebSocket);
   const [text, setText] = useState("");
-  const [token, setToken] = useState("");
 
   const onChangeComment = (e) => {
     setText(e.target.value);
@@ -286,10 +291,11 @@ export const Comment = (props) => {
   const Send = async () => {
     const request = {
       diary: props.diary,
-      comment: text,
-      email: props.customer.email
+      comment: text
     }
+    webSocketService.send("/app/message", {}, request);
     await diaryApi.sendComment(request);
+    // await diaryApi.sendcommentNoti(request);
     await setText("");
     await props.setCount(props.count + 1);
   }
@@ -304,8 +310,8 @@ export const Comment = (props) => {
   };
 
 
-  function deleteComment(e) {
-    diaryApi.deleteComment(e.id);
+  const deleteComment = async (e) => {
+    await diaryApi.deleteComment(e.id);
     window.location.replace("/diary/detail/" + props.diary);
   }
 
@@ -362,7 +368,7 @@ export const Comment = (props) => {
       <div className="content">
         {/* 댓글 낱개 디자인 */}
         {array && array.map(e => (
-          !e.delete && <CommentDetail>
+          !e.delete && <CommentDetail key={e.id}>
           <div className="profile">
             {/*<img src={`${process.env.PUBLIC_URL}/public_assets/default_avatar.png`}/>*/}
             <img src={e.customer.profilePic}/>
@@ -428,5 +434,33 @@ export const Thumbs = styled.button`
     border-radius: 40px;
     bottom: 70px;
     right: 10px;
+  }
+`
+
+export const BackBtn = styled.button`
+  position: absolute;
+  top: 8vh;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  background-color: rgb(0, 0, 0, 0);
+  z-index: 3;
+  border: 0;
+
+  .back-btn {
+    color: white;
+    font-size: 30px;
+    @media(max-width: 768px) {
+      
+    }
+  }
+  
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    top: 10px;
+    left: 10px;
   }
 `

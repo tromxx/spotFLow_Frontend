@@ -1,32 +1,23 @@
 import styled, {css} from "styled-components";
 import {TfiArrowLeft} from "react-icons/tfi";
-import {useState, useReducer ,useRef, useEffect} from "react";
+import {useState ,useRef, useEffect} from "react";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
 import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus} from "react-icons/ai";
 import {  SlLocationPin } from "react-icons/sl"
-import {MdOutlineEditOff, MdSecurityUpdateGood, MdSettingsBackupRestore} from "react-icons/md";
-
 import {  BiCurrentLocation } from 'react-icons/bi';
-
 import default_avatar from '../images/default_avatar.png'
 import { useNavigate} from "react-router-dom";
-
 import TimeLineModal from "../utils/TimeLineModal";
-
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
-
 import userTimelineApi from "../api/UserTimelineApi";
 import { useCallback } from "react";
 import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
 import  { UserContext } from "../context/UserStore";
 import { useContext } from "react";
-
 import { storage } from '../api/FirebaseApi';  
 import ToTheTop from "../utils/ToTheTop";
-
-
 import { Map } from "react-kakao-maps-sdk";
 import LocationModal from "../utils/LocationModal";
 import useCurrentLocation from "../utils/Location";
@@ -883,7 +874,7 @@ const handleLocationModal = () => {
             <HeaderItemRight>
                 
                 <CreateBtn onClick={moveMyFlow} style={{fontSize:"8px"}}>
-                     MyFlow
+                     My
                 </CreateBtn>                     
                 
               

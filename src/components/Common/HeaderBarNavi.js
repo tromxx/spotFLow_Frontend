@@ -11,6 +11,8 @@ import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { useEffect } from 'react';
 import CustomerApi from '../../api/CustomerApi';
 import NotificationApi from '../../api/NotificationApi';
+import StompWebSocket from './StompWebSocket';
+
 
 const HeaderBarDiv = styled.div`
   width: 100vw;
@@ -24,7 +26,7 @@ const HeaderBarDiv = styled.div`
   background-color: ${props => props.theme.bgColor};
   color: ${props => props.theme.textColor};
   transition: background-color 0.5s ease;
-  position: absolute;
+  position: fixed;
   z-index: 5;
 `;
 
@@ -52,6 +54,11 @@ const LoggedInDiv = styled.div`
   align-items: center;
   padding-right: 65px;
   gap: 15px;
+
+  .nofi {
+    border: none;
+    background-color: transparent;
+  }
 
 `;
 
@@ -86,10 +93,7 @@ const HeaderBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [ThemeMode, setTheme] = useTheme();
-  const [oldNofi, setOldNofi] = useState("");
-  const [isNewNofi, setIsNewNofi] = useState(false);
-  const [nofiData, setNofiData] = useState("");
-  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const{setEmail, nickname,setNickname,setProfilePic,setStatMsg,setFollower, setFollowing ,isLoggedIn, setIsLoggedIn, isNewNofi} = useContext(UserContext);
   
     useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -114,35 +118,10 @@ const HeaderBar = () => {
     };
     getCustomerInfo();
   }, [isLoggedIn,setEmail, setNickname, setProfilePic, setStatMsg, setIsLoggedIn,setFollower, setFollowing]);
-  
-  useEffect(() => {
-    if(isLoggedIn) {
-      const token = localStorage.getItem("authToken");
-
-    const fetchNoti = async () => {
-      const response = await NotificationApi.getAllNoti(token);
-      if(response.data !== oldNofi) {
-        setIsNewNofi(true);
-        setOldNofi(response.data);
-      } else {
-        console.log("새로운 알림이 없습니다.");
-      }
-    }
-
-    fetchNoti();
-
-    }
-    
-  }, []);
 
   const logOut = () =>{
     localStorage.clear();
     setIsLoggedIn(false);
-  }
-
-  const notificationFunc = () => {
-    navigate("/nofication");
-    setIsNewNofi(false);
   }
 
   return (
@@ -153,8 +132,9 @@ const HeaderBar = () => {
       />
       {isLoggedIn ? 
         <LoggedInDiv>
-          <button className="nofi" onClick={()=>{navigate("/nofication")}}>
-              {isNewNofi !== "" ? <NofiOn /> : <NofiNone />}
+          {/*<StompWebSocket />*/}
+          <button className="nofi" onClick={()=>{navigate("/notification")}}>
+              {isNewNofi ? <NofiOn /> : <NofiNone />}
           </button>
           <p>{nickname}</p>
           <Exit onClick={logOut}/>

@@ -7,10 +7,17 @@ const ErrorDiv = styled.div`
    display: flex;
    justify-content: center;
    align-items: center;
-	flex-direction: column;
-	gap: 15px;
-   margin-top: 5%;
-	font-family: var(--efont);
+   text-align: center;
+	ul{
+      margin-top: 10%;
+		width: 400px;
+		display: flex;
+		flex-direction: column;
+		gap: 25px;
+		justify-content: center;
+		align-items: center;
+		font-family: var(--kfont);
+	}
 	.controlNaviDiv{
 		display: flex;
 		gap: 30px;
@@ -26,8 +33,9 @@ const ErrorDiv = styled.div`
 const Error = () =>{
 	const navigate = useNavigate();
 
-    return(
-        <ErrorDiv>
+   return(
+      <ErrorDiv>
+			<ul>
             <img src={Logo} alt="" />
 				<p>로그인이 필요한 서비스 입니다.</p>
 				<div className="controlNaviDiv">
@@ -35,8 +43,9 @@ const Error = () =>{
 					<p>|</p>
 					<p onClick={()=>navigate("/signUp")}>Sign Up</p>
 				</div>
-        </ErrorDiv>
-    );
+			</ul>
+      </ErrorDiv>
+   );
 };
 
 export default Error;

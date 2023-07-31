@@ -2,7 +2,7 @@ import {A11y, Navigation, Pagination, Scrollbar} from "swiper";
 import 'swiper/swiper.css'
 import {useEffect, useState} from "react";
 import * as SC from "./SwiperComponent"
-import {BsChatDots} from "react-icons/bs";
+import {BsChatDots, BsArrowLeftCircle} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import {useParams} from "react-router-dom";
 import diaryApi from "../../api/DiaryApi";
@@ -14,6 +14,7 @@ export const DiarySwiper = () => {
   const [overlay, setOverlay] = useState(0);
   // 댓글 표시 여부
   const [chatBox, setChatBox] = useState(0);
+  const [token, setToken] = useState("");
 
 
   const [diary, setDiary] = useState({})
@@ -25,7 +26,7 @@ export const DiarySwiper = () => {
     let res = await diaryApi.findDiary(id);
     await setDiary(res.data);
     await setTimeLine(res.data.timeLineList);
-    await setComment(res.data.commentList);
+    await setComment(res.data.commentList.filter(e=>e.delete === false));
     console.log(res.data.commentList);
     console.log(res.data.timeLineList);
     console.log(res.data);
@@ -39,17 +40,15 @@ export const DiarySwiper = () => {
 
   const [thumbs, setThumbs] = useState(0);
 
-  const ThumbsUp = async (e, email) => {
+  const ThumbsUp = async (e) => {
     e.stopPropagation();
-    if (email !== null){
-      const thumbsData = await diaryApi.thumbsUP(id, email);
-      console.log("email : " + email);
-      console.log("status : " + thumbsData.status);
-      if (thumbsData.status === 200) {
-        setThumbs(thumbsData.data);
-        console.log(thumbsData);
-      }
+    const thumbsData = await diaryApi.thumbsUP(id);
+    console.log("status : " + thumbsData.status);
+    if (thumbsData.status === 200) {
+      setThumbs(thumbsData.data);
+      console.log(thumbsData);
     }
+
   }
 
   function OverlayMode(e) {
@@ -59,12 +58,18 @@ export const DiarySwiper = () => {
     else setOverlay(0);
   }
 
+  function pageBack(e) {
+    e.stopPropagation();
+    window.history.back();
+  }
+
   const [customer, setCustomer] = useState(null);
 
   useEffect(() => {
     DiaryInit();
     const token = localStorage.getItem('authToken');
     console.log(token);
+    setToken(token);
     // 이부분 localStorage 에서 토큰 뺴오기
     const getCustomerInfo = async () => {
       if (token != null) {
@@ -81,7 +86,23 @@ export const DiarySwiper = () => {
       }
     };
     getCustomerInfo();
+
+    const getThumbsInfo = async () => {
+      try {
+        const res = await diaryApi.findThumbs(id);
+        console.log(res.data);
+        if (res.data.id > 0) {
+          setThumbs(1);
+        }
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    getThumbsInfo();
   }, [count]);
+
+
   return (
     <SC.Container onClick={(event) => OverlayMode(event)}>
       <SC.DiarySwipe
@@ -96,7 +117,7 @@ export const DiarySwiper = () => {
         onSlideChange={() => console.log('slide change')}
       >
         {timeline.map(e => (
-            <SC.TimeLine>
+            <SC.TimeLine key={e.id}>
               {overlay === 1 &&
                 <>
                   <SC.Overlay>
@@ -122,9 +143,12 @@ export const DiarySwiper = () => {
       <SC.Btn onClick={(event) => OpenChat(event)}>
         <BsChatDots className="comment"/>
       </SC.Btn>
-      <SC.Thumbs onClick={(event) => ThumbsUp(event,customer.email)}>
+      <SC.Thumbs onClick={(event) => ThumbsUp(event)}>
         {thumbs === 0 ? <FaRegThumbsUp className="thumbs-up"/> : <FaThumbsUp className="thumbs-up"/>}
       </SC.Thumbs>
+      <SC.BackBtn>
+        <BsArrowLeftCircle className="back-btn" onClick={(e) => pageBack(e)}/>
+      </SC.BackBtn>
 
     </SC.Container>
   );

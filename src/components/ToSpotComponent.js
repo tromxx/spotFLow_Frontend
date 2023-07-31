@@ -179,7 +179,7 @@ export const Container = styled.div`
     left: 5px;
     width: 90px;
     height: 90px;
-    border-radius: 90px;
+    //border-radius: 90px;
     border: 1px solid #bbb;
     color: #888;
     overflow: hidden;

@@ -22,6 +22,7 @@ import { useContext } from "react";
 import ErrorPage from "../components/Common/Error";
 
 export const MyFlowWrapper = styled.div`
+
  	display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +38,7 @@ export const MyFlowDiv = styled.div`
   /* border: ${props=>props.theme.borderColor};	 */
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
-	margin-top: 40px;
+	margin-top: 100px;
   height: 93vh;
 	min-height: 93vh;
   display: flex;
@@ -206,7 +207,8 @@ const MenuBar = styled.div`
 	height: 30px;
 	margin-top: 20px;
 	border-radius: 8px;
-	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
+	background-color: transparent;
+	/* ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'}; */
 	position: relative;
 `;
 
@@ -454,7 +456,7 @@ const MyFlow = () =>{
 	  // 플로우 작성시 이미지 파일 선택하는 핸들링
 
 		const [file, setFile] = useState(null);
-  	const [url, setUrl] = useState('');
+  	const [uploadedUrl, setUploadedUrl] = useState('');
 	
 		const handleUpload = () => {
 			// 파일이 있는지 확인
@@ -467,28 +469,36 @@ const MyFlow = () =>{
 					console.log('File uploaded successfully!');
 					fileRef.getDownloadURL().then((url) => {
 						console.log("저장경로 확인 : " + url);
-						setUrl(url);
-						continueToDB();
+						setUploadedUrl(url);
+						setSortedFlow("");
 					});
 				});
 			} else {
 				console.log('파일이 없습니다.');
-				continueToDB();
+				
 			}
 		};
+		
+		useEffect(() => {
+			if (uploadedUrl) {
+				continueToDB();
+			}
+		}, [uploadedUrl]);
 
 		// 글 DB에 올리는 부분 구현
 		const continueToDB = async () => {
-			MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, url, place, async function() {
-				const response = await MyFlowApi.getmyFlow();
-				setSortedFlow("");
+				const response = await MyFlowApi.newFlow(location.latitude, location.longitude, flowModalText, uploadedUrl, place)
+				console.log("데이터 확인" + response.data);
 				setData(response.data);
 				setSortedFlow(response.data);
-				handleSort();
-			});
-		
+			setPlace("");
+			setFlowModalText("");
+			setThumbnailSrc("");
 			setFlowModalOpen(false);
+			setLocationValue("");
 		};
+
+		
 
 	// 플로우 작성 시 이미지 추가 및 추가시 썸네일
 

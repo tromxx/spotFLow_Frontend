@@ -1,5 +1,5 @@
 import axios from "axios";
-import ToSpotData from "../dataSet/ToSpotData";
+
 
 const Backend = "http://localhost:8111";
 
@@ -17,7 +17,7 @@ const MyFlowApi = {
       place: place
     };
 
-    return await axios.post(Backend + '/myflow/myflownew', flowData, {
+    return await axios.post(Backend + "/timeline/myflownew", flowData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -25,21 +25,22 @@ const MyFlowApi = {
     });
   },
 
-  getClickedFlow: async (flowId) => {
-    const token = localStorage.getItem('authToken');
-    try {
-      const response = await axios.post(Backend + "/auth/clickedflow", flowId, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      return response;
-    } catch (error) {
-      throw new error("클릭한 플로우 정보를 가져오는 데 실패했습니다.");
-    }
+  // getClickedFlow: async (flowId) => {
+  //   const token = localStorage.getItem('authToken');
+  //   try {
+  //     const response = await axios.post(Backend + "/auth/clickedflow", flowId, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       }
+  //     });
+  //     return response;
+  //   } catch (error) {
+  //     throw new error("클릭한 플로우 정보를 가져오는 데 실패했습니다.");
+  //   }
 
-  },
+  // }
+
 
   getmyFlow: async (token) => {
 
@@ -50,8 +51,14 @@ const MyFlowApi = {
       }
     });
   },
-	allFlow: async () => {
-    return await axios.get(Backend + "/timeline/find");
+
+	allFlow: async (token) => {
+    return await axios.get(Backend + "/timeline/find", {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
 	}
 
 }

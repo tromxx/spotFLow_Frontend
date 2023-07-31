@@ -1,12 +1,12 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from './pages/Home';
 import Diary from './pages/Diary';
 import TimeLine from './pages/TimeLine';
 import HeaderBarNavi from './components/Common/HeaderBarNavi';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
-import { ThemeProvider } from './context/themeProvider';
+import {ThemeProvider} from './context/themeProvider';
 import DiaryCategory from './pages/DiaryCategory';
 import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiaryDetail/DiarySwiper";
@@ -15,14 +15,32 @@ import UserStore from './context/UserStore';
 import MyFlow from './pages/MyFlow';
 import MobileMyFlow from './pages/MobileMyFlow';
 import FindPwEmail from './pages/FindPwEmail';
-import { useLayoutEffect, useState } from 'react';
+import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
 import ChangeInfo from './pages/ChangeInfo';
+import Notification from './pages/Notification';
+import DirectMessenger from "./pages/DirectMessenger";
+import WebSocketProvider from "./context/WebSockeProvider";
+
+export const WebSocket = React.createContext();
 import Nofication from './pages/Nofication';
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [webSocketService, setWebSocketService] = useState(null);
+
+  useEffect(() => {
+    const service = new WebSocketProvider();
+    service.connect().then(() => {
+      setWebSocketService(service);
+      console.log(service);
+    });
+
+    return () => {
+      service.disconnect();
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -37,12 +55,13 @@ function App() {
   }, []);
 
   return (
-    <UserStore>
-      <BrowserRouter>
-        <ThemeProvider>
-          <Routes>
-            <Route path="/" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+    <WebSocket.Provider value={webSocketService}>
+      <UserStore>
+        <BrowserRouter>
+          <ThemeProvider>
+            <Routes>
+              <Route path="/" element={<>
+                {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                 <Home/>
               </>} />
             <Route path="/login" element={<>
@@ -65,38 +84,36 @@ function App() {
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
-            <Route path="/diary/user/:email" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <DiaryUser />
-            </>} />
             <Route path="/diaryCategory" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCategory />
             </>} />
-            <Route path="/diarymypage" element={<>
+            <Route path="/diaryMypage" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryMypage />
-            </>} />
-            <Route path="/diaryedit/:id" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <DiaryEdit />
             </>} />
             <Route path="/diaryCreate" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
             </>} />
-            <Route path="/flow" element={<>
+            <Route path="/flow" element={
+              <>
                 {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <TimeLine />
-            </>}/>
-            <Route path="/diary/detail/:id" element={<>
+              </>
+            }/>
+            <Route path="/diary/detail/:id" element={
+              <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <DiarySwiper/>
-            </>}/>
+              </>
+            }/>
+
             <Route path='/myflow' element={
             <>
             {windowWidth <= 840 ? null : <HeaderBarNavi />}
             {windowWidth <= 840 ? <MobileMyFlow /> :  <MyFlow />}
+             
             </>
            }/>
            <Route path='/nofication' element={
