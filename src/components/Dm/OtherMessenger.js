@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {styled} from "styled-components";
+import moment from "moment";
 
 const Container = styled.div`
   max-width: 500px;
@@ -39,15 +40,18 @@ const Container = styled.div`
 `;
 
 const OtherMessenger = (props) => {
-
+  const [data, setData] = useState(null);
+  useEffect(()=>{
+    setData(props.chat)
+  }, [props])
   return (
     <>
-      <Container>
+      {data && <Container>
         <div className="box">
-          <p>동해물과 백두산이 마르고 닳도록</p>
-          <span>yyyy-mm-dd 7:43 am</span>
+          <p>{data.message}</p>
+          <span>{moment(data.date).format('YYYY년 MM월 DD일 A h시 mm분')}</span>
         </div>
-      </Container>
+      </Container>}
 
     </>
   )
