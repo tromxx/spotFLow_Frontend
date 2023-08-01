@@ -3,11 +3,11 @@ import { styled } from 'styled-components'
 import { SlLocationPin } from "react-icons/sl";
 import { useState } from "react";
 import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
-
+import { useLayoutEffect } from "react";
 const NotificationDiv = styled.div`
   width: 95%;
-  height: 100px;
-  margin-top: 5px;
+  height: 150px;
+  margin-top: 0px;
   text-align: left;
   border-bottom: ${props=>props.theme.borderColor};
   background-color: transparent;
@@ -17,20 +17,27 @@ const NotificationDiv = styled.div`
   align-items: flex-start; /* 수정: 상단 정렬로 변경 */
   font-family: var(--kfont);
 
+  .container {
+  font-weight: bolder;
+  
+}
+
   @media(max-width: 768px) {
     width: 100%;
     height: 150px;
     margin-bottom: 20px;
   }
-.name-container,
-.diary-container,
-.comment-container {
-  max-width: 100px; /* 텍스트 최대 너비 설정 */
-  overflow: hidden;
-  white-space: nowrap; /* 텍스트가 한 줄에서만 표시되도록 설정 */
-  text-overflow: ellipsis; /* 텍스트가 너무 길 경우 ...으로 표시 */
-}
+
 `;
+
+const SpanText = styled.p`
+  font-weight: bolder;
+  width:70px;
+  padding:0 5px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+`
 
 const HeartImg = styled(AiFillHeart)`
   width: 25px;
@@ -44,11 +51,27 @@ const CommentImg = styled(AiOutlineComment)`
 `;
 
 
-const NotificationContainer = ({ diary, name, comment }) => {
+const NotificationContainer = ({ diary, sender, comment }) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const splitString = (str, maxLength) => {
+    if (str!== "" && str.length <= maxLength) {
+      return str;
+    } else {
+      return str.substring(0, maxLength - 3) + "...";
+    }
+  }
 
-  
- 
-  
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(()=>{
     console.log(diary)
@@ -57,16 +80,26 @@ const NotificationContainer = ({ diary, name, comment }) => {
 
   return (
     <NotificationDiv>
-        {comment !== "" ? 
-          <p>
-            <CommentImg /> <br /> <span className="name-container">{name}</span>님이 <span className="diary-container">{diary}</span> 에 댓글을 남겼습니다. <br /> <span className="comment-container">{comment}</span>
-          </p>
-            : 
-          <p>
-            <HeartImg /> <br />  <span className="diary-container">{diary}</span> 에 좋아요를 받았습니다.
-          </p> 
-        }
-
+        {comment !== "" ? (
+        <p>
+          <CommentImg /> <br />
+          <span className="container">
+            {windowWidth > 840 ? splitString(sender, 15) : splitString(sender, 10)}
+          </span>
+          님이{" "}
+          <span className="container">
+            {windowWidth > 840 ? splitString(diary, 15) : splitString(diary, 10)}
+          </span>{" "}
+          에 댓글을 남겼습니다. <br />
+          <span className="container">
+            {windowWidth > 840 ? splitString(comment, 35) : splitString(comment, 20)}
+          </span>
+        </p>
+      ) : (
+        <p>
+          <HeartImg /> <br /> <span className="container">{diary}</span> 에 좋아요를 받았습니다.
+        </p>
+      )}
     </NotificationDiv>
   );
 };

@@ -218,24 +218,30 @@ const DiaryMyPage = () =>{
                     <GoToAdd  onClick={()=>navigate("/diaryCreate")}/>
                 </div>
             </div>
-   
             <DiaryContainerDiv> 
-            {datas && datas.map(data=>(
-                <div className="container" key={data.id}>
-                    <Input type="checkbox" 
-                        onChange={()=>getTheData(data.id)} 
-                        $isChecked={isChecked.toString()}
-                    />
-                    <DiaryMyPageContainer
-                        val={{
-                            id : data.id,
-                            img : data.timeLineList[0].image,
-                            like : data.like,
-                            view : data.view,
-                        }}
-                    />
-                </div>
-                ))}
+            {datas && datas.length > 0 ? (
+                datas.map((data) => (
+                    <div className="container" key={data.id}>
+                        <Input
+                            type="checkbox"
+                            onChange={() => getTheData(data.id)}
+                            $isChecked={isChecked.toString()}
+                        />
+                        <DiaryMyPageContainer
+                            val={{
+                                id: data.id,
+                                img: data.timeLineList[0].image,
+                                like: data.like,
+                                view: data.view,
+                            }}
+                        />
+                    </div>
+                ))
+                ) : (
+                    <div className="EmptyData">
+                        게시글이 없습니다
+                    </div>
+                )}
             </DiaryContainerDiv>
             <Modal type={true} open={modalOpen} children={modalText} confirm={()=>setModalOpen(false)}/>
         </Container>

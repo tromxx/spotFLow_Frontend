@@ -5,12 +5,12 @@ const DOMAIN = "http://localhost:8111"
 const DiaryApi = {
 
   //다이어리 저장하기
-  saveDiary: async (title, content, timeline) => {
+  saveDiary: async (data) => {
     const token = localStorage.getItem("authToken")
     const requestData = {
-      title: title,
-      content: content,
-      timeLineList: timeline
+      title: data.title,
+      content: data.content,
+      timeLineList: data.timeLineList
     }
     return axios.post(DOMAIN + "/diary", requestData, {
       headers : {
@@ -47,6 +47,11 @@ const DiaryApi = {
     return axios.post(DOMAIN + "/diary/update",data);
   },
 
+  //다이어리 업데이트 ㅇㄹㅇ
+  updateMyDiary : async (data) => {
+    return axios.put(DOMAIN + "/diary",data);
+  },
+
   // 다이어리 조회수 올리기 
   increaseView : async (id) =>{
     const data = {
@@ -60,20 +65,28 @@ const DiaryApi = {
     return axios.post(DOMAIN + "/diary/del", data);
   },
 
+  // 다이어리 삭제 체크된것만
+  deleteDiarys: async(id) => {
+    const token = localStorage.getItem("authToken");
+    return axios.post(DOMAIN + "/diary/check", id);
+  },
+
+
   sendComment: async (props) => {
     const token = localStorage.getItem("authToken");
     const comment = {
       diary: props.diary,
       content: props.comment,
     }
-    return await axios.post(DOMAIN + "/diary/comment", comment, {
+    console.log(comment)
+    return await axios.post(DOMAIN + "/diary/comment", comment, { 
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     });
   },
-
+  
   sendcommentNoti: async (comment) => {
     const token = localStorage.getItem("authToken");
     
@@ -142,9 +155,12 @@ const DiaryApi = {
   
   // 다이어리 전체 조회 하기
   findAllDiary : async() =>{
-    return await axios.get(DOMAIN + "/diary/all");
+    return await axios.get(DOMAIN + "/diary/alls");
   }
 }
 
 export default DiaryApi;
+
+
+
 

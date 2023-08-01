@@ -202,10 +202,10 @@ const DiaryEdit = () =>{
           <div className="Controler">
             <GoToDiary onClick={()=>navigate("/diary")}/>
             <UploadButton onClick={uploadToDiary}/>
-            <GoToMyProfile onClick={()=>navigate("/diarymypage")}/>
+            <GoToMyProfile onClick={()=>navigate("/mydiary")}/>
           </div>
         </UserContainer>
-        <UpdateContainer>
+        <UpdateContainer> 
           <input type="text" placeholder="제목을 입력하세요." onChange={(e)=>setTitle(e.target.value)}/>
           <textarea name="" id="" cols="30" rows="10" placeholder="내용을 입력하세요." onChange={(e)=>setContext(e.target.value)}></textarea>
           <div className="ImageConatiner">

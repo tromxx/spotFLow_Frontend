@@ -23,6 +23,12 @@ const userTimelineApi = {
     });
   },
 
+   // 모두 가져옴 
+   getUserTimelineLists: async (lastId) => {
+    return await axios.get(DOMAIN + "/auth/timeline/All");
+  },
+
+
   // 특정 타임라인의 장소별 검색 결과가져옴
   getTimePlace: async (place) => {
     const token = localStorage.getItem("authToken");

@@ -11,7 +11,9 @@ const NotificationWrapper = styled.div`
 	text-align: center;
 	background-color: ${props=>props.theme.bgColor};
 	height: 100vh;
-  
+  @media(max-width:768px){
+    height: 100vh;
+  }
 `;
 
 const NotificationDiv = styled.div`
@@ -19,18 +21,23 @@ const NotificationDiv = styled.div`
   color: ${props=>props.theme.textColor};
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 	width: 60%;
-  height: 93vh;
-	min-height: 93vh;
+  height: 80vh;
+	/* min-height: 93vh; */
   display: flex;
   align-items: center;
 	text-align: center;
 	flex-direction: column;
 	position: relative;
   overflow-y: scroll;
-  margin: 40px auto; 
+  margin: 120px auto; 
   @media(max-width: 768px) {
     width: 95%;
     box-shadow: none;
+    margin-top: 60px;
+    margin-bottom: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 85vh;
   }
 `;
 
@@ -105,7 +112,7 @@ const Notification = () => {
                       className="nofiContainer"
                       id={nofiData.id}
                       diary={nofiData.diary}
-                      name={nofiData.commentWriter}
+                      sender={nofiData.sender}
                       comment={nofiData.comment}
                     />
                   ))}

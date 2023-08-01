@@ -1,18 +1,22 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {styled} from "styled-components";
 import {WebSocket} from "../App";
 import {BsSend} from "react-icons/bs";
 import {UserContext} from "../context/UserStore";
+import {useContext} from 'react';
 import {useParams} from "react-router-dom";
 import MyMessenger from "../components/Dm/MyMessenger"
 import OtherMessenger from "../components/Dm/OtherMessenger"
 import ChatApi from "../api/ChatApi";
+import {useEffect} from 'react';
 
 const Container = styled.div`
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
   background-color: #caf0f8;
+
   * {
     box-sizing: border-box;
   }
@@ -30,8 +34,10 @@ const Container = styled.div`
     }
   }
 
-  hr {
-    opacity: 30%;
+  .first {
+    position: absolute;
+    top: 15vh;
+    left: 20px;
   }
 
   img {
@@ -49,7 +55,7 @@ const Container = styled.div`
     margin-top: 2px;
     margin-left: 5px;
     overflow: hidden;
-    border: .5px solid rgb(30,30,30,30%);
+    border: .5px solid rgb(30, 30, 30, 30%);
     @media (max-width: 768px) {
       width: 40px;
       height: 40px;
@@ -120,10 +126,12 @@ const Container = styled.div`
       padding: 20px;
     }
   }
+
   .chat-list {
     height: 96%;
     overflow-y: scroll;
   }
+
   .chat-list::-webkit-scrollbar {
     display: none;
   }
@@ -138,14 +146,16 @@ const DirectMessenger = () => {
 
   const [room, setRoom] = useState("");
   const [text, setText] = useState("");
-  const [chat, setChat] = useState(null);
+  const [chat, setChat] = useState([]);
+  const [change, setChange] = useState(false);
 
   let req = {
     roomId: room,
-    receiver: "hanjy20129@gmail.com",
-    sender: email,
+    receiver: receiver,
+    sender: "hanjy1101@naver.com",
     message: text
   };
+
 
   function Send() {
     webSocketService.send("/message", req);
@@ -158,14 +168,9 @@ const DirectMessenger = () => {
     console.log(req.roomId);
     webSocketService.subscribe("/message/" + req.roomId, (data) => {
       console.log(data.message);
-      setChat(data.message);
+      console.log(chat.concat(data.message))
+      setChange(!change);
     });
-  }
-
-  function callbackF(room, subscribe) {
-    if(room !== "" || room) {
-      subscribe();
-    }
   }
 
   const onChangeComment = (e) => {
@@ -173,14 +178,15 @@ const DirectMessenger = () => {
   }
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("email = " + email);
     const getRoom = async () => {
-      const res = await ChatApi.createRoom("hanjy20129@gmail.com");
+      const res = await ChatApi.createRoom(receiver);
       if (res.status === 200) {
         console.log(res.data);
         setRoom(res.data);
         const chat = await ChatApi.findChatLog(res.data);
+        console.log(chat.data);
         setChat(chat.data);
       } else {
         console.log(res)
@@ -190,7 +196,8 @@ const DirectMessenger = () => {
     if (webSocketService) {
       Subscribe();
     }
-  },[webSocketService, room]);
+  }, [webSocketService, room, change]);
+
   return (
     <Container>
       <div className="box-chat">
@@ -199,18 +206,18 @@ const DirectMessenger = () => {
             <img
               src="https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/default_avatar.png?alt=media&token=7ea670df-ff84-4a85-bdb2-41b9a7f6a77a"/>
           </div>
-          <input type="text" id="comment"  onChange={onChangeComment} value={text}/>
+          <input type="text" id="comment" onChange={onChangeComment} value={text}/>
           <button className="btn-send" onClick={Send}>
-            <BsSend className="send" />
+            <BsSend className="send"/>
           </button>
         </div>
         <div className="chat-list">
           {chat && chat.map(e => (
             <>
               {e.sender === email ? (
-                <MyMessenger/>
+                <MyMessenger chat={e}/>
               ) : (
-                <OtherMessenger/>
+                <OtherMessenger chat={e}/>
               )}
             </>
           ))}

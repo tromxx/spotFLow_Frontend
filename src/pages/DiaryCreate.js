@@ -128,7 +128,7 @@ const DiaryCreate = () => {
   const {nickname,profilePic} = useContext(UserContext);
   const [datas, setDatas] = useState();
   const [title, setTitle] = useState("");
-  const [context, setContext] = useState("");
+  const [content, setContent] = useState("");
   const [timeLine, setTimeLine] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalText, setModalText] = useState("")
@@ -149,7 +149,6 @@ const DiaryCreate = () => {
       fetchData();
     },[]
   )
-
 
   const getTimeLineId = (e) => {
     setTimeLine((prevTimeLine) => {
@@ -175,10 +174,10 @@ const DiaryCreate = () => {
   const uploadToDiary = async() =>{
     const data ={
       title : title,
-      content : context,
-      timeLineIds : timeLine
+      content : content,
+      timeLineList : timeLine
     };
-    if(title.length < 1 || context.length < 1 || timeLine.length === 0){
+    if(title.length < 1 || content.length < 1 || timeLine.length === 0){
       setModalOpen(true);
       setType("diary");
       setModalText("선택해주세요!");
@@ -205,11 +204,11 @@ const DiaryCreate = () => {
       </UserContainer>
       <UpdateContainer>
         <input type="text" placeholder="제목을 입력하세요." onChange={(e)=>setTitle(e.target.value)}/>
-        <textarea name="" id="" cols="30" rows="10" placeholder="내용을 입력하세요." onChange={(e)=>setContext(e.target.value)}></textarea>
+        <textarea name="" id="" cols="30" rows="10" placeholder="내용을 입력하세요." onChange={(e)=>setContent(e.target.value)}></textarea>
         <div className="ImageConatiner">
           {datas && datas.map(data=>(
             <div className="ImageDiv" key={data.id}> 
-              <input type="checkBox" onChange={()=>getTimeLineId(data.id)}/>
+              <input type="checkBox" onChange={()=>{getTimeLineId(data);}}/>
               <img  src={data.img} alt="error" />
               <p>{data.date}</p>
             </div>

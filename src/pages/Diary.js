@@ -101,7 +101,7 @@ const DiaryContainerDiv = styled.div`
 
 const Diary = () =>{
     const [datas, setData] = useState();
-    const {nickname,profilePic} = useContext(UserContext);
+    const {nickname,profilePic, email} = useContext(UserContext);
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -110,9 +110,14 @@ const Diary = () =>{
         const fetchData = async() =>{
             const response = await DiaryApi.findAllDiary();
             setData(response.data);
+            console.log(response.data);
         };
         fetchData();
     },[])
+
+    const goToMyProfile = () =>{
+        navigate(`/profile/${email}`)
+    }
 
     return(
         <Container>
@@ -123,11 +128,11 @@ const Diary = () =>{
                 </div>
                 <div className="Controler">
                     <GoBackButton onClick={()=>navigate("/")}/>
-                    <GoProfileButton onClick={()=>navigate("/diarymypage")}/>
+                    <GoProfileButton onClick={goToMyProfile}/>
                     <GoToAdd onClick={()=>navigate("/diaryCreate")}/>
                 </div>
             </div>
-            {/* <DiaryContainerDiv>
+            <DiaryContainerDiv>
                 {datas && datas.map(data=>(
                     <DiaryContainer 
                         key={data.id}
@@ -138,12 +143,14 @@ const Diary = () =>{
                             nickname : data.nickname,
                             profilepic : data.profilePic,
                             title : data.title,
-                            like : data.like
+                            like : data.like,
+                            view : data.view,
+                            date : data.date 
                         }}
                     />
                 ))
                 }
-            </DiaryContainerDiv> */}
+            </DiaryContainerDiv>
         </Container>
     );
 };

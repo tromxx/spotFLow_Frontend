@@ -54,8 +54,7 @@ const DiaryContainerDiv = styled.div`
         }
     }
     .text{
-        width:70px;
-        padding:0 5px;
+        width:80px;
         overflow:hidden;
         text-overflow:ellipsis;
         white-space:nowrap;
@@ -117,7 +116,6 @@ const SliderDiv = styled.div`
 const Eye = styled(BsEyeFill)`
     width: 20px;
     height: 20px;
-    color: var(--blue);
 `;
 
 const Heart = styled(AiFillHeart)`
@@ -149,22 +147,42 @@ const DiaryContainer = (props) => {
         await DiaryApi.increaseView(id);
     }
 
-    const getEmail = () =>{
-        const emails = props.val.email;
-        if(emails === email){
-            navigate("/diarymypage");
-        }else{
-            navigate(`/diary/user/${emails}`);
-        }
+    const getEmail = (e) =>{
+        console.log(e);
+        navigate(`/profile/${e}`);
     };
-  
+
+
+
+    const calculateTime = (date) => {
+        let date1 = new Date(date); // This is in local time
+        let date2 = new Date();
+        let diffMilliseconds = Math.abs(date2 - date1);
+        let diffSeconds = Math.floor(diffMilliseconds / 1000);
+        let diffMinutes = Math.floor(diffSeconds / 60);
+        let diffHours = Math.floor(diffMinutes / 60);
+        let diffDays = Math.floor(diffHours / 24);
+        let diffTime;
+
+        if(diffDays > 0){
+          diffTime = diffDays + "일 전";
+        } else if(diffHours > 0) {
+          diffTime = diffHours + "시간 전";
+        } else if(diffMinutes > 0) {
+          diffTime = diffMinutes + "분 전";
+        } else {
+          diffTime = diffSeconds + "초 전";
+        }
+
+        return diffTime;  // diffTime 반환
+    }
 
     return(
         <DiaryContainerDiv>
             <div className="InfoDiv">
                 <ProfileImg src={props.val.profilepic} alt="" />
-                <p onClick={getEmail}>{props.val.nickname}</p>
-                <p>15분전</p>
+                <p onClick={()=>getEmail(props.val.email)}>{props.val.nickname}</p>
+                <p>{calculateTime(props.val.date)}</p>
             </div>
             <SliderDiv>
             <Slider {...settings}>
@@ -176,12 +194,12 @@ const DiaryContainer = (props) => {
             </Slider>
             </SliderDiv>   
             <div className="InfoDivContainer"> 
-                <div className="text">
-                <p>{props.val.title}</p>
+                <div>
+                    <p className="text">{props.val.title}</p>
                 </div>
                 <div className="HeartCounterDiv">
                     <Eye/>
-                    <p>19</p>
+                    <p>{props.val.view}</p>
                     <Heart/>
                     <p>{props.val.like}</p>
                 </div>

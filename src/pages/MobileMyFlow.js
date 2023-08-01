@@ -25,6 +25,18 @@ import LocationModal from "../utils/LocationModal";
 import { TfiArrowLeft } from "react-icons/tfi";
 import { useContext } from "react";
 import { UserContext } from "../context/UserStore";
+import { isVisible } from "@testing-library/user-event/dist/utils";
+import Error from "../components/Common/Error";
+
+const MyFlowWrapper = styled.div`
+
+ 	display: flex;
+  justify-content: center;
+  align-items: center;
+	text-align: center;
+	background-color: ${props=>props.theme.bgColor};
+	
+`;
 
 const MyFlowDiv = styled.div`
 	background-color: ${props=>props.theme.bgColor};
@@ -204,7 +216,8 @@ const MenuBar = styled.div`
 	width: 82%;
 	height: 30px;
 	border-radius: 8px;
-	background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'};
+	/* background-color: ${props => props.theme.textColor === 'black' ? '#d6d6d6' : '#423F3E'}; */
+	background-color: transparent;
 	position: relative;
 `;
 
@@ -476,7 +489,24 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 		</>
 	);
 
-	// 유저 위치 찾기
+
+		//flowModal의 체크박스 관리 툴
+	const [isVisible, setIsVisible] = useState(false);
+	const handleVisible = () => {
+		setIsVisible(!isVisible);
+	}
+	const [checkedKeys, setCheckedKeys] = useState([]);
+
+  const handleCheckboxCheck = (key) => {
+    
+    if (checkedKeys.includes(key)) {
+      setCheckedKeys(checkedKeys.filter((k) => k !== key));
+    } else {
+      setCheckedKeys([...checkedKeys, key]);
+    }
+  };
+
+		// 유저 위치 찾기
 	const [locationModalOpen, setLocationModalOpen] = useState(false);
 	const { location, getCurrentLocation } = useCurrentLocation();
 	const [locationValue, setLocationValue] = useState("");
@@ -595,8 +625,10 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 	}
 
     return(
-			
+			<MyFlowWrapper>
+			{isLoggedIn ? 
 			<MyFlowDiv>
+				
 				<MyFlowMenuName>
 				<CreateBtn2 onClick={goToFlow}>
 					<TfiArrowLeft style={{fontSize: "20px"}}/>
@@ -615,6 +647,9 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange}  />
 					<MenuButtonWrapper>
 						<SearchImg />
+						<CheckButton onClick={handleVisible}>
+							<CheckImg />
+						</CheckButton>
 						<SortButton onClick={handleSort}>
 							{sort === "az" ? <SortAz /> : <SortZa />}
 						</SortButton>
@@ -629,12 +664,16 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
                 img={sortedFlow.img}
                 time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
                 content={sortedFlow.content}
-                location={sortedFlow.location}
+                isVisible={isVisible}
+								onCheck={handleCheckboxCheck}
+								location={sortedFlow.location}
 								date={new Date(sortedFlow.date).toLocaleDateString([], {
 									year: 'numeric',
 									month: '2-digit',
 									day: '2-digit',
-								})}
+								}
+								
+								)}
 								
               />
             ))}
@@ -761,7 +800,10 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
     </FlowModal>
 		
 		<Modal open={modalOpen} close={closeModal} header="SpotFlow" type={"type"} confirm={closeBoth}>{modalText}</Modal>
+		
 	</MyFlowDiv>
+	: <Error /> }
+	</MyFlowWrapper>
     );
 };
 export default MobileMyFlow;

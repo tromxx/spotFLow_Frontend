@@ -150,7 +150,7 @@ const Container = styled.div`
     font-weight: bold;
     color: white;
     background-color: var(--grey);
-    border-radius: 20px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
     &:hover{

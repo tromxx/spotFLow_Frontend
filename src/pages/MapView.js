@@ -1,41 +1,42 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect,useCallback ,useMemo, useState} from 'react';
 import { CustomOverlayMap, Map, MapMarker, MarkerClusterer, useMap } from "react-kakao-maps-sdk";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ToSpotData from "../dataSet/ToSpotData";
 import * as ToSpot from "../components/ToSpotComponent";
-import { LuCircleDot } from "react-icons/lu";
+import {LuCircleDot} from "react-icons/lu";
 import MyFlowApi from "../api/MyFlowApi";
 import ForumData from '../utils/ForumData';
 import styled from 'styled-components';
 
 const Maker = styled.div`
-  display:flex;
+  display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   flex-direction: column;
-  font-size:10px;
+  font-size: 10px;
   width: 200px;
   height: 300px;
-  background-color:white;
+  background-color: white;
   border-radius: 15px;
 
-    .img{
-      height: 70%;
-      width: 100%;
-      border-radius: 15px 15px 0 0;
-    }
-    .title{
-      display:flex;
-      justify-content: center;
-      align-items:center;
-      height: 30%;
-      width: 100%;
-      font-size: 10px;
-      flex-wrap: wrap;
-      text-overflow: ellipsis;
-      font-weight: bold;
-    }  
+  .img {
+    height: 70%;
+    width: 100%;
+    border-radius: 15px 15px 0 0;
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    width: 100%;
+    font-size: 10px;
+    flex-wrap: wrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+  }
 `
 
 
@@ -48,36 +49,38 @@ const MapView = React.memo((props) => {
   const [forumData,setForumData] = useState([]);
 
    // 축제 데이터 가져오기 
-   useEffect(() => {
+   const fetchForumData = useCallback(() => {
     const start_idx = 1;
-    const end_idx = 220;
+    const end_idx = 100;
     const type = " ";
     const title = " ";
 
     ForumData(start_idx, end_idx, type, title).then(data => {
-      setForumData(data);
-      console.log(data);
+        setForumData(data);
+        console.log(data);
     }).catch(error => {
-      console.error("Error fetching forum data:", error);
+        console.error("Error fetching forum data:", error);
     });
-  }, []);
+}, []);  // 의존성 배열을 빈 배열로 설정하여 컴포넌트가 마운트될 때만 함수가 실행되도록 합니다.
+
+useEffect(() => {
+    fetchForumData();
+}, [fetchForumData]);  // 의존성 배열에 fetchForumData를 추가하여 함수가 변경될 때만 데이터를 가져오도록 합니다.
 
 
   // 날짜 차이 계산
   const calDate = (start_date) => {
     const start_date_obj = new Date(start_date);
     const current_date_obj = new Date();
-    const difference_in_time =  start_date_obj - current_date_obj ;
+    const difference_in_time = start_date_obj - current_date_obj;
     const difference_in_days = difference_in_time / (1000 * 3600 * 24);
     return Math.floor(difference_in_days);
-}
-
-
+  }
 
 
   const dataInit = async (token) => {
     let res = await MyFlowApi.allFlow(token);
-    if (res.status===200) {
+    if (res.status === 200) {
       console.log(res.status);
       let user = await res.data.map(i => ({
         name: i.customer.nickName,
@@ -89,7 +92,7 @@ const MapView = React.memo((props) => {
         content: i.content,
         view: i.view
       }));
-      let userData =  await user.map(i => ({
+      let userData = await user.map(i => ({
         content: ToSpotData.setOverlay(i),
         lat: i.lat,
         lng: i.lng
@@ -128,7 +131,7 @@ const MapView = React.memo((props) => {
     setViewSet(prevState => (prevState === 0 ? 1 : 0));
   };
 
-  const EventMarkerContainer = React.memo(({ lat, lng, content }) => {
+  const EventMarkerContainer = React.memo(({lat, lng, content}) => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -136,15 +139,29 @@ const MapView = React.memo((props) => {
     const soonImg = "https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/images%2Ffree-icon-location-10797038.png?alt=media&token=e0965f50-abc4-40b0-a7eb-684052328586";
     return (
       <>
-        
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center", color:"white" ,borderRadius:"15px",backgroundColor:"#35B1E8",width:"100px",height:"30px",left:"10%",top:"60px",position:"absolute", zIndex:"100"}}>서울 축제</div>
+
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "white",
+          borderRadius: "15px",
+          backgroundColor: "#35B1E8",
+          width: "100px",
+          height: "30px",
+          left: "10%",
+          top: "60px",
+          position: "absolute",
+          zIndex: "100"
+        }}>서울 축제
+        </div>
         <MapMarker
           position={{
             lat: lat,
             lng: lng
           }}
           image={{
-            src: calDate(content.STRTDATE) < 3 ?   soonImg : markerImg, // 마커이미지의 주소입니다
+            src: calDate(content.STRTDATE) < 3 ? soonImg : markerImg, // 마커이미지의 주소입니다
             size: {
               width: 45,
               height: 50,
@@ -163,21 +180,51 @@ const MapView = React.memo((props) => {
           }}
         >
         </MapMarker>
-        
+
         {isVisible &&
           <CustomOverlayMap position={{
             lat: content.LOT,
             lng: content.LAT,
           }}>
-          <Maker onClick={()=>{setIsVisible(false)}}>
-            <img src={`${content.MAIN_IMG}`} className='img'></img>
-            <p>{`${content.DATE}`}</p>
-            <p>{`${content.PLACE}`}</p>
-            <div className='title'>{content.TITLE}</div>
-          </Maker>
+            <Maker onClick={() => {
+              setIsVisible(false)
+            }}>
+              <img src={`${content.MAIN_IMG}`} className='img'></img>
+              <p>{`${content.DATE}`}</p>
+              <p>{`${content.PLACE}`}</p>
+              <div className='title'>{content.TITLE}</div>
+            </Maker>
           </CustomOverlayMap>
         }
 
+      </>
+    );
+  });
+
+  const UserEventMarkerContainer = React.memo(({ lat, lng, content }) => {
+    const map = useMap();
+    const [isVisible, setIsVisible] = useState(false);
+
+    return (
+      <>
+        <MapMarker
+          position={{
+            lat: lat,
+            lng: lng
+          }}
+          onClick={(marker) => {
+            map.panTo(marker.getPosition());
+            setIsVisible(prevState => !prevState);
+          }}
+        />
+        {isVisible &&
+          <CustomOverlayMap position={{
+            lat: lat,
+            lng: lng
+          }}>
+            {content}
+          </CustomOverlayMap>
+        }
       </>
     );
   });
@@ -205,35 +252,27 @@ const MapView = React.memo((props) => {
         level={3}
       >
         {viewSet === 0 ? (
-          <MarkerClusterer
-            averageCenter={true}
-            minLevel={1}
-            disableClickZoom={true}
-          >
-            {flow.map((pos,idx) => (
-              <MapMarker
-                key={`${pos.lat}-${pos.lng}+${idx}`}
-                position={{
-                  lat: pos.lat,
-                  lng: pos.lng,
-                }}
-              />
-            ))}
-          </MarkerClusterer>
+          flow.map((value) => (
+            <UserEventMarkerContainer
+              key={`EventMarkerContainer-${value.lat}-${value.lng}`}
+              lat={value.lat}
+              lng={value.lng}
+              content={value.content}
+            />
+          ))
         ) : (
-            forumData.map((value,idx) => (
-              
-              <EventMarkerContainer
-               key={`EventMarkerContainer-${value.LAT}-${value.LOT}-${idx}`}
-                lat={parseFloat(value.LOT)}
-                lng={parseFloat(value.LAT)}
-                content={value}
-                
-                
+          forumData.map((value, idx) => (
 
-              />
-            ))
-          )}
+            <EventMarkerContainer
+              key={`EventMarkerContainer-${value.LAT}-${value.LOT}-${idx}`}
+              lat={parseFloat(value.LOT)}
+              lng={parseFloat(value.LAT)}
+              content={value}
+
+
+            />
+          ))
+        )}
 
         {/*{place.map(p => (*/}
         {/*  <ToSpot.Btn translateY={(p.num * 6 * isToSpotBtnState)}>*/}
@@ -257,8 +296,8 @@ const MapView = React.memo((props) => {
 
         <ToSpot.Converter onClick={() => convertViewSet()}>
           {viewSet === 0 ?
-            <LuCircleDot className="icon" size={30} /> :
-            <FaMapMarkerAlt className="icon" size={30} />
+            <LuCircleDot className="icon" size={30}/> :
+            <FaMapMarkerAlt className="icon" size={30}/>
           }
         </ToSpot.Converter>
 
