@@ -145,6 +145,7 @@ const HeaderBar = (props) => {
   const logOut = () =>{
     localStorage.clear();
     setIsLoggedIn(false);
+    navigate("/");
   }
 
   const handleNoti = () => {
