@@ -278,46 +278,42 @@ const Modal = styled.div`
     )
 }
 
-const Diary = ({setSelectedTimelineIndex,setSelectedDiaryToEdit,selectedDiaryToEdit ,data, isDelete, isEdit, handleCheckboxChange, selectedDiaries, setSelectedDiaries }) => {
-    
+const Diary = ({ setSelectedDiaryToEdit, selectedDiaryToEdit, data, isDelete, isEdit, handleCheckboxChange, selectedDiaries, setSelectedDiaries }) => {
     const Navi = useNavigate();
-   
-
     return (
-        <>     
+      <>
         {
-            data.map((e,idx)=> {
-               return (
-                <div style={{position:"relative"}} key={idx}>
-               <img  onClick={()=>{Navi(`/diary/detail/${e.id}`)}} key={idx} alt='' style={{width:"100%",height:"100%"}} src={e.itemList[0].timeLine.image}></img>
-              <CheckBox key={e.id + '-delete'}> { isDelete && <input className='delete' type="checkbox" name="" id="" 
-                            checked={selectedDiaries.includes(e.id)} 
-                            onChange={(event) => handleCheckboxChange(e.id, event.target.checked)}
-              />} </CheckBox>
-              
-              <CheckBox key={e.id + '-edit'}> 
-                { isEdit && 
-                    <input 
-                        className='edit' 
-                        type="radio" 
-                        name="id" 
-                        id="id"
-                        checked={selectedDiaryToEdit === e.id}
-                        onChange={() => {
-                            setSelectedDiaryToEdit(e.id);
-                            setSelectedTimelineIndex(0); // Set the first timeline item as selected by default
-                        }} 
-                    /> 
-                }
-            </CheckBox>
-            </div >
-                  
-               ) 
-            })
+          data.map((e, idx) => {
+            // itemList[0]의 존재 여부를 검사
+            const imageUrl = e.itemList && e.itemList[0] && e.itemList[0].timeLine ? e.itemList[0].timeLine.image : '';
+            return (
+              <div style={{ position: "relative" }} key={idx}>
+                <img onClick={() => { Navi(`/diary/detail/${e.id}`) }} key={idx} alt='' style={{ width: "100%", height: "100%" }} src={imageUrl}></img>
+                <CheckBox key={e.id + '-delete'}>
+                  {isDelete && <input className='delete' type="checkbox" name="" id=""
+                    checked={selectedDiaries.includes(e.id)}
+                    onChange={(event) => handleCheckboxChange(e.id, event.target.checked)}
+                  />}
+                </CheckBox>
+                <CheckBox key={e.id + '-edit'}>
+                  {isEdit &&
+                    <input
+                      className='edit'
+                      type="radio"
+                      name="id"
+                      id="id"
+                      checked={selectedDiaryToEdit === e.id}
+                      onChange={() => setSelectedDiaryToEdit(e.id)}
+                    />
+                  }
+                </CheckBox>
+              </div>
+            );
+          })
         }
-        </>
+      </>
     );
-}   
+  };
 
 const TimeLine = (props) => {
    
@@ -464,6 +460,22 @@ function Profile() {
           console.error("Error updating diary:", error);
         }
       }
+      const handleTimelineSelection = (selectedTimelineItem) => {
+        console.log("Function called with item:", selectedTimelineItem);
+        console.log("selectedDiaryToEdit:", selectedDiaryToEdit);
+        console.log("selectedTimelineIndex:", selectedTimelineIndex);
+        if (selectedDiaryToEdit !== null && selectedTimelineIndex !== null) {
+          setDiaryData(prevDiary => {
+            const newDiary = [...prevDiary];
+            const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);
+            if (selectedDiary && selectedDiary.itemList && selectedDiary.itemList[selectedTimelineIndex]) {
+              selectedDiary.itemList[selectedTimelineIndex].timeLine.image = selectedTimelineItem.tl_profile_pic; // 이미지 교체
+            }
+            return newDiary;
+          });
+          setIsTimeLine(false); // 모달 닫기
+        }
+      };
       
 
   return (
@@ -577,7 +589,7 @@ function Profile() {
 
 
 
-         <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
+         {/* <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
             <main  style={{overflow:"auto",border:"1px solid",width:"100%",height:"90%"}}>
             {
   timeLine.map((timeLineItem, idx) => {
@@ -597,7 +609,24 @@ function Profile() {
 }
 
             </main>
-         </FlowModal>
+         </FlowModal> */}
+
+
+<FlowModal open={isTimeLine} close={() => { setIsTimeLine(false) }}>
+  <main style={{ overflow: "auto", border: "1px solid", width: "100%", height: "90%" }}>
+    {
+      timeLine.map(e => {
+        return (
+          <img alt='' style={{ width: "95%", height: "50%" }} src={e.tl_profile_pic}
+            onClick={() => handleTimelineSelection(e)} // 여기서 호출합니다.
+          ></img>
+        );
+      })
+    }
+  </main>
+</FlowModal>
+
+
 
     </Container>
    
