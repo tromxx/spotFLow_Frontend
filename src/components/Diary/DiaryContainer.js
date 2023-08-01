@@ -147,13 +147,9 @@ const DiaryContainer = (props) => {
         await DiaryApi.increaseView(id);
     }
 
-    const getEmail = () =>{
-        const id = props.val.email;
-        if(id === email){
-            navigate("/mydiary");
-        }else{
-            navigate(`/diary/user/${id}`);
-        }
+    const getEmail = (e) =>{
+        console.log(e);
+        navigate(`/profile/${e}`);
     };
 
 
@@ -185,7 +181,7 @@ const DiaryContainer = (props) => {
         <DiaryContainerDiv>
             <div className="InfoDiv">
                 <ProfileImg src={props.val.profilepic} alt="" />
-                <p onClick={getEmail}>{props.val.nickname}</p>
+                <p onClick={()=>getEmail(props.val.email)}>{props.val.nickname}</p>
                 <p>{calculateTime(props.val.date)}</p>
             </div>
             <SliderDiv>
