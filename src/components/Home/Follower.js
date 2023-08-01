@@ -49,10 +49,14 @@ const Follower = () => {
     fetchData();
   }, []);
 
-  const setFollowUp = async(e) => {
+  const setFollowUp = async(email, id) => {
     const data = {
-        email : e
+        id : id,
+        email : email
     };
+    
+    console.log(data);
+
     const response = await FollowApi.setFollowUp(data);
     setFollowing(response.data.following);
     setFollower(response.data.follower);
@@ -67,7 +71,7 @@ const Follower = () => {
           <div className="hello" key={data.email}>
             <img src={data.profilePic} alt="" />
             <p>{data.nickname}</p>
-            <button onClick={()=>setFollowUp(data.email)}>맞팔로우</button>
+            <button onClick={()=>setFollowUp(data.email, data.id)}>맞팔로우</button>
           </div>
         ))
       ) : (
