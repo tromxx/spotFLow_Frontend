@@ -130,6 +130,8 @@ const HeaderBar = (props) => {
             return () => {
               eventSource.close();
             };
+          } else {
+            return null;
           }
         } catch (error) {
           localStorage.clear();

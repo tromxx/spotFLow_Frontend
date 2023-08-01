@@ -118,10 +118,15 @@ const FlowContainerWrapper = styled.div`
   }
 `;
 
-const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, id}) => {
+const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, onCheck, id}) => {
   const [isChecked, setIsChecked] = useState(false);
 
- 
+  const handleCheck = () => {
+    setIsChecked(!isChecked)
+    if(isChecked) {
+      onCheck(id);
+    }
+  }
 
 
   return (
@@ -132,18 +137,18 @@ const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, i
           <input
           type="checkbox"
           checked={isChecked}
-          onChange={() => setIsChecked(!isChecked)}
+          onChange={handleCheck}
           className="checkBox"
           />
         
       
       </div>
       </CSSTransition>
-      <FlowContainer>
+      <FlowContainer >
         
         <DateWrapper>
             <Date>
-              {date}
+            {key}{date}
             </Date>
           </DateWrapper>
         <MyFlowContainerDiv>

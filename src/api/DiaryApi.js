@@ -10,7 +10,7 @@ const DiaryApi = {
     const requestData = {
       title: data.title,
       content: data.content,
-      timeLineList: data.timeLineIds
+      timeLineList: data.timeLineList
     }
     return axios.post(DOMAIN + "/diary", requestData, {
       headers : {

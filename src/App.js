@@ -21,7 +21,9 @@ import DirectMessenger from "./pages/DirectMessenger";
 import WebSocketProvider from "./context/WebSockeProvider";
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
-import Profile from './pages/Profile'
+import Profile from './pages/Profile';
+import userEvent from '@testing-library/user-event';
+
 
 
 export const WebSocket = React.createContext();
@@ -84,11 +86,11 @@ function App() {
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
-            <Route path="/mydiary" element={<>
-              {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <DiaryMypage />}
-              {/* 성근씨 파트 */}
-            </>} />
+              
+
+
+
+
             <Route path="/diaryCreate" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
@@ -113,6 +115,25 @@ function App() {
                 <TimeLine/>
               </>
             }/>
+               <Route path="/profile/:id" element={
+              <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <Profile/>
+              </>
+            }/>
+
+        <Route path="/mydiary" element={<>
+                      {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                      {/* <DiaryMypage />} */}
+                      {/* 성근씨 파트 */}
+                    </>} />
+
+            <Route path="/myprofile/:id" element={
+              <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <Profile isMy={true}/>
+              </>
+            }/>
 
               <Route path='/myflow' element={
                 <>
@@ -129,7 +150,7 @@ function App() {
                 </>
               }
               />
-              <Route path='/ws-test' element={
+              <Route path='/chat/:receiver' element={
                 <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                   <DirectMessenger/>

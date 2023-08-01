@@ -155,7 +155,9 @@ const DiaryContainer = (props) => {
             navigate(`/diary/user/${id}`);
         }
     };
-    
+
+
+
     const calculateTime = (date) => {
         let date1 = new Date(date); // This is in local time
         let date2 = new Date();
@@ -164,10 +166,10 @@ const DiaryContainer = (props) => {
         let diffMinutes = Math.floor(diffSeconds / 60);
         let diffHours = Math.floor(diffMinutes / 60);
         let diffDays = Math.floor(diffHours / 24);
-        let diffTime; 
-    
+        let diffTime;
+
         if(diffDays > 0){
-          diffTime = diffDays + "일 전"; 
+          diffTime = diffDays + "일 전";
         } else if(diffHours > 0) {
           diffTime = diffHours + "시간 전";
         } else if(diffMinutes > 0) {
@@ -175,9 +177,9 @@ const DiaryContainer = (props) => {
         } else {
           diffTime = diffSeconds + "초 전";
         }
-    
+
         return diffTime;  // diffTime 반환
-    } 
+    }
 
     return(
         <DiaryContainerDiv>
