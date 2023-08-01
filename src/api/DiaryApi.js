@@ -7,8 +7,12 @@ const DiaryApi = {
   //다이어리 저장하기
   saveDiary: async (data) => {
     const token = localStorage.getItem("authToken")
-
-    return axios.post(DOMAIN + "/diary", data, {
+    const requestData = {
+      title: data.title,
+      content: data.content,
+      timeLineList: data.timeLineIds
+    }
+    return axios.post(DOMAIN + "/diary", requestData, {
       headers : {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -43,6 +47,11 @@ const DiaryApi = {
     return axios.post(DOMAIN + "/diary/update",data);
   },
 
+  //다이어리 업데이트 ㅇㄹㅇ
+  updateMyDiary : async (data) => {
+    return axios.put(DOMAIN + "/diary",data);
+  },
+
   // 다이어리 조회수 올리기 
   increaseView : async (id) =>{
     const data = {
@@ -55,6 +64,13 @@ const DiaryApi = {
   deleteDiary: async(data) => {
     return axios.post(DOMAIN + "/diary/del", data);
   },
+
+  // 다이어리 삭제 체크된것만
+  deleteDiarys: async(id) => {
+    const token = localStorage.getItem("authToken");
+    return axios.post(DOMAIN + "/diary/check", id);
+  },
+
 
   sendComment: async (props) => {
     const token = localStorage.getItem("authToken");
@@ -144,4 +160,7 @@ const DiaryApi = {
 }
 
 export default DiaryApi;
+
+
+
 

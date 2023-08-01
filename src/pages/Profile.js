@@ -1,16 +1,20 @@
 import React, {useContext,useState,useEffect} from 'react'
 import styled, {css} from 'styled-components'
 import  { UserContext } from "../context/UserStore";
-import {BsGrid3X3} from "react-icons/bs";
+
 import {RiMapPinTimeLine,RiCheckboxBlankFill} from "react-icons/ri";
 import {MdPersonOff} from "react-icons/md"
-
+import {TfiArrowLeft} from "react-icons/tfi";
 import { PiChatCenteredTextLight } from "react-icons/pi";
 import {GiNotebook} from "react-icons/gi";
 import userTimelineApi from '../api/UserTimelineApi';
 import DiaryApi from '../api/DiaryApi';
 import CustomerApi from '../api/CustomerApi';
 import { useParams ,useNavigate} from 'react-router-dom';
+import {IoArrowBackCircleOutline} from 'react-icons/io5'
+import {BsGear,BsTrash,BsGrid3X3} from 'react-icons/bs'
+import {BiEdit} from 'react-icons/bi'
+import FlowModal from '../utils/FlowModal';
 
 
 
@@ -42,7 +46,11 @@ const List = styled.div`
         width: 100%;
     }
 
-    
+    .option {
+        ${centerAlign}
+        justify-content: space-evenly;
+        width: 100%;
+    }
 `
 const Header = styled.div`
     ${centerAlign}
@@ -51,6 +59,16 @@ const Header = styled.div`
     height: 20%;
     width: 100%;
     border: 0.5px solid silver;
+    .back {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 22px;
+        @media (min-width: 1300px) {
+               left: 300px;
+               top:15px;
+            }
+    }
     .profile {
         ${centerAlign}
         width: 90%;
@@ -59,6 +77,7 @@ const Header = styled.div`
             @media (max-width: 840px) {
                 margin-left : 80px;
                 width: 60%;
+                margin-top:10px;
             }
 
         img{
@@ -90,11 +109,26 @@ const Header = styled.div`
                     width:100%;
                 }
                 button {
-                    background-color: skyblue;
+                    background-color: #46CFFA;
+                    width: 130px;
+                    height: 35px;
                     color:white;
                     border: none;
                     border-radius: 20px;
+                   
                 }
+                .follow {
+                        margin-right:30px;
+                    }
+                .message {
+                    background-color: #DEE5E5;
+                    color:black; 
+                }
+                @media (max-width: 840px) {
+                        button{
+                            width: 90px;
+                        }
+                   }   
                 .info-name {
                     position: relative;
                     ${centerAlign};
@@ -132,6 +166,7 @@ const SwitchList = styled.div`
 `
 
 const ItemList = styled.div`
+    position:relative;
     border:  0.5px solid silver; 
     overflow : scroll;
     display:grid; 
@@ -164,6 +199,73 @@ const ItemList = styled.div`
 
    
 `
+const CheckBox = styled.div`
+    position: absolute;
+    top:0px;
+    right: 0px;
+    input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    appearance: none;
+    cursor: pointer;
+    background-color:white;
+  }
+  input[type="checkbox"]:checked {
+    background:#46CFFA ;
+    border: none;
+  }
+`
+const Modal = styled.div`
+    margin-top:20px;
+    width:100%;
+    height: 95%;
+  //  border:1px solid;
+
+    input {
+        width: 90%;
+        padding: 10px;
+        border-radius: 15px;
+        background-color:#FAFAFA;
+        border: #EFEFEF 1px solid;
+        border-radius: 6px;
+    
+    }
+    
+    textarea {
+        padding: 10px;
+        margin-top: 10px;
+        width:  90%;
+        height: 55%;
+        border-radius:15px;
+        background-color:#FAFAFA;
+        border: #EFEFEF 1px solid;
+        border-radius: 6px;
+        padding-left: 10px;
+    }
+    .flow {
+     //   border:1px solid;
+        width: 95%;
+        height: 25%;
+        margin-left: 15px;
+      
+        ${centerAlign};
+        justify-content: space-around;
+        overflow: auto;
+        @media (max-width: 840px) {
+           margin-left: 13px;
+            }
+    }
+    .item {
+        position:relative;
+        flex-shrink: 0;
+        ${centerAlign};
+        border: 1px solid;
+        width: 50%;
+        height: 95%;
+    }
+`
 
 
  const CreateInfo = (props) => {
@@ -175,14 +277,36 @@ const ItemList = styled.div`
     )
 }
 
-const Diary = (props) => {
+const Diary = ({setSelectedDiaryToEdit,selectedDiaryToEdit ,data, isDelete, isEdit, handleCheckboxChange, selectedDiaries, setSelectedDiaries }) => {
+    
     const Navi = useNavigate();
+   
 
     return (
         <>     
         {
-            props.data.map((e,idx)=> {
-               return <img onClick={()=>{Navi(`/diary/detail/${e.id}`)}} key={idx} alt='' style={{width:"100%",height:"100%"}} src={e.itemList[0].timeLine.image}></img>
+            data.map((e,idx)=> {
+               return (
+                <div style={{position:"relative"}} key={idx}>
+               <img  onClick={()=>{Navi(`/diary/detail/${e.id}`)}} key={idx} alt='' style={{width:"100%",height:"100%"}} src={e.itemList[0].timeLine.image}></img>
+              <CheckBox key={e.id + '-delete'}> { isDelete && <input className='delete' type="checkbox" name="" id="" 
+                            checked={selectedDiaries.includes(e.id)} 
+                            onChange={(event) => handleCheckboxChange(e.id, event.target.checked)}
+              />} </CheckBox>
+              <CheckBox key={e.id + '-edit'}> 
+                { isEdit && 
+                    <input 
+                        className='edit' 
+                        type="radio" 
+                        name="id" 
+                        id="id"
+                        checked={selectedDiaryToEdit === e.id}
+                        onChange={() => setSelectedDiaryToEdit(e.id)} 
+                    /> 
+                }
+            </CheckBox>
+                    </div>
+               ) 
             })
         }
         </>
@@ -216,11 +340,41 @@ function Profile() {
     const [timeData,setTimeData] = useState([]);
 
     const [follower,setFollower] = useState([]);
+    const Navi = useNavigate();
 
+    const [option,setOption] = useState(false);
+
+    const [isEdit,setIsEdit] = useState(false);
+    const [isDelete,setIsDelete] = useState(false);
+
+    const [selectedDiaryToEdit, setSelectedDiaryToEdit] = useState(null);
+
+    // 완료되면 재렌더링 
+    const [Change,setChange] = useState(false);
 
     const { id } = useParams(); 
 
     let email = decodeURIComponent(id);
+
+    const [selectedDiaries, setSelectedDiaries] = useState([]);
+
+    const handleCheckboxChange = (id, isChecked) => {
+        if (isChecked) {
+            setSelectedDiaries([...selectedDiaries, id]);
+        } else {
+            setSelectedDiaries(selectedDiaries.filter(diaryId => diaryId !== id));
+        }
+    };
+
+    const handleDelete = async () => {
+
+        await DiaryApi.deleteDiarys({ id: selectedDiaries });
+        setChange(!Change);
+        setIsDelete(!isDelete); 
+        setIsEdit(false)
+        setSelectedDiaries([]);
+    };
+
     useEffect(()=>{
        async function fetch () {
 
@@ -229,17 +383,53 @@ function Profile() {
         setTimeData(res.data.customer.timeLineList);
         setUserData(res.data.customer);
         setFollower(res.data.follower);
-        console.log(res.data.customer);
+      //  console.log(res.data.customer);
         console.log(res.data.customer.diaryList);
         }
         fetch();
         
-    },[])
+    },[Change])
+
+    const [isModal,setIsModal] = useState(false);
+
+
+    const [flow,setFlow] = useState([1,2,3]);
+
+    const [timeLine,setTimeLine] = useState([]);
+
+    async function fetchFlow () {
+        const res = await userTimelineApi.getUserTimelineList(0);
+          setFlow(res.data);
+
+          const res2 = await userTimelineApi.getUserTimelineLists();
+          setTimeLine(res2.data);
+          console.log(res2.data);
+        }
     
+
+    useEffect(() => {
+        if (isModal) {
+          fetchFlow();
+        }
+        else {
+            setFlow([]);
+        }
+      }, [isModal]);
+
+
+
+      const [isTimeLine,setIsTimeLine] = useState(false);
+     
+      const [content,setContent] = useState("");
+      const [title,setTitle] = useState("");
+
+      const [selectedTimelineIndex, setSelectedTimelineIndex] = useState(null);
+
   return (
     <Container>
         <List>
             <Header>
+                <IoArrowBackCircleOutline onClick={()=>{Navi(-1)}} className='back'/>
                 <div className='profile'>
                     <div className='profile-pic' >
                        <img alt='' src={userData.profilePic}></img>
@@ -251,19 +441,43 @@ function Profile() {
                                    <CreateInfo follower={follower.follower} name={"팔로워"}/>
                                    <CreateInfo following={follower.following} name={"팔로잉"}/>                                         
                              </div>
-                                <div style={{display:"flex",flexDirection:"row"}}>
-                                <button style={{marginRight:"15px"}}>Follow</button>
-                                <button>Message</button>
-                                </div>
+                             {user.email === id ? 
+                             
+                             <div className='option'>
+                                <BsGear onClick={()=>{setOption(!option)}}/>
+                                {option &&  <BiEdit onClick={()=>{
+                                    if(selectedDiaryToEdit !== null) {
+                                        setIsModal(true);
+                                    }
+                                    setIsEdit(!isEdit); setIsDelete(false)}}/> } 
+                                {option &&  <BsTrash onClick={()=>{
+                                    if(selectedDiaries.length >= 1){
+                                        handleDelete()
+                                }  else {
+                                    setIsDelete(!isDelete);
+                                    setIsEdit(false);
+                                }         
+                                }}/>}
+                             </div>
+
+          
+
+                             :
+                             <div style={{display:"flex",flexDirection:"row"}}>
+                             <button className='follow'>팔로우하기</button>
+                             <button className='message' onClick={()=>{Navi(`/chat/${id}`)}}>메세지보내기</button>
+                             </div>
+                             }
+                            
                                 
                         </div>
                     </div>
                 </div>
             </Header>
             <StatMsg>
-                <p style={{marginTop:"5px",marginLeft:"35px"}}>{user.email}</p>
+                <p style={{marginTop:"5px",marginLeft:"35px"}}>{userData.nickName}</p>
                 <div style={{marginTop:"0px",marginLeft:"35px",display:"flex",justifyContent:"start",alignItems:"center"}}>
-                    {userData.statMsg}
+                    {userData.statMsg }
                 </div>
             </StatMsg>
             <SwitchList>
@@ -279,18 +493,83 @@ function Profile() {
            
             <TimeLine data={timeData}/>
             :
-            <Diary data={diaryData}/>
+            <Diary setSelectedDiaryToEdit={setSelectedDiaryToEdit} selectedDiaryToEdit={selectedDiaryToEdit} selectedDiaries={selectedDiaries} setSelectedDiaries={setSelectedDiaries} handleCheckboxChange={handleCheckboxChange} isDelete={isDelete} isEdit={isEdit} data={diaryData}/>
             }
             {  
                     userData.openStatus !== "PUBLIC" &&
                   <div className='private' ><MdPersonOff></MdPersonOff>비공개 유저입니다.</div> 
                 
             }
-
+         <button onClick={()=>{console.log(selectedDiaries)}}>ㅆㅆ</button>
         </ItemList>
-        
+       
         </List>
+
+        <FlowModal flow={flow} open={isModal} type ={true} close={()=>{setIsModal(false); setSelectedDiaryToEdit(null)}}>
+            <Modal>
+            <input  onChange={(e)=>{setTitle(e.target.value)}} value={diaryData.filter(diary => diary.id === selectedDiaryToEdit).title} type={"text"}></input>
+            <textarea onChange={(e)=>{setContent(e.target.value)}} value={diaryData.filter(diary => diary.id === selectedDiaryToEdit).content} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
+            <div className='flow' >
+
+                    {
+            //   diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
+            //     return diary.itemList.map((item, idx) => {
+            //         return (
+            //             <div style={{position:"relative"}}> 
+            //                 <div key={item.timeLine.id} style={{position:"relative"}}>
+            //                     <img style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" />
+            //                     {/* {item.timeLine.id} */}
+            //                     <input onClick={()=>{setIsTimeLine(true);setSelectedTimelineIndex(idx)}} style={{right:"0px",top:"0px",position:"absolute",width:"10px",height:"10px"}} type="checkbox" name="id" id="id" />
+            //                 </div>
+            //             </div>
+            //         );
+            //     });
+            // })
+            diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
+                return diary.itemList.map((item, idx) => {
+                  return (
+                    <div style={{position:"relative"}}> 
+                      <div key={item.timeLine.id} style={{position:"relative"}}
+                           onClick={() => setSelectedTimelineIndex(idx)}> 
+                        <img style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" />
+                        <input onClick={()=>{setIsTimeLine(true)}} style={{right:"0px",top:"0px",position:"absolute",width:"10px",height:"10px"}} type="checkbox" name="id" id="id" />
+                      </div>
+                    </div>
+                  );
+                });
+              })
+            
+            
+                    }
+
+            </div>
+            </Modal>
+         </FlowModal>
+
+         <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
+            <main  style={{overflow:"auto",border:"1px solid",width:"100%",height:"90%"}}>
+                {
+                    timeLine.map(e => {
+                        return(
+                            <img alt='' style={{width:"95%",height:"50%"}} src={e.tl_profile_pic}
+                            onClick={() => {
+                                setDiaryData(prevDiary => {
+                                  const newDiary = [...prevDiary];
+                                  const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);
+                                  selectedDiary.itemList[selectedTimelineIndex] = e;  // Replace the timeline item with the selected one
+                                  return newDiary;
+                                });
+                                setIsTimeLine(false);
+                              }}
+                            ></img>
+                        );
+                    })
+                }
+            </main>
+         </FlowModal>
+
     </Container>
+   
     
   )
 }

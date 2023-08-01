@@ -1,7 +1,7 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {CustomOverlayMap, Map, MapMarker, MarkerClusterer, useMap} from "react-kakao-maps-sdk";
-import {FaMapMarkerAlt} from "react-icons/fa";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect,useCallback ,useMemo, useState} from 'react';
+import { CustomOverlayMap, Map, MapMarker, MarkerClusterer, useMap } from "react-kakao-maps-sdk";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import ToSpotData from "../dataSet/ToSpotData";
 import * as ToSpot from "../components/ToSpotComponent";
 import {LuCircleDot} from "react-icons/lu";
@@ -46,22 +46,26 @@ const MapView = React.memo((props) => {
   const [lat, setLat] = useState(37.4923615);
   const [lng, setLng] = useState(127.0292881);
   const [flow, setFlow] = useState([]);
-  const [forumData, setForumData] = useState([]);
+  const [forumData,setForumData] = useState([]);
 
-  // 축제 데이터 가져오기
-  useEffect(() => {
+   // 축제 데이터 가져오기 
+   const fetchForumData = useCallback(() => {
     const start_idx = 1;
-    const end_idx = 220;
+    const end_idx = 100;
     const type = " ";
     const title = " ";
 
     ForumData(start_idx, end_idx, type, title).then(data => {
-      setForumData(data);
-      console.log(data);
+        setForumData(data);
+        console.log(data);
     }).catch(error => {
-      console.error("Error fetching forum data:", error);
+        console.error("Error fetching forum data:", error);
     });
-  }, []);
+}, []);  // 의존성 배열을 빈 배열로 설정하여 컴포넌트가 마운트될 때만 함수가 실행되도록 합니다.
+
+useEffect(() => {
+    fetchForumData();
+}, [fetchForumData]);  // 의존성 배열에 fetchForumData를 추가하여 함수가 변경될 때만 데이터를 가져오도록 합니다.
 
 
   // 날짜 차이 계산
