@@ -151,7 +151,7 @@ const DirectMessenger = () => {
 
   let req = {
     roomId: room,
-    receiver: "hanjy20129@gmail.com",
+    receiver: receiver,
     sender: "hanjy1101@naver.com",
     message: text
   };
@@ -181,7 +181,7 @@ const DirectMessenger = () => {
   useEffect(() => {
     console.log("email = " + email);
     const getRoom = async () => {
-      const res = await ChatApi.createRoom("hanjy20129@gmail.com");
+      const res = await ChatApi.createRoom(receiver);
       if (res.status === 200) {
         console.log(res.data);
         setRoom(res.data);
