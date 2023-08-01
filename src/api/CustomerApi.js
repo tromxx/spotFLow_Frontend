@@ -15,7 +15,14 @@ const CustomerApi = {
 
   //테이블 아이디 값으로 가져오기 
   getCustomerInfoById: async (id) => {
-    return await axios.get(DOMAIN + `/auth/customer/profile/${id}`);
+    const token = localStorage.getItem("authToken");
+    return await axios.get(DOMAIN + `/customer/profile/${id}`
+    ,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
   },
 
   //put 사용자 상테 메시지 수정
