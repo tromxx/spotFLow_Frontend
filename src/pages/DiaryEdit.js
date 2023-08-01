@@ -202,7 +202,7 @@ const DiaryEdit = () =>{
           <div className="Controler">
             <GoToDiary onClick={()=>navigate("/diary")}/>
             <UploadButton onClick={uploadToDiary}/>
-            <GoToMyProfile onClick={()=>navigate("/diarymypage")}/>
+            <GoToMyProfile onClick={()=>navigate("/mydiary")}/>
           </div>
         </UserContainer>
         <UpdateContainer>

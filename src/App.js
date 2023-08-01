@@ -21,6 +21,8 @@ import DirectMessenger from "./pages/DirectMessenger";
 import WebSocketProvider from "./context/WebSockeProvider";
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
+import Profile from './pages/Profile'
+
 
 export const WebSocket = React.createContext();
 
@@ -82,24 +84,33 @@ function App() {
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
-            <Route path="/diaryMypage" element={<>
+            <Route path="/mydiary" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <DiaryMypage />
+              <DiaryMypage />}
+              {/* 성근씨 파트 */}
             </>} />
             <Route path="/diaryCreate" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
             </>} />
-            <Route path="/flow" element={
-              <>
-                {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                <TimeLine />
-              </>
-            }/>
+            <Route path="/diaryedit/:id" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <DiaryEdit />
+            </>} />
+            <Route path="/diary/user/:id" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <Profile/> 
+            </>} />
             <Route path="/diary/detail/:id" element={
               <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <DiarySwiper/>
+              </>
+            }/>
+                   <Route path="/flow" element={
+              <>
+                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
+                <TimeLine/>
               </>
             }/>
 
@@ -130,6 +141,7 @@ function App() {
         </BrowserRouter>
       </UserStore>
     </WebSocket.Provider>
+
   );
 }
 

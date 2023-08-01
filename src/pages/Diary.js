@@ -110,6 +110,7 @@ const Diary = () =>{
         const fetchData = async() =>{
             const response = await DiaryApi.findAllDiary();
             setData(response.data);
+            console.log(response.data);
         };
         fetchData();
     },[])
@@ -123,11 +124,11 @@ const Diary = () =>{
                 </div>
                 <div className="Controler">
                     <GoBackButton onClick={()=>navigate("/")}/>
-                    <GoProfileButton onClick={()=>navigate("/diarymypage")}/>
+                    <GoProfileButton onClick={()=>navigate("/mydiary")}/>
                     <GoToAdd onClick={()=>navigate("/diaryCreate")}/>
                 </div>
             </div>
-            {/* <DiaryContainerDiv>
+            <DiaryContainerDiv>
                 {datas && datas.map(data=>(
                     <DiaryContainer 
                         key={data.id}
@@ -138,12 +139,14 @@ const Diary = () =>{
                             nickname : data.nickname,
                             profilepic : data.profilePic,
                             title : data.title,
-                            like : data.like
+                            like : data.like,
+                            view : data.view,
+                            date : data.date 
                         }}
                     />
                 ))
                 }
-            </DiaryContainerDiv> */}
+            </DiaryContainerDiv>
         </Container>
     );
 };
