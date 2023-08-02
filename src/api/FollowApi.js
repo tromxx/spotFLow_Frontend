@@ -46,7 +46,31 @@ const FollowApi = {
               'Authorization': `Bearer ${token}`
             }
         });
+    },
+
+    checkFollowing: async (email) => {
+        const token = localStorage.getItem("authToken");
+        return axios.get(DOMAIN + `/follow/testing?email=${email}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    
+    setFollowing : async(email) =>{
+        const token = localStorage.getItem("authToken");
+        const data ={
+            email : email
+        }
+        return axios.post(DOMAIN + "/follow/following",data, {
+            headers : {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+        });
     }
+    
 }
 
 export default FollowApi;

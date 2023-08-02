@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import FollowApi from "../../api/FollowApi";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
+import { useNavigate } from "react-router-dom";
 
 const FollowingContainer = styled.div`
     margin-top: 20px;
@@ -42,6 +43,7 @@ const FollowingContainer = styled.div`
 const Following = () =>{
     const [datas , setDatas] = useState();
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
     const {setFollowing, setFollower} = useContext(UserContext);
 
     const deleteFollowing = async(email, id) =>{
@@ -70,7 +72,7 @@ const Following = () =>{
       }, []);
 
     const goToUserPage =(e)=>{
-      console.log(e);
+      navigate(`/profile/${e}`);
     }
 
     return(
@@ -82,7 +84,7 @@ const Following = () =>{
             <div className="hello" key={data.email}>
               <img src={data.profilePic} alt="" />
               <p onClick={()=>goToUserPage(data.email)}>{data.nickname}</p>
-              <button onClick={()=>deleteFollowing(data.email,data.id)}>삭제하기</button>
+              <button onClick={()=>deleteFollowing(data.email, data.id)}>삭제하기</button>
             </div>
           ))
         ) : (

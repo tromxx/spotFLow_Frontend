@@ -72,7 +72,6 @@ const Follower = () => {
         id : id,
         email : email
     };
-    
     const response = await FollowApi.setFollowUp(data);
     setFollowing(response.data.following);
     setFollower(response.data.follower);

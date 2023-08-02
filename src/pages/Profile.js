@@ -1,11 +1,7 @@
 import React, {useContext,useState,useEffect} from 'react'
 import styled, {css} from 'styled-components'
 import  { UserContext } from "../context/UserStore";
-
 import {RiMapPinTimeLine,RiCheckboxBlankFill} from "react-icons/ri";
-import {MdPersonOff} from "react-icons/md"
-import {TfiArrowLeft} from "react-icons/tfi";
-import { PiChatCenteredTextLight } from "react-icons/pi";
 import {GiNotebook} from "react-icons/gi";
 import userTimelineApi from '../api/UserTimelineApi';
 import DiaryApi from '../api/DiaryApi';
@@ -15,7 +11,8 @@ import {IoArrowBackCircleOutline} from 'react-icons/io5'
 import {BsGear,BsTrash,BsGrid3X3} from 'react-icons/bs'
 import {BiEdit} from 'react-icons/bi'
 import FlowModal from '../utils/FlowModal';
-
+import FollowApi from '../api/FollowApi';
+import FollowingModal from '../utils/LoginSignUpModal';
 
 
 const centerAlign = css`
@@ -170,17 +167,10 @@ const ItemList = styled.div`
     border:  0.5px solid silver; 
     overflow : scroll;
     display:grid; 
-    //grid-gap: 4px; 
     grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
     grid-template-rows: ${(props) => props.grid ==="true" ? "1fr" : "200px 200px 200px"};
-  //  grid-template-columns: 1fr 1fr 1fr;     
-  //  grid-template-rows: 200px 100px 100px; 
-  //  align-items: center; 
-  //  justify-content: space-around;
     width: 100%;
     height: 66%;
-    /* ${centerAlign} */
-
     .private{
         ${centerAlign};
         background-color : "aliceblue";
@@ -221,7 +211,6 @@ const Modal = styled.div`
     margin-top:20px;
     width:100%;
     height: 95%;
-  //  border:1px solid;
 
     input {
         width: 90%;
@@ -245,7 +234,6 @@ const Modal = styled.div`
         padding-left: 10px;
     }
     .flow {
-     //   border:1px solid;
         width: 95%;
         height: 25%;
         margin-left: 15px;
@@ -284,7 +272,6 @@ const Diary = ({ setSelectedDiaryToEdit, selectedDiaryToEdit, data, isDelete, is
       <>
         {
           data.map((e, idx) => {
-            // itemList[0]의 존재 여부를 검사
             const imageUrl = e.itemList && e.itemList[0] && e.itemList[0].timeLine ? e.itemList[0].timeLine.image : '';
             return (
               <div style={{ position: "relative" }} key={idx}>
@@ -316,8 +303,6 @@ const Diary = ({ setSelectedDiaryToEdit, selectedDiaryToEdit, data, isDelete, is
   };
 
 const TimeLine = (props) => {
-   
-
     return (
         <>     
         {
@@ -329,37 +314,26 @@ const TimeLine = (props) => {
     );
 } 
 
-
-
 function Profile() {
     const user = useContext(UserContext);
     const [state,setState] = useState(false);
     const [grid,setGrid] = useState(false);
-
     const [userData , setUserData] = useState([]);
-
     const [diaryData,setDiaryData] = useState([]);
     const [timeData,setTimeData] = useState([]);
-
     const [follower,setFollower] = useState([]);
     const Navi = useNavigate();
-
     const [option,setOption] = useState(false);
-
     const [isEdit,setIsEdit] = useState(false);
     const [isDelete,setIsDelete] = useState(false);
-
     const [selectedDiaryToEdit, setSelectedDiaryToEdit] = useState(null);
-
-    // 완료되면 재렌더링 
     const [Change,setChange] = useState(false);
-
     const { id } = useParams(); 
-
     const [myEmail,setMyEmail] = useState("");
-    
-
     let email = decodeURIComponent(id);
+    const [modals, setModalsOpen] = useState(false);
+    const [messages, setMessages] = useState("")
+
 
     const [selectedDiaries, setSelectedDiaries] = useState([]);
 
@@ -417,18 +391,6 @@ function Profile() {
           console.log(res2.data);
         }
     
-
-    useEffect(() => {
-        if (isModal) {
-          fetchFlow();
-        }
-        else {
-            setFlow([]);
-        }
-      }, [isModal]);
-
-
-
       const [isTimeLine,setIsTimeLine] = useState(false);
      
       const [contents,setContent] = useState("");
@@ -438,18 +400,14 @@ function Profile() {
 
 
       async function confirm() {
-        // id, title, content, timeLineList를 가져옵니다.
         const id = selectedDiaryToEdit;
         const title = titles; // 사용자가 입력한 제목
         const content = contents; // 사용자가 입력한 내용
       
-        // 다이어리의 타임라인 리스트를 가져옵니다.
         const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
           id: item.timeLine.id,
-          // 필요한 다른 필드들을 여기에 추가합니다.
         }));
       
-        // 요청 본문을 만듭니다.
         const diaryUpdateRequest = {
           id,
           title,
@@ -458,7 +416,6 @@ function Profile() {
         };
       
         try {
-          // PUT 요청을 보냅니다.
           const response = await DiaryApi.updateMyDiary(diaryUpdateRequest);
           const updatedDiary = response.data;
           // 상태를 업데이트합니다.
@@ -485,6 +442,20 @@ function Profile() {
         }
       };
       
+      const checkFollowing = async(e) => {
+        const response = await FollowApi.checkFollowing(e);
+        if(response.data){
+          setModalsOpen(true);
+          setMessages("팔로잉 중입니다.");
+        }else{
+          const response = await FollowApi.setFollowing(e);
+          if(response.data){
+            setModalsOpen(true);
+            setMessages("팔로잉 완료.");
+            setChange(true);
+          }
+        }
+      }
 
   return (
     <Container>
@@ -525,7 +496,7 @@ function Profile() {
 
                              :
                              <div style={{display:"flex",flexDirection:"row"}}>
-                             <button className='follow'>팔로우하기</button>
+                             <button onClick={()=>checkFollowing(id)}className='follow'>팔로우하기</button>
                              <button className='message' onClick={()=>{Navi(`/chat/${id}/${myEmail}`)}}>메세지보내기</button>
                              </div>
                              }
@@ -566,59 +537,9 @@ function Profile() {
   <Modal>
     <input onChange={(e)=>{setTitle(e.target.value)}} value={titles} type={"text"}></input>
     <textarea onChange={(e)=>{setContent(e.target.value)}} value={contents} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
-    {/* <div className='flow' >
-      {
-        diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
-          return diary.itemList.map((item, idx) => {
-            return (
-              <div key={item.timeLine.id} >
-                <div style={{width:"100%", position:"relative"}}>
-                <img   style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" onClick={() => {
 
-                  setDiaryData(prevDiary => {
-                    const newDiary = [...prevDiary];  // Copy the current state
-                    const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);  // Find the diary being edited
-                    selectedDiary.itemList[idx].timeLine = item.timeLine;  // Replace the timeline item with the selected one
-                    return newDiary;
-                  });
-                  setIsTimeLine(false);
-                }}
-                />
-                    <button onClick={()=>{setIsTimeLine(true)}} style={{top:"0px",right:"0px",position:"absolute",width:"10px",borderRadius:"15px",height:"15px"}}></button>
-                </div>
-              </div>
-            );
-          });
-        })
-      }
-    </div> */}
   </Modal>
 </FlowModal>
-
-
-
-         {/* <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
-            <main  style={{overflow:"auto",border:"1px solid",width:"100%",height:"90%"}}>
-            {
-  timeLine.map((timeLineItem, idx) => {
-    return (
-        <img 
-        alt='' 
-        style={{width:"95%",height:"50%"}} 
-        src={timeLineItem.tl_profile_pic}
-        onClick={() => {
-            setIsTimeLine(false);
-
-        }}
-    ></img>
-    ); 
-  })
-  
-}
-
-            </main>
-         </FlowModal> */}
-
 
 <FlowModal open={isTimeLine} close={() => { setIsTimeLine(false) }}>
   <main style={{ overflow: "auto", border: "1px solid", width: "100%", height: "90%" }}>
@@ -633,12 +554,9 @@ function Profile() {
     }
   </main>
 </FlowModal>
-
-
-
-    </Container>
+<FollowingModal type={true} open={modals} children={messages} confirm={()=>setModalsOpen(false)}/>
+</Container>
    
-    
   )
 }
 
