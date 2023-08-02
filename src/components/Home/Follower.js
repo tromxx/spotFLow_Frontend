@@ -20,15 +20,33 @@ const FollowerContainer = styled.div`
             width: 50px;
             height: 50px;
         }
-        button{
-            width: 75px;
-            height: 30px;
-            border-radius: 20px;
-            background-color: var(--blue);
-            cursor: pointer;
+        p{
+          cursor: pointer;
+          &:hover{
+            color: var(--blue);
+          }
         }
     }
 `
+const Unfollow = styled.button`
+  width: 75px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: var(--grey);
+  border: none;
+  font-family: var(--kfont);
+  cursor: pointer;
+`;
+
+const Follow = styled.button`
+  width: 75px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: var(--blue);
+  border: none;
+  font-family: var(--kfont);
+  cursor: pointer;
+`;
 
 const Follower = () => {
   const [datas, setDatas] = useState();
@@ -55,29 +73,33 @@ const Follower = () => {
         email : email
     };
     
-    console.log(data);
-
     const response = await FollowApi.setFollowUp(data);
     setFollowing(response.data.following);
     setFollower(response.data.follower);
   }
 
   return (
-    <FollowerContainer>
-      {loading ? (
-        <p>로딩중...</p>
-      ) : datas.length > 0 ? (
-        datas.map((data) => (
-          <div className="hello" key={data.email}>
-            <img src={data.profilePic} alt="" />
-            <p>{data.nickname}</p>
-            <button onClick={()=>setFollowUp(data.email, data.id)}>맞팔로우</button>
-          </div>
-        ))
-      ) : (
-        <p>팔로우 하고 있는 유저가 없습니다.</p>
-      )}
-    </FollowerContainer>
+<FollowerContainer>
+  {loading ? (
+    <p>로딩중...</p>
+  ) : datas.length > 0 ? (
+    datas.map((data) => (
+      <div className="hello" key={data.email}>
+        <img src={data.profilePic} alt="" />
+        <p>{data.nickname}</p>
+        {console.log(data.isFollowUp)}
+        {data.isFollowUp ? ( 
+            <Unfollow>팔로우</Unfollow> 
+          ) : (
+            <Follow onClick={() => setFollowUp(data.email, data.id)}>팔로우</Follow>
+        )}
+      </div>
+    ))
+  ) : (
+    <p>팔로우 하고 있는 유저가 없습니다.</p>
+  )}
+</FollowerContainer>
+
   );
 };
 
