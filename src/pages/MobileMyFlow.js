@@ -513,21 +513,23 @@ const handleCheckboxCheck = (id) => {
 
 
 const deleteRequest = async () => {
-  try {
+	try {
 		const idsToDelete = Object.keys(checkedIds);
 		const data = {
 			id: idsToDelete
 		}
 		console.log(data);
-    const response = await MyFlowApi.deleteFlow(data);
-		if(response.data === ""){
-			setData(response.data);
-    	setSortedFlow(response.data);
-		}
-    
-  } catch (error) {
-    console.log(error);
-  }
+		await MyFlowApi.deleteFlow(data);
+		setCheckedIds({});
+		const token = localStorage.getItem("authToken")
+		const response = await MyFlowApi.getmyFlow(token);
+		setData(response.data);
+		setSortedFlow(response.data);
+			
+		
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 

@@ -20,13 +20,13 @@ const DiaryApi = {
     });
   },
 
-  //특정 다이어리 디데일 정보 가죠오기 Diary Detail
+  //특정 다이어리 디데일 정보 가져오기 Diary Detail
   // id = 다이어리 식별 번호
   findDiary: async (id) => {
     return axios.get(DOMAIN + "/diary?num=" + id);
   },
 
-  //유저 다이어리 정보 가죠오기 
+  //유저 다이어리 정보 가져오기 
   findMyDiary: async () => {
     const token = localStorage.getItem("authToken");
     return axios.get(DOMAIN + "/diary/my-diary",{
@@ -37,7 +37,7 @@ const DiaryApi = {
     });
   },
   
-  //특정 유저 diary 가죠오기
+  //특정 유저 diary 가져오기
   findUserDiary: async (email) => {
     return axios.get(DOMAIN + "/diary/user?email=" + email);
   },
@@ -47,7 +47,7 @@ const DiaryApi = {
     return axios.post(DOMAIN + "/diary/update",data);
   },
 
-  //다이어리 업데이트 ㅇㄹㅇ
+  //다이어리 업데이트 
   updateMyDiary : async (data) => {
     return axios.put(DOMAIN + "/diary",data);
   },
@@ -98,7 +98,7 @@ const DiaryApi = {
     })
   },
 
-  //다이어리 댓글 삭재 하기
+  //다이어리 댓글 삭제 하기
   deleteComment: async (comment) => {
     console.log(comment)
     return await axios.delete(DOMAIN + "/diary/comment/" + comment);
@@ -134,6 +134,7 @@ const DiaryApi = {
     const token = localStorage.getItem("authToken")
     const request = {
       id : id,
+      content : "like"
     }
     return await axios.put(DOMAIN + "/diary/like", request,{
       headers: {
