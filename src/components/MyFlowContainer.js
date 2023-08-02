@@ -118,15 +118,23 @@ const FlowContainerWrapper = styled.div`
   }
 `;
 
-const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, onCheck, id}) => {
+const MyFlowContainer = ({ img, time, content, location, date, isVisible, onCheck, id, isDelete}) => {
   const [isChecked, setIsChecked] = useState(false);
+  
 
   const handleCheck = () => {
-    setIsChecked(!isChecked)
-    if(isChecked) {
-      onCheck(id);
-    }
-  }
+    setIsChecked((prevChecked) => !prevChecked); // 이전 상태 값을 활용하여 업데이트
+    // isChecked 값을 사용하는 대신 setIsChecked를 사용하여 상태를 업데이트합니다.
+  
+    // 상태 업데이트가 완료된 후에 실행되는 콜백 함수
+    setIsChecked((updatedChecked) => {
+      if (updatedChecked) {
+        // 체크박스가 해제되었을 때에만 onCheck 함수 호출
+        onCheck(id);
+        console.log(id);
+      }
+    });
+  };
 
 
   return (
@@ -144,11 +152,11 @@ const MyFlowContainer = ({ key, img, time, content, location, date, isVisible, o
       
       </div>
       </CSSTransition>
-      <FlowContainer >
+      <FlowContainer id={id}>
         
         <DateWrapper>
             <Date>
-            {key}{date}
+            {date}
             </Date>
           </DateWrapper>
         <MyFlowContainerDiv>

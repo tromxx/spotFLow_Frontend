@@ -80,7 +80,7 @@ const NotificationContainer = ({ diary, sender, comment }) => {
 
   return (
     <NotificationDiv>
-        {comment !== "" ? (
+        {comment !== null ? (
         <p>
           <CommentImg /> <br />
           <span className="container">

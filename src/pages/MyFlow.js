@@ -5,6 +5,7 @@ import { BiCurrentLocation } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera} from "react-icons/ai";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture, SlLocationPin } from "react-icons/sl"
+import { BsCheckCircle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import { Map } from "react-kakao-maps-sdk";
 import "../components/Flowcss.css"
@@ -296,7 +297,7 @@ const DeleteButton = styled.button`
 	color: ${props => props.theme.textColor};	
 	position: absolute;
 	width: 30px;
-	left: 230px;
+	right: 70px;
 	height: 30px;
 	top: 0px;
 	border: none;
@@ -336,12 +337,37 @@ const CreateBtn2 = styled.div`
   }
 `
 
+const CheckButton = styled.button`
+	color: ${props => props.theme.textColor};	
+	position: absolute;
+	width: 30px;
+	right: 30px;
+	top: 0px;
+	height: 30px;
+	border: none;
+	background-color: transparent;
+	align-self: flex-end;
+	&:hover {
+		cursor: pointer;
+	}
+`;
+
+const CheckImg = styled(BsCheckCircle)`
+	color: ${props => props.theme.textColor};
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	left: 3px;
+	top: 4px;	
+`;
+
 
 const MyFlow = () =>{
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
+	const [checkedIds, setCheckedIds] = useState({});
 	const { isLoggedIn } = useContext(UserContext);
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
@@ -361,7 +387,8 @@ const MyFlow = () =>{
 		};
 		
 		fetchData(); // fetchData 함수 호출
-	}, []);
+	}, [setCheckedIds]);
+
 	
 		// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
@@ -531,6 +558,47 @@ const MyFlow = () =>{
 		navigate("/flow");
 	}
 
+			//flowModal의 체크박스 관리 툴
+			const [isVisible, setIsVisible] = useState(false);
+			const handleVisible = () => {
+				setIsVisible(!isVisible);
+			}
+			
+		
+		const handleCheckboxCheck = (id) => {
+			setCheckedIds((prevCheckedIds) => {
+				if (prevCheckedIds[id]) {
+					const updatedIds = { ...prevCheckedIds };
+					delete updatedIds[id];
+					return updatedIds;
+				} else {
+					return { ...prevCheckedIds, [id]: true };
+				}
+			});
+		};
+		
+		
+		
+		const deleteRequest = async () => {
+			try {
+				const idsToDelete = Object.keys(checkedIds);
+				const data = {
+					id: idsToDelete
+				}
+				console.log(data);
+				await MyFlowApi.deleteFlow(data);
+				setCheckedIds({});
+				const token = localStorage.getItem("authToken")
+				const response = await MyFlowApi.getmyFlow(token);
+				setData(response.data);
+				setSortedFlow(response.data);
+					
+				
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
     return(
 		
 			<MyFlowWrapper>
@@ -554,6 +622,13 @@ const MyFlow = () =>{
 				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange}  />
 					<MenuButtonWrapper>
 						<SearchImg />
+						{isVisible && <DeleteButton onClick={deleteRequest} >
+							<DeleteImg />
+						</DeleteButton>}
+						<SearchImg />
+						<CheckButton onClick={handleVisible}>
+							<CheckImg />
+						</CheckButton>
 						<SortButton onClick={handleSort}>
 							{sort === "az" ? <SortAz /> : <SortZa />}
 						</SortButton>
@@ -561,19 +636,25 @@ const MyFlow = () =>{
 				</MenuBar>
 				<ScrollBar >
           <FlowDiv>
-            {sortedFlow && sortedFlow.map((sortedFlow) => (
+					{sortedFlow && sortedFlow.map((sortedFlow) => (
               <MyFlowContainer
 								className="myFlowContainer"
                 key={sortedFlow.id}
+								id={sortedFlow.id}
                 img={sortedFlow.img}
                 time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
                 content={sortedFlow.content}
-                location={sortedFlow.location}
+                isVisible={isVisible}
+								onCheck={handleCheckboxCheck}
+								location={sortedFlow.location}
+								isDelete={sortedFlow.isDelete}
 								date={new Date(sortedFlow.date).toLocaleDateString([], {
 									year: 'numeric',
 									month: '2-digit',
 									day: '2-digit',
-								})}
+								}
+								
+								)}
 								
               />
             ))}

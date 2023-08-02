@@ -29,12 +29,14 @@ const Container = styled.div`
     width: 100vw;
     height: 100vh;
   //  border: 1px solid;
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "#40403F" : "white"};
     @media (max-width: 840px) {
         top:0px;
     }
+
 `
 const List = styled.div`
-
+    background-color:white;
     height: 100%;
     width: 50%;
   //  border:1px solid;
@@ -56,6 +58,8 @@ const Header = styled.div`
     height: 20%;
     width: 100%;
     border: 0.5px solid silver;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
+    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
     .back {
         position: absolute;
         top: 10px;
@@ -84,12 +88,12 @@ const Header = styled.div`
             border:1px silver solid;
         }
         .profile-pic {
-            {}
+            
         }
 
         .profile-side {
             margin-left: 20px;
-         //   border: 1px solid;
+
             width: 100%;
             height: 60%;
 
@@ -102,7 +106,7 @@ const Header = styled.div`
                     ${centerAlign};
                     justify-content: space-evenly;
                     height: 75%;
-             //       border: 1px solid;
+
                     width:100%;
                 }
                 button {
@@ -119,7 +123,9 @@ const Header = styled.div`
                     }
                 .message {
                     background-color: #DEE5E5;
-                    color:black; 
+                    background-color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "#DEE5E5" };
+                    color:white; 
+                    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black" };
                 }
                 @media (max-width: 840px) {
                         button{
@@ -133,7 +139,7 @@ const Header = styled.div`
                     justify-content:space-evenly;
                     width: 100px;
                     height:60px;
-              //      border:1px solid;
+
 
                     p{
                         position:absolute;
@@ -153,6 +159,10 @@ const StatMsg = styled.div`
     
     border: 0.5px solid silver;
     background-color: #F5F8FA;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
+    
+
+
 `
 const SwitchList = styled.div`
     ${centerAlign}
@@ -160,6 +170,8 @@ const SwitchList = styled.div`
     width: 100%;
     height: 9%;
     border: silver 0.5px solid;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "white"};
+    
 `
 
 const ItemList = styled.div`
@@ -167,10 +179,22 @@ const ItemList = styled.div`
     border:  0.5px solid silver; 
     overflow : scroll;
     display:grid; 
+<<<<<<< HEAD
     grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
     grid-template-rows: ${(props) => props.grid ==="true" ? "1fr" : "200px 200px 200px"};
     width: 100%;
     height: 66%;
+=======
+
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
+    grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
+    grid-template-rows: ${(props) => props.grid ==="true" ? "1fr" : "200px 200px 200px"};
+
+    width: 100%;
+    height: 66%;
+
+
+>>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
     .private{
         ${centerAlign};
         background-color : "aliceblue";
@@ -370,7 +394,6 @@ function Profile() {
 
         }
         fetch();
-        console.log(user.email);
         
     },[Change])
 
@@ -388,9 +411,14 @@ function Profile() {
           const res2 = await userTimelineApi.getUserTimelineLists();
           setTimeLine(res2.data);
 
-          console.log(res2.data);
+
         }
     
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
       const [isTimeLine,setIsTimeLine] = useState(false);
      
       const [contents,setContent] = useState("");
@@ -400,14 +428,28 @@ function Profile() {
 
 
       async function confirm() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
         const id = selectedDiaryToEdit;
         const title = titles; // 사용자가 입력한 제목
         const content = contents; // 사용자가 입력한 내용
       
+<<<<<<< HEAD
         const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
           id: item.timeLine.id,
         }));
       
+=======
+
+        const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
+          id: item.timeLine.id,
+
+        }));
+      
+
+>>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
         const diaryUpdateRequest = {
           id,
           title,
@@ -422,13 +464,11 @@ function Profile() {
           setDiaryData(prevDiaryData => prevDiaryData.map(diary => diary.id === id ? updatedDiary : diary));
           setIsModal(false);
         } catch (error) {
-          console.error("Error updating diary:", error);
+
         }
       }
       const handleTimelineSelection = (selectedTimelineItem) => {
-        console.log("Function called with item:", selectedTimelineItem);
-        console.log("selectedDiaryToEdit:", selectedDiaryToEdit);
-        console.log("selectedTimelineIndex:", selectedTimelineIndex);
+      
         if (selectedDiaryToEdit !== null && selectedTimelineIndex !== null) {
           setDiaryData(prevDiary => {
             const newDiary = [...prevDiary];
@@ -537,10 +577,22 @@ function Profile() {
   <Modal>
     <input onChange={(e)=>{setTitle(e.target.value)}} value={titles} type={"text"}></input>
     <textarea onChange={(e)=>{setContent(e.target.value)}} value={contents} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
+<<<<<<< HEAD
 
   </Modal>
 </FlowModal>
 
+=======
+  
+  </Modal>
+</FlowModal>
+
+
+
+       
+
+
+>>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
 <FlowModal open={isTimeLine} close={() => { setIsTimeLine(false) }}>
   <main style={{ overflow: "auto", border: "1px solid", width: "100%", height: "90%" }}>
     {
