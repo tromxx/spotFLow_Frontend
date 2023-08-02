@@ -44,10 +44,12 @@ const Following = () =>{
     const [loading, setLoading] = useState(true);
     const {setFollowing, setFollower} = useContext(UserContext);
 
-    const deleteFollowing = async(e) =>{
+    const deleteFollowing = async(email, id) =>{
         const data = {
-            id : e
+          email : email,
+          id : id
         }
+        console.log(data);
         const response = await FollowApi.delUserFollowing(data);
         setDatas(response.data.following);
         setFollowing(response.data.count.following);
@@ -80,7 +82,7 @@ const Following = () =>{
             <div className="hello" key={data.email}>
               <img src={data.profilePic} alt="" />
               <p onClick={()=>goToUserPage(data.email)}>{data.nickname}</p>
-              <button onClick={()=>deleteFollowing(data.id)}>삭제하기</button>
+              <button onClick={()=>deleteFollowing(data.email,data.id)}>삭제하기</button>
             </div>
           ))
         ) : (

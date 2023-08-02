@@ -74,7 +74,7 @@ export const Btn = styled.div`
     font-size: 50px;
     color: white;
     @media (max-width: 768px) {
-      font-size: 20px;
+      font-size: 30px;
     }
   }
 
@@ -83,8 +83,8 @@ export const Btn = styled.div`
     height: 40px;
     border-radius: 40px;
     bottom: 20px;
-    right: 10px;
-    border: 2px solid #d9d9d9;
+    right: 5px;
+    //border: 2px solid #d9d9d9;
   }
 `;
 export const Overlay = styled.div`

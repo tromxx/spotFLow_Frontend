@@ -249,13 +249,14 @@ const Modal = styled.div`
         width: 95%;
         height: 25%;
         margin-left: 15px;
-      
+
+
         ${centerAlign};
         justify-content: space-around;
         overflow: auto;
         @media (max-width: 840px) {
            margin-left: 13px;
-            }
+         }
     }
     .item {
         position:relative;
@@ -277,41 +278,42 @@ const Modal = styled.div`
     )
 }
 
-const Diary = ({setSelectedDiaryToEdit,selectedDiaryToEdit ,data, isDelete, isEdit, handleCheckboxChange, selectedDiaries, setSelectedDiaries }) => {
-    
+const Diary = ({ setSelectedDiaryToEdit, selectedDiaryToEdit, data, isDelete, isEdit, handleCheckboxChange, selectedDiaries, setSelectedDiaries }) => {
     const Navi = useNavigate();
-   
-
     return (
-        <>     
+      <>
         {
-            data.map((e,idx)=> {
-               return (
-                <div style={{position:"relative"}} key={idx}>
-               <img  onClick={()=>{Navi(`/diary/detail/${e.id}`)}} key={idx} alt='' style={{width:"100%",height:"100%"}} src={e.itemList[0].timeLine.image}></img>
-              <CheckBox key={e.id + '-delete'}> { isDelete && <input className='delete' type="checkbox" name="" id="" 
-                            checked={selectedDiaries.includes(e.id)} 
-                            onChange={(event) => handleCheckboxChange(e.id, event.target.checked)}
-              />} </CheckBox>
-              <CheckBox key={e.id + '-edit'}> 
-                { isEdit && 
-                    <input 
-                        className='edit' 
-                        type="radio" 
-                        name="id" 
-                        id="id"
-                        checked={selectedDiaryToEdit === e.id}
-                        onChange={() => setSelectedDiaryToEdit(e.id)} 
-                    /> 
-                }
-            </CheckBox>
-                    </div>
-               ) 
-            })
+          data.map((e, idx) => {
+            // itemList[0]의 존재 여부를 검사
+            const imageUrl = e.itemList && e.itemList[0] && e.itemList[0].timeLine ? e.itemList[0].timeLine.image : '';
+            return (
+              <div style={{ position: "relative" }} key={idx}>
+                <img onClick={() => { Navi(`/diary/detail/${e.id}`) }} key={idx} alt='' style={{ width: "100%", height: "100%" }} src={imageUrl}></img>
+                <CheckBox key={e.id + '-delete'}>
+                  {isDelete && <input className='delete' type="checkbox" name="" id=""
+                    checked={selectedDiaries.includes(e.id)}
+                    onChange={(event) => handleCheckboxChange(e.id, event.target.checked)}
+                  />}
+                </CheckBox>
+                <CheckBox key={e.id + '-edit'}>
+                  {isEdit &&
+                    <input
+                      className='edit'
+                      type="radio"
+                      name="id"
+                      id="id"
+                      checked={selectedDiaryToEdit === e.id}
+                      onChange={() => setSelectedDiaryToEdit(e.id)}
+                    />
+                  }
+                </CheckBox>
+              </div>
+            );
+          })
         }
-        </>
+      </>
     );
-}   
+  };
 
 const TimeLine = (props) => {
    
@@ -332,7 +334,7 @@ const TimeLine = (props) => {
 function Profile() {
     const user = useContext(UserContext);
     const [state,setState] = useState(false);
-    const [grid,setGrid] = useState(true);
+    const [grid,setGrid] = useState(false);
 
     const [userData , setUserData] = useState([]);
 
@@ -353,6 +355,9 @@ function Profile() {
     const [Change,setChange] = useState(false);
 
     const { id } = useParams(); 
+
+    const [myEmail,setMyEmail] = useState("");
+    
 
     let email = decodeURIComponent(id);
 
@@ -377,23 +382,28 @@ function Profile() {
 
     useEffect(()=>{
        async function fetch () {
-
+        const token = localStorage.getItem("authToken");
         const res = await CustomerApi.getCustomerInfoById((email));
         setDiaryData(res.data.customer.diaryList.filter(e=> e.delete !== true));
         setTimeData(res.data.customer.timeLineList);
         setUserData(res.data.customer);
         setFollower(res.data.follower);
-      //  console.log(res.data.customer);
-        console.log(res.data.customer.diaryList);
+
+
+        const ress = await CustomerApi.getCustomerInfo(token);
+        setMyEmail(ress.data.customer.email);
+
+
         }
         fetch();
+        console.log(user.email);
         
     },[Change])
 
     const [isModal,setIsModal] = useState(false);
 
 
-    const [flow,setFlow] = useState([1,2,3]);
+    const [flow,setFlow] = useState([]);
 
     const [timeLine,setTimeLine] = useState([]);
 
@@ -403,6 +413,7 @@ function Profile() {
 
           const res2 = await userTimelineApi.getUserTimelineLists();
           setTimeLine(res2.data);
+
           console.log(res2.data);
         }
     
@@ -420,10 +431,60 @@ function Profile() {
 
       const [isTimeLine,setIsTimeLine] = useState(false);
      
-      const [content,setContent] = useState("");
-      const [title,setTitle] = useState("");
+      const [contents,setContent] = useState("");
+      const [titles,setTitle] = useState("");
 
       const [selectedTimelineIndex, setSelectedTimelineIndex] = useState(null);
+
+
+      async function confirm() {
+        // id, title, content, timeLineList를 가져옵니다.
+        const id = selectedDiaryToEdit;
+        const title = titles; // 사용자가 입력한 제목
+        const content = contents; // 사용자가 입력한 내용
+      
+        // 다이어리의 타임라인 리스트를 가져옵니다.
+        const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
+          id: item.timeLine.id,
+          // 필요한 다른 필드들을 여기에 추가합니다.
+        }));
+      
+        // 요청 본문을 만듭니다.
+        const diaryUpdateRequest = {
+          id,
+          title,
+          content,
+          timeLineList,
+        };
+      
+        try {
+          // PUT 요청을 보냅니다.
+          const response = await DiaryApi.updateMyDiary(diaryUpdateRequest);
+          const updatedDiary = response.data;
+          // 상태를 업데이트합니다.
+          setDiaryData(prevDiaryData => prevDiaryData.map(diary => diary.id === id ? updatedDiary : diary));
+          setIsModal(false);
+        } catch (error) {
+          console.error("Error updating diary:", error);
+        }
+      }
+      const handleTimelineSelection = (selectedTimelineItem) => {
+        console.log("Function called with item:", selectedTimelineItem);
+        console.log("selectedDiaryToEdit:", selectedDiaryToEdit);
+        console.log("selectedTimelineIndex:", selectedTimelineIndex);
+        if (selectedDiaryToEdit !== null && selectedTimelineIndex !== null) {
+          setDiaryData(prevDiary => {
+            const newDiary = [...prevDiary];
+            const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);
+            if (selectedDiary && selectedDiary.itemList && selectedDiary.itemList[selectedTimelineIndex]) {
+              selectedDiary.itemList[selectedTimelineIndex].timeLine.image = selectedTimelineItem.tl_profile_pic; // 이미지 교체
+            }
+            return newDiary;
+          });
+          setIsTimeLine(false); // 모달 닫기
+        }
+      };
+      
 
   return (
     <Container>
@@ -441,10 +502,10 @@ function Profile() {
                                    <CreateInfo follower={follower.follower} name={"팔로워"}/>
                                    <CreateInfo following={follower.following} name={"팔로잉"}/>                                         
                              </div>
-                             {user.email === id ? 
+                             {myEmail  === id ? 
                              
                              <div className='option'>
-                                <BsGear onClick={()=>{setOption(!option)}}/>
+                                <BsGear onClick={()=>{setOption(!option);  }}/>
                                 {option &&  <BiEdit onClick={()=>{
                                     if(selectedDiaryToEdit !== null) {
                                         setIsModal(true);
@@ -452,7 +513,7 @@ function Profile() {
                                     setIsEdit(!isEdit); setIsDelete(false)}}/> } 
                                 {option &&  <BsTrash onClick={()=>{
                                     if(selectedDiaries.length >= 1){
-                                        handleDelete()
+                                        handleDelete();
                                 }  else {
                                     setIsDelete(!isDelete);
                                     setIsEdit(false);
@@ -465,7 +526,7 @@ function Profile() {
                              :
                              <div style={{display:"flex",flexDirection:"row"}}>
                              <button className='follow'>팔로우하기</button>
-                             <button className='message' onClick={()=>{Navi(`/chat/${id}`)}}>메세지보내기</button>
+                             <button className='message' onClick={()=>{Navi(`/chat/${id}/${myEmail}`)}}>메세지보내기</button>
                              </div>
                              }
                             
@@ -489,84 +550,91 @@ function Profile() {
 
          <ItemList grid={grid.toString()}>
             {
-          userData.openStatus === "PUBLIC" && state ?
+           state ?
            
             <TimeLine data={timeData}/>
             :
-            <Diary setSelectedDiaryToEdit={setSelectedDiaryToEdit} selectedDiaryToEdit={selectedDiaryToEdit} selectedDiaries={selectedDiaries} setSelectedDiaries={setSelectedDiaries} handleCheckboxChange={handleCheckboxChange} isDelete={isDelete} isEdit={isEdit} data={diaryData}/>
+            <Diary setSelectedTimelineIndex={setSelectedTimelineIndex} setSelectedDiaryToEdit={setSelectedDiaryToEdit} selectedDiaryToEdit={selectedDiaryToEdit} selectedDiaries={selectedDiaries} setSelectedDiaries={setSelectedDiaries} handleCheckboxChange={handleCheckboxChange} isDelete={isDelete} isEdit={isEdit} data={diaryData}/>
             }
-            {  
-                    userData.openStatus !== "PUBLIC" &&
-                  <div className='private' ><MdPersonOff></MdPersonOff>비공개 유저입니다.</div> 
-                
-            }
-         <button onClick={()=>{console.log(selectedDiaries)}}>ㅆㅆ</button>
+        
+
         </ItemList>
        
         </List>
 
-        <FlowModal flow={flow} open={isModal} type ={true} close={()=>{setIsModal(false); setSelectedDiaryToEdit(null)}}>
-            <Modal>
-            <input  onChange={(e)=>{setTitle(e.target.value)}} value={diaryData.filter(diary => diary.id === selectedDiaryToEdit).title} type={"text"}></input>
-            <textarea onChange={(e)=>{setContent(e.target.value)}} value={diaryData.filter(diary => diary.id === selectedDiaryToEdit).content} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
-            <div className='flow' >
+        <FlowModal confirm={()=>{confirm()}} flow={flow} open={isModal} type ={true} close={()=>{setIsModal(false); setSelectedDiaryToEdit(null)}}>
+  <Modal>
+    <input onChange={(e)=>{setTitle(e.target.value)}} value={titles} type={"text"}></input>
+    <textarea onChange={(e)=>{setContent(e.target.value)}} value={contents} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
+    {/* <div className='flow' >
+      {
+        diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
+          return diary.itemList.map((item, idx) => {
+            return (
+              <div key={item.timeLine.id} >
+                <div style={{width:"100%", position:"relative"}}>
+                <img   style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" onClick={() => {
 
-                    {
-            //   diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
-            //     return diary.itemList.map((item, idx) => {
-            //         return (
-            //             <div style={{position:"relative"}}> 
-            //                 <div key={item.timeLine.id} style={{position:"relative"}}>
-            //                     <img style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" />
-            //                     {/* {item.timeLine.id} */}
-            //                     <input onClick={()=>{setIsTimeLine(true);setSelectedTimelineIndex(idx)}} style={{right:"0px",top:"0px",position:"absolute",width:"10px",height:"10px"}} type="checkbox" name="id" id="id" />
-            //                 </div>
-            //             </div>
-            //         );
-            //     });
-            // })
-            diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
-                return diary.itemList.map((item, idx) => {
-                  return (
-                    <div style={{position:"relative"}}> 
-                      <div key={item.timeLine.id} style={{position:"relative"}}
-                           onClick={() => setSelectedTimelineIndex(idx)}> 
-                        <img style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" />
-                        <input onClick={()=>{setIsTimeLine(true)}} style={{right:"0px",top:"0px",position:"absolute",width:"10px",height:"10px"}} type="checkbox" name="id" id="id" />
-                      </div>
-                    </div>
-                  );
-                });
-              })
-            
-            
-                    }
+                  setDiaryData(prevDiary => {
+                    const newDiary = [...prevDiary];  // Copy the current state
+                    const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);  // Find the diary being edited
+                    selectedDiary.itemList[idx].timeLine = item.timeLine;  // Replace the timeline item with the selected one
+                    return newDiary;
+                  });
+                  setIsTimeLine(false);
+                }}
+                />
+                    <button onClick={()=>{setIsTimeLine(true)}} style={{top:"0px",right:"0px",position:"absolute",width:"10px",borderRadius:"15px",height:"15px"}}></button>
+                </div>
+              </div>
+            );
+          });
+        })
+      }
+    </div> */}
+  </Modal>
+</FlowModal>
 
-            </div>
-            </Modal>
-         </FlowModal>
 
-         <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
+
+         {/* <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
             <main  style={{overflow:"auto",border:"1px solid",width:"100%",height:"90%"}}>
-                {
-                    timeLine.map(e => {
-                        return(
-                            <img alt='' style={{width:"95%",height:"50%"}} src={e.tl_profile_pic}
-                            onClick={() => {
-                                setDiaryData(prevDiary => {
-                                  const newDiary = [...prevDiary];
-                                  const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);
-                                  selectedDiary.itemList[selectedTimelineIndex] = e;  // Replace the timeline item with the selected one
-                                  return newDiary;
-                                });
-                                setIsTimeLine(false);
-                              }}
-                            ></img>
-                        );
-                    })
-                }
+            {
+  timeLine.map((timeLineItem, idx) => {
+    return (
+        <img 
+        alt='' 
+        style={{width:"95%",height:"50%"}} 
+        src={timeLineItem.tl_profile_pic}
+        onClick={() => {
+            setIsTimeLine(false);
+
+        }}
+    ></img>
+    ); 
+  })
+  
+}
+
             </main>
-         </FlowModal>
+         </FlowModal> */}
+
+
+<FlowModal open={isTimeLine} close={() => { setIsTimeLine(false) }}>
+  <main style={{ overflow: "auto", border: "1px solid", width: "100%", height: "90%" }}>
+    {
+      timeLine.map(e => {
+        return (
+          <img alt='' style={{ width: "95%", height: "50%" }} src={e.tl_profile_pic}
+            onClick={() => handleTimelineSelection(e)} // 여기서 호출합니다.
+          ></img>
+        );
+      })
+    }
+  </main>
+</FlowModal>
+
+
 
     </Container>
    
@@ -574,4 +642,6 @@ function Profile() {
   )
 }
 
-export default Profile
+export default Profile;
+
+

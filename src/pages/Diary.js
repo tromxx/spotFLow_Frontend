@@ -101,7 +101,7 @@ const DiaryContainerDiv = styled.div`
 
 const Diary = () =>{
     const [datas, setData] = useState();
-    const {nickname,profilePic} = useContext(UserContext);
+    const {nickname,profilePic, email} = useContext(UserContext);
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -115,6 +115,10 @@ const Diary = () =>{
         fetchData();
     },[])
 
+    const goToMyProfile = () =>{
+        navigate(`/profile/${email}`)
+    }
+
     return(
         <Container>
             <div className="UserContainer">
@@ -124,7 +128,7 @@ const Diary = () =>{
                 </div>
                 <div className="Controler">
                     <GoBackButton onClick={()=>navigate("/")}/>
-                    <GoProfileButton onClick={()=>navigate("/mydiary")}/>
+                    <GoProfileButton onClick={goToMyProfile}/>
                     <GoToAdd onClick={()=>navigate("/diaryCreate")}/>
                 </div>
             </div>
