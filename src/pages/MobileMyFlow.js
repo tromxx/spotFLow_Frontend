@@ -25,8 +25,8 @@ import LocationModal from "../utils/LocationModal";
 import { TfiArrowLeft } from "react-icons/tfi";
 import { useContext } from "react";
 import { UserContext } from "../context/UserStore";
-import { isVisible } from "@testing-library/user-event/dist/utils";
 import Error from "../components/Common/Error";
+
 
 const MyFlowWrapper = styled.div`
 
@@ -142,7 +142,7 @@ const BiArrowBacks = styled(BiArrowBack)`
 	}
 `;
 
-const MyFlowMenuName = styled.p`
+const MyFlowMenuName = styled.div`
 	display: flex;
 	justify-content: space-between;
 	font-family: var(--efont);
@@ -367,6 +367,7 @@ const DeleteImg = styled(AiFillDelete)`
 	height: 25px;
 	margin-bottom: 2px;
 	margin-left: 1px;
+	transition: 0.6s ease;
 `;
 
 const DeleteButton = styled.button`
@@ -413,7 +414,7 @@ const CreateBtn2 = styled.div`
 `
 
 
-const MobileMyFlow = ({ onClose, goToMyPage }) =>{
+const MobileMyFlow = () =>{
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
@@ -495,16 +496,40 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 	const handleVisible = () => {
 		setIsVisible(!isVisible);
 	}
-	const [checkedKeys, setCheckedKeys] = useState([]);
+	const [checkedIds, setCheckedIds] = useState({});
 
-  const handleCheckboxCheck = (key) => {
-    
-    if (checkedKeys.includes(key)) {
-      setCheckedKeys(checkedKeys.filter((k) => k !== key));
+const handleCheckboxCheck = (id) => {
+  setCheckedIds((prevCheckedIds) => {
+    if (prevCheckedIds[id]) {
+      const updatedIds = { ...prevCheckedIds };
+      delete updatedIds[id];
+      return updatedIds;
     } else {
-      setCheckedKeys([...checkedKeys, key]);
+      return { ...prevCheckedIds, [id]: true };
     }
-  };
+  });
+};
+
+
+
+const deleteRequest = async () => {
+  try {
+		const idsToDelete = Object.keys(checkedIds);
+		const data = {
+			id: idsToDelete
+		}
+		console.log(data);
+    const response = await MyFlowApi.deleteFlow(data);
+		if(response.data === ""){
+			setData(response.data);
+    	setSortedFlow(response.data);
+		}
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 		// 유저 위치 찾기
 	const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -645,7 +670,10 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
 				
 				<MenuBar>
 				<SearchBarInput type="text" className="nicknameInput" value={searchValue} onChange={handleSearchChange}  />
-					<MenuButtonWrapper>
+					<MenuButtonWrapper >
+						{isVisible && <DeleteButton onClick={deleteRequest} >
+							<DeleteImg />
+						</DeleteButton>}
 						<SearchImg />
 						<CheckButton onClick={handleVisible}>
 							<CheckImg />
@@ -661,12 +689,14 @@ const MobileMyFlow = ({ onClose, goToMyPage }) =>{
               <MyFlowContainer
 								className="myFlowContainer"
                 key={sortedFlow.id}
+								id={sortedFlow.id}
                 img={sortedFlow.img}
                 time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
                 content={sortedFlow.content}
                 isVisible={isVisible}
 								onCheck={handleCheckboxCheck}
 								location={sortedFlow.location}
+								isDelete={sortedFlow.isDelete}
 								date={new Date(sortedFlow.date).toLocaleDateString([], {
 									year: 'numeric',
 									month: '2-digit',

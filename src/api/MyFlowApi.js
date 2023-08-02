@@ -59,8 +59,22 @@ const MyFlowApi = {
         'Authorization': `Bearer ${token}`
       }
     });
-	}
-
+	},
+  deleteFlow: async (data) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      console.log(data);
+      const response = await axios.post(Backend + "/timeline/myflowdel", data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default MyFlowApi;

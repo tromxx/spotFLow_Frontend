@@ -8,15 +8,17 @@ const ErrorDiv = styled.div`
    justify-content: center;
    align-items: center;
    text-align: center;
+	 
 	 p {
 		color: ${props=>props.theme.textColor}
 	 }
 	ul{
-      margin-top: 20%;
-		width: 400px;
+    margin-top: 20%;
+	
+		width: 390px;
 		display: flex;
 		flex-direction: column;
-		gap: 25px;
+		/* gap: 25px; */
 		justify-content: center;
 		align-items: center;
 		font-family: var(--kfont);
