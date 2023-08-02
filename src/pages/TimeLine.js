@@ -586,11 +586,12 @@ const handleUploadImage = async () => {
 
       
       if (content.length < 5 || place === "" || location.latitude == null || location.longitude == null ) {
-
+        console.log("작성중인것을 완료하세요");
         contents.current.focus();
         return;  
       }
       if (selectedImage == null) {
+        console.log(selectedImage+"이미지 가 null입니다.");
         return;
       }
       
@@ -602,6 +603,7 @@ const handleUploadImage = async () => {
         lng: state.center.lng ,
         place : place,
       };
+      
       const token = localStorage.getItem('authToken');
       
       setData(updatedData);

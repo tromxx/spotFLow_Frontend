@@ -1,6 +1,8 @@
 import React, {useEffect,useCallback ,useMemo, useState} from 'react';
 import { CustomOverlayMap, Map, MapMarker, MarkerClusterer, useMap } from "react-kakao-maps-sdk";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { GiPartyPopper } from "react-icons/gi";
+
 import { useNavigate } from "react-router-dom";
 import ToSpotData from "../dataSet/ToSpotData";
 import * as ToSpot from "../components/ToSpotComponent";
@@ -135,12 +137,12 @@ useEffect(() => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
 
-    const markerImg = "https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/images%2Ffree-icon-location-pin-8637632%20(1).png?alt=media&token=92a76f40-a6c7-45c9-809f-5d320b9d844f";
+    const markerImg = "https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/images%2Ffree-icon-music-festival-5039367-removebg-preview.png?alt=media&token=b0f4139d-4e46-468f-b29d-04c60c0a7af3";
     const soonImg = "https://firebasestorage.googleapis.com/v0/b/spotflow-5475a.appspot.com/o/images%2Ffree-icon-location-10797038.png?alt=media&token=e0965f50-abc4-40b0-a7eb-684052328586";
     return (
       <>
 
-        <div style={{
+        {/* <div style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -154,7 +156,7 @@ useEffect(() => {
           position: "absolute",
           zIndex: "100"
         }}>서울 축제
-        </div>
+        </div> */}
         <MapMarker
           position={{
             lat: lat,
@@ -201,7 +203,7 @@ useEffect(() => {
     );
   });
 
-  const UserEventMarkerContainer = React.memo(({ lat, lng, content }) => {
+    const UserEventMarkerContainer = React.memo(({ lat, lng, content }) => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -252,9 +254,9 @@ useEffect(() => {
         level={3}
       >
         {viewSet === 0 ? (
-          flow.map((value) => (
+          flow.map((value,idx) => (
             <UserEventMarkerContainer
-              key={`EventMarkerContainer-${value.lat}-${value.lng}`}
+              key={`EventMarkerContainer-${value.lat}-${value.lng}-${idx}`}
               lat={value.lat}
               lng={value.lng}
               content={value.content}
@@ -296,7 +298,7 @@ useEffect(() => {
 
         <ToSpot.Converter onClick={() => convertViewSet()}>
           {viewSet === 0 ?
-            <LuCircleDot className="icon" size={30}/> :
+            <GiPartyPopper className="icon" size={30}/> :
             <FaMapMarkerAlt className="icon" size={30}/>
           }
         </ToSpot.Converter>
