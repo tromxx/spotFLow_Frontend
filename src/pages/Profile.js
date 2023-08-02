@@ -32,12 +32,14 @@ const Container = styled.div`
     width: 100vw;
     height: 100vh;
   //  border: 1px solid;
+  background-color: ${(props) => props.theme.bgColor === '#171010' ? "#40403F" : "white"};
     @media (max-width: 840px) {
         top:0px;
     }
+
 `
 const List = styled.div`
-
+    background-color:white;
     height: 100%;
     width: 50%;
   //  border:1px solid;
@@ -59,6 +61,8 @@ const Header = styled.div`
     height: 20%;
     width: 100%;
     border: 0.5px solid silver;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
+    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
     .back {
         position: absolute;
         top: 10px;
@@ -156,6 +160,10 @@ const StatMsg = styled.div`
     
     border: 0.5px solid silver;
     background-color: #F5F8FA;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
+    
+
+
 `
 const SwitchList = styled.div`
     ${centerAlign}
@@ -163,6 +171,8 @@ const SwitchList = styled.div`
     width: 100%;
     height: 9%;
     border: silver 0.5px solid;
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "white"};
+    
 `
 
 const ItemList = styled.div`
@@ -171,6 +181,7 @@ const ItemList = styled.div`
     overflow : scroll;
     display:grid; 
     //grid-gap: 4px; 
+    background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
     grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
     grid-template-rows: ${(props) => props.grid ==="true" ? "1fr" : "200px 200px 200px"};
   //  grid-template-columns: 1fr 1fr 1fr;     
