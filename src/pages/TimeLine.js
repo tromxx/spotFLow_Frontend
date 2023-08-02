@@ -924,7 +924,7 @@ const handleLocationModal = () => {
                       }} >
    
                     <div className="item-header">
-                      <img className="profile" style={
+                      <img onClick={()=>{Navi(`/profile/${e.email}`)}} className="profile" style={
                               issort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
                               : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }

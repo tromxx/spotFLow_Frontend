@@ -356,6 +356,9 @@ function Profile() {
 
     const { id } = useParams(); 
 
+    const [myEmail,setMyEmail] = useState("");
+    
+
     let email = decodeURIComponent(id);
 
     const [selectedDiaries, setSelectedDiaries] = useState([]);
@@ -379,16 +382,21 @@ function Profile() {
 
     useEffect(()=>{
        async function fetch () {
-
+        const token = localStorage.getItem("authToken");
         const res = await CustomerApi.getCustomerInfoById((email));
         setDiaryData(res.data.customer.diaryList.filter(e=> e.delete !== true));
         setTimeData(res.data.customer.timeLineList);
         setUserData(res.data.customer);
         setFollower(res.data.follower);
-      //  console.log(res.data.customer);
-        console.log(res.data.customer.diaryList);
+
+
+        const ress = await CustomerApi.getCustomerInfo(token);
+        setMyEmail(ress.data.customer.email);
+
+
         }
         fetch();
+        console.log(user.email);
         
     },[Change])
 
@@ -494,7 +502,7 @@ function Profile() {
                                    <CreateInfo follower={follower.follower} name={"팔로워"}/>
                                    <CreateInfo following={follower.following} name={"팔로잉"}/>                                         
                              </div>
-                             {user.email === id ? 
+                             {myEmail  === id ? 
                              
                              <div className='option'>
                                 <BsGear onClick={()=>{setOption(!option);  }}/>
@@ -518,7 +526,7 @@ function Profile() {
                              :
                              <div style={{display:"flex",flexDirection:"row"}}>
                              <button className='follow'>팔로우하기</button>
-                             <button className='message' onClick={()=>{Navi(`/chat/${id}`)}}>메세지보내기</button>
+                             <button className='message' onClick={()=>{Navi(`/chat/${id}/${myEmail}`)}}>메세지보내기</button>
                              </div>
                              }
                             
@@ -542,7 +550,7 @@ function Profile() {
 
          <ItemList grid={grid.toString()}>
             {
-          userData.openStatus === "PUBLIC" && state ?
+           state ?
            
             <TimeLine data={timeData}/>
             :
@@ -558,7 +566,7 @@ function Profile() {
   <Modal>
     <input onChange={(e)=>{setTitle(e.target.value)}} value={titles} type={"text"}></input>
     <textarea onChange={(e)=>{setContent(e.target.value)}} value={contents} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
-    <div className='flow' >
+    {/* <div className='flow' >
       {
         diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
           return diary.itemList.map((item, idx) => {
@@ -583,7 +591,7 @@ function Profile() {
           });
         })
       }
-    </div>
+    </div> */}
   </Modal>
 </FlowModal>
 

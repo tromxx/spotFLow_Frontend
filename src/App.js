@@ -150,7 +150,7 @@ function App() {
                 </>
               }
               />
-              <Route path='/chat/:receiver' element={
+              <Route path='/chat/:receiver/:sender' element={
                 <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                   <DirectMessenger/>
