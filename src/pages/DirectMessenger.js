@@ -142,7 +142,7 @@ const DirectMessenger = () => {
   const webSocketService = useContext(WebSocket);
   const {email} = useContext(UserContext);
 
-  const {receiver} = useParams();
+  const {receiver,sender} = useParams();
 
   const [room, setRoom] = useState("");
   const [text, setText] = useState("");
@@ -152,9 +152,15 @@ const DirectMessenger = () => {
   let req = {
     roomId: room,
     receiver: receiver,
-    sender: "hanjy1101@naver.com",
+    sender: sender,
     message: text
   };
+
+  // stompClient.connect(header, function (frame) {
+  //   console.log("connected: " + frame);
+  //   console.log("연결 테스트")
+  // });
+
 
 
   function Send() {
