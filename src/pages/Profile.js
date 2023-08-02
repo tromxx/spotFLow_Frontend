@@ -91,7 +91,7 @@ const Header = styled.div`
             border:1px silver solid;
         }
         .profile-pic {
-            {}
+            
         }
 
         .profile-side {
