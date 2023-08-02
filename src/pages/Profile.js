@@ -96,7 +96,7 @@ const Header = styled.div`
 
         .profile-side {
             margin-left: 20px;
-         //   border: 1px solid;
+
             width: 100%;
             height: 60%;
 
@@ -109,7 +109,7 @@ const Header = styled.div`
                     ${centerAlign};
                     justify-content: space-evenly;
                     height: 75%;
-             //       border: 1px solid;
+
                     width:100%;
                 }
                 button {
@@ -126,7 +126,9 @@ const Header = styled.div`
                     }
                 .message {
                     background-color: #DEE5E5;
-                    color:black; 
+                    background-color: ${(props) => props.theme.bgColor === '#171010' ? "black" : "#DEE5E5" };
+                    color:white; 
+                    color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black" };
                 }
                 @media (max-width: 840px) {
                         button{
@@ -140,7 +142,7 @@ const Header = styled.div`
                     justify-content:space-evenly;
                     width: 100px;
                     height:60px;
-              //      border:1px solid;
+
 
                     p{
                         position:absolute;
@@ -180,17 +182,14 @@ const ItemList = styled.div`
     border:  0.5px solid silver; 
     overflow : scroll;
     display:grid; 
-    //grid-gap: 4px; 
+
     background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
     grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
     grid-template-rows: ${(props) => props.grid ==="true" ? "1fr" : "200px 200px 200px"};
-  //  grid-template-columns: 1fr 1fr 1fr;     
-  //  grid-template-rows: 200px 100px 100px; 
-  //  align-items: center; 
-  //  justify-content: space-around;
+
     width: 100%;
     height: 66%;
-    /* ${centerAlign} */
+
 
     .private{
         ${centerAlign};
@@ -407,7 +406,6 @@ function Profile() {
 
         }
         fetch();
-        console.log(user.email);
         
     },[Change])
 
@@ -425,19 +423,9 @@ function Profile() {
           const res2 = await userTimelineApi.getUserTimelineLists();
           setTimeLine(res2.data);
 
-          console.log(res2.data);
+
         }
     
-
-    useEffect(() => {
-        if (isModal) {
-          fetchFlow();
-        }
-        else {
-            setFlow([]);
-        }
-      }, [isModal]);
-
 
 
       const [isTimeLine,setIsTimeLine] = useState(false);
@@ -449,18 +437,18 @@ function Profile() {
 
 
       async function confirm() {
-        // id, title, content, timeLineList를 가져옵니다.
+
         const id = selectedDiaryToEdit;
         const title = titles; // 사용자가 입력한 제목
         const content = contents; // 사용자가 입력한 내용
       
-        // 다이어리의 타임라인 리스트를 가져옵니다.
+
         const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
           id: item.timeLine.id,
-          // 필요한 다른 필드들을 여기에 추가합니다.
+
         }));
       
-        // 요청 본문을 만듭니다.
+
         const diaryUpdateRequest = {
           id,
           title,
@@ -476,13 +464,11 @@ function Profile() {
           setDiaryData(prevDiaryData => prevDiaryData.map(diary => diary.id === id ? updatedDiary : diary));
           setIsModal(false);
         } catch (error) {
-          console.error("Error updating diary:", error);
+
         }
       }
       const handleTimelineSelection = (selectedTimelineItem) => {
-        console.log("Function called with item:", selectedTimelineItem);
-        console.log("selectedDiaryToEdit:", selectedDiaryToEdit);
-        console.log("selectedTimelineIndex:", selectedTimelineIndex);
+      
         if (selectedDiaryToEdit !== null && selectedTimelineIndex !== null) {
           setDiaryData(prevDiary => {
             const newDiary = [...prevDiary];
@@ -577,58 +563,13 @@ function Profile() {
   <Modal>
     <input onChange={(e)=>{setTitle(e.target.value)}} value={titles} type={"text"}></input>
     <textarea onChange={(e)=>{setContent(e.target.value)}} value={contents} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
-    {/* <div className='flow' >
-      {
-        diaryData.filter(diary => diary.id === selectedDiaryToEdit).map(diary => {
-          return diary.itemList.map((item, idx) => {
-            return (
-              <div key={item.timeLine.id} >
-                <div style={{width:"100%", position:"relative"}}>
-                <img   style={{width:"100px",height:"100%"}} src={item.timeLine.image} alt="" onClick={() => {
-
-                  setDiaryData(prevDiary => {
-                    const newDiary = [...prevDiary];  // Copy the current state
-                    const selectedDiary = newDiary.find(diary => diary.id === selectedDiaryToEdit);  // Find the diary being edited
-                    selectedDiary.itemList[idx].timeLine = item.timeLine;  // Replace the timeline item with the selected one
-                    return newDiary;
-                  });
-                  setIsTimeLine(false);
-                }}
-                />
-                    <button onClick={()=>{setIsTimeLine(true)}} style={{top:"0px",right:"0px",position:"absolute",width:"10px",borderRadius:"15px",height:"15px"}}></button>
-                </div>
-              </div>
-            );
-          });
-        })
-      }
-    </div> */}
+  
   </Modal>
 </FlowModal>
 
 
 
-         {/* <FlowModal open={isTimeLine} close={()=>{setIsTimeLine(false)}}>
-            <main  style={{overflow:"auto",border:"1px solid",width:"100%",height:"90%"}}>
-            {
-  timeLine.map((timeLineItem, idx) => {
-    return (
-        <img 
-        alt='' 
-        style={{width:"95%",height:"50%"}} 
-        src={timeLineItem.tl_profile_pic}
-        onClick={() => {
-            setIsTimeLine(false);
-
-        }}
-    ></img>
-    ); 
-  })
-  
-}
-
-            </main>
-         </FlowModal> */}
+       
 
 
 <FlowModal open={isTimeLine} close={() => { setIsTimeLine(false) }}>

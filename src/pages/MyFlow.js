@@ -367,6 +367,7 @@ const MyFlow = () =>{
 	const theme = useTheme();
 	const [data, setData] = useState(); // 가져온 JSON 플로우 데이터를 저장
 	const [sortedFlow, setSortedFlow] = useState(data); // 플로우 데이터 정렬
+	const [checkedIds, setCheckedIds] = useState({});
 	const { isLoggedIn } = useContext(UserContext);
 
 	 // 마운트 되었을 때 JSON 데이터를 가져오는 비동기 함수
@@ -386,7 +387,8 @@ const MyFlow = () =>{
 		};
 		
 		fetchData(); // fetchData 함수 호출
-	}, []);
+	}, [setCheckedIds]);
+
 	
 		// 들어온 플로우 데이터값을 정렬
 	const handleSort = () => { 
@@ -561,7 +563,7 @@ const MyFlow = () =>{
 			const handleVisible = () => {
 				setIsVisible(!isVisible);
 			}
-			const [checkedIds, setCheckedIds] = useState({});
+			
 		
 		const handleCheckboxCheck = (id) => {
 			setCheckedIds((prevCheckedIds) => {
@@ -584,12 +586,14 @@ const MyFlow = () =>{
 					id: idsToDelete
 				}
 				console.log(data);
-				const response = await MyFlowApi.deleteFlow(data);
-				if(response.data === ""){
-					setData(response.data);
-					setSortedFlow(response.data);
-				}
+				await MyFlowApi.deleteFlow(data);
+				setCheckedIds({});
+				const token = localStorage.getItem("authToken")
+				const response = await MyFlowApi.getmyFlow(token);
+				setData(response.data);
 				setSortedFlow(response.data);
+					
+				
 			} catch (error) {
 				console.log(error);
 			}
