@@ -1,7 +1,7 @@
 import {A11y, Navigation, Pagination, Scrollbar} from "swiper";
 import 'swiper/swiper.css'
 import {useCallback, useEffect, useMemo, useState} from "react";
-import * as SC from "./SwiperComponent"
+import * as SC from "../../styled/SwiperComponent"
 import {BsChatDots, BsArrowLeftCircle} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import {useParams} from "react-router-dom";

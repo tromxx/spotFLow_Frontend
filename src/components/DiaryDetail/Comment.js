@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import diaryApi from "../../api/DiaryApi";
 import moment from "moment/moment";
 import {BsSend} from "react-icons/bs";
-import {CommentBox, CommentDetail} from "./SwiperComponent";
+import {CommentBox, CommentDetail} from "../../styled/SwiperComponent";
 
 export const Comment = (props) => {
   const [text, setText] = useState("");
