@@ -1,4 +1,4 @@
-import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera} from "react-icons/ai";
+import { AiOutlineSearch, AiOutlinePlus , AiFillDelete, AiOutlineCamera } from "react-icons/ai";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { SlPicture, SlLocationPin } from "react-icons/sl"
 import { BsCheckCircle } from "react-icons/bs";
