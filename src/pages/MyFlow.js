@@ -19,7 +19,7 @@ import { useContext } from "react";
 import ErrorPage from "../components/Common/Error";
 import { MyFlowWrapper, MyFlowDiv, FileBox, MyFlowMenuName, CreateBtn, FlowDiv, 
 	ScrollBar, MenuBar, SortButton, SortAz, SortZa, SearchImg, SearchBarInput, 
-	PictureImg, DeleteButton, MenuButtonWrapper, CreateBtn2, CheckButton, CheckImg, DeleteImg } 
+	DeleteButton, MenuButtonWrapper, CreateBtn2, CheckButton, CheckImg, DeleteImg } 
 	from "../styled/Myflow_Styled";
 
 

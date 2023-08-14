@@ -13,7 +13,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
 import userTimelineApi from "../api/UserTimelineApi";
 import { useCallback } from "react";
-import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
+import { FileBox , MyFlowWrapper , MyFlowDiv} from "../styled/Myflow_Styled"
 import  { UserContext } from "../context/UserStore";
 import { useContext } from "react";
 import { storage } from '../api/FirebaseApi';  

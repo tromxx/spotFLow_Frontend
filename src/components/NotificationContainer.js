@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { styled } from 'styled-components'
-import { SlLocationPin } from "react-icons/sl";
 import { useState } from "react";
 import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { useLayoutEffect } from "react";
@@ -29,15 +28,6 @@ const NotificationDiv = styled.div`
   }
 
 `;
-
-const SpanText = styled.p`
-  font-weight: bolder;
-  width:70px;
-  padding:0 5px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-`
 
 const HeartImg = styled(AiFillHeart)`
   width: 25px;

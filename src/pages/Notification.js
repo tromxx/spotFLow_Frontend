@@ -80,16 +80,7 @@ const Notification = () => {
        
       }
     }
-    
-  
-    // const updateNoti = async () => {
-    //   try {
-    //     const updated = await NotificationApi.updateFetchNoti(token, nofiData);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-  
+
     const fetchDataAndUpdate = async () => {
       await fetchNoti();
       if (nofiData !== null) {
