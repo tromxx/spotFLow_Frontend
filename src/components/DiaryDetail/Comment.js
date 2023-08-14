@@ -18,18 +18,6 @@ export const Comment = (props) => {
 
     await diaryApi.sendComment(request);
     await diaryApi.sendcommentNoti(request);
-    // async function executeFunctionsSequentially() {
-    //   await diaryApi.sendComment(request);
-
-    //   // 0.2초(200ms) 지연 실행
-    //   await new Promise((resolve) => setTimeout(resolve, 200));
-
-    //   await diaryApi.sendcommentNoti(request);
-    // }
-
-    // // 함수 실행
-    // executeFunctionsSequentially();
-    // Send(request);
     await setText("");
     await props.setCount(props.count + 1);
     console.log(request);
