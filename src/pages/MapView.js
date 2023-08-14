@@ -104,7 +104,6 @@ useEffect(() => {
     }
   };
 
-  const place = ToSpotData.getPlace();
   const [isToSpotBtnState, setIsToSpotBtnState] = useState(0);
 
   const btnToSpotMoreView = () => {
