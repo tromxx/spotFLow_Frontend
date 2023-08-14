@@ -1,14 +1,6 @@
 import {styled} from "styled-components";
 import {Swiper, SwiperSlide} from "swiper/react";
-import {BsChatDots, BsSend} from "react-icons/bs";
-import {useCallback, useContext, useEffect, useMemo, useState} from "react";
-import moment from 'moment';
 import 'moment/locale/ko';
-import diaryApi from "../../api/DiaryApi";
-import UserStore, {UserContext} from "../../context/UserStore";
-import {WebSocket} from "../../App";
-import {Stomp} from "@stomp/stompjs";
-import SockJS from 'sockjs-client';
 
 export const DiarySwipe = styled(Swiper)`
   position: absolute;
