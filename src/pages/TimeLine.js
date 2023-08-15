@@ -12,7 +12,7 @@ import TimeLineModal from "../utils/TimeLineModal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import FlowModal from "../utils/FlowModal";
 import userTimelineApi from "../api/UserTimelineApi";
-import { FileBox , MyFlowWrapper , MyFlowDiv} from './MyFlow';
+import { FileBox , MyFlowWrapper , MyFlowDiv} from '../styled/Myflow_Styled';
 import  { UserContext } from "../context/UserStore";
 import { storage } from '../api/FirebaseApi';  
 import ToTheTop from "../utils/ToTheTop";
