@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlinePlus , AiOutlineCamera} from "react-icons/ai";
+import { AiOutlinePlus , AiOutlineCamera } from "react-icons/ai";
 import { SlLocationPin } from "react-icons/sl"
 import { useNavigate } from "react-router-dom";
 import { BiCurrentLocation } from 'react-icons/bi';
