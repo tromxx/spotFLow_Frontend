@@ -1,5 +1,5 @@
 import React from 'react';
-import { CSSTransition} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import './SlideDiv.css'
 
 const SlideEffect = ({ show, children }) => {

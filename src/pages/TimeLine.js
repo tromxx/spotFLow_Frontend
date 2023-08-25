@@ -3,6 +3,9 @@ import {TfiArrowLeft} from "react-icons/tfi";
 import {useState ,useRef, useEffect, useCallback ,useContext} from "react";
 import {FiColumns} from "react-icons/fi";
 import {RiLayoutRowLine} from "react-icons/ri";
+
+import {BsFillEyeFill} from "react-icons/bs";
+
 import {AiOutlineCamera, AiOutlineSearch, AiOutlinePlus} from "react-icons/ai";
 import {  SlLocationPin } from "react-icons/sl"
 import {  BiCurrentLocation } from 'react-icons/bi';
@@ -19,6 +22,7 @@ import ToTheTop from "../utils/ToTheTop";
 import { Map } from "react-kakao-maps-sdk";
 import LocationModal from "../utils/LocationModal";
 import useCurrentLocation from "../utils/Location";
+
 import {
   ItemGrid,
   Container,
@@ -504,7 +508,7 @@ const handleLocationModal = () => {
                              {issort || <h5 className="item-header-time" style={{ width:"45px" , position:"absolute", right: "-14px",top:"5px" ,fontSize:"10px"}}>{calculateTime(e.updateTime)}</h5>}
                             
                           </div>
-                          <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> {e.view} view</div>
+                          <div style={{fontSize:"12px", position:"absolute",right:"10px"}}> <BsFillEyeFill style={{fontSize:'13px'}}/> {e.view} </div>
                       </div>
                     <ItemImg  issort={issort.toString()} url={  e.tl_profile_pic || e.image}></ItemImg>
               
