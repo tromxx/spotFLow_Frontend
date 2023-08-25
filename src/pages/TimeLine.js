@@ -495,7 +495,7 @@ const handleLocationModal = () => {
                       <img onClick={()=>{Navi(`/profile/${e.email}`)}} className="profile" style={
                               issort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
-                              : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }
+                              : { margin: "10px", width: "45px", height:"45px", borderRadius:"90%" }
                           }
                       src={ e.ct_profile_pic || e.customer.profilePic || default_avatar} alt="" />
                           <div style={
