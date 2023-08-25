@@ -397,7 +397,7 @@ const handleLocationModal = () => {
             open={()=>setIsCreate(true)}
             close={CreatePostCancle}
             header={<div className="title">
-            <span style={{ color: '#00B4D8' }}>F</span>low
+            <span style={{ color: '#00B4D8' }}>S</span>POT
             </div>}
             type="y"
             confirm={CreatePostConfirm}
@@ -442,7 +442,7 @@ const handleLocationModal = () => {
                 }} style={{borderRadius: "8px", marginTop:"7px"}}>
                   <TfiArrowLeft style={{fontSize: "20px" }}></TfiArrowLeft>
                 </CreateBtn>
-                <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
+                <p style={{marginLeft:"15px"}} className="Name">Spot</p>
               </div>
               <div style={{width: "70%", position: "relative"}}>
             <input onKeyDown={(e)=> {activeEnter(e)}} type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
