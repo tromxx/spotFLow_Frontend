@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import MyFlowContainer from "../components/MyFlowContainer"
 import { useState } from "react";
 import FlowModal from "../utils/FlowModal";
+import { BiCurrentLocation } from 'react-icons/bi';
 import Modal from '../utils/Modal';
 import { CSSTransition } from "react-transition-group";
 import "../components/Flowcss.css"
@@ -274,7 +275,7 @@ const deleteRequest = async () => {
 				</CreateBtn2>
 				
 				<div className="title">
-  				my<span style={{ color: '#00B4D8' }}>F</span>low
+  				mySpot
 				</div>
 
 					<CreateBtn onClick={openFlowModal}>
@@ -412,7 +413,7 @@ const deleteRequest = async () => {
         open={flowModalOpen}
         close={closeFlowModal}
         header={<div className="title">
-				<span style={{ color: '#00B4D8' }}>F</span>low
+				<span style={{ color: '#00B4D8' }}>S</span>pot
 				</div>}
         type="y"
 				confirm={handleUpload}
