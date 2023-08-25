@@ -306,7 +306,7 @@ const deleteRequest = async () => {
                 key={sortedFlow.id}
 								id={sortedFlow.id}
                 img={sortedFlow.img}
-                time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
+                time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'short' })}
                 content={sortedFlow.content}
                 isVisible={isVisible}
 								onCheck={handleCheckboxCheck}

@@ -273,7 +273,7 @@ const MyFlow = () =>{
 				</CreateBtn2>
 				
 				<div className="title">
-  				my<span style={{ color: '#00B4D8' }}>F</span>low
+  				mySpot
 				</div>
 
 					<CreateBtn onClick={openFlowModal}>
@@ -305,7 +305,7 @@ const MyFlow = () =>{
                 key={sortedFlow.id}
 								id={sortedFlow.id}
                 img={sortedFlow.img}
-                time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'medium' })}
+                time={new Date(sortedFlow.date).toLocaleTimeString([], { timeStyle: 'short' })}
                 content={sortedFlow.content}
                 isVisible={isVisible}
 								onCheck={handleCheckboxCheck}

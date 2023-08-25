@@ -321,7 +321,7 @@ const handlePostClick = async (postId) => {
       if(!user.isLoggedIn) {
           setIsUser(true);
          return 
-      } Navi('/myflow');
+      } Navi('/myspot');
     }
 
   // 토글 여부를 결정하는 state 선언
