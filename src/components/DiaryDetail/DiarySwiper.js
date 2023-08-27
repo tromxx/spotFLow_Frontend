@@ -1,12 +1,13 @@
 import {A11y, Navigation, Pagination, Scrollbar} from "swiper";
 import 'swiper/swiper.css'
-import {useEffect, useState} from "react";
-import * as SC from "./SwiperComponent"
+import {useCallback, useEffect, useMemo, useState} from "react";
+import * as SC from "../../styled/SwiperComponent"
 import {BsChatDots, BsArrowLeftCircle} from "react-icons/bs";
 import {FaRegThumbsUp, FaThumbsUp} from "react-icons/fa";
 import {useParams} from "react-router-dom";
 import diaryApi from "../../api/DiaryApi";
 import CustomerApi from "../../api/CustomerApi";
+import {Comment} from "./Comment";
 
 export const DiarySwiper = () => {
   const {id} = useParams();
@@ -22,7 +23,7 @@ export const DiarySwiper = () => {
   const [comment, setComment] = useState([]);
   const [count, setCount] = useState(0);
 
-  const DiaryInit = async () => {
+  const DiaryInit = useCallback( async () => {
     let res = await diaryApi.findDiary(id);
     await setDiary(res.data);
     await setTimeLine(res.data.timeLineList);
@@ -30,7 +31,7 @@ export const DiarySwiper = () => {
     console.log(res.data.commentList);
     console.log(res.data.timeLineList);
     console.log(res.data);
-  }
+  },[id]);
 
   function OpenChat(e) {
     e.stopPropagation();
@@ -138,7 +139,7 @@ export const DiarySwiper = () => {
         )
         }
       </SC.DiarySwipe>
-      {chatBox === 1 && <SC.Comment diary={id} commentList={comment} count={count} setCount={setCount} customer={customer}/>}
+      {chatBox === 1 && <Comment diary={id} commentList={comment} count={count} setCount={setCount} customer={customer}/>}
 
       <SC.Btn onClick={(event) => OpenChat(event)}>
         <BsChatDots className="comment"/>

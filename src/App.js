@@ -21,7 +21,7 @@ import DirectMessenger from "./pages/DirectMessenger";
 import WebSocketProvider from "./context/WebSockeProvider";
 import DiaryUser from './pages/DiaryUser';
 import DiaryEdit from './pages/DiaryEdit';
-import Profile from './pages/Profile';
+// import Profile from './pages/Profile';
 import userEvent from '@testing-library/user-event';
 
 
@@ -101,7 +101,7 @@ function App() {
             </>} />
             <Route path="/diary/user/:id" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <Profile/> 
+              {/*<Profile/> */}
             </>} />
             <Route path="/diary/detail/:id" element={
               <>
@@ -109,7 +109,7 @@ function App() {
                 <DiarySwiper/>
               </>
             }/>
-                   <Route path="/flow" element={
+                   <Route path="/spot" element={
               <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi />}
                 <TimeLine/>
@@ -118,7 +118,7 @@ function App() {
                <Route path="/profile/:id" element={
               <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                <Profile/>
+                {/*<Profile/>*/}
               </>
             }/>
 
@@ -131,11 +131,11 @@ function App() {
             <Route path="/myprofile/:id" element={
               <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                <Profile isMy={true}/>
+                {/*<Profile isMy={true}/>*/}
               </>
             }/>
 
-              <Route path='/myflow' element={
+              <Route path='/myspot' element={
                 <>
                   {windowWidth <= 840 ? null : <HeaderBarNavi/>}
                   {windowWidth <= 840 ? <MobileMyFlow/> : <MyFlow/>}
