@@ -491,7 +491,6 @@ const MyFlow = () =>{
 				// 이미지 파이어베이스 업로드
 				const storageRef = storage.ref();
 				const fileRef = storageRef.child(file.name);
-		
 				fileRef.put(file).then(() => {
 					console.log('File uploaded successfully!');
 					fileRef.getDownloadURL().then((url) => {

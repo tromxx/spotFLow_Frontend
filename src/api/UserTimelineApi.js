@@ -46,8 +46,6 @@ const userTimelineApi = {
   // 타임라인 정보를 저장함
   setUserTimeline: async (props, token) => {
     const data = {
-      lat: props.lat,
-      lng: props.lng,
       tl_profile_pic: props.image,
       content: props.content,
       updateTime: props.date,

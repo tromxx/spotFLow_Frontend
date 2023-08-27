@@ -179,12 +179,6 @@ const ItemList = styled.div`
     border:  0.5px solid silver; 
     overflow : scroll;
     display:grid; 
-<<<<<<< HEAD
-    grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
-    grid-template-rows: ${(props) => props.grid ==="true" ? "1fr" : "200px 200px 200px"};
-    width: 100%;
-    height: 66%;
-=======
 
     background-color: ${(props) => props.theme.bgColor === '#171010' ? "#D9D8D7" : "white"};
     grid-template-columns: ${(props) => props.grid ==="true" ? "1fr" : "1fr 1fr 1fr"};
@@ -194,7 +188,6 @@ const ItemList = styled.div`
     height: 66%;
 
 
->>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
     .private{
         ${centerAlign};
         background-color : "aliceblue";
@@ -414,11 +407,8 @@ function Profile() {
 
         }
     
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
       const [isTimeLine,setIsTimeLine] = useState(false);
      
       const [contents,setContent] = useState("");
@@ -428,20 +418,10 @@ function Profile() {
 
 
       async function confirm() {
-<<<<<<< HEAD
-=======
-
->>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
         const id = selectedDiaryToEdit;
         const title = titles; // 사용자가 입력한 제목
         const content = contents; // 사용자가 입력한 내용
       
-<<<<<<< HEAD
-        const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
-          id: item.timeLine.id,
-        }));
-      
-=======
 
         const timeLineList = diaryData.find(diary => diary.id === id).itemList.map(item => ({
           id: item.timeLine.id,
@@ -449,7 +429,6 @@ function Profile() {
         }));
       
 
->>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
         const diaryUpdateRequest = {
           id,
           title,
@@ -577,22 +556,8 @@ function Profile() {
   <Modal>
     <input onChange={(e)=>{setTitle(e.target.value)}} value={titles} type={"text"}></input>
     <textarea onChange={(e)=>{setContent(e.target.value)}} value={contents} style={{resize: "none"}} name="" id="" cols="30" rows="15"></textarea>
-<<<<<<< HEAD
-
   </Modal>
 </FlowModal>
-
-=======
-  
-  </Modal>
-</FlowModal>
-
-
-
-       
-
-
->>>>>>> 30f0a2bba6e88d52daff1697ecef1974bff31ca1
 <FlowModal open={isTimeLine} close={() => { setIsTimeLine(false) }}>
   <main style={{ overflow: "auto", border: "1px solid", width: "100%", height: "90%" }}>
     {

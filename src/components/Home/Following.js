@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { styled } from "styled-components";
 import FollowApi from "../../api/FollowApi";
-import { useContext } from "react";
-import { UserContext } from "../../context/UserStore";
 import { useNavigate } from "react-router-dom";
 
 const FollowingContainer = styled.div`
@@ -44,19 +42,6 @@ const Following = () =>{
     const [datas , setDatas] = useState();
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const {setFollowing, setFollower} = useContext(UserContext);
-
-    const deleteFollowing = async(email, id) =>{
-        const data = {
-          email : email,
-          id : id
-        }
-        console.log(data);
-        const response = await FollowApi.delUserFollowing(data);
-        setDatas(response.data.following);
-        setFollowing(response.data.count.following);
-        setFollower(response.data.count.follower);
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,7 +69,7 @@ const Following = () =>{
             <div className="hello" key={data.email}>
               <img src={data.profilePic} alt="" />
               <p onClick={()=>goToUserPage(data.email)}>{data.nickname}</p>
-              <button onClick={()=>deleteFollowing(data.email, data.id)}>삭제하기</button>
+              <button>삭제하기</button>
             </div>
           ))
         ) : (
