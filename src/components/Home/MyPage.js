@@ -361,8 +361,8 @@ const MyPage = ({ onClose, setCurrentPage }) => {
          </div>
           <Paragrph $isactive={isactive.toString()} className='StatMsg'>{statMsg}</Paragrph>
         </div>
-        <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>To<span>F</span>low</Paragrph>
         <Paragrph onClick={()=>navigate("/spot")} $isactive={isactive.toString()} className='Spot'>ToSpot</Paragrph>
+        <Paragrph onClick={()=>navigate("/diary")} $isactive={isactive.toString()} className='Diary'>To<span>F</span>low</Paragrph>
         <Paragrph onClick={setTheme} $isactive={isactive.toString()} className='Theme' >{ThemeMode === "dark" ? "Light Mode" : "Dark Mode"}</Paragrph>
         <Button $isactive={isactive.toString()} onClick={updateProfile} >저장하기</Button>
         <TextArea
