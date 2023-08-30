@@ -273,7 +273,7 @@ const MyFlow = () =>{
 				</CreateBtn2>
 				
 				<div className="title">
-  				my<span style={{ color: '#00B4D8' }}>F</span>low
+  				mySpot
 				</div>
 
 					<CreateBtn onClick={openFlowModal}>
@@ -417,7 +417,7 @@ const MyFlow = () =>{
         type="y"
 				confirm={handleUpload}
       	>
-        <textarea className="flowArea" placeholder="나의 플로우를 공유해 보세요(90자 이내)"
+        <textarea className="flowArea" placeholder="나의 이야기를 공유해 보세요(90자 이내)"
           value={flowModalText}
           onChange={textLimit}
         />
