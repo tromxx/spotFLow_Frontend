@@ -128,7 +128,6 @@ const Heart = styled(AiFillHeart)`
 
 const DiaryContainer = (props) => {
     const navigate = useNavigate();
-    const{email} = useContext(UserContext);
     const theme = useTheme();
 
     const settings = {

@@ -321,7 +321,7 @@ const handlePostClick = async (postId) => {
       if(!user.isLoggedIn) {
           setIsUser(true);
          return 
-      } Navi('/myflow');
+      } Navi('/myspot');
     }
 
   // 토글 여부를 결정하는 state 선언
@@ -397,7 +397,7 @@ const handleLocationModal = () => {
             open={()=>setIsCreate(true)}
             close={CreatePostCancle}
             header={<div className="title">
-            <span style={{ color: '#00B4D8' }}>F</span>low
+            <span style={{ color: '#00B4D8' }}>S</span>POT
             </div>}
             type="y"
             confirm={CreatePostConfirm}
@@ -442,7 +442,7 @@ const handleLocationModal = () => {
                 }} style={{borderRadius: "8px", marginTop:"7px"}}>
                   <TfiArrowLeft style={{fontSize: "20px" }}></TfiArrowLeft>
                 </CreateBtn>
-                <p style={{marginLeft:"15px"}} className="Name"><span>F</span>low</p>
+                <p style={{marginLeft:"15px"}} className="Name">Spot</p>
               </div>
               <div style={{width: "70%", position: "relative"}}>
             <input onKeyDown={(e)=> {activeEnter(e)}} type="text" className="Search-bar"  onChange={(e)=>{setSearch(e.target.value)}}
@@ -495,7 +495,7 @@ const handleLocationModal = () => {
                       <img onClick={()=>{Navi(`/profile/${e.email}`)}} className="profile" style={
                               issort
                               ? { margin: "10px", width: "30px", height:"30px", borderRadius:"50%" }
-                              : { margin: "10px", width: "55px", height:"45px", borderRadius:"90%" }
+                              : { margin: "10px", width: "45px", height:"45px", borderRadius:"90%" }
                           }
                       src={ e.ct_profile_pic || e.customer.profilePic || default_avatar} alt="" />
                           <div style={

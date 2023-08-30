@@ -7,7 +7,6 @@ import HeaderBarNavi from './components/Common/HeaderBarNavi';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import {ThemeProvider} from './context/themeProvider';
-import DiaryMypage from './pages/DiaryMypage';
 import {DiarySwiper} from "./components/DiaryDetail/DiarySwiper";
 import DiaryCreate from './pages/DiaryCreate';
 import UserStore from './context/UserStore';
@@ -19,10 +18,7 @@ import ChangeInfo from './pages/ChangeInfo';
 import Notification from './pages/Notification';
 import DirectMessenger from "./pages/DirectMessenger";
 import WebSocketProvider from "./context/WebSockeProvider";
-import DiaryUser from './pages/DiaryUser';
-import DiaryEdit from './pages/DiaryEdit';
-// import Profile from './pages/Profile';
-import userEvent from '@testing-library/user-event';
+import Profile from './pages/Profile';
 
 
 
@@ -86,77 +82,38 @@ function App() {
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <Diary />
             </>} />
-              
-
-
-
-
-            <Route path="/diaryCreate" element={<>
+            <Route path="/diarycreate" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
               <DiaryCreate />
             </>} />
-            <Route path="/diaryedit/:id" element={<>
+            <Route path="/diary/detail/:id" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              <DiaryEdit />
-            </>} />
-            <Route path="/diary/user/:id" element={<>
+              <DiarySwiper/>
+            </>}/>
+            <Route path="/spot" element={<>
               {windowWidth <= 840 ? null : <HeaderBarNavi />}
-              {/*<Profile/> */}
-            </>} />
-            <Route path="/diary/detail/:id" element={
-              <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                <DiarySwiper/>
-              </>
-            }/>
-                   <Route path="/flow" element={
-              <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                <TimeLine/>
-              </>
-            }/>
-               <Route path="/profile/:id" element={
-              <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                {/*<Profile/>*/}
-              </>
-            }/>
-
-        <Route path="/mydiary" element={<>
-                      {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                      {/* <DiaryMypage />} */}
-                      {/* 성근씨 파트 */}
-                    </>} />
-
-            <Route path="/myprofile/:id" element={
-              <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi />}
-                {/*<Profile isMy={true}/>*/}
-              </>
-            }/>
-
-              <Route path='/myflow' element={
-                <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                  {windowWidth <= 840 ? <MobileMyFlow/> : <MyFlow/>}
-
-
-                </>
-              }/>
-              <Route path='/notification' element={
-                <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                  <Notification/>
-                </>
-              }
-              />
-              <Route path='/chat/:receiver/:sender' element={
-                <>
-                  {windowWidth <= 840 ? null : <HeaderBarNavi/>}
-                  <DirectMessenger/>
-                </>
-              }
-              />
+              <TimeLine/>
+            </>}/>
+            <Route path="/profile/:id" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              {/*<Profile/>*/}
+            </>}/>
+            <Route path="/myprofile/:id" element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi />}
+              <Profile isMy={true}/>
+            </>}/>
+            <Route path='/myspot' element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+              {windowWidth <= 840 ? <MobileMyFlow/> : <MyFlow/>}
+            </>}/>
+            <Route path='/notification' element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+              <Notification/>
+            </>}/>
+            <Route path='/chat/:receiver/:sender' element={<>
+              {windowWidth <= 840 ? null : <HeaderBarNavi/>}
+              <DirectMessenger/>
+            </>}/>
             </Routes>
           </ThemeProvider>
         </BrowserRouter>

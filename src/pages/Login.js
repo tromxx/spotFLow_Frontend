@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 import Logo from "../images/logo.png"
-import GoogleLogo from "../images/GoogleLogin.png"
-import KakaoLogo from "../images/KakaoLogin.png"
 import SpotLogo from "../images/SpotFlowLogin.png"
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
@@ -41,7 +39,7 @@ const LogInDiv = styled.div`
       font-family: var(--efont);
       font-size: 20px;
    }
-   li:nth-last-child(-n+3) {
+   li:nth-last-child(1) {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -58,12 +56,6 @@ const LogInDiv = styled.div`
       cursor: pointer;
       background-color: var(--lightblue);
    }
-   li:nth-last-child(2) {
-      background-color: transparent;
-   }
-	li:nth-last-child(1){
-		background-color: yellow;
-	}
     .container{
       display: flex;
       gap: 30px;
@@ -136,8 +128,6 @@ const Login = () => {
                <p onClick={()=>navigate("/findpwemail")}>비밀번호 찾기</p>
             </div>
             <li onClick={onClickChecking}><img src={SpotLogo} alt="" /></li>
-            <li><img src={GoogleLogo} alt="" /></li>
-            <li><img src={KakaoLogo} alt="" /></li>
          </ul>
 			<LoginSignUpModal 
 				children={message} 

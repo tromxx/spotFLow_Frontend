@@ -59,9 +59,9 @@ const Container = styled.div`
   position:relative;
   .Name {
     margin-top:0px;
-    
+    font-family: var(--efont);
     color: ${(props) => props.theme.bgColor === '#171010' ? "white" : "black"};
-    font-family: var(--kfont);
+
     font-size: 35px;
     font-weight: bolder;
     span {

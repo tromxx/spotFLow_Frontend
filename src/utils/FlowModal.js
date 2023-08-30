@@ -160,6 +160,7 @@ const ModalStyle = styled.div`
         justify-content: flex-start;
       }
       .locationInputBtn {
+        top: 10px;
         right: 0px;
         position: absolute;
         align-self: flex-end;
@@ -170,7 +171,8 @@ const ModalStyle = styled.div`
       
       }
       .locationPin {
-        right: 180px;
+        top: 7px;
+        right: 170px;
         position: absolute;
       }
       
